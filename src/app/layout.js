@@ -20,6 +20,8 @@ export default function RootLayout({ children }) {
         <Header/>
         {/* <Navbar/> */}
         <Menu/>
+        <h2>Check Git
+        </h2>
         {children}
         <Footer/>
         <Awareness/>
