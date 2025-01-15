@@ -22,7 +22,7 @@ export default function Home() {
         <Navcategory/>
          <Slider/>
         <Topcategory/> 
-        {/* <ProductGrid/> */}
+        <ProductGrid/>
         <Aromogroup/>
         <Servicegroup/>
         <Featuredpackage/>
