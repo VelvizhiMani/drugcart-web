@@ -17,12 +17,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${jost.variable} ${poppins.variable} antialiased`}
       >
-        <Header/>
+        {/* <Header/> */}
         {/* <Navbar/> */}
-        <Menu/>
+        {/* <Menu/> */}
         {children}
-        <Footer/>
-        <Awareness/>
+        {/* <Footer/>
+        <Awareness/> */}
       </body>
     </html>
   );
