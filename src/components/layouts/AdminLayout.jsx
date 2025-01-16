@@ -89,10 +89,11 @@ function AdminLayout(props) {
                     <Link href={{
                         pathname: item.path,
                         // query: { name: 'test' },
-                    }}>
+                    }}
+                        key={i}
+                    >
                         <ListItem
-                            key={i}
-                            style={{ marginTop: 8, backgroundColor: pathName === item.path ? "orange" : null }}
+                            style={{ marginTop: 8, backgroundColor: pathName === item.path ? "#1976d2" : null }}
                             button
                             onClick={() => {
                                 router.push(item.path, { s: 'test' });
@@ -113,8 +114,7 @@ function AdminLayout(props) {
                 ))}
             </List>
 
-            <List>
-                {/* Parent Menu Item */}
+            {/* <List>
                 <ListItem disablePadding>
                     <ListItemButton onClick={handleToggle}>
                         <ListItemIcon>
@@ -127,7 +127,6 @@ function AdminLayout(props) {
                     </ListItemButton>
                 </ListItem>
 
-                {/* Nested Items */}
                 <Collapse in={open} timeout="auto" unmountOnExit>
                     <List component="div" disablePadding>
                         <ListItem disablePadding>
@@ -148,20 +147,7 @@ function AdminLayout(props) {
                         </ListItem>
                     </List>
                 </Collapse>
-            </List>
-            {/* <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
+            </List> */}
         </div>
     );
 
@@ -191,7 +177,7 @@ function AdminLayout(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography  variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         DrugCarts Admin
                     </Typography>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
