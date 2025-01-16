@@ -7,10 +7,6 @@ export default function Home() {
      <h1>Welcome Home Page</h1>
      <AddEmployees/>
      <ShowEmployees/>
-     <header>header</header>
-      <aside>sidebar</aside>
-      <main>content</main>
-      <footer>footer</footer>
     </>
   );
 }
