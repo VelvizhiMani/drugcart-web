@@ -20,7 +20,7 @@
     "react-redux": "^9.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "20.17.14",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8",
