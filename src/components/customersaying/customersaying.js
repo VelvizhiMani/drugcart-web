@@ -1,15 +1,15 @@
 import Image from "next/image";
-import Star from '../../assets/customer/star.png'
-import Store from '../../assets/customer/store.png'
-import Online from '../../assets/customer/online.png'
-import Logo from '../../assets/customer/logo.png'
-import Customer from '../../assets/customer/customer-saying-about-us.jpg'
+import Star from '@/assets/customer/star.png'
+import Store from '@/assets/customer/store.png'
+import Online from '@/assets/customer/online.png'
+import Logo from '@/assets/customer/logo.png'
+import Customer from '@/assets/customer/customer-saying-about-us.jpg'
 
-const Customersaying = () => {
+const CustomerSaying = () => {
   return (
     <section className='px-10 mt-5'>
         <div className='container mx-auto bg-bgwhy rounded-md p-5'>
-          <div className='grid grid-cols-2 md:grid-cols-4 mt-8 justify-center gap-5'>
+          <div className='grid grid-cols-1 md:grid-cols-4 mt-8 justify-center gap-5'>
             <div className='mx-auto'>
               <h2 className='font-bold text-3xl text-black text-center mb-6'>Why Choose Us ?</h2>
               <Image src={Logo} alt="Drugcarts Logo" className='object-cover w-42 px-8 rounded-md' />
@@ -140,4 +140,4 @@ const Customersaying = () => {
   )
 }
 
-export default Customersaying
+export default CustomerSaying;

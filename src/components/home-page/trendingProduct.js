@@ -51,4 +51,4 @@ function TrendingProduct() {
     )
 }
 
-export default TrendingProduct
+export default TrendingProduct;

@@ -1,11 +1,11 @@
 import Image from 'next/image'
-import Shopping from '../../../assets/shopcategory/shipping.png'
-import Customer from '../../../assets/shopcategory/customer-care.png'
-import Anthropology from '../../../assets/shopcategory/anthropology.png'
-import Drugstore from '../../../assets/shopcategory/drugstore.png'
-import Emergency from '../../../assets/shopcategory/emergency-call.png'
+import Shopping from '@/assets/shopcategory/shipping.png'
+import Customer from '@/assets/shopcategory/customer-care.png'
+import Anthropology from '@/assets/shopcategory/anthropology.png'
+import Drugstore from '@/assets/shopcategory/drugstore.png'
+import Emergency from '@/assets/shopcategory/emergency-call.png'
 
-const Servicegroup= () => {
+const ServiceGroup= () => {
   return (
     <section className='px-10'>
         <div className='p-2 font-bold mb-2 mt-2 text-center text-lg'>
@@ -77,4 +77,4 @@ const Servicegroup= () => {
   )
 }
 
-export default Servicegroup;
+export default ServiceGroup;

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 // import { MenuIcon, XIcon } from '@heroicons/react/outline';
 
-const Menu = () => {
+const DesktopMenu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Main menu toggle
     const [submenuOpen, setSubmenuOpen] = useState(null); // Submenu toggle
 
@@ -18,7 +18,7 @@ const Menu = () => {
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 mr-2">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                                 </svg>
-                                <span>View Categories</span> </div>
+                                <span>View Categories 1</span> </div>
                         </Link>
                     </div>
 
@@ -190,4 +190,4 @@ const Menu = () => {
     );
 };
 
-export default Menu;
+export default DesktopMenu;
