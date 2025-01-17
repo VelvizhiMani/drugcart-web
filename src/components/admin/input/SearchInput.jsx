@@ -28,7 +28,7 @@ function SearchInput({ filterOption, rowCount, filterSubmit }) {
             sx={{ p: '0px 0px', 
                 display: 'flex', 
                 alignItems: 'center', 
-                width: 300, 
+                // width: 300, 
                 borderColor: "gray", 
                 borderWidth: 1,
                 marginTop: 2
