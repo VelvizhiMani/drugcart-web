@@ -35,7 +35,7 @@ function SearchInput({ filterOption, rowCount, filterSubmit }) {
             }}
         >
             <InputBase
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ ml: 1, flex: 1, fontFamily: "Poppins" }}
                 placeholder="Search"
                 inputProps={{ 'aria-label': 'search' }}
             />

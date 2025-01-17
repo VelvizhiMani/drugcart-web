@@ -59,7 +59,6 @@ function AdminLayout(props) {
     const handleToggle = () => {
         setOpen(!open);
     };
-    console.log(pathName);
 
     const userRoutes = [
         {
@@ -71,6 +70,31 @@ function AdminLayout(props) {
             id: 2,
             path: "/admin/category",
             name: "category",
+        },
+        {
+            id: 3,
+            path: "/admin/subcategory",
+            name: "Subcategory",
+        },
+        {
+            id: 4,
+            path: "/admin/category2",
+            name: "Generice Name",
+        },
+        {
+            id: 5,
+            path: "/admin/category2",
+            name: "Medicine List",
+        },
+        {
+            id: 6,
+            path: "/admin/category2",
+            name: "Manufactuer List",
+        },
+        {
+            id: 6,
+            path: "/admin/category2",
+            name: "Form List",
         },
     ];
 
@@ -158,7 +182,7 @@ function AdminLayout(props) {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar
-                elevation={0}
+                elevation={3}
                 component="nav"
                 position="fixed"
                 sx={{
@@ -178,7 +202,7 @@ function AdminLayout(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        DrugCarts Admin
+                        DrugCarts
                     </Typography>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         <IconButton sx={{ p: 0 }}>

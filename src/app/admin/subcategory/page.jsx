@@ -21,24 +21,25 @@ import DDInput from '@/components/admin/input/DDInput';
 import AdminLayout from '@/components/layouts/AdminLayout';
 
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+function createData(categoryName, subCategory) {
+    return { categoryName, subCategory };
 }
 
 const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('pizza burger', 356, 16.0, 49, 3.9),
-    createData('sultiute', 356, 16.0, 49, 3.9),
+    createData('alzheimers-disese', "Lewy Body Dementia"),
+    createData('alzheimers-disese', "Vascular Dementia"),
+    createData('alzheimers-disese', "Fronto Temporal Dementia"),
+    createData('anaemia', "Anaemia"),
+    createData('anaesthesia-local', "local anesthetic"),
+    createData('analgesic', "Headache", "salary"),
+    createData('analgesic', "Pain relief"),
 ];
 const rowText = {
     color: '#fff',
     fontFamily: "Poppins",
 }
-function UserTable() {
+function SubCategory() {
+    const router = useRouter()
     const pathname = usePathname()
     const [showNo, setShowNo] = useState("")
 
@@ -46,7 +47,6 @@ function UserTable() {
         setShowNo(event.target.value);
     };
 
-    const router = useRouter()
     const handleClick = () => {
         alert("row count alert");
     };
@@ -57,15 +57,15 @@ function UserTable() {
         <AdminLayout>
             <Box>
                 <Box sx={{ display: 'flex' }}>
-                    <Typography variant="h5" fontFamily={"Poppins"} fontWeight="bold" sx={{ flexGrow: 1 }}>Category</Typography>
+                    <Typography variant="h5" fontFamily={"Poppins"} fontWeight="bold" sx={{ flexGrow: 1 }}>Sub Catogory List</Typography>
                     <Button
                         color="secondary"
                         variant="contained"
                         style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                         startIcon={<AddIcon />}
-                        onClick={() => router.push(`/admin/categoryAdd`)}
+                        onClick={() => router.push(`/admin/subcategoryAdd`)}
                     >
-                        Add Category
+                        Add Sub Category
                     </Button>
                 </Box>
                 <Grid2 container alignItems={"center"} spacing={2}>
@@ -87,22 +87,22 @@ function UserTable() {
                         <TableHead sx={{ backgroundColor: '#24282c' }}>
                             <TableRow>
                                 <TableCell style={rowText}>Sno</TableCell>
-                                <TableCell style={rowText}>Category</TableCell>
-                                <TableCell align="right" style={rowText}>Status</TableCell>
+                                <TableCell style={rowText}>Category Name</TableCell>
+                                <TableCell style={rowText}>Sub Category</TableCell>
                                 <TableCell align="right" style={rowText}>Action</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {rows.map((row, i) => (
                                 <TableRow
-                                    key={row.name}
+                                    key={i}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                 >
                                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>{i + 1}</TableCell>
                                     <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                        {row.name}
+                                        {row.categoryName}
                                     </TableCell>
-                                    <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">Active</TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.subCategory}</TableCell>
                                     <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                         <button>
                                             <CreateIcon color="primary" />
@@ -127,4 +127,4 @@ function UserTable() {
     )
 }
 
-export default UserTable
+export default SubCategory

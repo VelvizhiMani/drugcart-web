@@ -12,11 +12,12 @@ import PersonIcon from '@mui/icons-material/Person';
 import { Button, Typography } from '@mui/material';
 
 const CardItem = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
+    background: 'linear-gradient(to right bottom, #141727, #3a416f)',
     ...theme.typography.body2,
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
     borderRadius: 12,
     color: theme.palette.text.secondary,
+    cursor: 'pointer',
     ...theme.applyStyles('dark', {
         backgroundColor: '#1A2027',
     }),
@@ -37,24 +38,23 @@ const CardIcon = styled(Paper)(({ theme }) => ({
 
 function UserCard() {
     return (
-        <Grid container spacing={2}>
+        <Grid container mt={2} mb={8} spacing={2}>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
                 <CardItem elevation={6}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
-                            fontWeight={500}
-                            fontSize={16}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Orders
+                            Admin infoway
                         </Typography>
-                        <CardIcon>
-                            <WorkIcon sx={{ color: "#fff" }} />
-                        </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>4574</Typography>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(contract)</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -63,17 +63,16 @@ function UserCard() {
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
-                            fontWeight={500}
-                            fontSize={16}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Products
+                            Mukesh
                         </Typography>
-                        <CardIcon>
-                            <AccountTreeIcon sx={{ color: "#fff" }} />
-                        </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>6475</Typography>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={16}>(salary)</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -82,17 +81,16 @@ function UserCard() {
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
-                            fontWeight={500}
-                            fontSize={16}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Users
+                            Kishore
                         </Typography>
-                        <CardIcon>
-                            <GroupsIcon sx={{ color: "#fff" }} />
-                        </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(salary)</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -101,17 +99,88 @@ function UserCard() {
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
-                            fontWeight={500}
-                            fontSize={16}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Customers
+                            Ramani
                         </Typography>
-                        <CardIcon>
-                            <ShoppingCartIcon sx={{ color: "#fff" }} />
-                        </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(contract)</Typography>
+                </CardItem>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                <CardItem elevation={6}>
+                    <Box sx={{ display: 'flex' }}>
+                        <Typography
+                            variant="body1"
+                            fontFamily={"Poppins"}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
+                            sx={{ flexGrow: 1 }}
+                        >
+                            Mahalakshmi
+                        </Typography>
+                    </Box>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(contract)</Typography>
+                </CardItem>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                <CardItem elevation={6}>
+                    <Box sx={{ display: 'flex' }}>
+                        <Typography
+                            variant="body1"
+                            fontFamily={"Poppins"}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
+                            sx={{ flexGrow: 1 }}
+                        >
+                            Pavithra
+                        </Typography>
+                    </Box>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(contract)</Typography>
+                </CardItem>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                <CardItem elevation={6}>
+                    <Box sx={{ display: 'flex' }}>
+                        <Typography
+                            variant="body1"
+                            fontFamily={"Poppins"}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
+                            sx={{ flexGrow: 1 }}
+                        >
+                            Meher
+                        </Typography>
+                    </Box>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(salary)</Typography>
+                </CardItem>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                <CardItem elevation={6}>
+                    <Box sx={{ display: 'flex' }}>
+                        <Typography
+                            variant="body1"
+                            fontFamily={"Poppins"}
+                            fontWeight={"bold"}
+                            fontSize={22}
+                            color='#fff'
+                            textAlign={"center"}
+                            sx={{ flexGrow: 1 }}
+                        >
+                            Priyanka
+                        </Typography>
+                    </Box>
+                    <Typography variant="body1" mt={0.5} fontFamily={"Poppins"} textAlign={"center"} color='#fff' fontSize={18}>(salary)</Typography>
                 </CardItem>
             </Grid>
         </Grid>

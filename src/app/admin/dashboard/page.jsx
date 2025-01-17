@@ -10,13 +10,17 @@ import AdminLayout from '@/components/layouts/AdminLayout'
 import { Button, Typography } from '@mui/material';
 import AdminCard from '@/components/admin/card/AdminCard';
 import UserTable from '@/components/admin/table/UserTable';
+import UserCard from '@/components/admin/card/UserCard';
+import ProductCalendar from '@/components/admin/Calender/ProductCalender';
 
 function Dashboard() {
   return (
     <AdminLayout>
       <Box sx={{ flexGrow: 1 }}>
+        <UserCard />
         <AdminCard />
         <UserTable />
+        <ProductCalendar />
       </Box>
     </AdminLayout>
   )

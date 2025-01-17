@@ -21,24 +21,25 @@ import SelectInput from '../input/SelectInput';
 import DDInput from '../input/DDInput';
 
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
+function createData(name, email, password, userType) {
+    return { name, email, password, userType };
 }
 
 const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('pizza burger', 356, 16.0, 49, 3.9),
-    createData('sultiute', 356, 16.0, 49, 3.9),
+    createData('admin infoway', "admin@gmail.com", "HRW12345", "salary"),
+    createData('mukesh', "mukesh@gmail.com", "HRW12345", "contract"),
+    createData('dilima', "dilima@gmail.com", "HRW12345", "contract"),
+    createData('Meher', "meher@gmail.com", "HRW12345", "salary"),
+    createData('Abirami', "abirami@gmail.com", "HRW12345", "contract"),
+    createData('kamali', "kamali@gmail.com", "salary", "salary"),
+    createData('Raghavi', "raghavi@gmail.com", "HRW12345", "contract"),
 ];
 const rowText = {
     color: '#fff',
     fontFamily: "Poppins",
 }
 function UserTable() {
+    const router = useRouter()
     const pathname = usePathname()
     const [showNo, setShowNo] = useState("")
 
@@ -46,7 +47,6 @@ function UserTable() {
         setShowNo(event.target.value);
     };
 
-    const router = useRouter()
     const handleClick = () => {
         alert("row count alert");
     };
@@ -60,11 +60,11 @@ function UserTable() {
                 <Button
                     color="secondary"
                     variant="contained"
-                    style={{ textTransform: "capitalize" }}
+                    style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/categoryAdd`)}
+                    onClick={() => router.push(`/admin/userAdd`)}
                 >
-                    Add Category
+                    Add User
                 </Button>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -86,8 +86,10 @@ function UserTable() {
                     <TableHead sx={{ backgroundColor: '#24282c' }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Category</TableCell>
-                            <TableCell align="right" style={rowText}>Status</TableCell>
+                            <TableCell style={rowText}>Name</TableCell>
+                            <TableCell  style={rowText}>Email</TableCell>
+                            <TableCell  style={rowText}>Password</TableCell>
+                            <TableCell  style={rowText}>UserType</TableCell>
                             <TableCell align="right" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -101,7 +103,9 @@ function UserTable() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                     {row.name}
                                 </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">Active</TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.email}</TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.password}</TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.userType}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button>
                                         <CreateIcon color="primary" />
@@ -117,7 +121,7 @@ function UserTable() {
 
             </TableContainer>
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
-                <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182</Typography>
+                <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182 entries</Typography>
                 <br/>
                 <Pagination size="large" count={10} color="secondary" />
             </Box>
