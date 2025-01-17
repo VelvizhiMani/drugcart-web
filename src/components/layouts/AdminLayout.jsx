@@ -101,12 +101,16 @@ function AdminLayout(props) {
     const drawer = (
         <div>
             {/* <Toolbar /> */}
-            <Image
-                priority
-                src={Logo}
-                alt="Logo"
-                className='logoIcon'
-            />
+            <Box sx={{ background: '#fff', py: 1 }}>
+                <Image
+                    priority
+                    src={Logo}
+                    alt="Logo"
+                    className='logoIcon'
+                />
+            </Box>
+
+
             <Divider />
             <List>
                 {userRoutes.map((item, i) => (
@@ -129,6 +133,7 @@ function AdminLayout(props) {
                                     variant="body1"
                                     color={"#fff"}
                                     fontFamily={"Poppins"}
+                                    fontSize={15}
                                 >
                                     {item.name}
                                 </Typography>
@@ -201,8 +206,8 @@ function AdminLayout(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        DrugCarts
+                    <Typography variant="h6" fontFamily={"Poppins"} fontWeight={600} noWrap sx={{ flexGrow: 1 }}>
+                        Admin
                     </Typography>
                     <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                         <IconButton sx={{ p: 0 }}>
