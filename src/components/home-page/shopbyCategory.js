@@ -1,18 +1,17 @@
 import Image from 'next/image'
-import Facecare from '../../../assets/shopbycategory/face-care.png'
-import Oralcare from '../../../assets/shopbycategory/oral-care.png'
-import Naturalcare from '../../../assets/shopbycategory/natural-care.png'
-import Skincare from '../../../assets/shopbycategory/skin-care.png'
-import Womencare from '../../../assets/shopbycategory/women-care.png'
-import Generic1 from '../../../assets/shopbycategory/generic-1.png'
-import Generic2 from '../../../assets/shopbycategory/generic-2.png'
-import Newproduct from '../../../assets/shopbycategory/new.png'
-import Bestseller from '../../../assets/shopbycategory/best-seller.png'
-import Discount from '../../../assets/shopbycategory/discount.png'
-import Tranding from '../../../assets/shopbycategory/tranding.png'
-import Herbal from '../../../assets/shopbycategory/herbal.png'
+import Facecare from '@/assets/shopbycategory/face-care.png'
+import Oralcare from '@/assets/shopbycategory/oral-care.png'
+import Naturalcare from '@/assets/shopbycategory/natural-care.png'
+import Skincare from '@/assets/shopbycategory/skin-care.png'
+import Generic1 from '@/assets/shopbycategory/generic-1.png'
+import Generic2 from '@/assets/shopbycategory/generic-2.png'
+import Newproduct from '@/assets/shopbycategory/new.png'
+import Bestseller from '@/assets/shopbycategory/best-seller.png'
+import Discount from '@/assets/shopbycategory/discount.png'
+import Tranding from '@/assets/shopbycategory/tranding.png'
+import Herbal from '@/assets/shopbycategory/herbal.png'
 
-const Shopbycategory = () => {
+const ShopbyCategory = () => {
   return (
     <section className='px-10 mt-3'>
         <div className='p-2 font-semibold mb-2 mt-2 text-lg'>
@@ -146,4 +145,4 @@ const Shopbycategory = () => {
   )
 }
 
-export default Shopbycategory
+export default ShopbyCategory;

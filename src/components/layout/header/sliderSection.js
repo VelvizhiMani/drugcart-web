@@ -1,10 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
-import BannerImg from "../../../assets/main-banner.png"
-import Righttop from "../../../assets/banner-right-top.png"
-import Rightbottom from "../../../assets/banner-right-bottom.png"
+import BannerImg from "@/assets/main-banner.png"
+import Righttop from "@/assets/banner-right-top.png"
+import Rightbottom from "@/assets/banner-right-bottom.png"
 
-const Slider = () => {
+const SliderSection = () => {
   return (
     <section>
         <div className='container mx-auto'>
@@ -22,4 +22,4 @@ const Slider = () => {
   )
 }
 
-export default Slider;
+export default SliderSection;

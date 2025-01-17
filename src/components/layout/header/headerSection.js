@@ -3,7 +3,7 @@ import Image from "next/image";
 import Logo from "@/assets/logo.png"
 import { useState } from "react";
 
-const Header = () => {
+const HeaderSection = () => {
     const [pincode, setPincode] = useState("");
     const [query, setQuery] = useState("");
 
@@ -96,4 +96,4 @@ const Header = () => {
     )
 }
 
-export default Header;
+export default HeaderSection;

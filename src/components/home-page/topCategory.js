@@ -1,13 +1,13 @@
 import Image from 'next/image'
-import CancerCare from "../../../assets/shopcategory/cancer-care.png"
-import ElderCare from "../../../assets/shopcategory/elder-care.png"
-import SpecialCare from "../../../assets/shopcategory/special-care.png"
-import HealthCare from "../../../assets/shopcategory/health-care.png"
-import HealthDevice from "../../../assets/shopcategory/health-device-care.png"
-import BeautyDevice from "../../../assets/shopcategory/beauty-care.png"
-import Ayurvedic from "../../../assets/ayurvedic.png"
+import CancerCare from "@/assets/shopcategory/cancer-care.png"
+import ElderCare from "@/assets/shopcategory/elder-care.png"
+import SpecialCare from "@/assets/shopcategory/special-care.png"
+import HealthCare from "@/assets/shopcategory/health-care.png"
+import HealthDevice from "@/assets/shopcategory/health-device-care.png"
+import BeautyDevice from "@/assets/shopcategory/beauty-care.png"
+import Ayurvedic from "@/assets/ayurvedic.png"
 
-const Topcategory = () => {
+const TopCategory = () => {
     return (
         <section className='px-10 mt-4'>
             <div className='p-2 bg-gray-100 font-bold mb-4'>
@@ -72,4 +72,4 @@ const Topcategory = () => {
     )
 }
 
-export default Topcategory;
+export default TopCategory;

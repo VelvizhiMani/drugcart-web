@@ -1,11 +1,11 @@
 import Image from "next/image"
-import Offers1 from '../../../assets/offers/offers-1.jpg'
-import Offers2 from '../../../assets/offers/offers-2.jpg'
-import Offers3 from '../../../assets/offers/offers-3.jpg'
-import WheatgrassJuice from '../../../assets/product/wheatgrass-juice.png';
-import Famelight from '../../../assets/famelight.png';
+import Offers1 from '@/assets/offers/offers-1.jpg'
+import Offers2 from '@/assets/offers/offers-2.jpg'
+import Offers3 from '@/assets/offers/offers-3.jpg'
+import WheatgrassJuice from '@/assets/product/wheatgrass-juice.png';
+import Famelight from '@/assets/famelight.png';
 
-const Fameoftheday = () => {
+const FameSection = () => {
   return (
     <section className='px-10 mt-10'>
       <div className="bg-bgfame px-5 py-2 mb-10 relative">
@@ -21,7 +21,7 @@ const Fameoftheday = () => {
         <div className='p-2 font-bold mb-2 text-center text-lg'>
           <h1>Fame of the Day</h1>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 mb-10 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-5 mb-10 gap-2">
           <div className="relative mt-10 bg-white p-4 border rounded-lg shadow-md">
             <div className="absolute top-2 left-1 text-white text-xs px-2 py-1 rounded-full">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 text-black">
@@ -335,4 +335,4 @@ const Fameoftheday = () => {
   )
 }
 
-export default Fameoftheday
+export default FameSection;

@@ -1,12 +1,12 @@
 import Image from 'next/image'
-import Aromaoffer from '../../../assets/offers/aroma.png'
-import Labtest from '../../../assets/offers/labtest.png'
-import Healthoffer from '../../../assets/offers/healthcare.png'
-import Ayurvedicoffer from '../../../assets/offers/ayurvedic.png'
-import Specialoffer from '../../../assets/offers/specialcare.png'
-import Eyeoffer from '../../../assets/offers/eyecare.png'
+import Aromaoffer from '@/assets/offers/aroma.png'
+import Labtest from '@/assets/offers/labtest.png'
+import Healthoffer from '@/assets/offers/healthcare.png'
+import Ayurvedicoffer from '@/assets/offers/ayurvedic.png'
+import Specialoffer from '@/assets/offers/specialcare.png'
+import Eyeoffer from '@/assets/offers/eyecare.png'
 
-const Aromogroup = () => {
+const AromoGroup = () => {
   return (
       <section className='px-10 mt-3'>
         <div className='grid grid-cols-3 md:grid-cols-3 gap-3'>
@@ -23,4 +23,4 @@ const Aromogroup = () => {
   )
 }
 
-export default Aromogroup;
+export default AromoGroup;

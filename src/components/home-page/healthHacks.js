@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import Hacks1 from '../../../assets/hacks/hacks-1.jpg'
-import Hacks2 from '../../../assets/hacks/hacks-2.jpg'
-import Hacks3 from '../../../assets/hacks/hacks-3.jpg'
-const Healthhacks = () => {
+import Hacks1 from '@/assets/hacks/hacks-1.jpg'
+import Hacks2 from '@/assets/hacks/hacks-2.jpg'
+import Hacks3 from '@/assets/hacks/hacks-3.jpg'
+const HealthHacks = () => {
   return (
     <section className='px-10 mt-3'>
         <div className='p-2 font-semibold mb-2 mt-2 text-lg'>
@@ -50,4 +50,4 @@ const Healthhacks = () => {
   )
 }
 
-export default Healthhacks;
+export default HealthHacks;

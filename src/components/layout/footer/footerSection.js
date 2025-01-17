@@ -1,13 +1,13 @@
 import Image from "next/image";
-import logoIcon from "../../assets/logo.png";
-import GooglePay from "../../assets/payment/google-pay.png";
-import Mastercard from "../../assets/payment/mastercard.png";
-import Visa from "../../assets/payment/visa.png";
-import Rupay from "../../assets/payment/rupay.png";
-import appstoreIcon from "../../assets/app/app-store.png";
-import googlepayIcon from "../../assets/app/google-pay.png";
+import logoIcon from "@/assets/logo.png";
+import GooglePay from "@/assets/payment/google-pay.png";
+import Mastercard from "@/assets/payment/mastercard.png";
+import Visa from "@/assets/payment/visa.png";
+import Rupay from "@/assets/payment/rupay.png";
+import appstoreIcon from "@/assets/app/app-store.png";
+import googlepayIcon from "@/assets/app/google-pay.png";
 
-const Footer = () => {
+const FooterSection = () => {
     return (
         <>
             <section className='bg-bgcolor'>
@@ -166,7 +166,7 @@ const Footer = () => {
     )
 }
 
-export default Footer
+export default FooterSection;
 
 
 

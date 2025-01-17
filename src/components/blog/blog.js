@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import Blog1 from '../../assets/blog/blog-1.png';
-import Blog2 from '../../assets/blog/blog-2.jpg'
-import Blog3 from '../../assets/blog/blog-3.jpg'
-import Blog4 from '../../assets/blog/blog-4.jpg'
+import Blog1 from '@/assets/blog/blog-1.png';
+import Blog2 from '@/assets/blog/blog-2.jpg'
+import Blog3 from '@/assets/blog/blog-3.jpg'
+import Blog4 from '@/assets/blog/blog-4.jpg'
 
 const Blog = () => {
   return (

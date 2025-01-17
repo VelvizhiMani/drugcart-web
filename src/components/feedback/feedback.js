@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Clientreview from '../../assets/client-review-icon.png'
+import Clientreview from '@/assets/client-review-icon.png'
 
 const Feedback = () => {
   return (

@@ -1,14 +1,14 @@
 import Image from 'next/image'
-import Seasonal from '../../../assets/featured/seasonal.png'
-import Labpackage from '../../../assets/featured/lab-package.png'
-import ClinicCare from '../../../assets/featured/clinic-care.png'
-import Babycare from '../../../assets/featured/baby-care.png'
-import Drugcarts from '../../../assets/featured/drugcarts.png'
-import SpecialCares from '../../../assets/featured/special-care.png'
-import Testkit from '../../../assets/featured/test-kit.png'
-import Women from '../../../assets/featured/women.png'
+import Seasonal from '@/assets/featured/seasonal.png'
+import Labpackage from '@/assets/featured/lab-package.png'
+import ClinicCare from '@/assets/featured/clinic-care.png'
+import Babycare from '@/assets/featured/baby-care.png'
+import Drugcarts from '@/assets/featured/drugcarts.png'
+import SpecialCares from '@/assets/featured/special-care.png'
+import Testkit from '@/assets/featured/test-kit.png'
+import Women from '@/assets/featured/women.png'
 
-const Featuredpackage = () => {
+const FeaturedPackage = () => {
   return (
     <section className='px-10'>
         <div className='p-2 font-semibold mb-5 mt-10 text-lg bg-gray-100'>
@@ -53,4 +53,4 @@ const Featuredpackage = () => {
   )
 }
 
-export default Featuredpackage
+export default FeaturedPackage;
