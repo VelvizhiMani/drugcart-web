@@ -1,30 +1,30 @@
-'use client';
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { apiData } from '../reduxToolkit/slice';
+// 'use client';
+// import React, { useEffect } from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { apiData } from '../reduxToolkit/slice';
 
-const APIData = () => {
-    const dispatch = useDispatch();
-    const employeesAPIData = useSelector((state) => state.employeeData.employeesAPIData)
-    const isLoading = useSelector((state) => state.employeeData.isLoading)
-    const error = useSelector((state) => state.employeeData.error)
+// const APIData = () => {
+//     const dispatch = useDispatch();
+//     const employeesAPIData = useSelector((state) => state.employeeData.employeesAPIData)
+//     const isLoading = useSelector((state) => state.employeeData.isLoading)
+//     const error = useSelector((state) => state.employeeData.error)
 
-    useEffect(() => {
-      dispatch(apiData());
-    },[])
+//     useEffect(() => {
+//       dispatch(apiData());
+//     },[])
 
-  return (
-    <>
-    <h4>API Data</h4>
-    {isLoading && <p>Loading .....</p>}
-    {error && <p>Error {error}</p>}
-    {
-        employeesAPIData.length > 0 ? employeesAPIData.map((item)=> (
-            <h3 key={item.id}>{item.name}</h3>
-        )) : !isLoading && <p>No Data Available</p>
-    }
-    </>
-  )
-}
+//   return (
+//     <>
+//     <h4>API Data</h4>
+//     {isLoading && <p>Loading .....</p>}
+//     {error && <p>Error {error}</p>}
+//     {
+//         employeesAPIData.length > 0 ? employeesAPIData.map((item)=> (
+//             <h3 key={item.id}>{item.name}</h3>
+//         )) : !isLoading && <p>No Data Available</p>
+//     }
+//     </>
+//   )
+// }
 
-export default APIData
+// export default APIData
