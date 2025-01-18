@@ -1,5 +1,4 @@
 import { jost, poppins } from "@/utils/fonts";
-// import { Providers } from "../reduxToolkit/provider";
 import "./globals.css";
 import HeaderSection from "@/components/layout/header/headerSection";
 import MenuSection from "@/components/layout/navigation/desktopMenu";
@@ -17,13 +16,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${jost.variable} ${poppins.variable} antialiased`}
       >
-        {/* <Providers> */}
           <HeaderSection />
           <MenuSection />
           {children}
           <FooterSection />
           <AwarenessSection/>
-        {/* </Providers> */}
       </body>
     </html>
   );
