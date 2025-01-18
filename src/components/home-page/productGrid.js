@@ -156,8 +156,8 @@ const ProductGrid = () => {
                         <div className="divide-y divide-slate-400 mb-8">
                             <div className="text-2xl"><h3 className="font-bold text-lg mb-2">Best Seller</h3></div>
                             {bestSellers?.map((item) => (
-                                <div className="p-4">
-                                    <div className="flex items-center" key={item?.id}>
+                                <div className="p-4" key={item?.id}>
+                                    <div className="flex items-center">
                                         <div className="w-1/3">
                                             <Image
                                                 src={item?.image}
