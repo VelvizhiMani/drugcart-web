@@ -1,4 +1,4 @@
-const {createSlice, nanoid, createAsyncThunk} = require("@reduxjs/toolkit");
+import {createSlice, nanoid, createAsyncThunk} from "@reduxjs/toolkit";
 
 const initialState = {
     employees:JSON.parse(localStorage.getItem('emp')) || [],

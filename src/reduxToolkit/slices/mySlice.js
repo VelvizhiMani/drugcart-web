@@ -1,4 +1,4 @@
-const { createSlice, nanoid } = require("@reduxjs/toolkit")
+import {createSlice, nanoid} from "@reduxjs/toolkit";
 
 const initialState = {
     students: []
