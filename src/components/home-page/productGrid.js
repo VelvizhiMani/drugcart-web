@@ -152,12 +152,12 @@ const ProductGrid = () => {
                     </div>
                 </div>
                 <div className="bg-[#FFEFF5] rounded-md shadow-md">
-                    <div className="p-4 rounded-lg shadow">
-                        <div className="divide-y divide-slate-400">
+                    <div className="p-4 rounded-lg">
+                        <div className="divide-y divide-slate-400 mb-8">
                             <div className="text-2xl"><h3 className="font-bold text-lg mb-2">Best Seller</h3></div>
                             {bestSellers?.map((item) => (
-                                <div className="p-4">
-                                    <div className="flex items-center" key={item?.id}>
+                                <div className="p-4" key={item?.id}>
+                                    <div className="flex items-center">
                                         <div className="w-1/3">
                                             <Image
                                                 src={item?.image}
@@ -195,13 +195,13 @@ const ProductGrid = () => {
                                 </div>
                             ))}
                         </div>
-                        <button>
+                        {/* <button> */}
                             <Image
                                 src={discountImg}
                                 alt="Product"
                                 className="w-80 h-auto my-4"
                             />
-                        </button>
+                        {/* </button> */}
 
                     </div>
                 </div>
