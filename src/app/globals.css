@@ -23,3 +23,9 @@ body {
 .bannerheight {
   height: 450px;
 }
+
+.ql-editor {
+  overflow: auto;
+  resize: vertical;
+  min-height: 18em;
+}

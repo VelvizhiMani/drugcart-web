@@ -18,21 +18,29 @@ import TextInput from "@/components/admin/input/TextInput";
 import ImageInput from "@/components/admin/input/ImageInput";
 import InputArea from "@/components/admin/input/InputArea";
 import VideoInput from "@/components/admin/input/VideoInput";
-
 import dynamic from "next/dynamic";
-import Quill from "quill";
-import QuillImageResize from "quill-image-resize-module-react";
+// import Quill from "quill";
+// import QuillImageResize from "quill-image-resize-module-react";
 import "react-quill-new/dist/quill.snow.css";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
-Quill.register("modules/resize", QuillImageResize);
+// Quill.register("modules/resize", QuillImageResize);
 
 function GenericeAdd() {
   const router = useRouter();
   const [categoryName, setCategoryName] = useState("");
   const [subCategoryName, setSubCategoryName] = useState("");
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      // This ensures the code runs only on the client side
+      window.addEventListener('load', () => {
+        // Quill.register("modules/resize", QuillImageResize);
+      });
+    }
+  }, []);
 
   const handleTypeChange = (event) => {
     setCategoryName(event.target.value);
@@ -56,9 +64,9 @@ function GenericeAdd() {
       ["link", "image", "video"],
       ["clean"],
     ],
-    resize: {
-      modules: ["Resize"],
-    },
+    // resize: {
+    //   modules: ["Resize"],
+    // },
   };
 
   console.log(value);
@@ -160,6 +168,7 @@ function GenericeAdd() {
               theme="snow"
               value={value}
               onChange={setValue}
+
             />
           </Grid2>
         </Grid2>
