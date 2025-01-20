@@ -111,7 +111,7 @@ function CategoryAdd() {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
               title={"URL"}
-              value={formik.values.categoryName}
+              value={formik.values.url}
               onChange={formik.handleChange("url")}
               helperText={formik.touched.url ? formik.errors.url : null}
               error={formik.touched.url ? formik.errors.url : null}
