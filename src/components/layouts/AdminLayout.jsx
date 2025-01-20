@@ -78,7 +78,7 @@ function AdminLayout(props) {
         },
         {
             id: 4,
-            path: "/admin/category2",
+            path: "/admin/genericelist",
             name: "Generice Name",
         },
         {
