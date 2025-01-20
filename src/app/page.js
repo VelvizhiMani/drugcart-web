@@ -11,6 +11,9 @@ import FameSection from "@/components/home-page/fameSection";
 import Blog from "@/components/blog/blog";
 import CustomerSaying from "@/components/customersaying/customersaying";
 import Feedback from '@/components/feedback/feedback';
+import AddEmployees from "../components/employee/AddEmployees";
+import ShowEmployees from "../components/employee/ShowEmployees";
+
 
 export default function Home() {
   return (
@@ -28,6 +31,8 @@ export default function Home() {
     <Blog/>
     <Feedback/>
     <CustomerSaying/>
+    <AddEmployees/>
+    <ShowEmployees/>
     </>
   );
 }
