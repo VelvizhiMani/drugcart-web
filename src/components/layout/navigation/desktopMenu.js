@@ -160,36 +160,52 @@ const DesktopMenu = () => {
                 </Link>
                 {submenuOpen === 'ayush' && (
                     <div className="ml-4 space-y-1">
-                        <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
-                            Submenu 1
+                        <Link href="/ayurvedic" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            Ayurvedic
                         </Link>
-                        <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
-                            Submenu 2
+                        <Link href="/homeopathy" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            Homeopathy
+                        </Link>
+                        <Link href="/siddha" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            Siddha
+                        </Link>
+                        <Link href="/unani" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            Unani
                         </Link>
                     </div>
                 )}
-                <Link href="/" className="block px-4 py-2 hover:bg-white">
-                    Team
-                </Link>
                 <Link
                     href="#"
                     className="block px-4 py-2 hover:bg-white"
-                    onClick={() => setSubmenuOpen(submenuOpen === 'calendar' ? null : 'calendar')}
+                    onClick={() => setSubmenuOpen(submenuOpen === 'healthcare' ? null : 'calendar')}
                 >
-                    Calendar
+                    Health Care
                 </Link>
-                {submenuOpen === 'calendar' && (
+                {submenuOpen === 'healthcare' && (
                     <div className="ml-4 space-y-1">
                         <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
-                            Event 1
+                            Blood Test Kit
                         </Link>
                         <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
-                            Event 2
+                            Covid Test Kit
+                        </Link>
+                        <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            Diabetes Monitor
+                        </Link>
+                        <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            Fitness Equipment
+                        </Link>
+                        <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
+                            HIV Test Kit
                         </Link>
                     </div>
                 )}
-                <Link href="/" className="block px-4 py-2 hover:bg-white">
-                    Projects
+                <Link href="/lab" className="block px-4 py-2 hover:bg-white">
+                    Lab
+                </Link>
+                
+                <Link href="/doctor" className="block px-4 py-2 hover:bg-white">
+                    Doctor
                 </Link>
             </div>
         </nav>
