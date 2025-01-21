@@ -11,10 +11,11 @@ import {
 import AdminLayout from "@/components/layouts/AdminLayout";
 import SearchField from "@/components/admin/AutoComplete/SearchField";
 import ImageField from "@/components/admin/AutoComplete/ImageField";
+import Link from "next/link";
 
 const conditions = [
   { name: "Acne" },
-  { name: "ADHD"},
+  { name: "ADHD" },
   { name: "Agoraphobia" },
   { name: "Alzheimer's Disease" },
   { name: "Amblyopia" },
@@ -32,7 +33,7 @@ function MedicineCat() {
     selectedLetter === "All"
       ? conditions
       : conditions.filter((c) => c.name.startsWith(selectedLetter));
-      
+
   return (
     <AdminLayout>
       <Box>
@@ -64,7 +65,7 @@ function MedicineCat() {
             </Button>
           ))}
           <Button
-          size="small"
+            size="small"
             variant={selectedLetter === "All" ? "contained" : "outlined"}
             color="success"
             onClick={() => setSelectedLetter("All")}
@@ -77,14 +78,16 @@ function MedicineCat() {
         <Typography variant="h6">{selectedLetter}</Typography>
         <Grid2 container spacing={2}>
           {filteredConditions.map((condition, index) => (
-            <Grid2 size={{xs: 12, sm: 6, md: 4}} key={index}>
-              <Card elevation={3} className="p-2 cursor-pointer">
-                <CardContent className="flex flex-col items-center">
-                  <Typography variant="h6" align="center" fontWeight="bold">
-                    {condition.name}
-                  </Typography>
-                </CardContent>
-              </Card>
+            <Grid2 key={index} size={{ xs: 12, sm: 6, md: 4 }}>
+              <Link href={`/admin/genericproducts/${condition.name}`}>
+                <Card elevation={3} className="p-2 cursor-pointer">
+                  <CardContent className="flex flex-col items-center">
+                    <Typography variant="h6" align="center" fontWeight="bold">
+                      {condition.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Link>
             </Grid2>
           ))}
         </Grid2>
