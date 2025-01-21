@@ -22,6 +22,7 @@ import dynamic from "next/dynamic";
 // import Quill from "quill";
 // import QuillImageResize from "quill-image-resize-module-react";
 import "react-quill-new/dist/quill.snow.css";
+import TextEditor from "@/components/admin/input/TextEditor";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -36,7 +37,7 @@ function GenericeAdd() {
   useEffect(() => {
     if (typeof window !== "undefined" && typeof document !== "undefined") {
       // This ensures the code runs only on the client side
-      window.addEventListener('load', () => {
+      window.addEventListener("load", () => {
         // Quill.register("modules/resize", QuillImageResize);
       });
     }
@@ -110,7 +111,7 @@ function GenericeAdd() {
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <SelectInput
-              title={" Sub Category Name"}
+              title={"Sub Category Name"}
               value={subCategoryName}
               onChange={handleSubTypeChange}
               data={subcatType}
@@ -147,29 +148,135 @@ function GenericeAdd() {
         }}
       >
         <Grid2 container spacing={2}>
-          <Grid2 size={{ xs: 12, md: 8 }}>
+          <Grid2 size={{ xs: 12, md: 12 }}>
             {/* <EditorToolbar /> */}
-            <InputLabel
-              id="input"
-              sx={{
-                mt: 1,
-                mb: 0.5,
-                fontWeight: 600,
-                fontFamily: "Poppins",
-                color: "#000",
-                fontSize: 14,
-              }}
+            <TextEditor title={"Medical Description of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Uses of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Uses and Benefits of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Medicine Prescribed for Follow Indication:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Mechanism of action of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"How Medicine works:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Contraindications of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Side effects of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"FAQs for Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <Typography
+              variant="h6"
+              fontFamily={"Poppins"}
+              fontWeight="bold"
+              fontSize={16}
             >
-              Medical Description of Medicine :
-            </InputLabel>
-            <ReactQuill
-              modules={modules}
-              //   formats={formats}
-              theme="snow"
-              value={value}
-              onChange={setValue}
-
-            />
+              Precautions and general warning of Medicine:
+            </Typography>
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Pregnancy:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Breast Feeding:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Kidney Problem:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Liver Disease:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Heart Disease:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Asthma:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"How to Take Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Use of Medicine in Adult:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"Use of Medicine in children:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Use of Medicine in Elderly Patients:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Alcohol:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Driving or operating machinery:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Other general warnings:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Talk to your doctor if:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"General instructions:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <Typography
+              variant="h6"
+              fontFamily={"Poppins"}
+              fontWeight="bold"
+              fontSize={16}
+            >
+              Drug Interaction of Medicine:
+            </Typography>
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Drug-Drug interaction of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Drug-Food interaction of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Drug-Disease interaction of Medicine:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Interaction with food items:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <Typography
+              variant="h6"
+              fontFamily={"Poppins"}
+              fontWeight="bold"
+              fontSize={16}
+            >
+              Dosage of Medicine:
+            </Typography>
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Over Dose:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Missed Dose:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Storage and disposal:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <TextEditor title={"Fast tag:"} />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            <TextEditor title={"References:"} value={value} onChange={setValue}/>
           </Grid2>
         </Grid2>
       </Paper>

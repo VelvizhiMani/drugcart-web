@@ -83,7 +83,7 @@ function AdminLayout(props) {
         },
         {
             id: 5,
-            path: "/admin/category2",
+            path: "/admin/medicinecat",
             name: "Medicine List",
         },
         {
