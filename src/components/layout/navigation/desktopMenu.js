@@ -145,14 +145,20 @@ const DesktopMenu = () => {
 
             {/* Mobile Menu */}
             <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden bg-gray-200`}>
+            <Link href="/" className="block px-4 py-2 hover:bg-white">
+                    Home
+                </Link>
+                <Link href="/medicine" className="block px-4 py-2 hover:bg-white">
+                    Medicine
+                </Link>
                 <Link
                     href="#"
                     className="block px-4 py-2 hover:bg-white"
-                    onClick={() => setSubmenuOpen(submenuOpen === 'dashboard' ? null : 'dashboard')}
+                    onClick={() => setSubmenuOpen(submenuOpen === 'ayush' ? null : 'dashboard')}
                 >
-                    Dashboard
+                    Ayush
                 </Link>
-                {submenuOpen === 'dashboard' && (
+                {submenuOpen === 'ayush' && (
                     <div className="ml-4 space-y-1">
                         <Link href="/" className="block px-4 py-2 text-black hover:bg-gray-100">
                             Submenu 1
