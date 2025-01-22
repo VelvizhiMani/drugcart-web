@@ -197,7 +197,7 @@ function GeneticProduct() {
             variant="contained"
             style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
             startIcon={<AddIcon />}
-            onClick={() => router.push(`/admin/categoryAdd`)}
+            onClick={() => router.push(`/admin/genericlistadd`)}
           >
             Add Product
           </Button>

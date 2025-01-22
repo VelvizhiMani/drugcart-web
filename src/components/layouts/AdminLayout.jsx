@@ -64,12 +64,12 @@ function AdminLayout(props) {
         {
             id: 1,
             path: "/admin/dashboard",
-            name: "dashboard",
+            name: "Dashboard",
         },
         {
             id: 2,
             path: "/admin/category",
-            name: "category",
+            name: "Category",
         },
         {
             id: 3,
@@ -193,7 +193,7 @@ function AdminLayout(props) {
                 sx={{
                     width: { sm: `calc(100% - ${drawerWidth}px)` },
                     ml: { sm: `${drawerWidth}px` },
-                    backgroundColor: '#24282c'
+                    backgroundColor: '#a50f46'
                 }}
             >
                 <Toolbar>
@@ -235,7 +235,7 @@ function AdminLayout(props) {
                     sx={{
                         display: { xs: 'block', sm: 'none' },
                         '& .MuiDrawer-paper': {
-                            boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#24282c'
+                            boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#25b243'
                         },
                     }}
                 >
@@ -247,7 +247,7 @@ function AdminLayout(props) {
                     sx={{
                         display: { xs: 'none', sm: 'block' },
                         '& .MuiDrawer-paper': {
-                            boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#24282c',
+                            boxSizing: 'border-box', width: drawerWidth, backgroundColor: '#25b243',
                         },
                     }}
                     open
