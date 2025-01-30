@@ -1,10 +1,10 @@
-const { configureStore } = require("@reduxjs/toolkit");
-import employeeReducer from './slices/slice';
-import studentReducer from './slices/mySlice';
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "@/reduxToolkit/slices/userSlice"
+import cartReducer from "@/reduxToolkit/slices/cartSlice"
 
 export const store = configureStore({
     reducer: {
-        employeeData: employeeReducer,
-        studentData: studentReducer
+        userData: userReducer,
+        cartData: cartReducer
     }
 })

@@ -37,7 +37,7 @@ export async function GET() {
     const userWithCart = await Cart.find({ userId: user?._id });
 
     console.log(userWithCart);
-    return NextResponse.json({ cart: userWithCart }, { status: 200 })
+    return NextResponse.json({ carts: userWithCart }, { status: 200 })
     // if (!success) {
     //     return res.status(401).json({ message });
     // }
