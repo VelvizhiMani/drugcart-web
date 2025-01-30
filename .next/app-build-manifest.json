@@ -18,51 +18,41 @@
       "static/css/app/(dashboard)/layout.css",
       "static/chunks/app/(dashboard)/layout.js"
     ],
-    "/(dashboard)/admin/subcategory/page": [
+    "/(dashboard)/admin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/subcategory/page.js"
-    ],
-    "/(auth)/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/(auth)/layout.css",
-      "static/chunks/app/(auth)/layout.js"
-    ],
-    "/(auth)/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/login/page.js"
+      "static/chunks/app/(dashboard)/admin/page.js"
     ],
     "/(dashboard)/admin/category/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(dashboard)/admin/category/page.js"
     ],
-    "/(dashboard)/admin/page": [
+    "/(dashboard)/admin/genericlist/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/page.js"
+      "static/chunks/app/(dashboard)/admin/genericlist/page.js"
     ],
-    "/(auth)/otp/page": [
+    "/(dashboard)/admin/medicinecat/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/otp/page.js"
+      "static/chunks/app/(dashboard)/admin/medicinecat/page.js"
     ],
-    "/api/verify-otp/route": [
+    "/(dashboard)/admin/genericlist/add/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/verify-otp/route.js"
+      "static/css/app/(dashboard)/admin/genericlist/add/page.css",
+      "static/chunks/app/(dashboard)/admin/genericlist/add/page.js"
     ],
-    "/(dashboard)/admin/formlist/page": [
+    "/(dashboard)/admin/category/add/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/formlist/page.js"
+      "static/chunks/app/(dashboard)/admin/category/add/page.js"
     ],
-    "/(dashboard)/admin/manufactuerlist/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/manufactuerlist/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

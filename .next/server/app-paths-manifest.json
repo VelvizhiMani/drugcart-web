@@ -1,10 +1,9 @@
 {
-  "/api/verify-otp/route": "app/api/verify-otp/route.js",
-  "/(home)/page": "app/(home)/page.js",
-  "/(auth)/login/page": "app/(auth)/login/page.js",
-  "/(dashboard)/admin/category/page": "app/(dashboard)/admin/category/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/(dashboard)/admin/page": "app/(dashboard)/admin/page.js",
-  "/(auth)/otp/page": "app/(auth)/otp/page.js",
-  "/(dashboard)/admin/formlist/page": "app/(dashboard)/admin/formlist/page.js",
-  "/(dashboard)/admin/manufactuerlist/page": "app/(dashboard)/admin/manufactuerlist/page.js"
+  "/(dashboard)/admin/category/page": "app/(dashboard)/admin/category/page.js",
+  "/(dashboard)/admin/genericlist/page": "app/(dashboard)/admin/genericlist/page.js",
+  "/(dashboard)/admin/medicinecat/page": "app/(dashboard)/admin/medicinecat/page.js",
+  "/(dashboard)/admin/genericlist/add/page": "app/(dashboard)/admin/genericlist/add/page.js",
+  "/(dashboard)/admin/category/add/page": "app/(dashboard)/admin/category/add/page.js"
 }

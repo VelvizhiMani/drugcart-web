@@ -1,4 +1,4 @@
-// File: F:\Jose\dragcart\Archive\src\app\(dashboard)\layout.js
+// File: F:\Jose\dragcart\drugcart-main\drugcart-web\drugcart-web\src\app\(dashboard)\layout.js
 import * as entry from '../../../../src/app/(dashboard)/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
