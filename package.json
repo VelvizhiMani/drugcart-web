@@ -1,5 +1,5 @@
 {
-  "name": "drugcarts25",
+  "name": "velvizhiprj",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,18 +9,26 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.5.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.2",
+    "@mui/material": "^6.4.2",
+    "@reduxjs/toolkit": "^2.5.1",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "express": "^4.21.2",
+    "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
-    "next": "15.1.4",
+    "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0"
+    "react-quill-new": "^3.3.3",
+    "react-redux": "^9.2.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@types/node": "20.17.14",
+    "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8",
