@@ -7,7 +7,7 @@ import TextInput from '@/components/admin/input/TextInput';
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { useDispatch } from 'react-redux';
-import { CreateUserService } from '../../../../services/admin/userService'
+import { CreateUserService } from '../../../../../services/admin/userService'
 
 function UserAdd() {
     const dispatch = useDispatch()
