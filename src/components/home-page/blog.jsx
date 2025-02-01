@@ -6,10 +6,10 @@ import Blog3 from '@/assets/blog/blog-3.jpg'
 const Blog = () => {
   return (
     <section className='px-10 mt-10'>
-        <div className='bg-bgblog rounded-md px-10'>
-          <h1 className='font-bold text-3xl p-7'>Our Latest Blog</h1>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-center md:text-left px-5 pb-10'>
-            <div className='bg-white rounded-lg p-10'>
+        <div className='bg-bgblog rounded-md px-5 md:px-10'>
+          <h1 className='font-bold text-xl md:text-2xl p-5'>Our Latest Blog</h1>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-center md:text-left px-0 md:px-5 pb-10'>
+            <div className='bg-white rounded-lg p-5'>
               <Image src={Blog1} alt="Blog banner" className='w-full object-cover' />
               <p className="text-purple-900 mt-6 font-bold text-md">Prepare in advance for nutritionDay 2024</p>
               <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's. </span>

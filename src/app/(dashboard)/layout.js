@@ -1,7 +1,7 @@
 import { jost, poppins } from "@/utils/fonts";
 import "@/app/globals.css";
 import { Providers } from "@/reduxToolkit/provider";
-
+import AdminLayout from "../../components/layout/AdminLayout"
 export const metadata = {
   title: "Dashboard Page",
   description: "This is Marketing Page",
@@ -11,16 +11,17 @@ export const metadata = {
 const DashboardLayout = ({ children }) => {
   return (
     <html lang="en">
-     <body
+      <body
         className={`${jost.variable} ${poppins.variable} antialiased`}
       >
         <Providers>
-        <header className="bg-red-300">Header</header>
-        {children}
-        <footer className="bg-green-200">Footer</footer>
+          <AdminLayout>
+            {children}
+          </AdminLayout>
         </Providers>
-        </body>
-    </html>
+
+      </body>
+    </html >
   )
 }
 

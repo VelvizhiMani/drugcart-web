@@ -1,11 +1,12 @@
+import Image from "next/image";
 import Alovera from "@/assets/product/alovera.png";
 import Breathe from "@/assets/product/breathe-eazy.png";
 import Honitus from "@/assets/product/honitus.png";
 import Wheatgrass from "@/assets/product/wheatgrass-juice.png";
-import Image from "next/image";
 import FavouriteIcon from "@/assets/Icons/FavouriteIcon";
 import CartIcon from "@/assets/Icons/CartIcon";
 import discountImg from "@/assets/trendingimg/dealofday.png";
+// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const TrandingProduct = () => {
   const products = [
@@ -116,7 +117,7 @@ const TrandingProduct = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:p-3 content-center place-items-center border border-t-0">
             {products?.map((product) => (
               <div
-                key={product.id}
+                key={product?.id}
                 className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
               >
                 <div className="grid justify-end">
@@ -149,9 +150,6 @@ const TrandingProduct = () => {
                   <span className="text-yellow-500">&#9733;</span>
                   <span className="text-yellow-500">&#9733;</span>
                   <span className="text-gray-500">&#9733;</span>
-                  {/* <span className="ml-1 text-sm text-gray-600">
-                    {product?.rating} Stars
-                  </span> */}
                 </div>
               </div>
             ))}

@@ -1,6 +1,5 @@
 import connectionToDatabase from '../lib/mongodb'
 import User from '../models/User'
-import { NextResponse } from 'next/server'
 import { headers } from 'next/headers';
 import jwt from 'jsonwebtoken';
 
