@@ -10,26 +10,21 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material';
 
-function SearchInput({ filterOption, rowCount, filterSubmit }) {
+function SearchInput({ filterOption, rowCount, value, onChange, Submit }) {
     const theme = useTheme()
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     return (
         <Paper
             component="form"
             elevation={3}
-            sx={{ p: '0px 0px', 
-                display: 'flex', 
-                alignItems: 'center', 
+            sx={{
+                p: '0px 0px',
+                display: 'flex',
+                alignItems: 'center',
                 // width: 300, 
-                borderColor: "gray", 
+                borderColor: "gray",
                 borderWidth: 1,
                 marginTop: 2
             }}
@@ -38,42 +33,18 @@ function SearchInput({ filterOption, rowCount, filterSubmit }) {
                 sx={{ ml: 1, flex: 1, fontFamily: "Poppins" }}
                 placeholder="Search"
                 inputProps={{ 'aria-label': 'search' }}
+                value={value}
+                onChange={onChange}
             />
-            <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                <SearchIcon />
-            </IconButton>
-            {filterOption ?
-                <>
-                    <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-                    <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}>
-                        <SortSharpIcon color="secondary" />
-                    </IconButton>
-                </>
-                :
-                null}
-
-            <Menu
-
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                {Array.from(Array(rowCount)).map((_, i) => (
-                    <MenuItem
-                        key={i}
-                        sx={{ paddingLeft: 3, paddingRight: 3, fontWeight: 600 }}
-                        onClick={() => filterSubmit()}>
-                        {i + 1}
-                    </MenuItem>
-                ))}
-            </Menu>
+            <>
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={Submit}>
+                    <SearchIcon />
+                </IconButton>
+            </>
         </Paper>
     );
 }

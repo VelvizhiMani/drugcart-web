@@ -1,20 +1,28 @@
 "use client"
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Box, Button, Grid2, Paper, Stack, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SelectInput from '@/components/admin/input/SelectInput';
 import TextInput from '@/components/admin/input/TextInput';
 import { useFormik } from 'formik';
 import * as yup from "yup";
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateUserService, PutUserService } from '../../../../../services/admin/userService'
+import { CreateUserService, GetUserService, PutUserService } from '../../../../../services/admin/userService'
 
 function EditUser() {
     const { userId } = useSelector((state) => state.adminUserData)
     const dispatch = useDispatch()
     const router = useRouter()
+    const params = useParams()
 
+    useEffect(() => {
+        dispatch(GetUserService(params?.id))
+    },[params?.id])
+
+    console.log(userId);
+    
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
             username: userId?.username || "",
             email: userId?.email || "",

@@ -13,47 +13,40 @@ import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import SearchInput from '@/components/admin/input/SearchInput';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
-import SelectInput from '../input/SelectInput';
 import DDInput from '../input/DDInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteUserService, GetAllUserService, GetUserService } from '../../../services/admin/userService';
-
-
-function createData(name, email, password, userType) {
-    return { name, email, password, userType };
-}
 
 const rowText = {
     color: '#fff',
     fontFamily: "Poppins",
 }
+
 function UserTable() {
     const { adminUser, userId } = useSelector((state) => state.adminUserData)
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("")
     const dispatch = useDispatch();
     const router = useRouter()
     const pathname = usePathname()
-    const [showNo, setShowNo] = useState(3)
+    const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
 
-
     useEffect(() => {
-        dispatch(GetAllUserService(showNo))
-    }, [showNo])
+        dispatch(GetAllUserService(page, showNo, search))
+    }, [page, showNo, search])
+
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };
 
-    const handleClick = () => {
-        alert("row count alert");
-    };
-
+    const searchSubmit = () => {
+        dispatch(GetAllUserService(page, showNo, search))
+    }
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    console.log("adminUser", userId)
+    console.log("adminUser", adminUser)
     return (
         <Box sx={{ my: 5 }}>
             <Box sx={{ display: 'flex' }}>
@@ -78,7 +71,12 @@ function UserTable() {
                     />
                 </Grid2>
                 <Grid2 size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }} marginLeft={"auto"}>
-                    <SearchInput filterOption={true} rowCount={8} filterSubmit={handleClick} />
+                    <SearchInput filterOption={true}
+                        rowCount={8}
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        Submit={searchSubmit}
+                    />
                 </Grid2>
             </Grid2>
 
@@ -108,10 +106,8 @@ function UserTable() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.password}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.role}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
-                                    <button onClick={async () => {
-                                        await dispatch(GetUserService(row?._id)).then(() => {
-                                            router.push(`/admin/user/${row?._id}`)
-                                        })
+                                    <button onClick={() => {
+                                        router.push(`/admin/user/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
@@ -137,7 +133,13 @@ function UserTable() {
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
                 <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182 entries</Typography>
                 <br />
-                <Pagination size="large" count={10} color="secondary" />
+                <Pagination
+                    size="large"
+                    count={adminUser?.pagination?.totalPages}
+                    page={page}
+                    color="secondary"
+                    onChange={(_, value) => setPage(value)}
+                />
             </Box>
         </Box>
     )

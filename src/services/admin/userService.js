@@ -27,8 +27,8 @@ const CreateUserService = (adminData, router) => async (dispatch) => {
     })
 }
 
-const GetAllUserService = (limit, search = "") => async (dispatch) => {
-    await axios.get(`/api/users?page=1&limit=${limit}&search=${search}`, { headers: await Authorization() }).then((response) => {
+const GetAllUserService = (page = 1,limit, search = "") => async (dispatch) => {
+    await axios.get(`/api/users?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() }).then((response) => {
         dispatch(getUsers(response.data))
         console.log(response.data);
         
