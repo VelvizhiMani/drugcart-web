@@ -9,7 +9,7 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateUserService, PutUserService } from '../../../../../services/admin/userService'
 
-function UserAdd() {
+function EditUser() {
     const { userId } = useSelector((state) => state.adminUserData)
     const dispatch = useDispatch()
     const router = useRouter()
@@ -39,7 +39,7 @@ function UserAdd() {
     return (
         <Box>
             <Box sx={{ display: 'flex' }}>
-                <Typography variant="h6" fontFamily={"Poppins"} fontWeight="bold" sx={{ flexGrow: 1 }}>Add User</Typography>
+                <Typography variant="h6" fontFamily={"Poppins"} fontWeight="bold" sx={{ flexGrow: 1 }}>Edit User</Typography>
                 <Button
                     color="success"
                     variant="contained"
@@ -115,4 +115,4 @@ function UserAdd() {
     )
 }
 
-export default UserAdd
+export default EditUser

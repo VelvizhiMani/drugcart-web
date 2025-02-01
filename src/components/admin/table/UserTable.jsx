@@ -63,7 +63,7 @@ function UserTable() {
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/userAdd`)}
+                    onClick={() => router.push(`/admin/user/add`)}
                 >
                     Add User
                 </Button>
@@ -110,7 +110,7 @@ function UserTable() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={async () => {
                                         await dispatch(GetUserService(row?._id)).then(() => {
-                                            router.push(`/admin/useredit/${row?._id}`)
+                                            router.push(`/admin/user/${row?._id}`)
                                         })
                                     }}>
                                         <CreateIcon color="primary" />
