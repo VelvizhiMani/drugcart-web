@@ -27,15 +27,16 @@ const Register = () => {
         .required("Mobile number is required"),
     }),
     onSubmit: (data) => {
-      console.log(data);
-      dispatch(sendOTPService(data, router))
+      console.log("DATA",data);
+      // dispatch(sendOTPService(data, router))
+      router.push(`/otp?username=${data.username}&phone=${data.phone}`)
     },
   });
 
-  const onSubmit = async () => {
-    await dispatch(sendOTPService(username, phone, router))
-    // router.push(`/otp?username=${username}&phone=${phone}`)
-  }
+  // const onSubmit = async () => {
+  //   await dispatch(sendOTPService(username, phone, router))
+  //   // router.push(`/otp?username=${username}&phone=${phone}`)
+  // }
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-10 justify-center">
