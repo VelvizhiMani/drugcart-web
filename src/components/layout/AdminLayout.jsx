@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import React, { useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -61,6 +61,11 @@ function AdminLayout(props) {
     handleMobileMenuClose();
   };
 
+  const logout = async () => {
+    await localStorage.removeItem('token')
+    await localStorage.removeItem('role')
+    router.replace('/')
+  }
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
@@ -79,6 +84,26 @@ function AdminLayout(props) {
       setMobileOpen(!mobileOpen);
     }
   };
+  const navigateTo = (subpath) => {
+    router.push(`/admin/${subpath}`);
+  };
+
+
+  useEffect(() => {
+
+    const role = localStorage.getItem('role');
+    console.log('role: ' + role);
+    const token = ""
+    console.log(token);
+
+    if (!role) {
+      // navigateTo('adminlogin');
+      router.replace(`/adminlogin`);
+    }
+
+
+  }, [router]);
+
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -98,7 +123,7 @@ function AdminLayout(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={logout}>Logout</MenuItem>
     </Menu>
   );
 

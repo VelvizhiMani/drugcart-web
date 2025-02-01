@@ -4,7 +4,7 @@ import Image from "next/image";
 import Otpbanner from "@/assets/common/otpbanner.png"
 import Logo from "@/assets/logo.png";
 
-const OTP = () => {
+const OTP = ({params}) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(10);
 
@@ -45,7 +45,7 @@ const OTP = () => {
             </div>
             {/* OTP Header */}
             <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-              OTP Verification
+              OTP Verification {params?.phone}
             </h2>
             <p className="text-sm text-gray-600 text-center mb-6">
               Enter your verification code we just sent to your number

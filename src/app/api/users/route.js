@@ -1,51 +1,89 @@
 import connectionToDatabase from '@/lib/mongodb'
-import User from '@/models/User'
+import AdminUser from '@/models/AdminUser'
+import { authenticateUser } from '../../../utils/middleware';
 import { NextResponse } from 'next/server'
-import bcrypt from 'bcryptjs';
-import axios from 'axios';
 
-export async function GET(request, response) {
+export async function POST(request) {
+
     try {
         await connectionToDatabase()
-        const user = await User.find();
-        if (user) {
-            return NextResponse.json(user, { status: 200 })
+        const { success, user, message } = await authenticateUser();
+        console.log(success);
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 })
+        }
+        const { username, email, password, role, salary } = await request.json()
+        const existingUser = await AdminUser.findOne({ email });
+        if (existingUser) {
+            return NextResponse.json({ error: 'User alreay exist' }, { status: 400 })
         } else {
-            return NextResponse.json({ message: "User not found" }, { status: 400 });
+            const newUser = new AdminUser({ username, email, password, role, salary });
+            await newUser.save()
+            return NextResponse.json(newUser, { status: 200 })
         }
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
 }
 
-export async function POST(req) {
-  try {
-    const { phone } = await req.json();
+// export async function GET() {
+//     const { success, user, message } = await authenticateUser();
+// // console.log(user);
 
-    if (!phone) {
-      return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
+//     if (!success) {
+//         return NextResponse.json({ error: message }, { status: 401 })
+//     }
+//     await connectionToDatabase();
+//     const allUsers = await AdminUser.find({});
+//     const filteredUsers = allUsers.filter((adminUser) => adminUser.role !== "admin");
+
+//     console.log(filteredUsers);
+//     return NextResponse.json(filteredUsers, { status: 200 })
+// }
+
+
+export async function GET(req) {
+
+
+    // Parse query parameters
+    const { searchParams } = new URL(req.url);
+    const page = parseInt(searchParams.get("page")) || 1;
+    const limit = parseInt(searchParams.get("limit")) || 10;
+    const search = searchParams.get("search") || "";
+ 
+    const filters = search ? { username: { $regex: search, $options: "i" } } : {};
+    console.log(filters);
+    try {
+        await connectionToDatabase();
+        const skip = (page - 1) * limit;
+
+        // Fetch cart items with pagination
+        const cartItems = await AdminUser.find(filters)
+            .skip(skip)
+            .limit(limit)
+
+        // Total items in the user's cart
+        const totalItems = await AdminUser.countDocuments(filters);
+        const totalPages = Math.ceil(totalItems / limit);
+console.log('carties', cartItems);
+
+        return NextResponse.json(
+            {
+                users: cartItems,
+                pagination: {
+                    totalItems,
+                    totalPages,
+                    currentPage: page,
+                },
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error fetching cart items:", error);
+        return NextResponse.json(
+            { error: "Failed to fetch cart items" },
+            { status: 500 }
+        );
     }
-
-    const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
-
-    // Store OTP in a temporary memory (Use Redis/DB for production)
-    if (!global.otpStore) {
-      global.otpStore = {};
-    }
-    global.otpStore[phone] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 }; // Expires in 5 min
-
-    // InstantAlerts API Request
-    const response = await axios.post("https://instantalerts.co/api/web/send", {
-      apikey: process.env.INSTANTALERTS_API_KEY,
-      sender: process.env.INSTANTALERTS_SENDER_ID,
-      to: phone,
-      message: `Your Signup OTP for Drugcarts is ${otp} Regards, ${process.env.INSTANTALERTS_SENDER_ID}`,
-      format: "json",
-    });
-
-    return NextResponse.json({ success: true, message: "OTP sent successfully!", otp }); // Remove OTP in production
-  } catch (error) {
-    console.error("InstantAlerts API Error:", error.response?.data || error.message);
-    return NextResponse.json({ error: "Failed to send OTP", details: error.message }, { status: 500 });
-  }
 }
