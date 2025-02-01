@@ -3,17 +3,10 @@ import React, { useState } from 'react'
 import Image from "next/image";
 import Otpbanner from "@/assets/common/otpbanner.png"
 import Logo from "@/assets/logo.png";
-import { useSearchParams } from 'next/navigation';
 
 const OTP = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(10);
-  let searchParams = useSearchParams();
-  const username = searchParams.get("username");
-  const phone = searchParams.get("phone");
-  console.log("USERNAME", username);
-  console.log("PHONE", phone);
-
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return; // Allow only numbers
