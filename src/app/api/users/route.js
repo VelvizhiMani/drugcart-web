@@ -18,59 +18,6 @@ export async function GET(request, response) {
     }
 }
 
-
-// export async function POST(request) {
-//     try {
-//         await connectionToDatabase()
-//         const { email, password } = await request.json()
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) {
-//             return NextResponse.json({ error: 'User alreay exist' }, { status: 400 })
-//         } else {
-//             const hashedPassword = await bcrypt.hash(password, 10);
-//             const newUser = new User({ email, password: hashedPassword });
-//             await newUser.save()
-//             return NextResponse.json(newUser, { status: 200 })
-//         }
-//     } catch (error) {
-//         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
-//     }
-// }
-
-// export async function POST(req) {
-//     try {
-//       const { phone } = await req.json();
-//       if (!phone) {
-//         return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
-//       }
-  
-//       const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
-//       const message = `Your OTP code is ${otp}. It is valid for 5 minutes.`; 
-  
-//       console.log("Sending OTP to:", message);
-  
-//       // InstantAlerts API Request
-//       const response = await axios.post("https://instantalerts.co/api/web/send", {
-//         apikey: process.env.INSTANTALERTS_API_KEY,
-//         sender: process.env.INSTANTALERTS_SENDER_ID,
-//         to: phone,
-//         message: "Your Signup OTP for Drugcarts is  Regards, DRGCRT",
-//         format: "json",
-//       });
-  
-//       console.log("InstantAlerts API Response:", response.data); // Log full response
-  
-//       return NextResponse.json({ success: true, message: "OTP sent successfully!", data: response.data });
-//     } catch (error) {
-//       console.error("InstantAlerts API Error:", error.response?.data || error.message);
-  
-//       return NextResponse.json(
-//         { error: "Failed to send OTP", details: error.response?.data || error.message },
-//         { status: 500 }
-//       );
-//     }
-//   }
-
 export async function POST(req) {
   try {
     const { phone } = await req.json();

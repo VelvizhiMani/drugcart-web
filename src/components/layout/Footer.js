@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
 
-const FooterSection = () => {
+const Footer = () => {
   return (
     <>
       <section className="mt-3 bg-[#B7084B]">
@@ -231,18 +231,18 @@ const FooterSection = () => {
               </div>
               <h3 className="text-xl pb-4 pt-5 font-bold">Download App</h3>
               <div className="flex gap-3">
-                <Image
+                {/* <Image
                   priority
                   src={IMAGES.APPSTORE}
                   alt="call us"
-                  className="w-26 lg:w-36 object-cover"
+                  className="w-26 object-cover"
                 />
                 <Image
                   priority
                   src={IMAGES.APPGOOGLEPAY}
                   alt="call us"
-                  className="w-26 lg:w-36 object-cover"
-                />
+                  className="w-26 object-cover"
+                /> */}
               </div>
             </div>
           </div>
@@ -316,4 +316,4 @@ const FooterSection = () => {
   );
 };
 
-export default FooterSection;
+export default Footer;

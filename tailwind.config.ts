@@ -26,9 +26,9 @@ export default {
         'bgclient':'#CEDEFC',
         'bgwhy':'#D6FFE6',
         'becustomer':'#4C4C95',
-        'bgftpink':'#F6A1AC',
-        'bgftblue':'#699BF7',
-        'bgftrose':'#FF0076CC',
+        // 'bgftpink':'#F6A1AC',
+        // 'bgftblue':'#699BF7',
+        // 'bgftrose':'#FF0076CC',
         'bgftgreen':'#588345',
         'bgftbrown':'#A15F3B',
         'bgfooter':'#FFE5EF',
@@ -38,6 +38,9 @@ export default {
           100: '#ffe2e8',
         },
       },
+      fontFamily: {
+        bebas:['Bebas Neue','sans-serif']
+      }
     },
   },
   plugins: [],

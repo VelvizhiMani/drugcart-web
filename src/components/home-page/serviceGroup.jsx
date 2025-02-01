@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
 
