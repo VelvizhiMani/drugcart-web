@@ -28,8 +28,8 @@ const Register = () => {
     }),
     onSubmit: (data) => {
       console.log("DATA",data);
-      // dispatch(sendOTPService(data, router))
-      router.push(`/otp?username=${data.username}&phone=${data.phone}`)
+      dispatch(sendOTPService(data, router))
+      // router.push(`/otp?username=${data.username}&phone=${data.phone}`)
     },
   });
 

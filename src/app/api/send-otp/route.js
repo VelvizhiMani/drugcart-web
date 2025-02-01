@@ -45,7 +45,7 @@ export async function GET(request, response) {
 //       }
   
 //       const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
-//       const message = `Your OTP code is ${otp}. It is valid for 5 minutes.`; 
+//       const message = Your OTP code is ${otp}. It is valid for 5 minutes.; 
   
 //       console.log("Sending OTP to:", message);
   
@@ -87,6 +87,7 @@ export async function POST(req) {
     }
     global.otpStore[phone] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 }; // Expires in 5 min
 
+    console.log(process.env.INSTANTALERTS_API_KEY)
     // InstantAlerts API Request
     const response = await axios.post("https://instantalerts.co/api/web/send", {
       apikey: process.env.INSTANTALERTS_API_KEY,
