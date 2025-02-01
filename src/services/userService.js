@@ -22,7 +22,7 @@ const sendOTPService = (userData, router) => async (dispatch) => {
     console.log(userData);
     
     const { phone, username } = userData
-    await axios.post('/api/users', {phone}).then((response) => {
+    await axios.post('/api/send-otp', {phone}).then((response) => {
         console.log(response);
         router.push(`/otp?username=${username}&phone=${phone}`)
     }).catch((error) => {
@@ -42,4 +42,5 @@ const verifyOTPService = (userData, router) => async (dispatch) => {
     console.log('dispatch', phone);
     
 }
+
 export { registerService, PostUserService, sendOTPService, verifyOTPService }
