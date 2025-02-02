@@ -6,15 +6,17 @@ import Logo from "@/assets/logo.png";
 // import {useSearchParams } from 'next/navigation';
 
 
-const OTP = () => {
+const OTP = (context) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(10);
+
+  const data = context.params.username;
 
 // const searchParams = useSearchParams()
  
 //   const username = searchParams.get('username');
 //   const phone = searchParams.get('phone');
-//   console.log(username,phone,"SERACH")
+  console.log(data,"SERACH")
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return; // Allow only numbers
