@@ -3,23 +3,30 @@ import React, { useState } from 'react'
 import Image from "next/image";
 import Otpbanner from "@/assets/common/otpbanner.png"
 import Logo from "@/assets/logo.png";
-// import {useSearchParams } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { sendOTPService, verifyOTPService } from '@/services/userService';
+import { useDispatch } from 'react-redux';
+import { useTimer } from '@/hooks/useTimer'
 
-const OTP = () => {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const [timer, setTimer] = useState(10);
+const OTP = async({searchParams}) => {
+  const { timer, startTimer, resetTimer } = useTimer({ initcounter: 300 });
+  const dispatch = useDispatch()
+  const router = useRouter()
 
-// const searchParams = useSearchParams()
- 
-//   const username = searchParams.get('username');
-//   const phone = searchParams.get('phone');
-//   console.log(username,phone,"SERACH")
+  const username = await searchParams.username;
+  const phone = await searchParams.phone;
+  console.log("phone: " + phone, "username: " + username);
+
+  const [otp, setOtp] = useState(["", "", "", "", "", "",]);
+  const [digit, setDigit] = useState("")
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return; // Allow only numbers
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+    const strJoin = newOtp.join("")
+    setDigit(strJoin)
 
     // Move to the next input if a digit is entered
     if (value && index < otp.length - 1) {
@@ -33,10 +40,31 @@ const OTP = () => {
     }
   };
 
-  const handleResend = () => {
-    // Reset timer logic here
-    setTimer(10);
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
+
+  const handleResend = async () => {
+    // Reset timer logic here
+    var userdata = {
+      username,
+      phone,
+    }
+    await dispatch(sendOTPService(userdata))
+    resetTimer()
+  };
+  console.log("otp", digit);
+
+  const onSubmit = async () => {
+    var userdata = {
+      username,
+      phone,
+      otp: digit
+    }
+    await dispatch(verifyOTPService(userdata, router))
+  }
 
   return (
     <>
@@ -55,7 +83,7 @@ const OTP = () => {
               OTP Verification
             </h2>
             <p className="text-sm text-gray-600 text-center mb-6">
-              Enter your verification code we just sent to your number
+              Enter your verification code we just sent to your number ({phone})
             </p>
 
             {/* OTP Inputs */}
@@ -76,13 +104,15 @@ const OTP = () => {
 
             {/* Resend Timer */}
             <div className="text-right text-sm text-gray-600 mb-4">
-              Resend {timer > 0 ? `0:${timer.toString().padStart(2, "0")}` : ""}
+              Resend {formatTime(timer)}
             </div>
 
             {/* Verify Button */}
             <button
               type="button"
-              className="w-full bg-bgcolor text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-700 transition"
+              disabled={digit.length > 5 ? false : true}
+              onClick={onSubmit}
+              className="w-full bg-bgcolor text-white py-2 px-4 rounded-lg shadow hover:bg-indigo-700 transition  disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 disabled:opacity-50"
             >
               Verify
             </button>
@@ -93,7 +123,7 @@ const OTP = () => {
                 Didn’t receive code?{" "}
                 <button
                   onClick={handleResend}
-                  disabled={timer > 0}
+                  // disabled={timer > 0}
                   className={`${timer > 0 ? "text-bgcolor" : "text-indigo-600"
                     } hover:underline`}
                 >
