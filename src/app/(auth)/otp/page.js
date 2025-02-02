@@ -1,20 +1,19 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useState, use } from 'react'
 import Image from "next/image";
 import Otpbanner from "@/assets/common/otpbanner.png"
 import Logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
 import { sendOTPService, verifyOTPService } from '@/services/userService';
 import { useDispatch } from 'react-redux';
-import { useTimer } from '@/hooks/useTimer'
+import { useTimer } from '@/hooks/useTimer';
 
-const OTP = async({searchParams}) => {
+const OTP = ({searchParams}) => {
   const { timer, startTimer, resetTimer } = useTimer({ initcounter: 300 });
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const username = await searchParams.username;
-  const phone = await searchParams.phone;
+  const {username,phone} = use(searchParams);
   console.log("phone: " + phone, "username: " + username);
 
   const [otp, setOtp] = useState(["", "", "", "", "", "",]);
