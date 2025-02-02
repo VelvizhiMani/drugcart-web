@@ -5,9 +5,6 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['localhost'],
   },
-  ExperimentalConfig: {
-    missingSuspenseWithCSRBailout: false,
-  },
 };
 
 export default nextConfig;
