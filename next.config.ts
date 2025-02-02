@@ -1,8 +1,8 @@
-const nextConfig = {
-  /* config options here */
-  experimental: {
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
     missingSuspenseWithCSRBailout: false,
-  },
+  /* config options here */
   images: {
     domains: ['localhost'],
   },
