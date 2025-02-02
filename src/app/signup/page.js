@@ -28,7 +28,7 @@ const Register = () => {
     onSubmit: (data) => {
       console.log("DATA",data);
       dispatch(sendOTPService(data, router))
-      router.push(`/verifyotp?username=${data.username}&phone=${data.phone}`)
+      router.push(`/search?username=${data.username}&phone=${data.phone}`)
     },
   });
 
