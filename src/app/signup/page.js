@@ -28,22 +28,9 @@ const Register = () => {
     onSubmit: (data) => {
       console.log("DATA",data);
       dispatch(sendOTPService(data, router))
-     
-      router.push({
-        pathname: '/otp',
-          query: {
-            data: 'data'
-          }
-      })
-      // router.push(`/otp?username=${data.username}&phone=${data.phone}`)
+      router.push(`/verifyotp?username=${data.username}&phone=${data.phone}`)
     },
   });
-
-  const data = {
-    username:"velvizhi",
-    phone:8056800773
-  }
-  console.log(data,"MAINDATA");
 
   // const onSubmit = async () => {
   //   await dispatch(sendOTPService(username, phone, router))
@@ -108,14 +95,6 @@ const Register = () => {
               >
                 Sign Up
               </button>
-              <Link
-  href={{
-    pathname: '/otp',
-    query: data // the data
-  }}
->
-  <a>Some text</a>   
-</Link>
             </div>
 
             {/* Sign Up Link */}

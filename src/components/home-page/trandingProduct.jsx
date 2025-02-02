@@ -6,7 +6,7 @@ import Wheatgrass from "@/assets/product/wheatgrass-juice.png";
 import FavouriteIcon from "@/assets/Icons/FavouriteIcon";
 import CartIcon from "@/assets/Icons/CartIcon";
 import discountImg from "@/assets/trendingimg/dealofday.png";
-// import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const TrandingProduct = () => {
   const products = [
@@ -122,7 +122,7 @@ const TrandingProduct = () => {
               >
                 <div className="grid justify-end">
                   <button className="bg-[#FFE5EF] p-1.5 rounded-full shadow hover:bg-gray-200">
-                    <FavouriteIcon active={product?.fav} />
+                    <FavoriteBorderIcon active={product?.fav} />
                   </button>
                 </div>
                 <Image
