@@ -39,12 +39,6 @@ const Register = () => {
     },
   });
 
-  const data = {
-    username:"velvizhi",
-    phone:8056800773
-  }
-  console.log(data,"MAINDATA");
-
   // const onSubmit = async () => {
   //   await dispatch(sendOTPService(username, phone, router))
   //   // router.push(`/otp?username=${username}&phone=${phone}`)
@@ -108,14 +102,6 @@ const Register = () => {
               >
                 Sign Up
               </button>
-              <Link
-  href={{
-    pathname: '/otp',
-    query: data // the data
-  }}
->
-  <a>Some text</a>   
-</Link>
             </div>
 
             {/* Sign Up Link */}

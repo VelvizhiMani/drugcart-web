@@ -16,7 +16,7 @@ const OTP = (context) => {
  
 //   const username = searchParams.get('username');
 //   const phone = searchParams.get('phone');
-  console.log(data,"SERACH")
+  console.log(data,"SERACH VERIFY")
 
   const handleChange = (value, index) => {
     if (!/^\d*$/.test(value)) return; // Allow only numbers
