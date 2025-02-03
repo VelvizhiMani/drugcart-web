@@ -121,8 +121,10 @@ const TrandingProduct = () => {
                 className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
               >
                 <div className="grid justify-end">
-                  <button className="bg-[#FFE5EF] p-1.5 rounded-full shadow hover:bg-gray-200">
-                    <FavoriteBorderIcon active={product?.fav} />
+                  <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className={product?.fav == true ? 'text-red-500 size-4' : 'size-4 text-white'}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+                    </svg> 
                   </button>
                 </div>
                 <Image
@@ -188,7 +190,7 @@ const TrandingProduct = () => {
                       <span className="text-gray-500">&#9733;</span>
                     </div>
                     <div className="w-1/2">
-                      <button className="bg-green-500 hover:bg-blue-600 ml-1 text-white font-poppins font-semibold text-[12px] py-1 px-1 rounded shadow-md">
+                      <button className="bg-green-500 hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-1 rounded shadow-md">
                         <div className="flex justify-center">
                           <span>Shop Now</span>
                           <svg

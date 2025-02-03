@@ -11,7 +11,12 @@ import Blog from "@/components/home-page/blog";
 import Feedback from "@/components/home-page/feedback";
 import CustomerSaying from "@/components/home-page/customerSaying";
 
-export default function Home() {
+  const Home = async() => {
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("Intentional Delay");
+    }, 2000);
+  })
   return (
     <main className="p-2">
       <Slider />
@@ -29,3 +34,5 @@ export default function Home() {
     </main>
   );
 }
+
+export default Home;
