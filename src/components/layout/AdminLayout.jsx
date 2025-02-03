@@ -33,10 +33,13 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Logo from "@/assets/logo.png";
 import { Badge, Menu, MenuItem } from "@mui/material";
+import { useSelector } from "react-redux";
+import DropSpinner from "@/components/admin/spinner/DropSpinner"
 
 const drawerWidth = 220;
 
 function AdminLayout(props) {
+  const { loading } = useSelector((state) => state.common)
   const matches = useMediaQuery("(min-width:600px)");
   const { window } = props;
   const router = useRouter();
@@ -440,6 +443,7 @@ function AdminLayout(props) {
           backgroundColor: "#fff",
         }}
       >
+        {loading && <DropSpinner />}
         <Toolbar />
         {props.children}
       </Box>

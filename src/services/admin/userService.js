@@ -1,6 +1,7 @@
 import { createUser, getUserId, getUsers } from '@/reduxToolkit/slices/admin/adminUserSlice';
 import Authorization from '@/utils/authorization';
 import axios from 'axios'
+import { IsLoading } from '../../reduxToolkit/slices/commonSlice';
 
 const AdminLoginService = (adminData, router) => async (dispatch) => {
     await axios.post('/api/adminlogin', adminData).then((response) => {
@@ -28,12 +29,14 @@ const CreateUserService = (adminData, router) => async (dispatch) => {
 }
 
 const GetAllUserService = (page = 1,limit, search = "") => async (dispatch) => {
+    dispatch(IsLoading(true))
     await axios.get(`/api/users?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() }).then((response) => {
         dispatch(getUsers(response.data))
         console.log(response.data);
-        
+        dispatch(IsLoading(false))
     }).catch((error) => {
         console.log("error", error.message)
+        dispatch(IsLoading(false))
     })
 }
 
@@ -46,10 +49,13 @@ const DeleteUserService = (userId) => async (dispatch) => {
 }
 
 const GetUserService = (userId) => async (dispatch) => {
+    dispatch(IsLoading(true))
     await axios.get(`/api/users/${userId}`, { headers: await Authorization() }).then((response) => {
         dispatch(getUserId(response.data))
+        dispatch(IsLoading(false))
     }).catch((error) => {
         console.log("error", error.message)
+        dispatch(IsLoading(false))
     })
 }
 

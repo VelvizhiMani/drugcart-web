@@ -1,9 +1,7 @@
 import "@/app/globals.css";
 import { jost, poppins } from "@/utils/fonts";
 import { Providers } from "@/reduxToolkit/provider";
-import TopHeader from "@/components/layout/topHeader";
-import Menu from "@/components/layout/Menu";
-import Footer from "@/components/layout/Footer";
+import CustomerLayout from "@/components/layout/CustomerLayout";
 
 export const metadata = {
   title: "Create Next App",
@@ -15,10 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${jost.variable} ${poppins.variable} antialiased`}>
         <Providers>
-          <TopHeader />
-          <Menu />
-          {children}
-          <Footer />
+          <CustomerLayout>
+            {children}
+          </CustomerLayout>
         </Providers>
       </body>
     </html>

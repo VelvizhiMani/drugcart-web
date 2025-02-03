@@ -1,3 +1,5 @@
+"use client"
+import { useEffect } from "react";
 import Slider from "@/components/layout/Slider";
 import TopCategory from "@/components/home-page/topCategory";
 import TrandingProduct from "@/components/home-page/trandingProduct";
@@ -10,13 +12,24 @@ import FameSection from "@/components/home-page/fameSection";
 import Blog from "@/components/home-page/blog";
 import Feedback from "@/components/home-page/feedback";
 import CustomerSaying from "@/components/home-page/customerSaying";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfileService } from "@/services/profileService"
 
-  const Home = async() => {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("Intentional Delay");
-    }, 2000);
-  })
+
+  const Home = () => {
+  const { profile } = useSelector((state) => state.profileData)
+  const dispatch = useDispatch()
+  // await new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve("Intentional Delay");
+  //   }, 2000);
+  // })
+
+  useEffect(() => {
+    dispatch(getProfileService())
+  }, [])
+  console.log(profile);
+  
   return (
     <main className="p-2">
       <Slider />

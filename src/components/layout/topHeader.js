@@ -1,18 +1,37 @@
 'use client';
 import Image from 'next/image';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IMAGES } from '@/components/common/images';
 import SavedSearchIcon from '@mui/icons-material/SavedSearch';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { useSelector, useDispatch } from 'react-redux';
+import { getProfileService } from '@/services/profileService';
+import { useRouter } from 'next/navigation';
 
 const TopHeader = () => {
+  const router = useRouter()
+  const { profile } = useSelector((state) => state.profileData)
+  const dispatch = useDispatch()
   const [pincode, setPincode] = useState("");
   const [query, setQuery] = useState("");
 
   const handleSearch = () => {
     alert(`Searching for: ${query} in pincode: ${pincode}`);
   };
+
+  useEffect(() => {
+    dispatch(getProfileService())
+  }, [])
+
+  const logout = async () => {
+    await localStorage.removeItem("token")
+    window.location.reload()
+  }
+
+  const loginLink = () => {
+    router.push("/login")
+  }
   return (
     <>
       <section className='mt-3 px-5 md:px-16'>
@@ -73,7 +92,17 @@ const TopHeader = () => {
                 <svg className="w-6 h-6 fill-sky-100 stroke-sky-500 stroke-2 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                   <path fillRule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clipRule="evenodd" />
                 </svg>
-                <h2 className='text-md ms-1'>Login</h2>
+
+                {profile?.phone ? <>
+                  <h2 className='text-md ms-1'>Hi {profile?.phone}</h2>
+                  <button type="button" className='text-white bg-bgcolor hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55' onClick={logout}>
+                    Logout
+                  </button>
+                </> : <button type="button" className='text-white bg-bgcolor hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55' onClick={loginLink}>
+                  LogIn
+                </button>}
+
+
               </div>
               <div className='flex justify-center items-center'>
                 <h2 className='text-md text-center'>English</h2>
