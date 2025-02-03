@@ -6,10 +6,12 @@ import Signupbanner from "@/assets/common/signupbanner.png"
 import Logo from "@/assets/logo.png";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useRouter } from 'next/navigation';
 import { sendOTPService } from "@/services/userService"
 
 const Register = () => {
   const dispatch = useDispatch()
+  const router = useRouter();
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -24,7 +26,6 @@ const Register = () => {
     onSubmit: (data) => {
       console.log("DATA",data);
       dispatch(sendOTPService(data, router))
-      router.push(`/otp?username=${data.username}&phone=${data.phone}`)
     },
   });
 
