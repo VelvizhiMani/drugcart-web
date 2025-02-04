@@ -7,10 +7,10 @@ function DropSpinner() {
     return (
 
         <Backdrop
-            sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+            sx={(theme) => ({ color: '#fff', background: "#0000"})}
             open={true}
         >
-            <CircularProgress color="inherit" />
+            <CircularProgress color="secondary" />
         </Backdrop>
     );
 }

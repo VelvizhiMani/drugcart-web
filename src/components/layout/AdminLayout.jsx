@@ -454,7 +454,7 @@ function AdminLayout(props) {
           backgroundColor: "#fff",
         }}
       >
-        {loading && <DropSpinner />}
+        {!loading && <DropSpinner />}
         <Toolbar />
         {props.children}
       </Box>
