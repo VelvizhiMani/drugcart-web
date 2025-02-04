@@ -17,6 +17,7 @@ import SearchInput from '@/components/admin/input/SearchInput';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
 import DDInput from '../input/DDInput';
 import { useDispatch, useSelector } from 'react-redux';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { DeleteUserService, GetAllUserService, GetUserService } from '../../../services/admin/userService';
 
 const rowText = {
@@ -25,6 +26,7 @@ const rowText = {
 }
 
 function UserTable() {
+    const matches = useMediaQuery('(min-width:600px)');
     const { adminUser, userId } = useSelector((state) => state.adminUserData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
@@ -86,9 +88,13 @@ function UserTable() {
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Name</TableCell>
-                            <TableCell style={rowText}>Email</TableCell>
-                            <TableCell style={rowText}>Password</TableCell>
-                            <TableCell style={rowText}>UserType</TableCell>
+                            {!matches ? null :  <>
+                         
+                         <TableCell style={rowText}>Email</TableCell>
+                         <TableCell style={rowText}>Password</TableCell>
+                         <TableCell style={rowText}>UserType</TableCell>
+                         </>}
+                           
                             <TableCell align="right" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -102,9 +108,12 @@ function UserTable() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                     {row.username}
                                 </TableCell>
+                                {!matches ? null :   <>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.email}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.password}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.role}</TableCell>
+                                </>} 
+                              
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={() => {
                                         router.push(`/admin/user/${row?._id}`)
@@ -132,7 +141,6 @@ function UserTable() {
             </TableContainer>
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
                 <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182 entries</Typography>
-                <br />
                 <Pagination
                     size="large"
                     count={adminUser?.pagination?.totalPages}

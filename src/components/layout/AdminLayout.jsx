@@ -107,6 +107,17 @@ function AdminLayout(props) {
 
   }, [router]);
 
+  console.log(pathName);
+
+  const pathText = (text) => {
+    const newSplit = text.split('/');
+    const newStr = newSplit[2]
+    if (newStr === undefined) {
+      return "dashboard"
+    } else {
+      return newStr
+    }
+  }
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -335,9 +346,9 @@ function AdminLayout(props) {
             noWrap
             component="div"
             fontFamily={"Poppins"}
-            sx={{ display: { xs: "none", sm: "block" } }}
+            // sx={{ display: { xs: "none", sm: "block" } }}
           >
-            Admin
+            {pathText(pathName)}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>

@@ -15,7 +15,7 @@ import ProductCalendar from '@/components/admin/Calender/ProductCalender';
 function Dashboard() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <UserCard />
+      {/* <UserCard /> */}
       <AdminCard />
       <UserTable />
       <ProductCalendar />

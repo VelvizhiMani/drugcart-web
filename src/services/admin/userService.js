@@ -1,7 +1,7 @@
 import { createUser, getUserId, getUsers } from '@/reduxToolkit/slices/admin/adminUserSlice';
 import Authorization from '@/utils/authorization';
 import axios from 'axios'
-import { IsLoading } from '../../reduxToolkit/slices/commonSlice';
+import { IsLoading, showToast } from '../../reduxToolkit/slices/commonSlice';
 
 const AdminLoginService = (adminData, router) => async (dispatch) => {
     await axios.post('/api/adminlogin', adminData).then((response) => {
@@ -11,7 +11,7 @@ const AdminLoginService = (adminData, router) => async (dispatch) => {
         router.replace(`/admin`)
     }).catch((error) => {
         console.log("error", error.message)
-        alert(error?.response?.data?.error)
+         dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
     })
 }
 
@@ -20,11 +20,12 @@ const CreateUserService = (adminData, router) => async (dispatch) => {
         console.log(response);
         // dispatch(createUser(response.data))
         dispatch(GetAllUserService())
-        alert("created successfully!!!");
+        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
         // router.replace(`/admin`)
     }).catch((error) => {
         console.log("error", error.message)
-        alert(error?.response?.data?.error)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+        // alert(error?.response?.data?.error)
     })
 }
 
@@ -63,7 +64,7 @@ const PutUserService = (userId, userData) => async (dispatch) => {
     await axios.put(`/api/users/${userId}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getUserId(response.data))
         dispatch(GetUserService(userId))
-        alert("updated successfully!!!");
+        dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)
     })

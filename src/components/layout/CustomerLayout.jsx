@@ -5,12 +5,14 @@ import Menu from "@/components/layout/Menu";
 import Footer from "@/components/layout/Footer";
 import DropSpinner from "@/components/admin/spinner/DropSpinner";
 import { useSelector } from 'react-redux';
+import ToastMessage from '../common/ToastMessage';
 
 function CustomerLayout({ children }) {
     const { loading } = useSelector((state) => state.common)
     return (
         <>
             {loading && <DropSpinner />}
+            <ToastMessage />
             <TopHeader />
             <Menu />
             {children}
