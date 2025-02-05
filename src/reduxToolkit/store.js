@@ -4,6 +4,7 @@ import cartReducer from "@/reduxToolkit/slices/cartSlice"
 import profileReducer from "@/reduxToolkit/slices/profileSlice"
 import adminUserReducer from "@/reduxToolkit/slices/admin/adminUserSlice"
 import commonReducer from "@/reduxToolkit/slices/commonSlice"
+import categoryReducer from "@/reduxToolkit/slices/categorySlice"
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         userData: userReducer,
         profileData: profileReducer,
         cartData: cartReducer,
+        categoryData: categoryReducer,
         adminUserData: adminUserReducer
     }
 })
