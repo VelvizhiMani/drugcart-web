@@ -1,5 +1,5 @@
 import connectionToDatabase from '../../../../lib/mongodb'
-import Category from '../../../../models/Category'
+import Subcategory from '../../../../models/SubCategory'
 import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
@@ -13,12 +13,12 @@ export async function GET(request, { params }) {
     try {
         await connectionToDatabase();
         const { id } = await params;
-        const categoryId = await Category.findById(id);
-        if (!categoryId) {
-            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
+        const subcategoryId = await Subcategory.findById(id);
+        if (!subcategoryId) {
+            return NextResponse.json({ error: 'Sub Category not found' }, { status: 404 });
         }
 
-        return NextResponse.json(categoryId, { status: 200 });
+        return NextResponse.json(subcategoryId, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
     }
@@ -34,13 +34,13 @@ export async function PUT(request, { params }) {
     try {
         const { id } = await params;
         const body = await request.json();
-        const updatedCategory = await Category.findByIdAndUpdate(id, body, { new: true });
+        const updatedSubCategory = await Subcategory.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedCategory) {
-            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
+        if (!updatedSubCategory) {
+            return NextResponse.json({ error: 'SubCategory not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedCategory, { status: 200 });
+        return NextResponse.json(updatedSubCategory, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
     }
@@ -55,13 +55,13 @@ export async function DELETE(request, { params }) {
 
     try {
         const { id } = await params;
-        const deletedCategory = await Category.findByIdAndDelete(id);
+        const deletedSubCategory = await Subcategory.findByIdAndDelete(id);
 
-        if (!deletedCategory) {
-            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
+        if (!deletedSubCategory) {
+            return NextResponse.json({ error: 'SubCategory not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: 'Category deleted successfully' }, { status: 200 });
+        return NextResponse.json({ message: 'SubCategory deleted successfully' }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error deleting user' }, { status: 500 });
     }

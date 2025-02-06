@@ -1,28 +1,9 @@
 import { useState } from "react";
 import { TextField, Autocomplete, InputLabel } from "@mui/material";
 
-const medicines = [
-  "Tacrolimus",
-  "Tadalafil + Dapoxetine",
-  "Tamoxifen",
-  "Tamsulosin",
-  "Tegafur + Gimeracil + Oteracil",
-  "Teicoplanin",
-  "Telmisartan",
-  "Telmisartan + Amlodipine",
-  "Telmisartan + Amlodipine + Chlorthalidone",
-  "Telmisartan + Amlodipine + Hydrochlorothiazide",
-  "Telmisartan + Atorvastatin",
-  "Telmisartan + Azelnidipine",
-  "Telmisartan + Chlorthalidone",
-  "Telmisartan + Hydrochlorothiazide",
-  "Telmisartan + Metoprolol Succinate",
-  "Telmisartan + Metoprolol Succinate + Chlorthalidone",
-];
-
-function SearchField({ title }) {
-  const [searchTerm, setSearchTerm] = useState("");
-
+function SearchField({ title, size = "small", data, getOptionLabel, value, helperText, error, onInputChange }) {
+  console.log(value);
+  
   return (
     <div>
       <InputLabel
@@ -40,15 +21,19 @@ function SearchField({ title }) {
       </InputLabel>
       <Autocomplete
         // freeSolo
+        size={size}
         noOptionsText="No Data Found"
-        options={medicines}
-        value={searchTerm}
-        onInputChange={(event, newValue) => setSearchTerm(newValue)}
+        getOptionLabel={getOptionLabel}
+        options={data || []}
+        value={value}
+        onInputChange={onInputChange}
         renderInput={(params) => (
           <TextField
             {...params}
             variant="outlined"
             fullWidth
+            error={error}
+            helperText={helperText}
           />
         )}
       />

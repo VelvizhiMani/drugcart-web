@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Box, Button, Grid2, Typography } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
@@ -15,6 +15,9 @@ import CreateIcon from '@mui/icons-material/Create';
 import Pagination from '@mui/material/Pagination';
 import SearchInput from '@/components/admin/input/SearchInput';
 import DDInput from '@/components/admin/input/DDInput';
+import { DeleteSubCategoryService, GetSubCategoryIdService, GetSubCategoryService } from '../../../../services/subCategoryService';
+import { useSelector, useDispatch } from 'react-redux';
+import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 
 function createData(categoryName, subCategory) {
@@ -36,18 +39,26 @@ const rowText = {
 }
 function SubCategory() {
     const router = useRouter()
-    const pathname = usePathname()
-    const [showNo, setShowNo] = useState("")
+    const { subCategories, subCategory } = useSelector((state) => state.subCategoryData)
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("")
+    const [showNo, setShowNo] = useState(10)
+    const [openModal, setOpenModal] = useState(false)
+    const dispatch = useDispatch()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };
 
-    const handleClick = () => {
-        alert("row count alert");
-    };
-
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    useEffect(() => {
+        dispatch(GetSubCategoryService(page, showNo, search))
+    }, [page, showNo, search])
+
+    const searchSubmit = () => {
+        dispatch(GetSubCategoryService(page, showNo, search))
+    }
 
     return (
         <Box>
@@ -73,7 +84,13 @@ function SubCategory() {
                     />
                 </Grid2>
                 <Grid2 size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }} marginLeft={"auto"}>
-                    <SearchInput filterOption={true} rowCount={8} filterSubmit={handleClick} />
+                    <SearchInput
+                        filterOption={true}
+                        rowCount={8}
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        filterSubmit={searchSubmit}
+                    />
                 </Grid2>
             </Grid2>
 
@@ -82,30 +99,41 @@ function SubCategory() {
                     <TableHead sx={{ backgroundColor: '#24282c' }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Category Name</TableCell>
                             <TableCell style={rowText}>Sub Category</TableCell>
+                            <TableCell style={rowText}>Category</TableCell>
                             <TableCell align="right" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, i) => (
+                        {subCategories && subCategories?.subcategoryItems?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{i + 1}</TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row?.subcat_name}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row.categoryName}
+                                    {row?.cat_name}
                                 </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.subCategory}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
-                                    <button>
+                                    <button onClick={() => {
+                                        router.push(`/admin/subcategory/${row?._id}`)
+                                    }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button>
+                                    <button onClick={async () => {
+                                        setOpenModal(true)
+                                        await dispatch(GetSubCategoryIdService(row?._id))
+                                    }}>
                                         <DeleteIcon color='error' />
                                     </button>
                                 </TableCell>
+                                <DeleteModal
+                                    open={openModal}
+                                    setOpen={setOpenModal}
+                                    title={"Delete Category"}
+                                    description={`Are you sure you want to delete ${subCategory?.subcat_name}`}
+                                    onSubmit={() => dispatch(DeleteSubCategoryService(subCategory?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>
@@ -113,9 +141,15 @@ function SubCategory() {
 
             </TableContainer>
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
-                <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182 entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {subCategories?.pagination?.totalItems} entries</Typography>
                 <br />
-                <Pagination size="large" count={10} color="secondary" />
+                <Pagination
+                    size="large"
+                    count={subCategories?.pagination?.totalPages}
+                    page={page}
+                    color="secondary"
+                    onChange={(_, value) => setPage(value)}
+                />
             </Box>
         </Box>
     )
