@@ -1,5 +1,5 @@
 import { authenticateUser } from '../../../utils/middleware';
-import Subcategory from '../../../models/SubCategory';
+import Generic from '../../../models/Generic';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -15,37 +15,69 @@ const s3 = new S3Client({
 
 
 export async function POST(request) {
-    
     const { success, user, message } = await authenticateUser();
-    console.log(success);
 
     if (!success) {
         return NextResponse.json({ error: message }, { status: 401 })
     }
 
     const {
-        cat_name,
-        subcat_name,
+        catnames,
+        subname,
         url,
-        sub_cat_img,
+        generices,
+        gen_img,
         imagealt,
+        description,
+        usesofmeds,
+        useofbenefits,
+        indicat,
+        mechanism,
+        medicinework,
+        contraindications,
+        sideeffects,
+        faqs,
+        pregnancy,
+        breastfeeding,
+        kidneyproblem:,
+        liverdisease,
+        asthma,
+        takemedicine,
+        adult,
+        childrenmed,
+        elderlymed,
+        alcohol,
+        heartdisease,
+        driving,
+        warnings,
+        talkdoctor,
+        instructions,
+        druginteraction,
+        drugfood,
+        drugdiease,
+        fooditems,
+        overdose,
+        misseddose,
+        disposal,
+        fasttag,
+        refer,
         metatitle,
-        metadesc,
-        metakeyboard
+        metakeyword,
+        metadesc
     } = await request.json();
 
     try {
         await connnectionToDatabase();
-        const isSubCategory = await Subcategory.findOne({ subcat_name });
-        if (isSubCategory) {
-            return NextResponse.json({ error: 'sub category already exist' }, { status: 401 })
+        const isCategory = await Generic.findOne({ category_name });
+        if (isCategory) {
+            return NextResponse.json({ error: 'category already exist' }, { status: 401 })
         }
 
-        const addSubCategory = new Subcategory({
-            cat_name,
-            subcat_name,
+        const addCategory = new Generic({
             url,
-            sub_cat_img,
+            category_name,
+            cat_type,
+            cat_img,
             imagealt,
             metatitle,
             metadesc,
@@ -53,8 +85,8 @@ export async function POST(request) {
         });
 
 
-        await addSubCategory.save();
-        return NextResponse.json(addSubCategory, { status: 200 })
+        await addCategory.save();
+        return NextResponse.json(addCategory, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
@@ -66,21 +98,22 @@ export async function GET(req) {
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
 
-    const filters = search ? { subcat_name: { $regex: search, $options: "i" } } : {};
+    const filters = search ? { category_name: { $regex: search, $options: "i" } } : {};
+
     try {
         await connnectionToDatabase();
         const skip = (page - 1) * limit;
 
-        const subcategoryItems = await Subcategory.find(filters)
+        const categoryItems = await Generic.find(filters)
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await Subcategory.countDocuments(filters);
+        const totalItems = await Generic.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
         return NextResponse.json(
             {
-                subcategoryItems: subcategoryItems,
+                categories: categoryItems,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -90,9 +123,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching sub category items:", error);
+        console.error("Error fetching category items:", error);
         return NextResponse.json(
-            { error: "Failed to fetch sub category items" },
+            { error: "Failed to fetch category items" },
             { status: 500 }
         );
     }

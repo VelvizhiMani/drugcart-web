@@ -15,9 +15,7 @@ const s3 = new S3Client({
 
 
 export async function POST(request) {
-    
     const { success, user, message } = await authenticateUser();
-    console.log(success);
 
     if (!success) {
         return NextResponse.json({ error: message }, { status: 401 })
@@ -67,7 +65,7 @@ export async function GET(req) {
     const search = searchParams.get("search") || "";
 
     const filters = search ? { category_name: { $regex: search, $options: "i" } } : {};
-    console.log(filters);
+
     try {
         await connnectionToDatabase();
         const skip = (page - 1) * limit;
@@ -78,7 +76,6 @@ export async function GET(req) {
 
         const totalItems = await Category.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
-        console.log('categoryItems', categoryItems);
 
         return NextResponse.json(
             {

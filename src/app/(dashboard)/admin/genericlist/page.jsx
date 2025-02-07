@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,6 +15,9 @@ import CreateIcon from "@mui/icons-material/Create";
 import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
+import { useDispatch, useSelector } from "react-redux";
+import { GetCategoryService } from "@/services/categoryService";
+import { GetSubCategoryService } from "@/services/subCategoryService";
 
 function createData(categoryName, subCategory, generic) {
     return { categoryName, subCategory, generic };
@@ -39,9 +42,16 @@ const rowText = {
     fontFamily: "Poppins",
 };
 function GenericeList() {
+    const { categories } = useSelector((state) => state.categoryData)
+    const { subCategories } = useSelector((state) => state.subCategoryData)
+    const dispatch = useDispatch()
     const pathname = usePathname();
     const [showNo, setShowNo] = useState("");
 
+    useEffect(() => {
+        dispatch(GetCategoryService())
+        dispatch(GetSubCategoryService())
+    }, [])
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };

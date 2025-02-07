@@ -2,7 +2,7 @@ import { useState } from "react";
 import { TextField, Autocomplete, InputLabel } from "@mui/material";
 
 function SearchField({ title, size = "small", data, getOptionLabel, value, helperText, error, onInputChange }) {
-  console.log(value);
+  // console.log(value);
   
   return (
     <div>

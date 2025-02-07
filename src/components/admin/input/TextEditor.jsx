@@ -28,7 +28,7 @@ const modules = {
 };
 
 function TextEditor({ title, value, type, onChange, helperText, error }) {
-  console.log(value);
+  // console.log(value);
   
   return (
     <div>

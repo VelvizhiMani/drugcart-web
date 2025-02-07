@@ -4,51 +4,130 @@ import {
   Box,
   Button,
   Grid2,
+  InputLabel,
   Paper,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import SelectInput from "@/components/admin/input/SelectInput";
-import TextInput from "@/components/admin/input/TextInput";
-import ImageInput from "@/components/admin/input/ImageInput";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import TextInput from "@/components/admin/input/TextInput";
+import ImageInput from "@/components/admin/input/ImageInput";
+import InputArea from "@/components/admin/input/InputArea";
+import VideoInput from "@/components/admin/input/VideoInput";
+import dynamic from "next/dynamic";
+// import Quill from "quill";
+// import QuillImageResize from "quill-image-resize-module-react";
+import "react-quill-new/dist/quill.snow.css";
 import TextEditor from "@/components/admin/input/TextEditor";
+import SearchField from "@/components/admin/AutoComplete/SearchField";
+import { useSelector, useDispatch } from "react-redux";
+import { GetCategoryService } from "@/services/categoryService";
+import { GetSubCategoryService } from "@/services/subCategoryService";
 
-function GenericListAdd() {
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+
+// Quill.register("modules/resize", QuillImageResize);
+
+function GenericeAdd() {
   const router = useRouter();
-  const [imagePreview, setImagePreview] = useState(null);
+  const { categories } = useSelector((state) => state.categoryData)
+  const { subCategories } = useSelector((state) => state.subCategoryData)
+  const dispatch = useDispatch()
+  const [value, setValue] = useState("");
 
   const formik = useFormik({
     initialValues: {
-      categoryName: "",
-      subCategory: "",
-      genericName: "",
-      categoryImage: "",
-      categoryImageAlt: "",
+      catnames: "",
+      subname: "",
+      url: "",
+      generices: "",
+      // gen_img: "",
+      imagealt: "",
+      mechanism: "",
+      // description: "",
+      // usesofmeds: "",
+      // useofbenefits: "",
+      // indicat: "",
+      // mechanism: "",
+      // medicinework: "",
+      // contraindications: "",
+      // sideeffects: "",
+      // faqs: "",
+      // pregnancy: "",
+      // breastfeeding: "",
+      // kidneyproblem: "",
+      // liverdisease: "",
+      // asthma: "",
+      // takemedicine: "",
+      // adult: "",
+      // childrenmed: "",
+      // elderlymed: "",
+      // alcohol: "",
+      // heartdisease: "",
+      // driving: "",
+      // warnings: "",
+      // talkdoctor: "",
+      // instructions: "",
+      // druginteraction: "",
+      // drugfood: "",
+      // drugdiease: "",
+      // fooditems: "",
+      // overdose: "",
+      // misseddose: "",
+      // disposal: "",
+      // fasttag: "",
+      // refer: "",
+      // metatitle: "",
+      // metakeyword: "",
+      // metadesc: "",
     },
     validationSchema: yup.object({
-      categoryName: yup.string().required("Category Name is required"),
-      subCategory: yup.string().required("subCategory Name is required"),
-      genericName: yup.string().required("Generic Name is required"),
-      url: yup.string().required("URL is required"),
-      categoryImage: yup.string().required("Category Image is required"),
+      catnames: yup.string().required("Category type is required"),
     }),
     onSubmit: async (data) => {
       await console.log(data);
+      // await dispatch(PostSubCategoryService(data, resetForm))
     },
   });
+  useEffect(() => {
+    dispatch(GetCategoryService())
+    dispatch(GetSubCategoryService())
+  }, [formik.values.catnames])
 
-  const handleCategoryImage = (event) => {
-    const file = event.target.files[0];
-    formik.setFieldValue("categoryImage", file);
-    setImagePreview(URL.createObjectURL(file));
+  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name === formik.values.catnames)
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined" && typeof document !== "undefined") {
+  //     // This ensures the code runs only on the client side
+  //     window.addEventListener("load", () => {
+  //       // Quill.register("modules/resize", QuillImageResize);
+  //     });
+  //   }
+  // }, []);
+  const catType = ["prescriptions", "non-prescriptions", "Others"];
+  const subcatType = ["test", "test1"];
+  const modules = {
+    toolbar: [
+      [{ font: [] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+    // resize: {
+    //   modules: ["Resize"],
+    // },
   };
 
-  const catType = ["prescriptions", "non-prescriptions", "Others"];
-
+  console.log(formik.values.mechanism);
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
@@ -58,15 +137,18 @@ function GenericListAdd() {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-          Add Generic Product
+          Add Generic Name
         </Typography>
+        {/* <div
+          dangerouslySetInnerHTML={{ __html: formik.values.mechanism }}
+        /> */}
         <Button
           color="success"
           variant="contained"
           style={{ textTransform: "capitalize" }}
-          onClick={() => router.push(`/admin/genericelist`)}
+          onClick={() => router.push(`/admin/genericlist`)}
         >
-          Generic Product List
+          Generic List
         </Button>
       </Box>
       <Paper
@@ -80,290 +162,59 @@ function GenericListAdd() {
       >
         <Grid2 container spacing={2}>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Category Name"}
-              value={formik.values.categoryName}
-              onChange={formik.handleChange("categoryName")}
+            <SearchField
+              title="Category Name"
+              data={categories?.categories}
+              value={formik.values.catnames}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.category_name || "")}
+              onInputChange={(event, newValue) => {
+                formik.setFieldValue("catnames", newValue);
+                formik.setFieldValue("subname", "");
+              }}
               helperText={
-                formik.touched.categoryName ? formik.errors.categoryName : null
+                formik.touched.catnames ? formik.errors.catnames : null
               }
               error={
-                formik.touched.categoryName ? formik.errors.categoryName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Sub Category Name"}
-              value={formik.values.subCategory}
-              onChange={formik.handleChange("subCategory")}
-              helperText={
-                formik.touched.subCategory ? formik.errors.subCategory : null
-              }
-              error={
-                formik.touched.subCategory ? formik.errors.subCategory : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Generic Name"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
-            <TextInput
-              title={
-                "Brand Name (website Product title) Ex:Veennat 100mg Tablet"
-              }
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 6 }}>
-            <TextInput
-              title={"URL (EX:veenat-100mg-tablet) [all small letters only]"}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Other verient Product Name Select"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <ImageInput
-              title={"Product Image (Ex:jpg and jpeg images only upload)"}
-              image={imagePreview}
-              onChange={handleCategoryImage}
-              error={
-                formik.touched.categoryImage
-                  ? formik.errors.categoryImage
-                  : null
+                formik.touched.catnames ? formik.errors.catnames : null
               }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput
-              title={
-                "Image alt tag: (Brand name, Generic name, price, uses, side Effects, Drugcarts)"
-              }
+            <SearchField
+              title="Sub Category Name"
+              data={filterSubCategory}
+              value={formik.values.subname}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.subcat_name || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("subname", newValue)}
+            // helperText={
+            //   formik.touched.subname ? formik.errors.subname : null
+            // }
+            // error={
+            //   formik.touched.subname ? formik.errors.subname : null
+            // }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput
-              title={
-                "Salt Composition(Generic name with Strength) Ex:Veenat (100mg)"
-              }
+            <TextInput title={"Generic Name"}
+              value={formik.values.generices}
+              onChange={formik.handleChange("generices")}
+            // helperText={formik.touched.generices ? formik.errors.generices : null}
+            // error={formik.touched.generices ? formik.errors.generices : null}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Form (Ex: Gel or caps)"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Country of Origin"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
+            <TextInput title={"URL"}
+              value={formik.values.url}
+              onChange={formik.handleChange("url")}
+            // helperText={formik.touched.url ? formik.errors.url : null}
+            // error={formik.touched.url ? formik.errors.url : null}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Storage"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
+            <ImageInput title={"Image"} />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Strength Eg: 100mg"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Pack"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 12 }}>
-            <TextInput title={"Drugs By Ailments"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 12 }}>
-            <SelectInput
-              title={"Manufactuer Address"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 12 }}>
-            <SelectInput
-              title={"Marketer Address"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Rex Required (Ex:Rx Required)"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Avaliable Stock"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Product reference(ex: Netmeds)"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Product Status"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Expires on or after:(Ex: June, 2021)"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Payment Type"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Return Policy"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"HSN"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"GST(%)"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"MRP: Ex:123.00"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Percentage DISCOUNT:(Ex:2) only type number"} />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Other Temperature"} />
+            <TextInput title={"Image Alt Tag"} />
           </Grid2>
         </Grid2>
       </Paper>
@@ -379,58 +230,13 @@ function GenericListAdd() {
       >
         <Grid2 container spacing={2}>
           <Grid2 size={{ xs: 12, md: 12 }}>
-            <Typography
-              variant="h6"
-              fontFamily={"Poppins"}
-              fontWeight="bold"
-              sx={{ flexGrow: 1 }}
-            >
-              Author Details
-            </Typography>
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 12 }}>
-            <SelectInput
-              title={"Review By:"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-          <Grid2 size={{ xs: 12, md: 12 }}>
-            <SelectInput
-              title={"Written:"}
-              value={formik.values.genericName}
-              onChange={formik.handleChange("genericName")}
-              helperText={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              error={
-                formik.touched.genericName ? formik.errors.genericName : null
-              }
-              data={catType}
-            />
-          </Grid2>
-        </Grid2>
-      </Paper>
+            {/* <EditorToolbar /> */}
+            <TextEditor title={"Medical Description of Medicine:"}
+              value={formik.values.mechanism}
+              onChange={formik.handleChange("mechanism")}
+            // value={value} 
 
-      <Paper
-        sx={{
-          borderColor: "#fa4b31",
-          borderTopWidth: 3,
-          borderBottomWidth: 2,
-          p: 2,
-          mt: 4,
-        }}
-      >
-        <Grid2 container spacing={2}>
-          <Grid2 size={{ xs: 12, md: 12 }}>
-            <TextEditor title={"Medical Description of Medicine:"} />
+            />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
             <TextEditor title={"Uses of Medicine:"} />
@@ -556,16 +362,12 @@ function GenericListAdd() {
             <TextEditor title={"Fast tag:"} />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
-            <TextEditor title={"References:"} />
+            <TextEditor title={"References:"} value={value} onChange={setValue} />
           </Grid2>
         </Grid2>
       </Paper>
       <Stack sx={{ padding: 2, display: "flex", alignItems: "flex-end" }}>
-        <Button
-          style={{ textTransform: "capitalize" }}
-          variant="contained"
-          onClick={formik.handleSubmit}
-        >
+        <Button style={{ textTransform: "capitalize" }} variant="contained" onClick={formik.handleSubmit}>
           Submit
         </Button>
       </Stack>
@@ -573,4 +375,4 @@ function GenericListAdd() {
   );
 }
 
-export default GenericListAdd;
+export default GenericeAdd;
