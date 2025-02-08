@@ -4,14 +4,14 @@ import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
 export async function GET(request, { params }) {
-    const { success, user, message } = await authenticateUser();
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 });
-    }
-
     try {
         await connectionToDatabase();
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
+
         const { id } = await params;
         const adminUser = await AdminUser.findById(id);
         if (!adminUser) {
@@ -25,13 +25,12 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-    const { success, user, message } = await authenticateUser();
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 });
-    }
-
     try {
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
         const { id } = await params;
         const body = await request.json();
         const updatedUser = await AdminUser.findByIdAndUpdate(id, body, { new: true });
@@ -47,13 +46,13 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-    const { success, user, message } = await authenticateUser();
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 });
-    }
-
     try {
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
+
         const { id } = await params;
         const deletedUser = await AdminUser.findByIdAndDelete(id);
 

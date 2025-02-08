@@ -6,39 +6,39 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
 });
 
 
 export async function POST(request) {
-    
-    const { success, user, message } = await authenticateUser();
-    console.log(success);
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 })
-    }
-
-    const {
-        cat_name,
-        subcat_name,
-        url,
-        sub_cat_img,
-        imagealt,
-        metatitle,
-        metadesc,
-        metakeyboard
-    } = await request.json();
-
     try {
         await connnectionToDatabase();
+
+        const { success, user, message } = await authenticateUser();
+        console.log(success);
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 400 })
+        }
+
+        const {
+            cat_name,
+            subcat_name,
+            url,
+            sub_cat_img,
+            imagealt,
+            metatitle,
+            metadesc,
+            metakeyboard
+        } = await request.json();
+
         const isSubCategory = await Subcategory.findOne({ subcat_name });
         if (isSubCategory) {
-            return NextResponse.json({ error: 'sub category already exist' }, { status: 401 })
+            return NextResponse.json({ error: 'sub category already exist' }, { status: 400 })
         }
 
         const addSubCategory = new Subcategory({
@@ -61,14 +61,21 @@ export async function POST(request) {
 }
 
 export async function GET(req) {
-    const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 10;
-    const search = searchParams.get("search") || "";
-
-    const filters = search ? { subcat_name: { $regex: search, $options: "i" } } : {};
     try {
         await connnectionToDatabase();
+        const { success, user, message } = await authenticateUser();
+        console.log(success);
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 })
+        }
+
+        const { searchParams } = new URL(req.url);
+        const page = parseInt(searchParams.get("page")) || 1;
+        const limit = parseInt(searchParams.get("limit")) || 10;
+        const search = searchParams.get("search") || "";
+
+        const filters = search ? { subcat_name: { $regex: search, $options: "i" } } : {};
         const skip = (page - 1) * limit;
 
         const subcategoryItems = await Subcategory.find(filters)

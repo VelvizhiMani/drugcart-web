@@ -88,13 +88,13 @@ function UserTable() {
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Name</TableCell>
-                            {!matches ? null :  <>
-                         
-                         <TableCell style={rowText}>Email</TableCell>
-                         <TableCell style={rowText}>Password</TableCell>
-                         <TableCell style={rowText}>UserType</TableCell>
-                         </>}
-                           
+                            {!matches ? null : <>
+
+                                <TableCell style={rowText}>Email</TableCell>
+                                <TableCell style={rowText}>Password</TableCell>
+                                <TableCell style={rowText}>UserType</TableCell>
+                            </>}
+
                             <TableCell align="right" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -108,12 +108,12 @@ function UserTable() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                     {row.username}
                                 </TableCell>
-                                {!matches ? null :   <>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.email}</TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.password}</TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.role}</TableCell>
-                                </>} 
-                              
+                                {!matches ? null : <>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.email}</TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.password}</TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row.role}</TableCell>
+                                </>}
+
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={() => {
                                         router.push(`/admin/user/${row?._id}`)
@@ -140,7 +140,7 @@ function UserTable() {
 
             </TableContainer>
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
-                <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182 entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {adminUser?.pagination?.totalItems} entries</Typography>
                 <Pagination
                     size="large"
                     count={adminUser?.pagination?.totalPages}

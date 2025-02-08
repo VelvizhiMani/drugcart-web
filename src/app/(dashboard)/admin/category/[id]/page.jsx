@@ -135,7 +135,7 @@ function EditCategory() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Category Image"}
-                            image={imagePreview}
+                            image={formik.values.cat_img}
                             onChange={handleCategoryImage}
                             error={
                                 formik.touched.cat_img

@@ -192,7 +192,6 @@ const genericSchema = new Schema(
         },
     }, { timestamps: true })
 
-// we will create a new collection
-const Generic = new mongoose.model('Generics', genericSchema, 'generics');
+const Generic = mongoose.models.Generic || mongoose.model("Generic", genericSchema, "generics");
 
 module.exports = Generic;

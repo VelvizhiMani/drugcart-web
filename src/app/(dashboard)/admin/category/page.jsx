@@ -150,7 +150,7 @@ function CategoryPage() {
 
             </TableContainer>
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
-                <Typography fontFamily={"Poppins"} fontWeight={500}>Showing 1-10 of 182 entries</Typography>
+             <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {categories?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"

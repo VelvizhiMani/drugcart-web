@@ -4,14 +4,13 @@ import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
 export async function GET(request, { params }) {
-    const { success, user, message } = await authenticateUser();
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 });
-    }
-
     try {
         await connectionToDatabase();
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
         const { id } = await params;
         const categoryId = await Category.findById(id);
         if (!categoryId) {
@@ -25,13 +24,12 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-    const { success, user, message } = await authenticateUser();
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 });
-    }
-
     try {
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
         const { id } = await params;
         const body = await request.json();
         const updatedCategory = await Category.findByIdAndUpdate(id, body, { new: true });
@@ -47,13 +45,13 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-    const { success, user, message } = await authenticateUser();
-
-    if (!success) {
-        return NextResponse.json({ error: message }, { status: 401 });
-    }
-
     try {
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
+
         const { id } = await params;
         const deletedCategory = await Category.findByIdAndDelete(id);
 
