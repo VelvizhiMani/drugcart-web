@@ -27,9 +27,15 @@ function EditCategory() {
     const [imagePreview, setImagePreview] = useState(null);
     const params = useParams()
 
+    const URLText = (text) => {
+        const splitText = text.split(" ")
+        const joinSpace = splitText.join("-").toLowerCase()
+        return joinSpace
+    }
+
     useEffect(() => {
         dispatch(GetCategoryIdService(params?.id))
-    },[params?.id])
+    }, [params?.id])
 
 
     const handleCategoryImage = (event) => {
@@ -62,6 +68,9 @@ function EditCategory() {
         },
     });
 
+    useEffect(() => {
+        formik.values.url = URLText(formik.values.category_name)
+    }, [formik.values.category_name])
 
     const catType = ["prescriptions", "non-prescriptions", "Others"];
     console.log(imagePreview);

@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SelectInput from "@/components/admin/input/SelectInput";
 import TextInput from "@/components/admin/input/TextInput";
 import ImageInput from "@/components/admin/input/ImageInput";
@@ -25,6 +25,12 @@ function CategoryAdd() {
   const dispatch = useDispatch()
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState(null);
+
+  const URLText = (text) => {
+    const splitText = text.split(" ")
+    const joinSpace = splitText.join("-").toLowerCase()
+    return joinSpace
+  }
 
   const handleCategoryImage = (event) => {
     const file = event.target.files[0];
@@ -56,9 +62,13 @@ function CategoryAdd() {
     },
   });
 
+  useEffect(() => {
+    formik.values.url = URLText(formik.values.category_name)
+  }, [formik.values.category_name])
+
 
   const catType = ["prescriptions", "non-prescriptions", "Others"];
-  console.log(imagePreview);
+  // console.log(imagePreview);
 
   return (
     <Box>
@@ -120,7 +130,7 @@ function CategoryAdd() {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
               title={"URL"}
-              value={formik.values.url}
+              value={URLText(formik.values.category_name)}
               onChange={formik.handleChange("url")}
               helperText={formik.touched.url ? formik.errors.url : null}
               error={formik.touched.url ? formik.errors.url : null}

@@ -32,7 +32,13 @@ function EditSubCategory() {
     useEffect(() => {
         dispatch(GetCategoryService())
         dispatch(GetSubCategoryIdService(params?.id))
-    },[params?.id])
+    }, [params?.id])
+
+    const URLText = (text) => {
+        const splitText = text.split(" ")
+        const joinSpace = splitText.join("-").toLowerCase()
+        return joinSpace
+    }
 
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
@@ -73,7 +79,7 @@ function EditSubCategory() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Sub Category
+                    Edit Sub Category
                 </Typography>
                 <Button
                     color="success"
@@ -125,7 +131,7 @@ function EditSubCategory() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"URL"}
-                            value={formik.values.url}
+                            value={URLText(formik.values.subcat_name)}
                             onChange={formik.handleChange("url")}
                             helperText={formik.touched.url ? formik.errors.url : null}
                             error={formik.touched.url ? formik.errors.url : null}

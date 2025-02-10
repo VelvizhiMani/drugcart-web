@@ -31,6 +31,12 @@ function SubCategoryAdd() {
         dispatch(GetCategoryService())
     }, [])
 
+    const URLText = (text) => {
+        const splitText = text.split(" ")
+        const joinSpace = splitText.join("-").toLowerCase()
+        return joinSpace
+    }
+
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
         formik.setFieldValue("sub_cat_img", URL.createObjectURL(file));
@@ -58,6 +64,10 @@ function SubCategoryAdd() {
             await dispatch(PostSubCategoryService(data, resetForm))
         },
     });
+
+    useEffect(() => {
+        formik.values.url = URLText(formik.values.subcat_name)
+    }, [formik.values.subcat_name])
 
     return (
         <Box>
@@ -120,7 +130,7 @@ function SubCategoryAdd() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"URL"}
-                            value={formik.values.url}
+                            value={URLText(formik.values.subcat_name)}
                             onChange={formik.handleChange("url")}
                             helperText={formik.touched.url ? formik.errors.url : null}
                             error={formik.touched.url ? formik.errors.url : null}
