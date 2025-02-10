@@ -7,6 +7,7 @@ import commonReducer from "@/reduxToolkit/slices/commonSlice"
 import categoryReducer from "@/reduxToolkit/slices/categorySlice"
 import subCategoryReducer from "@/reduxToolkit/slices/subCategorySlice"
 import genericReducer from "@/reduxToolkit/slices/genericSlice"
+import manufactuerReducer from "@/reduxToolkit/slices/manufactuerSlice"
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         categoryData: categoryReducer,
         subCategoryData: subCategoryReducer,
         genericData: genericReducer,
+        manufactuerData: manufactuerReducer,
         adminUserData: adminUserReducer
     }
 })

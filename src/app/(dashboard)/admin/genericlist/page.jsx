@@ -23,20 +23,6 @@ function createData(categoryName, subCategory, generic) {
     return { categoryName, subCategory, generic };
 }
 
-const rows = [
-    createData("alzheimers-disese", "Lewy Body Dementia", "Sofosbuvir"),
-    createData("alzheimers-disese", "Vascular Dementia", "Daclatasvir"),
-    createData(
-        "alzheimers-disese",
-        "Fronto Temporal Dementia",
-        "Abiraterone Acetate"
-    ),
-    createData("anaemia", "Anaemia", "Anastrozole"),
-    createData("anaesthesia-local", "local anesthetic", "Bendamustine"),
-    createData("analgesic", "Headache", "Bevacizumab"),
-    createData("analgesic", "Pain relief", "Sofosbuvir + Velpatasvir"),
-];
-
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
