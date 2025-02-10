@@ -16,8 +16,8 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { GetCategoryService } from "@/services/categoryService";
-import { GetSubCategoryService } from "@/services/subCategoryService";
+import { GetGeneticService, GetGeneticIdService, DeleteGeneticService } from "@/services/genericService";
+import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 function createData(categoryName, subCategory, generic) {
     return { categoryName, subCategory, generic };
@@ -42,26 +42,30 @@ const rowText = {
     fontFamily: "Poppins",
 };
 function GenericeList() {
-    const { categories } = useSelector((state) => state.categoryData)
-    const { subCategories } = useSelector((state) => state.subCategoryData)
+    const { genericList, generic } = useSelector((state) => state.genericData)
     const dispatch = useDispatch()
     const pathname = usePathname();
-    const [showNo, setShowNo] = useState("");
+    const router = useRouter();
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("")
+    const [showNo, setShowNo] = useState(10)
+    const [openModal, setOpenModal] = useState(false)
 
-    useEffect(() => {
-        dispatch(GetCategoryService())
-        dispatch(GetSubCategoryService())
-    }, [])
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };
 
-    const router = useRouter();
-    const handleClick = () => {
-        alert("row count alert");
-    };
-
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+    useEffect(() => {
+        dispatch(GetGeneticService(page, showNo, search))
+    }, [page, showNo, search])
+
+    const searchSubmit = () => {
+        dispatch(GetCategoryService(page, showNo, search))
+    }
+
+    // console.log('genericList', genericList);
 
     return (
         <Box>
@@ -108,7 +112,9 @@ function GenericeList() {
                     <SearchInput
                         filterOption={true}
                         rowCount={8}
-                        filterSubmit={handleClick}
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        filterSubmit={searchSubmit}
                     />
                 </Grid2>
             </Grid2>
@@ -127,7 +133,7 @@ function GenericeList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, i) => (
+                        {genericList && genericList?.generics?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -140,22 +146,33 @@ function GenericeList() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {row.categoryName}
+                                    {row?.catnames}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row.subCategory}
+                                    {row?.subname}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row.generic}
+                                    {row?.generices}
                                 </TableCell>
                                 <TableCell align="right" sx={{ fontFamily: rowText.fontFamily }}>
-                                    <button>
+                                    <button onClick={() => {
+                                        router.push(`/admin/genericlist/${row?._id}`)
+                                    }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button>
+                                    <button onClick={async () => {
+                                        setOpenModal(true)
+                                        await dispatch(GetGeneticIdService(row?._id))
+                                    }}>
                                         <DeleteIcon color="error" />
                                     </button>
                                 </TableCell>
+                                <DeleteModal
+                                    open={openModal}
+                                    setOpen={setOpenModal}
+                                    title={"Delete Generic"}
+                                    description={`Are you sure you want to delete ${generic?.generices}`}
+                                    onSubmit={() => dispatch(DeleteGeneticService(generic?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>
@@ -169,11 +186,15 @@ function GenericeList() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"} fontWeight={500}>
-                    Showing 1-10 of 182 entries
-                </Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {genericList?.generics?.pagination?.totalItems} entries</Typography>
                 <br />
-                <Pagination size="large" count={10} color="secondary" />
+                <Pagination
+                    size="large"
+                    count={genericList?.pagination?.totalPages}
+                    page={page}
+                    color="secondary"
+                    onChange={(_, value) => setPage(value)}
+                />
             </Box>
         </Box>
     );

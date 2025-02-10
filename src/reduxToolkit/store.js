@@ -6,6 +6,7 @@ import adminUserReducer from "@/reduxToolkit/slices/admin/adminUserSlice"
 import commonReducer from "@/reduxToolkit/slices/commonSlice"
 import categoryReducer from "@/reduxToolkit/slices/categorySlice"
 import subCategoryReducer from "@/reduxToolkit/slices/subCategorySlice"
+import genericReducer from "@/reduxToolkit/slices/genericSlice"
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
         cartData: cartReducer,
         categoryData: categoryReducer,
         subCategoryData: subCategoryReducer,
+        genericData: genericReducer,
         adminUserData: adminUserReducer
     }
 })
