@@ -90,7 +90,7 @@ const ProductCalendar = () => {
 
             <TableContainer component={Paper} sx={{marginTop: 2}}>
                 <Table>
-                    <TableHead sx={{ backgroundColor: '#24282c' }}>
+                    <TableHead sx={{ backgroundColor: '#7d5e69' }}>
                         <TableRow>
                             <TableCell style={rowText}>Date</TableCell>
                             {matches ? <>
@@ -103,13 +103,13 @@ const ProductCalendar = () => {
                                 :
                                 null}
 
-                            <TableCell align="center" sx={{ backgroundColor: '#24282c', color: "#fff" }}>Total</TableCell>
+                            <TableCell align="center" sx={{ backgroundColor: '#7d5e69', color: "#fff" }}>Total</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {users.map((user) => (
                             <TableRow key={user}>
-                                <TableCell sx={{ backgroundColor: '#24282c', color: "#fff" }}>{user}</TableCell>
+                                <TableCell sx={{ backgroundColor: '#7d5e69', color: "#fff" }}>{user}</TableCell>
                                 {matches ? <>
                                     {[...Array(daysInMonth).keys()].map((d) => (
                                         <TableCell key={d + 1} align="center">

@@ -96,7 +96,7 @@ function SubCategory() {
 
             <TableContainer component={Paper} sx={{ marginTop: 3 }}>
                 <Table size="small" aria-label="simple table">
-                    <TableHead sx={{ backgroundColor: '#24282c' }}>
+                    <TableHead sx={{ backgroundColor: '#7d5e69' }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Sub Category</TableCell>

@@ -23,7 +23,7 @@ const CardItem = styled(Paper)(({ theme }) => ({
 }));
 
 const CardIcon = styled(Paper)(({ theme }) => ({
-    background: 'linear-gradient(to right bottom, #2152ff, #21d4fd)',
+    background: '#001d35',
     ...theme.typography.body2,
     padding: theme.spacing(2),
     borderRadius: 30,
@@ -39,13 +39,14 @@ function AdminCard() {
     return (
         <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                <CardItem elevation={6}>
+                <CardItem elevation={6} sx={{ backgroundColor: "#007bff" }}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
                             fontWeight={500}
                             fontSize={16}
+                            color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
                             Total Orders
@@ -54,17 +55,18 @@ function AdminCard() {
                             <WorkIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>4574</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>4574</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                <CardItem elevation={6}>
+                <CardItem elevation={6} sx={{ backgroundColor: "#f35205" }}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
                             fontWeight={500}
                             fontSize={16}
+                            color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
                             Total Products
@@ -73,17 +75,18 @@ function AdminCard() {
                             <AccountTreeIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>6475</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>6475</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                <CardItem elevation={6}>
+                <CardItem elevation={6} sx={{ backgroundColor: "#cb2d3c" }}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
                             fontWeight={500}
                             fontSize={16}
+                            color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
                             Total Users
@@ -92,17 +95,18 @@ function AdminCard() {
                             <GroupsIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                <CardItem elevation={6}>
+                <CardItem elevation={6} sx={{ backgroundColor: "#25a142" }}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography
                             variant="body1"
                             fontFamily={"Poppins"}
                             fontWeight={500}
                             fontSize={16}
+                            color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
                             Total Customers
@@ -111,7 +115,7 @@ function AdminCard() {
                             <ShoppingCartIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#344767' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
                 </CardItem>
             </Grid>
         </Grid>
