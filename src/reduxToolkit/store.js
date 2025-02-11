@@ -8,6 +8,7 @@ import categoryReducer from "@/reduxToolkit/slices/categorySlice"
 import subCategoryReducer from "@/reduxToolkit/slices/subCategorySlice"
 import genericReducer from "@/reduxToolkit/slices/genericSlice"
 import manufactuerReducer from "@/reduxToolkit/slices/manufactuerSlice"
+import formReducer from "@/reduxToolkit/slices/formSlice"
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         subCategoryData: subCategoryReducer,
         genericData: genericReducer,
         manufactuerData: manufactuerReducer,
+        formData: formReducer,
         adminUserData: adminUserReducer
     }
 })
