@@ -1,5 +1,5 @@
 import connectionToDatabase from '../../../../lib/mongodb'
-import AdminUser from '../../../../models/AdminUser'
+import Generic from '../../../../models/Generic'
 import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
@@ -11,16 +11,15 @@ export async function GET(request, { params }) {
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
-
         const { id } = await params;
-        const adminUser = await AdminUser.findById(id);
-        if (!adminUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        const genericId = await Generic.findById(id);
+        if (!genericId) {
+            return NextResponse.json({ error: 'Generic not found' }, { status: 404 });
         }
 
-        return NextResponse.json(adminUser, { status: 200 });
+        return NextResponse.json(genericId, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
+        return NextResponse.json({ error: 'Error fetching Generic' }, { status: 500 });
     }
 }
 
@@ -33,15 +32,15 @@ export async function PUT(request, { params }) {
         }
         const { id } = await params;
         const body = await request.json();
-        const updatedUser = await AdminUser.findByIdAndUpdate(id, body, { new: true });
+        const updatedGeneric = await Generic.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!updatedGeneric) {
+            return NextResponse.json({ error: 'Generic not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedUser, { status: 200 });
+        return NextResponse.json(updatedGeneric, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
+        return NextResponse.json({ error: 'Error updating Generic' }, { status: 500 });
     }
 }
 
@@ -54,14 +53,14 @@ export async function DELETE(request, { params }) {
         }
 
         const { id } = await params;
-        const deletedUser = await AdminUser.findByIdAndDelete(id);
+        const deletedGeneric = await Generic.findByIdAndDelete(id);
 
-        if (!deletedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!deletedGeneric) {
+            return NextResponse.json({ error: 'Generic not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+        return NextResponse.json({ message: 'Generic deleted successfully' }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting user' }, { status: 500 });
+        return NextResponse.json({ error: 'Error deleting Generic' }, { status: 500 });
     }
 }

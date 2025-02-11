@@ -1,5 +1,5 @@
 import connectionToDatabase from '../../../../lib/mongodb'
-import AdminUser from '../../../../models/AdminUser'
+import Category from '../../../../models/Category'
 import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
@@ -11,14 +11,13 @@ export async function GET(request, { params }) {
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
-
         const { id } = await params;
-        const adminUser = await AdminUser.findById(id);
-        if (!adminUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        const categoryId = await Category.findById(id);
+        if (!categoryId) {
+            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
         }
 
-        return NextResponse.json(adminUser, { status: 200 });
+        return NextResponse.json(categoryId, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
     }
@@ -33,13 +32,13 @@ export async function PUT(request, { params }) {
         }
         const { id } = await params;
         const body = await request.json();
-        const updatedUser = await AdminUser.findByIdAndUpdate(id, body, { new: true });
+        const updatedCategory = await Category.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!updatedCategory) {
+            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedUser, { status: 200 });
+        return NextResponse.json(updatedCategory, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
     }
@@ -54,13 +53,13 @@ export async function DELETE(request, { params }) {
         }
 
         const { id } = await params;
-        const deletedUser = await AdminUser.findByIdAndDelete(id);
+        const deletedCategory = await Category.findByIdAndDelete(id);
 
-        if (!deletedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!deletedCategory) {
+            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+        return NextResponse.json({ message: 'Category deleted successfully' }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error deleting user' }, { status: 500 });
     }

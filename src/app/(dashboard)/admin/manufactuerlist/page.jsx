@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,50 +15,42 @@ import CreateIcon from "@mui/icons-material/Create";
 import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
+import { useDispatch, useSelector } from "react-redux";
+import { DeleteManufactuerService, GetManufactuerIdService, GetManufactuerService } from '@/services/manufactuerService';
+import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 function createData(name, url, status) {
     return { name, url, status };
 }
 
-const rows = [
-    createData(
-        "Mylan Pharmaceuticals Private Limited",
-        "mylanpharmaceuticals",
-        "Active"
-    ),
-    createData("Aarogya Herbals", "mylanpharmaceuticals", "Active"),
-    createData("Aarogya Herbals (Works)", "aah-biotech-pvt-ltd", "Active"),
-    createData("Aash Biotech Pvt Ltd", "Aarogya-herbals-works", "Active"),
-    createData(
-        "Accent Microcell Industries",
-        "accent-microcell-industries",
-        "Active"
-    ),
-    createData("Accure Labs Pvt. Ltd", "accure-labs-pvt", "Active"),
-    createData(
-        "Actimus Biosciences Pvt. Ltd.",
-        "actimus-biosciences-pvt-ltd",
-        "Active"
-    ),
-];
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
 function ManufactuerList() {
-    const pathname = usePathname();
-    const [showNo, setShowNo] = useState("");
+    const { manufactuerList, manufactuer } = useSelector((state) => state.manufactuerData)
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("")
+    const [showNo, setShowNo] = useState(10)
+    const [openModal, setOpenModal] = useState(false)
+    const dispatch = useDispatch()
+    const router = useRouter()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };
+ 
+    const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-    const router = useRouter();
-    const handleClick = () => {
-        alert("row count alert");
-    };
+    useEffect(() => {
+        dispatch(GetManufactuerService(page, showNo, search))
+    }, [page, showNo, search])
 
-    const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const searchSubmit = () => {
+        dispatch(GetManufactuerService(page, showNo, search))
+    }
+
+    // console.log("manufactuerList", manufactuerList);
 
     return (
         <Box>
@@ -105,7 +97,9 @@ function ManufactuerList() {
                     <SearchInput
                         filterOption={true}
                         rowCount={8}
-                        filterSubmit={handleClick}
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        filterSubmit={searchSubmit}
                     />
                 </Grid2>
             </Grid2>
@@ -124,7 +118,7 @@ function ManufactuerList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row, i) => (
+                        {manufactuerList?.manufactuers?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -137,14 +131,14 @@ function ManufactuerList() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {row.name}
+                                    {row.manufactuername}
                                 </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily }}
                                     component="th"
                                     scope="row"
                                 >
-                                    {row.url}
+                                    {row.manufactuerurl}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     Active
@@ -153,13 +147,24 @@ function ManufactuerList() {
                                     sx={{ fontFamily: rowText.fontFamily }}
                                     align="right"
                                 >
-                                    <button>
+                                    <button onClick={() => {
+                                        router.push(`/admin/manufactuerlist/${row?._id}`)
+                                    }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button>
+                                    <button onClick={async () => {
+                                        setOpenModal(true)
+                                        await dispatch(GetManufactuerIdService(row?._id))
+                                    }}>
                                         <DeleteIcon color="error" />
                                     </button>
                                 </TableCell>
+                                <DeleteModal
+                                    open={openModal}
+                                    setOpen={setOpenModal}
+                                    title={"Delete Category"}
+                                    description={`Are you sure you want to delete ${manufactuer?.manufactuername}`}
+                                    onSubmit={() => dispatch(DeleteManufactuerService(manufactuer?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>
@@ -173,11 +178,15 @@ function ManufactuerList() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"} fontWeight={500}>
-                    Showing 1-10 of 182 entries
-                </Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {manufactuerList?.pagination?.totalItems} entries</Typography>
                 <br />
-                <Pagination size="large" count={10} color="secondary" />
+                <Pagination
+                    size="large"
+                    count={manufactuerList?.pagination?.totalPages}
+                    page={page}
+                    color="secondary"
+                    onChange={(_, value) => setPage(value)}
+                />
             </Box>
         </Box>
     );

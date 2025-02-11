@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   Box,
   Button,
@@ -13,12 +13,14 @@ import TextInput from "@/components/admin/input/TextInput";
 import InputArea from "@/components/admin/input/InputArea";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PostManufactuerService } from "../../../../../services/manufactuerService"
-import { useDispatch } from "react-redux";
+import { PutManufactuerService, GetManufactuerIdService } from "../../../../../services/manufactuerService"
+import { useDispatch, useSelector } from "react-redux";
 
-function ManufactuerAdd() {
+function EditManufactuer() {
+    const { manufactuer } = useSelector((state) => state.manufactuerData)
   const dispatch = useDispatch()
   const router = useRouter();
+  const params = useParams()
 
   const URLText = (text) => {
     const splitText = text.split(" ")
@@ -26,14 +28,19 @@ function ManufactuerAdd() {
     return joinSpace
   }
 
+  useEffect(() => {
+    dispatch(GetManufactuerIdService(params?.id))
+}, [params?.id])
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      manufactuername: "",
-      manufactuerurl: "",
-      manufactueraddress: "",
-      metatitle: "",
-      metadesc: "",
-      metakeyboard: "",
+      manufactuername: manufactuer?.manufactuername || "",
+      manufactuerurl: manufactuer?.manufactuerurl || "",
+      manufactueraddress: manufactuer?.manufactueraddress || "",
+      metatitle: manufactuer?.metatitle || "",
+      metadesc: manufactuer?.metadesc || "",
+      metakeyboard: manufactuer?.metakeyboard || "",
     },
     validationSchema: yup.object({
       manufactuername: yup.string().required("Manufactuer Name is required"),
@@ -42,8 +49,8 @@ function ManufactuerAdd() {
         .string()
         .required("Manufactuer Address is required"),
     }),
-    onSubmit: async (data, {resetForm}) => {
-      await dispatch(PostManufactuerService(data, resetForm))
+    onSubmit: async (data) => {
+      await dispatch(PutManufactuerService(manufactuer?._id, data))
     },
   });
 
@@ -60,7 +67,7 @@ function ManufactuerAdd() {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-          Add Manufactuer
+          Edit Manufactuer
         </Typography>
         <Button
           color="success"
@@ -211,4 +218,4 @@ function ManufactuerAdd() {
   );
 }
 
-export default ManufactuerAdd;
+export default EditManufactuer;

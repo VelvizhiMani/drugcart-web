@@ -51,11 +51,16 @@ export async function GET(req) {
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
- 
+
     const filters = search ? { username: { $regex: search, $options: "i" } } : {};
     console.log(filters);
     try {
         await connectionToDatabase();
+        const { success, user, message } = await authenticateUser();
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 })
+        }
         const skip = (page - 1) * limit;
 
         // Fetch cart items with pagination
@@ -66,7 +71,7 @@ export async function GET(req) {
         // Total items in the user's cart
         const totalItems = await AdminUser.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
-console.log('carties', cartItems);
+        console.log('carties', cartItems);
 
         return NextResponse.json(
             {

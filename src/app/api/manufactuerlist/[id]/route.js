@@ -1,5 +1,5 @@
 import connectionToDatabase from '../../../../lib/mongodb'
-import AdminUser from '../../../../models/AdminUser'
+import Manufactuer from '../../../../models/Manufactuer'
 import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
@@ -11,16 +11,15 @@ export async function GET(request, { params }) {
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
-
         const { id } = await params;
-        const adminUser = await AdminUser.findById(id);
-        if (!adminUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        const manufactuer = await Manufactuer.findById(id);
+        if (!manufactuer) {
+            return NextResponse.json({ error: 'manufactuer not found' }, { status: 404 });
         }
 
-        return NextResponse.json(adminUser, { status: 200 });
+        return NextResponse.json(manufactuer, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
+        return NextResponse.json({ error: 'Error fetching manufactuer' }, { status: 500 });
     }
 }
 
@@ -33,15 +32,15 @@ export async function PUT(request, { params }) {
         }
         const { id } = await params;
         const body = await request.json();
-        const updatedUser = await AdminUser.findByIdAndUpdate(id, body, { new: true });
+        const updatedManufactuer = await Manufactuer.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!updatedManufactuer) {
+            return NextResponse.json({ error: 'Manufactuer not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedUser, { status: 200 });
+        return NextResponse.json(updatedManufactuer, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
+        return NextResponse.json({ error: 'Error updating Manufactuer' }, { status: 500 });
     }
 }
 
@@ -54,14 +53,14 @@ export async function DELETE(request, { params }) {
         }
 
         const { id } = await params;
-        const deletedUser = await AdminUser.findByIdAndDelete(id);
+        const deletedManufactuer = await Manufactuer.findByIdAndDelete(id);
 
-        if (!deletedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!deletedManufactuer) {
+            return NextResponse.json({ error: 'Manufactuer not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+        return NextResponse.json({ message: 'Manufactuer deleted successfully' }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting user' }, { status: 500 });
+        return NextResponse.json({ error: 'Error deleting Manufactuer' }, { status: 500 });
     }
 }

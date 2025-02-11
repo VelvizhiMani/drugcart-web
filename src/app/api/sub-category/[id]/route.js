@@ -1,9 +1,10 @@
 import connectionToDatabase from '../../../../lib/mongodb'
-import AdminUser from '../../../../models/AdminUser'
+import Subcategory from '../../../../models/SubCategory'
 import { authenticateUser } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
 export async function GET(request, { params }) {
+
     try {
         await connectionToDatabase();
         const { success, user, message } = await authenticateUser();
@@ -13,12 +14,12 @@ export async function GET(request, { params }) {
         }
 
         const { id } = await params;
-        const adminUser = await AdminUser.findById(id);
-        if (!adminUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        const subcategoryId = await Subcategory.findById(id);
+        if (!subcategoryId) {
+            return NextResponse.json({ error: 'Sub Category not found' }, { status: 404 });
         }
 
-        return NextResponse.json(adminUser, { status: 200 });
+        return NextResponse.json(subcategoryId, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
     }
@@ -31,15 +32,16 @@ export async function PUT(request, { params }) {
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
+
         const { id } = await params;
         const body = await request.json();
-        const updatedUser = await AdminUser.findByIdAndUpdate(id, body, { new: true });
+        const updatedSubCategory = await Subcategory.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!updatedSubCategory) {
+            return NextResponse.json({ error: 'SubCategory not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedUser, { status: 200 });
+        return NextResponse.json(updatedSubCategory, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
     }
@@ -54,13 +56,13 @@ export async function DELETE(request, { params }) {
         }
 
         const { id } = await params;
-        const deletedUser = await AdminUser.findByIdAndDelete(id);
+        const deletedSubCategory = await Subcategory.findByIdAndDelete(id);
 
-        if (!deletedUser) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
+        if (!deletedSubCategory) {
+            return NextResponse.json({ error: 'SubCategory not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
+        return NextResponse.json({ message: 'SubCategory deleted successfully' }, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error deleting user' }, { status: 500 });
     }

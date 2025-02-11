@@ -1,6 +1,6 @@
 "use client";
 import AddIcon from "@mui/icons-material/Add";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
     Box,
     Button,
@@ -19,17 +19,20 @@ import SearchField from "@/components/admin/AutoComplete/SearchField";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { PostSubCategoryService } from '../../../../../services/subCategoryService'
+import { GetSubCategoryIdService, PostSubCategoryService, PutSubCategoryService } from '../../../../../services/subCategoryService'
 import { GetCategoryService } from "@/services/categoryService";
 
-function SubCategoryAdd() {
+function EditSubCategory() {
+    const params = useParams()
     const { categories } = useSelector((state) => state.categoryData)
+    const { subCategory } = useSelector((state) => state.subCategoryData)
     const dispatch = useDispatch()
     const router = useRouter();
 
     useEffect(() => {
         dispatch(GetCategoryService())
-    }, [])
+        dispatch(GetSubCategoryIdService(params?.id))
+    }, [params?.id])
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -43,15 +46,16 @@ function SubCategoryAdd() {
     };
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            cat_name: "",
-            subcat_name: "",
-            url: "",
-            sub_cat_img: "",
-            imagealt: "",
-            metatitle: "",
-            metadesc: "",
-            metakeyboard: "",
+            cat_name: subCategory?.cat_name || "",
+            subcat_name: subCategory?.subcat_name || "",
+            url: subCategory?.url || "",
+            sub_cat_img: subCategory?.sub_cat_img || "",
+            imagealt: subCategory?.imagealt || "",
+            metatitle: subCategory?.metatitle || "",
+            metadesc: subCategory?.metadesc || "",
+            metakeyboard: subCategory?.metakeyboard || "",
         },
         validationSchema: yup.object({
             cat_name: yup.string().required("Category type is required"),
@@ -59,15 +63,12 @@ function SubCategoryAdd() {
             url: yup.string().required("URL is required"),
             sub_cat_img: yup.string().required("Sub Category Image is required"),
         }),
-        onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostSubCategoryService(data, resetForm))
+        onSubmit: async (data) => {
+            await dispatch(PutSubCategoryService(subCategory?._id, data))
         },
     });
 
-    useEffect(() => {
-        formik.values.url = URLText(formik.values.subcat_name)
-    }, [formik.values.subcat_name])
+    console.log(params);
 
     return (
         <Box>
@@ -78,7 +79,7 @@ function SubCategoryAdd() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Sub Category
+                    Edit Sub Category
                 </Typography>
                 <Button
                     color="success"
@@ -203,4 +204,4 @@ function SubCategoryAdd() {
     );
 }
 
-export default SubCategoryAdd;
+export default EditSubCategory;
