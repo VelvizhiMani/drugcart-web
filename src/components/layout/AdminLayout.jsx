@@ -251,7 +251,7 @@ function AdminLayout(props) {
             <ListItem
               style={{
                 marginTop: 8,
-                backgroundColor: pathName === item.path ? "#a50f46" : null,
+                backgroundColor: pathName === item.path ? "#00a65a" : null,
               }}
               onClick={() => {
                 router.push(item.path, { s: "test" });
@@ -261,7 +261,7 @@ function AdminLayout(props) {
               <Box>
                 <Typography
                   variant="body1"
-                  color={"#fff"}
+                  color={pathName === item.path ? "#fff" : "#fff"}
                   fontFamily={"Poppins"}
                   fontSize={15}
                 >
@@ -324,7 +324,7 @@ function AdminLayout(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor: "#25b243",
+          backgroundColor: "#7d5c68",
         }}
       >
         <Toolbar>
@@ -423,7 +423,7 @@ function AdminLayout(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "#25b243",
+              backgroundColor: "#7d5c68",
             },
           }}
         >
@@ -437,7 +437,7 @@ function AdminLayout(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "#25b243",
+              backgroundColor: "#7d5c68",
             },
           }}
           open

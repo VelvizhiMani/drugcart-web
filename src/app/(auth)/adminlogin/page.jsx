@@ -82,7 +82,7 @@ function AdminLogin() {
             >
                 {" "}
                 <Avatar
-                    src={"logo"}
+                    src={"https://assets3.drugcarts.com/static/image/logodrugnew.jpg"}
                     alt="Drugcart"
                     style={{
                         marginTop: theme.spacing(-8),
@@ -90,9 +90,10 @@ function AdminLogin() {
                         width: theme.spacing(10),
                         height: theme.spacing(10),
                     }}
+                    variant="square"
                 />
-                <Typography component="h1" variant="h5">
-                    Login
+                <Typography component="body1" variant="h5" textAlign="center">
+                Admin Login
                 </Typography>
                 <form style={{ marginTop: theme.spacing(3), width: "100%" }}>
                     <TextField
