@@ -55,7 +55,7 @@ const PutStorageService = (id, userData) => async (dispatch) => {
 
 const DeleteStorageService = (id) => async (dispatch) => {
     await axios.delete(`/api/storage/${id}`, { headers: await Authorization() }).then(() => {
-        dispatch(getStorages(id))
+        dispatch(getStorage(id))
         dispatch(GetStorageService())
     }).catch((error) => {
         console.log("error", error.message)

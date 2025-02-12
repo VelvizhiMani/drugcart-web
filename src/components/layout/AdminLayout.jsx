@@ -234,6 +234,11 @@ function AdminLayout(props) {
       path: "/admin/storagelist",
       name: "Storage List",
     },
+    {
+      id: 8,
+      path: "/admin/packagelist",
+      name: "Pack List",
+    },
   ];
 
   const drawer = (
