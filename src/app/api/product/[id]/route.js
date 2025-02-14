@@ -13,6 +13,7 @@ export async function GET(request, { params }) {
         }
         const { id } = await params;
         const product = await Product.findById(id);
+        console.log(product)
         if (!product) {
             return NextResponse.json({ error: 'Product not found' }, { status: 404 });
         }

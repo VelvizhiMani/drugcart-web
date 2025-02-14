@@ -166,7 +166,7 @@ export async function GET(req) {
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
     const generices = searchParams.get("generices") || "";
-    const brand = searchParams.get("brand") || "";
+    // const brand = searchParams.get("brand") || "";
 
     const filters = {};
     
@@ -178,9 +178,9 @@ export async function GET(req) {
         filters.generices = { $regex: generices, $options: "i" };
     }
 
-    if (brand) {
-        filters.brand = { $regex: brand, $options: "i" };
-    }
+    // if (brand) {
+    //     filters.brand = { $regex: brand, $options: "i" };
+    // }
 
     try {
         await connnectionToDatabase();

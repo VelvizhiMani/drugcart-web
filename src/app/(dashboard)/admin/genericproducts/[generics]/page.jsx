@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname, useParams } from "next/navigation";
-import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Button, FormHelperText, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -54,7 +54,7 @@ function GenericProducts() {
   const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   useEffect(() => {
-    dispatch(GetProductService(page, showNo, search))
+    dispatch(GetProductService(page, showNo, search, params?.generics))
   }, [page, showNo, search, params?.generics])
 
   const searchSubmit = () => {
@@ -80,7 +80,7 @@ function GenericProducts() {
           variant="contained"
           style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
           startIcon={<AddIcon />}
-          onClick={() => router.push(`/admin/storagelist/add`)}
+          onClick={() => router.push(`/admin/genericproducts/add`)}
         >
           Add Product
         </Button>
@@ -121,8 +121,18 @@ function GenericProducts() {
           <TableHead sx={{ backgroundColor: "#7d5e69" }}>
             <TableRow>
               <TableCell style={rowText}>Sno</TableCell>
-              <TableCell style={rowText}>Package Name</TableCell>
-              <TableCell style={rowText}>Status</TableCell>
+              <TableCell style={rowText}>Category</TableCell>
+              <TableCell style={rowText}>Sub Category</TableCell>
+              <TableCell style={rowText}>Generic</TableCell>
+              <TableCell style={rowText}>Selt Composition</TableCell>
+              <TableCell style={rowText}>Product</TableCell>
+              <TableCell style={rowText}>Word Count</TableCell>
+              <TableCell style={rowText}>Manufactuer</TableCell>
+              <TableCell style={rowText}>Image</TableCell>
+              <TableCell style={rowText}>Stock</TableCell>
+              <TableCell style={rowText}>MRP</TableCell>
+              <TableCell style={rowText}>%</TableCell>
+              <TableCell style={rowText}>Price</TableCell>
               <TableCell align="right" style={rowText}>
                 Action
               </TableCell>
@@ -142,10 +152,49 @@ function GenericProducts() {
                   component="th"
                   scope="row"
                 >
-                  {row?.storagename}
+                  {row?.cat_name}
                 </TableCell>
                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.status}
+                  {row?.subcat_name}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.generices}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.brand}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.product_name}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  12212
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.manufactuer}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.product_img ? (
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={row?.product_img}
+                      style={{ width: 45, height: 45 }}
+                      variant="rounded"
+                    />
+                  ) : (
+                    <FormHelperText error>No Image</FormHelperText>
+                  )}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.stock}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.saleprice}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.percentage}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.price}
                 </TableCell>
                 <TableCell
                   sx={{ fontFamily: rowText.fontFamily }}
@@ -158,7 +207,7 @@ function GenericProducts() {
                   </button>
                   <button onClick={async () => {
                     setOpenModal(true)
-                    await dispatch(GetStorageIdService(row?._id))
+                    await dispatch(GetProductIdService(row?._id))
                   }}>
                     <DeleteIcon color='error' />
                   </button>
@@ -166,8 +215,8 @@ function GenericProducts() {
                 <DeleteModal
                   open={openModal}
                   setOpen={setOpenModal}
-                  title={"Delete Form"}
-                  description={`Are you sure you want to delete ${product?.storagename}`}
+                  title={"Delete Product"}
+                  description={`Are you sure you want to delete ${product?.brand}`}
                   onSubmit={() => dispatch(DeleteStorageService(product?._id))} />
               </TableRow>
             ))}

@@ -19,10 +19,10 @@ const PostProductService = (data, resetForm) => async (dispatch) => {
     }
 }
 
-const GetProductService = (page = 1, limit, search = "") => async (dispatch) => {
+const GetProductService = (page = 1, limit, search = "", generics = "") => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/product?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/product?page=${page}&limit=${limit}&search=${search}&generices=${generics}`, { headers: await Authorization() })
         dispatch(getProducts(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
