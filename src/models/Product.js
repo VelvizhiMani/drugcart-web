@@ -60,9 +60,10 @@ const productSchema = new Schema(
             type: String,
             default: "",
         },
-        // packing:{
-        //     type:String,
-        // },
+        form: {
+            type:String,
+            default: "",
+        },
         product_img: {
             type: String,
             default: "",
