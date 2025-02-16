@@ -12,6 +12,7 @@ import formReducer from "@/reduxToolkit/slices/formSlice"
 import storageReducer from "@/reduxToolkit/slices/storageSlice"
 import packageReducer from "@/reduxToolkit/slices/packageSlice"
 import productReducer from "@/reduxToolkit/slices/productSlice"
+import courierReducer from "@/reduxToolkit/slices/courierSlice"
 
 export const store = configureStore({
     reducer: {
@@ -27,6 +28,7 @@ export const store = configureStore({
         storageData: storageReducer,
         packageData: packageReducer,
         productData: productReducer,
+        courierData: courierReducer,
         adminUserData: adminUserReducer
     }
 })
