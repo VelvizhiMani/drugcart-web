@@ -13,6 +13,7 @@ import storageReducer from "@/reduxToolkit/slices/storageSlice"
 import packageReducer from "@/reduxToolkit/slices/packageSlice"
 import productReducer from "@/reduxToolkit/slices/productSlice"
 import courierReducer from "@/reduxToolkit/slices/courierSlice"
+import orginReducer from "@/reduxToolkit/slices/orginSlice"
 
 export const store = configureStore({
     reducer: {
@@ -29,6 +30,7 @@ export const store = configureStore({
         packageData: packageReducer,
         productData: productReducer,
         courierData: courierReducer,
+        orginData: orginReducer,
         adminUserData: adminUserReducer
     }
 })
