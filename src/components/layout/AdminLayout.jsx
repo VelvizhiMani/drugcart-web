@@ -229,6 +229,16 @@ function AdminLayout(props) {
       path: "/admin/formlist",
       name: "Form List",
     },
+    {
+      id: 7,
+      path: "/admin/storagelist",
+      name: "Storage List",
+    },
+    {
+      id: 8,
+      path: "/admin/packagelist",
+      name: "Pack List",
+    },
   ];
 
   const drawer = (

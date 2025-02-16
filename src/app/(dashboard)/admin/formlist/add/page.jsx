@@ -9,39 +9,53 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextInput from "@/components/admin/input/TextInput";
 import ImageInput from "@/components/admin/input/ImageInput";
 import InputArea from "@/components/admin/input/InputArea";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { PostFormService } from "@/services/formService";
+import { useDispatch } from "react-redux";
 
 function FormAdd() {
-  const [imagePreview, setImagePreview] = useState(null);
   const router = useRouter();
+  const dispatch = useDispatch()
+
+  const URLText = (text) => {
+    const splitText = text.split(" ")
+    const joinSpace = splitText.join("-").toLowerCase()
+    return joinSpace
+  }
 
   const formik = useFormik({
     initialValues: {
-      formName: "",
-      formURL: "",
-      image: "",
-      imageAlt: "",
+      formname: "",
+      formurl: "",
+      picture: "",
+      alt: "",
+      metatitle: "",
+      metakeyword: "",
+      metadesc: "",
     },
     validationSchema: yup.object({
-      formName: yup.string().required("Form Name Name is required"),
-      formURL: yup.string().required("Form URL is required"),
-      image: yup.string().required("Image is required"),
+      formname: yup.string().required("Form Name is required"),
+      formurl: yup.string().required("Form URL is required"),
+      picture: yup.string().required("Picture is required"),
     }),
-    imageAlt: yup.string().required("Image Alt is required"),
-    onSubmit: async (data) => {
-      await console.log(data);
+    onSubmit: async (data, { resetForm }) => {
+      console.log(data);
+      await dispatch(PostFormService(data, resetForm))
     },
   });
 
+  useEffect(() => {
+    formik.values.formurl = URLText(formik.values.formname)
+  }, [formik.values.formname])
+
   const handleCategoryImage = (event) => {
     const file = event.target.files[0];
-    formik.setFieldValue("image", file);
-    setImagePreview(URL.createObjectURL(file));
+    formik.setFieldValue("picture", URL.createObjectURL(file));
   };
 
   return (
@@ -77,40 +91,44 @@ function FormAdd() {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <TextInput
               title={"Form Name (Ex: Gel or caps)"}
-              value={formik.values.formName}
-              onChange={formik.handleChange("formName")}
+              value={formik.values.formname}
+              onChange={formik.handleChange("formname")}
               helperText={
-                formik.touched.formName ? formik.errors.formName : null
+                formik.touched.formname ? formik.errors.formname : null
               }
-              error={formik.touched.formName ? formik.errors.formName : null}
+              error={formik.touched.formname ? formik.errors.formname : null}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <TextInput
               title={"URL Name (Ex: gel or caps)"}
-              value={formik.values.formURL}
-              onChange={formik.handleChange("formURL")}
-              helperText={formik.touched.formURL ? formik.errors.formURL : null}
-              error={formik.touched.formURL ? formik.errors.formURL : null}
+              value={URLText(formik.values.formurl)}
+              onChange={formik.handleChange("formurl")}
+              helperText={formik.touched.formurl ? formik.errors.formurl : null}
+              error={formik.touched.formurl ? formik.errors.formurl : null}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <ImageInput
               title={"Image"}
-              image={imagePreview}
+              image={formik.values.picture}
               onChange={handleCategoryImage}
-              error={formik.touched.image ? formik.errors.image : null}
+              error={
+                formik.touched.picture
+                  ? formik.errors.picture
+                  : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
             <TextInput
               title={"Image Alt"}
-              value={formik.values.imageAlt}
-              onChange={formik.handleChange("imageAlt")}
+              value={formik.values.alt}
+              onChange={formik.handleChange("alt")}
               helperText={
-                formik.touched.imageAlt ? formik.errors.imageAlt : null
+                formik.touched.alt ? formik.errors.alt : null
               }
-              error={formik.touched.imageAlt ? formik.errors.imageAlt : null}
+              error={formik.touched.alt ? formik.errors.alt : null}
             />
           </Grid2>
         </Grid2>
@@ -127,13 +145,25 @@ function FormAdd() {
       >
         <Grid2 container spacing={2}>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Meta Title"} />
+            <TextInput
+              title={"Meta Title"}
+              value={formik.values.metatitle}
+              onChange={formik.handleChange("metatitle")}
+            />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <TextInput title={"Meta Keyword"} />
+            <TextInput
+              title={"Meta Keyword"}
+              value={formik.values.metakeyword}
+              onChange={formik.handleChange("metakeyword")}
+            />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 8 }}>
-            <InputArea title={"Meta Description"} />
+            <InputArea
+              title={"Meta Description"}
+              value={formik.values.metadesc}
+              onChange={formik.handleChange("metadesc")}
+            />
           </Grid2>
         </Grid2>
       </Paper>

@@ -32,7 +32,7 @@ const medicines = [
 function ImageField({ title }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  console.log(searchTerm);
+  // console.log(searchTerm);
   
   return (
     <div>

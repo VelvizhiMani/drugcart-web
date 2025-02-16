@@ -16,7 +16,7 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteFormService, GetFormIdService, GetFormService } from '@/services/formService';
+import { DeleteStorageService, GetStorageIdService, GetStorageService } from '@/services/storageService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 function createData(name, url, status) {
@@ -36,8 +36,8 @@ const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function FormList() {
-    const { formList, form } = useSelector((state) => state.formData)
+function StorageList() {
+    const { storageList, storage } = useSelector((state) => state.storageData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
@@ -54,14 +54,14 @@ function FormList() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetFormService(page, showNo, search))
+        dispatch(GetStorageService(page, showNo, search))
     }, [page, showNo, search])
 
     const searchSubmit = () => {
-        dispatch(GetFormService(page, showNo, search))
+        dispatch(GetStorageService(page, showNo, search))
     }
 
-    console.log("formList", formList);
+    console.log("storageList", storageList);
 
     return (
         <Box>
@@ -72,16 +72,16 @@ function FormList() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Form List
+                    Storage List
                 </Typography>
                 <Button
                     color="secondary"
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/formlist/add`)}
+                    onClick={() => router.push(`/admin/storagelist/add`)}
                 >
-                    Form Add
+                    Storage Add
                 </Button>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -120,8 +120,7 @@ function FormList() {
                     <TableHead sx={{ backgroundColor: "#7d5e69" }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Form Name</TableCell>
-                            <TableCell style={rowText}>Url</TableCell>
+                            <TableCell style={rowText}>Storage Name</TableCell>
                             <TableCell style={rowText}>Status</TableCell>
                             <TableCell align="right" style={rowText}>
                                 Action
@@ -129,7 +128,7 @@ function FormList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {formList && formList?.forms?.map((row, i) => (
+                        {storageList && storageList?.storages?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -142,14 +141,7 @@ function FormList() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {row?.formname}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    component="th"
-                                    scope="row"
-                                >
-                                    {row?.formurl}
+                                    {row?.storagename}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.status}
@@ -159,13 +151,13 @@ function FormList() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/formlist/${row?._id}`)
+                                        router.push(`/admin/storagelist/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
                                     <button onClick={async () => {
                                         setOpenModal(true)
-                                        await dispatch(GetFormIdService(row?._id))
+                                        await dispatch(GetStorageIdService(row?._id))
                                     }}>
                                         <DeleteIcon color='error' />
                                     </button>
@@ -174,8 +166,8 @@ function FormList() {
                                     open={openModal}
                                     setOpen={setOpenModal}
                                     title={"Delete Form"}
-                                    description={`Are you sure you want to delete ${form?.formname}`}
-                                    onSubmit={() => dispatch(DeleteFormService(form?._id))} />
+                                    description={`Are you sure you want to delete ${storage?.storagename}`}
+                                    onSubmit={() => dispatch(DeleteStorageService(storage?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>
@@ -189,11 +181,11 @@ function FormList() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {formList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {storageList?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"
-                    count={formList?.pagination?.totalPages}
+                    count={storageList?.pagination?.totalPages}
                     page={page}
                     color="secondary"
                     onChange={(_, value) => setPage(value)}
@@ -203,4 +195,4 @@ function FormList() {
     );
 }
 
-export default FormList;
+export default StorageList;
