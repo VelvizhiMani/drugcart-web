@@ -249,6 +249,11 @@ function AdminLayout(props) {
       path: "/admin/orginlist",
       name: "Product Country of List",
     },
+    {
+      id: 11,
+      path: "/admin/referlist",
+      name: "Reference List",
+    },
   ];
 
   const drawer = (
