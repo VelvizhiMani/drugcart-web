@@ -3,6 +3,7 @@ import Authorization from '@/utils/authorization';
 import axios from 'axios'
 import { IsLoading, showToast } from '../../reduxToolkit/slices/commonSlice';
 
+//admin and staff login
 const AdminLoginService = (adminData, router) => async (dispatch) => {
     await axios.post('/api/adminlogin', adminData).then((response) => {
         console.log(response);
@@ -16,7 +17,7 @@ const AdminLoginService = (adminData, router) => async (dispatch) => {
 }
 
 const CreateUserService = (adminData, router) => async (dispatch) => {
-    await axios.post('/api/users', adminData, { headers: await Authorization() }).then((response) => {
+    await axios.post('/api/admin-users', adminData, { headers: await Authorization() }).then((response) => {
         console.log(response);
         // dispatch(createUser(response.data))
         dispatch(GetAllUserService())
@@ -31,7 +32,7 @@ const CreateUserService = (adminData, router) => async (dispatch) => {
 
 const GetAllUserService = (page = 1,limit, search = "") => async (dispatch) => {
     dispatch(IsLoading(true))
-    await axios.get(`/api/users?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() }).then((response) => {
+    await axios.get(`/api/admin-users?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() }).then((response) => {
         dispatch(getUsers(response.data))
         console.log(response.data);
         dispatch(IsLoading(false))
@@ -42,7 +43,7 @@ const GetAllUserService = (page = 1,limit, search = "") => async (dispatch) => {
 }
 
 const DeleteUserService = (userId) => async (dispatch) => {
-    await axios.delete(`/api/users/${userId}`, { headers: await Authorization() }).then(() => {
+    await axios.delete(`/api/admin-users/${userId}`, { headers: await Authorization() }).then(() => {
         dispatch(GetAllUserService())
     }).catch((error) => {
         console.log("error", error.message)
@@ -51,7 +52,7 @@ const DeleteUserService = (userId) => async (dispatch) => {
 
 const GetUserService = (userId) => async (dispatch) => {
     dispatch(IsLoading(true))
-    await axios.get(`/api/users/${userId}`, { headers: await Authorization() }).then((response) => {
+    await axios.get(`/api/admin-users/${userId}`, { headers: await Authorization() }).then((response) => {
         dispatch(getUserId(response.data))
         dispatch(IsLoading(false))
     }).catch((error) => {
@@ -61,7 +62,7 @@ const GetUserService = (userId) => async (dispatch) => {
 }
 
 const PutUserService = (userId, userData) => async (dispatch) => {
-    await axios.put(`/api/users/${userId}`, userData, { headers: await Authorization() }).then((response) => {
+    await axios.put(`/api/admin-users/${userId}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getUserId(response.data))
         dispatch(GetUserService(userId))
         dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
