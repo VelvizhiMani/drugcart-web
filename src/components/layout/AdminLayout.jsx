@@ -239,6 +239,21 @@ function AdminLayout(props) {
       path: "/admin/packagelist",
       name: "Pack List",
     },
+    {
+      id: 9,
+      path: "/admin/courierlist",
+      name: "Courier List",
+    },
+    {
+      id: 10,
+      path: "/admin/orginlist",
+      name: "Product Country of List",
+    },
+    {
+      id: 11,
+      path: "/admin/referlist",
+      name: "Reference List",
+    },
   ];
 
   const drawer = (
