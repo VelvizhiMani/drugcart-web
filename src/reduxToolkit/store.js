@@ -16,6 +16,7 @@ import courierReducer from "@/reduxToolkit/slices/courierSlice"
 import orginReducer from "@/reduxToolkit/slices/orginSlice"
 import referenceReducer from "@/reduxToolkit/slices/referenceSlice"
 import writtenByReducer from "@/reduxToolkit/slices/writtenBySlice"
+import reviewByReducer from "@/reduxToolkit/slices/reviewBySlice"
 
 export const store = configureStore({
     reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
         courierData: courierReducer,
         orginData: orginReducer,
         writtenbyData: writtenByReducer,
+        reviewbyData: reviewByReducer,
         referenceData: referenceReducer,
         adminUserData: adminUserReducer
     }

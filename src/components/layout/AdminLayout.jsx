@@ -264,6 +264,11 @@ function AdminLayout(props) {
       path: "/admin/writtenbylist",
       name: "Written by List",
     },
+    {
+      id: 13,
+      path: "/admin/reviewbylist",
+      name: "Review by List",
+    },
   ];
 
   const drawer = (
@@ -344,6 +349,30 @@ function AdminLayout(props) {
                   fontSize={14}
                 >
                   {userRoutes[12].name}
+                </Typography>
+              </ListItem>
+            </Link>
+            <Link
+              href={{
+                pathname: userRoutes[13].path,
+              }}
+            >
+              <ListItem sx={{ pl: 4 }} style={{
+                marginTop: 8,
+                backgroundColor: pathName === userRoutes[13].path ? "#00a65a" : null,
+              }}
+                onClick={() => {
+                  router.push(userRoutes[13].path);
+                  setMobileOpen(false);
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  color={pathName === userRoutes[13].path ? "#fff" : "#fff"}
+                  fontFamily={"Poppins"}
+                  fontSize={14}
+                >
+                  {userRoutes[13].name}
                 </Typography>
               </ListItem>
             </Link>
