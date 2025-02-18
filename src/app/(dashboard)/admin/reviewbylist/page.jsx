@@ -47,7 +47,7 @@ function ReviewByListPage() {
     dispatch(GetReviewByService(page, showNo, search))
   }
 
-  console.log("writtenByList", writtenByList);
+  // console.log("reviewByList", reviewByList);
 
   return (
     <Box>
