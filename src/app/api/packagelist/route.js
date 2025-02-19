@@ -69,9 +69,14 @@ export async function GET(req) {
         const totalItems = await Pack.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const PackItemsIndex = PackItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                packages: PackItems,
+                packages: PackItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
