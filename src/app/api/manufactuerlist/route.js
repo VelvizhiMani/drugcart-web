@@ -77,9 +77,14 @@ export async function GET(req) {
         const totalItems = await Manufactuer.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const manufactuerItemsWithIndex = manufactuerItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                manufactuers: manufactuerItems,
+                manufactuers: manufactuerItemsWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,
