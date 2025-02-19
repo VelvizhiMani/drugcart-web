@@ -91,9 +91,14 @@ export async function GET(req) {
         const totalItems = await ReviewBy.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const ReviewByItemsIndex = ReviewByItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                review_by_lists: ReviewByItems,
+                review_by_lists: ReviewByItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
