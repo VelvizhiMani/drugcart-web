@@ -76,9 +76,14 @@ export async function GET(req) {
         const totalItems = await CountryCode.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const CountryCodesWithIndex = CountryCodeItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                country_code_lists: CountryCodeItems,
+                country_code_lists: CountryCodesWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,
