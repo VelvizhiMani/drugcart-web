@@ -149,9 +149,14 @@ export async function GET(req) {
         const totalItems = await Generic.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const genericItemsWithIndex = genericItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                generics: genericItems,
+                generics: genericItemsWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,
