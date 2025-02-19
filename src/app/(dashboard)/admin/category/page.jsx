@@ -116,10 +116,10 @@ function CategoryPage() {
                     <TableBody>
                         {categories && categories?.categories?.map((row, i) => (
                             <TableRow
-                                key={i}
+                                key={row?.sno}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{i + 1}</TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row?.sno}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                     {row?.category_name}
                                 </TableCell>

@@ -269,6 +269,16 @@ function AdminLayout(props) {
       path: "/admin/reviewbylist",
       name: "Review by List",
     },
+    {
+      id: 14,
+      path: "/admin/country_code_list",
+      name: "Country Code",
+    },
+    {
+      id: 15,
+      path: "/admin/testtt",
+      name: "test",
+    },
   ];
 
   const drawer = (
@@ -376,16 +386,40 @@ function AdminLayout(props) {
                 </Typography>
               </ListItem>
             </Link>
-            <ListItem disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                {/* <ListItemIcon>
-                        <InsertDriveFile sx={{ color: '#fff' }} />
-                      </ListItemIcon> */}
-                <ListItemText primary="Traffic" sx={{ color: '#fff' }} />
-              </ListItemButton>
-            </ListItem>
           </List>
         </Collapse>
+        
+        {userRoutes.map((item, i) => i > 13 && (
+              <Link
+                href={{
+                  pathname: item.path,
+                  // query: { name: 'test' },
+                }}
+                key={i}
+              >
+                <ListItem
+                  style={{
+                    marginTop: 8,
+                    backgroundColor: pathName === item.path ? "#00a65a" : null,
+                  }}
+                  onClick={() => {
+                    router.push(item.path, { s: "test" });
+                    setMobileOpen(false);
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      color={pathName === item.path ? "#fff" : "#fff"}
+                      fontFamily={"Poppins"}
+                      fontSize={14}
+                    >
+                      {item.name}
+                    </Typography>
+                  </Box>
+                </ListItem>
+              </Link>
+            ))}
       </List>
     </div>
   );

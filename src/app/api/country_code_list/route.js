@@ -1,5 +1,5 @@
 import { authenticateUser } from '../../../utils/middleware';
-import Category from '../../../models/Category';
+import CountryCode from '../../../models/CountryCode';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -13,7 +13,6 @@ const s3 = new S3Client({
     },
 });
 
-
 export async function POST(request) {
     try {
         await connnectionToDatabase();
@@ -24,35 +23,29 @@ export async function POST(request) {
         }
 
         const {
-            url,
-            category_name,
-            cat_type,
-            cat_img,
-            imagealt,
-            metatitle,
-            metadesc,
-            metakeyboard
+            country,
+            code,
+            flag,
+            status,
+            date,
+            updated_at,
         } = await request.json();
 
-        const isCategory = await Category.findOne({ category_name });
-        if (isCategory) {
-            return NextResponse.json({ error: 'category already exist' }, { status: 401 })
+        const isCountryCode = await CountryCode.findOne({ country });
+        if (isCountryCode) {
+            return NextResponse.json({ error: 'Name already exist' }, { status: 401 })
         }
 
-        const addCategory = new Category({
-            url,
-            category_name,
-            cat_type,
-            cat_img,
-            imagealt,
-            metatitle,
-            metadesc,
-            metakeyboard
+        const addCountryCode = new CountryCode({
+            country,
+            code,
+            flag,
+            status,
+            date,
+            updated_at,
         });
-
-
-        await addCategory.save();
-        return NextResponse.json(addCategory, { status: 200 })
+        await addCountryCode.save();
+        return NextResponse.json(addCountryCode, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
@@ -64,7 +57,7 @@ export async function GET(req) {
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
 
-    const filters = search ? { category_name: { $regex: search, $options: "i" } } : {};
+    const filters = search ? { country: { $regex: search, $options: "i" } } : {};
 
     try {
         await connnectionToDatabase();
@@ -76,21 +69,16 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const categoryItems = await Category.find(filters)
+        const CountryCodeItems = await CountryCode.find(filters)
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await Category.countDocuments(filters);
+        const totalItems = await CountryCode.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
-
-        const categoriesWithIndex = categoryItems.map((category, index) => ({
-            ...category.toObject(),
-            sno: skip + index + 1,
-        }));
 
         return NextResponse.json(
             {
-                categories: categoriesWithIndex,
+                country_code_lists: CountryCodeItems,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -100,9 +88,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching category items:", error);
+        console.error("Error fetching CountryCode items:", error);
         return NextResponse.json(
-            { error: "Failed to fetch category items" },
+            { error: "Failed to fetch CountryCode items" },
             { status: 500 }
         );
     }
