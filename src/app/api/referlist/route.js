@@ -69,9 +69,15 @@ export async function GET(req) {
         const totalItems = await Reference.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const ReferenceItemsIndex = ReferenceItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
+
         return NextResponse.json(
             {
-                references: ReferenceItems,
+                references: ReferenceItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
