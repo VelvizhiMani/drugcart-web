@@ -91,9 +91,14 @@ export async function GET(req) {
         const totalItems = await Writtenby.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const WrittenbyItemsIndex = WrittenbyItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                written_by_lists: WrittenbyItems,
+                written_by_lists: WrittenbyItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
