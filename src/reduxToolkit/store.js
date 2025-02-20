@@ -18,6 +18,7 @@ import referenceReducer from "@/reduxToolkit/slices/referenceSlice"
 import writtenByReducer from "@/reduxToolkit/slices/writtenBySlice"
 import reviewByReducer from "@/reduxToolkit/slices/reviewBySlice"
 import countryCodeReducer from "@/reduxToolkit/slices/CountryCodeSlice"
+import knowBodyReducer from "@/reduxToolkit/slices/knowBodySlice"
 
 export const store = configureStore({
     reducer: {
@@ -39,6 +40,7 @@ export const store = configureStore({
         reviewbyData: reviewByReducer,
         referenceData: referenceReducer,
         countryCodeData: countryCodeReducer,
+        knowBodyData: knowBodyReducer,
         adminUserData: adminUserReducer
     }
 })

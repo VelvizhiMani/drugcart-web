@@ -40,6 +40,7 @@ const drawerWidth = 220;
 
 function AdminLayout(props) {
   const [open, setOpen] = React.useState(false)
+  const [isAwareness, setIsAwareness] = React.useState(false)
   const { loading } = useSelector((state) => state.common)
   const matches = useMediaQuery("(min-width:600px)");
   const { window } = props;
@@ -67,6 +68,10 @@ function AdminLayout(props) {
 
   const handleToggle = () => {
     setOpen(!open)
+  }
+
+  const handleAwarenessToggle = () => {
+    setIsAwareness(!isAwareness)
   }
 
   const logout = async () => {
@@ -276,8 +281,13 @@ function AdminLayout(props) {
     },
     {
       id: 15,
-      path: "/admin/testtt",
-      name: "test",
+      path: "/admin/diseaseslist",
+      name: "Know about diseases",
+    },
+    {
+      id: 16,
+      path: "/admin/knowbody",
+      name: "Know Your Body",
     },
   ];
 
@@ -336,6 +346,19 @@ function AdminLayout(props) {
           </ListItemButton>
         </ListItem>
 
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleAwarenessToggle}>
+            {/* <ListItemIcon>
+                            <BarChart sx={{ color: '#fff' }} />
+                        </ListItemIcon> */}
+            <Typography variant="body1" fontFamily={"Poppins"} fontSize={14} color='#fff'>
+              Awareness
+            </Typography>
+            {isAwareness ? <ExpandLess sx={{ color: '#fff', marginLeft: 'auto' }} /> : <ExpandMore sx={{ color: '#fff', marginLeft: 'auto' }} />}
+          </ListItemButton>
+        </ListItem>
+
+
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <Link
@@ -388,38 +411,70 @@ function AdminLayout(props) {
             </Link>
           </List>
         </Collapse>
-        
-        {userRoutes.map((item, i) => i > 13 && (
+
+        <Collapse in={isAwareness} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {userRoutes.map((item, i) => i > 14 &&
               <Link
+              key={i}
                 href={{
                   pathname: item.path,
-                  // query: { name: 'test' },
                 }}
-                key={i}
               >
-                <ListItem
-                  style={{
-                    marginTop: 8,
-                    backgroundColor: pathName === item.path ? "#00a65a" : null,
-                  }}
+                <ListItem sx={{ pl: 4 }} style={{
+                  marginTop: 8,
+                  backgroundColor: pathName === item.path ? "#00a65a" : null,
+                }}
                   onClick={() => {
-                    router.push(item.path, { s: "test" });
+                    router.push(item.path);
                     setMobileOpen(false);
                   }}
                 >
-                  <Box>
-                    <Typography
-                      variant="body1"
-                      color={pathName === item.path ? "#fff" : "#fff"}
-                      fontFamily={"Poppins"}
-                      fontSize={14}
-                    >
-                      {item.name}
-                    </Typography>
-                  </Box>
+                  <Typography
+                    variant="body1"
+                    color={pathName === item.path ? "#fff" : "#fff"}
+                    fontFamily={"Poppins"}
+                    fontSize={14}
+                  >
+                    {item.name}
+                  </Typography>
                 </ListItem>
               </Link>
-            ))}
+            )}
+          </List>
+        </Collapse>
+
+        {userRoutes.map((item, i) => i > 13 && (
+          <Link
+            href={{
+              pathname: item.path,
+              // query: { name: 'test' },
+            }}
+            key={i}
+          >
+            <ListItem
+              style={{
+                marginTop: 8,
+                backgroundColor: pathName === item.path ? "#00a65a" : null,
+              }}
+              onClick={() => {
+                router.push(item.path, { s: "test" });
+                setMobileOpen(false);
+              }}
+            >
+              <Box>
+                <Typography
+                  variant="body1"
+                  color={pathName === item.path ? "#fff" : "#fff"}
+                  fontFamily={"Poppins"}
+                  fontSize={14}
+                >
+                  {item.name}
+                </Typography>
+              </Box>
+            </ListItem>
+          </Link>
+        ))}
       </List>
     </div>
   );
