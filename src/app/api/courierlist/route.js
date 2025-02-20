@@ -71,9 +71,14 @@ export async function GET(req) {
         const totalItems = await Courier.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const CountryCodesWithIndex = CourierItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                couriers: CourierItems,
+                couriers: CountryCodesWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,

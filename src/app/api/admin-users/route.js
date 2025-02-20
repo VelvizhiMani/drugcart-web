@@ -64,18 +64,23 @@ export async function GET(req) {
         const skip = (page - 1) * limit;
 
         // Fetch cart items with pagination
-        const cartItems = await AdminUser.find(filters)
+        const userItems = await AdminUser.find(filters)
             .skip(skip)
             .limit(limit)
 
         // Total items in the user's cart
         const totalItems = await AdminUser.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
-        console.log('carties', cartItems);
+        console.log('carties', userItems);
+
+        const usersWithIndex = userItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
 
         return NextResponse.json(
             {
-                users: cartItems,
+                users: usersWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,

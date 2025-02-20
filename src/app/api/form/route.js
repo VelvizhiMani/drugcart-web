@@ -81,9 +81,14 @@ export async function GET(req) {
         const totalItems = await Form.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const formItemsWithIndex = formItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                forms: formItems,
+                forms: formItemsWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,

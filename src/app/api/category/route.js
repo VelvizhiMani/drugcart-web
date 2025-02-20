@@ -83,9 +83,14 @@ export async function GET(req) {
         const totalItems = await Category.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const categoriesWithIndex = categoryItems.map((category, index) => ({
+            ...category.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                categories: categoryItems,
+                categories: categoriesWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,

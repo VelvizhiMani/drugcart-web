@@ -1,5 +1,5 @@
 import { authenticateUser } from '../../../utils/middleware';
-import Reference from '../../../models/Reference';
+import ReviewBy from '../../../models/ReviewBy';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -23,22 +23,44 @@ export async function POST(request) {
         }
 
         const {
-            websitename,
-            url
+            name,
+            picture,
+            imagealt,
+            qualification,
+            desgination,
+            experience,
+            expdetails,
+            about,
+            education,
+            date,
+            timestamp,
+            updated_at,
+            status
         } = await request.json();
 
-        const isReference = await Reference.findOne({ websitename });
-        if (isReference) {
-            return NextResponse.json({ error: 'Website name already exist' }, { status: 401 })
+        const isReviewBy = await ReviewBy.findOne({ name });
+        if (isReviewBy) {
+            return NextResponse.json({ error: 'Name already exist' }, { status: 401 })
         }
 
-        const addReference = new Reference({
-            websitename,
-            url
+        const addReviewBy = new ReviewBy({
+            name,
+            picture,
+            imagealt,
+            qualification,
+            desgination,
+            experience,
+            expdetails,
+            about,
+            date,
+            timestamp,
+            updated_at,
+            education,
+            status
         });
 
-        await addReference.save();
-        return NextResponse.json(addReference, { status: 200 })
+        await addReviewBy.save();
+        return NextResponse.json(addReviewBy, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
@@ -50,7 +72,7 @@ export async function GET(req) {
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
 
-    const filters = search ? { websitename: { $regex: search, $options: "i" } } : {};
+    const filters = search ? { name: { $regex: search, $options: "i" } } : {};
 
     try {
         await connnectionToDatabase();
@@ -62,22 +84,21 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const ReferenceItems = await Reference.find(filters)
+        const ReviewByItems = await ReviewBy.find(filters)
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await Reference.countDocuments(filters);
+        const totalItems = await ReviewBy.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
-        const ReferenceItemsIndex = ReferenceItems.map((item, index) => ({
+        const ReviewByItemsIndex = ReviewByItems.map((item, index) => ({
             ...item.toObject(),
             sno: skip + index + 1,
         }));
 
-
         return NextResponse.json(
             {
-                references: ReferenceItemsIndex,
+                review_by_lists: ReviewByItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -87,9 +108,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching Reference items:", error);
+        console.error("Error fetching Writtenby items:", error);
         return NextResponse.json(
-            { error: "Failed to fetch Reference items" },
+            { error: "Failed to fetch Writtenby items" },
             { status: 500 }
         );
     }

@@ -124,7 +124,7 @@ function ManufactuerList() {
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                             >
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {i + 1}
+                                    {row?.sno}
                                 </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily }}

@@ -39,6 +39,7 @@ import DropSpinner from "@/components/admin/spinner/DropSpinner"
 const drawerWidth = 220;
 
 function AdminLayout(props) {
+  const [open, setOpen] = React.useState(false)
   const { loading } = useSelector((state) => state.common)
   const matches = useMediaQuery("(min-width:600px)");
   const { window } = props;
@@ -63,6 +64,10 @@ function AdminLayout(props) {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
+
+  const handleToggle = () => {
+    setOpen(!open)
+  }
 
   const logout = async () => {
     await localStorage.removeItem('token')
@@ -254,6 +259,26 @@ function AdminLayout(props) {
       path: "/admin/referlist",
       name: "Reference List",
     },
+    {
+      id: 12,
+      path: "/admin/writtenbylist",
+      name: "Written by List",
+    },
+    {
+      id: 13,
+      path: "/admin/reviewbylist",
+      name: "Review by List",
+    },
+    {
+      id: 14,
+      path: "/admin/country_code_list",
+      name: "Country Code",
+    },
+    {
+      id: 15,
+      path: "/admin/testtt",
+      name: "test",
+    },
   ];
 
   const drawer = (
@@ -265,7 +290,7 @@ function AdminLayout(props) {
 
       <Divider />
       <List>
-        {userRoutes.map((item, i) => (
+        {userRoutes.map((item, i) => i < 12 && (
           <Link
             href={{
               pathname: item.path,
@@ -288,7 +313,7 @@ function AdminLayout(props) {
                   variant="body1"
                   color={pathName === item.path ? "#fff" : "#fff"}
                   fontFamily={"Poppins"}
-                  fontSize={15}
+                  fontSize={14}
                 >
                   {item.name}
                 </Typography>
@@ -298,40 +323,104 @@ function AdminLayout(props) {
         ))}
       </List>
 
-      {/* <List>
-                <ListItem disablePadding>
-                    <ListItemButton onClick={handleToggle}>
-                        <ListItemIcon>
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleToggle}>
+            {/* <ListItemIcon>
                             <BarChart sx={{ color: '#fff' }} />
-                        </ListItemIcon>
-                        <Typography variant="body1" noWrap component="div" color='#fff' paddingRight={2}>
-                            Responsive
-                        </Typography>
-                        {open ? <ExpandLess sx={{ color: '#fff' }} /> : <ExpandMore sx={{ color: '#fff' }} />}
-                    </ListItemButton>
-                </ListItem>
+                        </ListItemIcon> */}
+            <Typography variant="body1" fontFamily={"Poppins"} fontSize={14} color='#fff'>
+              Prouduct Author Details
+            </Typography>
+            {open ? <ExpandLess sx={{ color: '#fff', marginLeft: 'auto' }} /> : <ExpandMore sx={{ color: '#fff', marginLeft: 'auto' }} />}
+          </ListItemButton>
+        </ListItem>
 
-                <Collapse in={open} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <ListItem disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
-                                <ListItemIcon>
-                                    <InsertDriveFile sx={{ color: '#fff' }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Sales" sx={{ color: '#fff' }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
-                                <ListItemIcon>
-                                    <InsertDriveFile sx={{ color: '#fff' }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Traffic" sx={{ color: '#fff' }} />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                </Collapse>
-            </List> */}
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <Link
+              href={{
+                pathname: userRoutes[12].path,
+              }}
+            >
+              <ListItem sx={{ pl: 4 }} style={{
+                marginTop: 8,
+                backgroundColor: pathName === userRoutes[12].path ? "#00a65a" : null,
+              }}
+                onClick={() => {
+                  router.push(userRoutes[12].path);
+                  setMobileOpen(false);
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  color={pathName === userRoutes[12].path ? "#fff" : "#fff"}
+                  fontFamily={"Poppins"}
+                  fontSize={14}
+                >
+                  {userRoutes[12].name}
+                </Typography>
+              </ListItem>
+            </Link>
+            <Link
+              href={{
+                pathname: userRoutes[13].path,
+              }}
+            >
+              <ListItem sx={{ pl: 4 }} style={{
+                marginTop: 8,
+                backgroundColor: pathName === userRoutes[13].path ? "#00a65a" : null,
+              }}
+                onClick={() => {
+                  router.push(userRoutes[13].path);
+                  setMobileOpen(false);
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  color={pathName === userRoutes[13].path ? "#fff" : "#fff"}
+                  fontFamily={"Poppins"}
+                  fontSize={14}
+                >
+                  {userRoutes[13].name}
+                </Typography>
+              </ListItem>
+            </Link>
+          </List>
+        </Collapse>
+        
+        {userRoutes.map((item, i) => i > 13 && (
+              <Link
+                href={{
+                  pathname: item.path,
+                  // query: { name: 'test' },
+                }}
+                key={i}
+              >
+                <ListItem
+                  style={{
+                    marginTop: 8,
+                    backgroundColor: pathName === item.path ? "#00a65a" : null,
+                  }}
+                  onClick={() => {
+                    router.push(item.path, { s: "test" });
+                    setMobileOpen(false);
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="body1"
+                      color={pathName === item.path ? "#fff" : "#fff"}
+                      fontFamily={"Poppins"}
+                      fontSize={14}
+                    >
+                      {item.name}
+                    </Typography>
+                  </Box>
+                </ListItem>
+              </Link>
+            ))}
+      </List>
     </div>
   );
 
@@ -371,7 +460,7 @@ function AdminLayout(props) {
             noWrap
             component="div"
             fontFamily={"Poppins"}
-            // sx={{ display: { xs: "none", sm: "block" } }}
+          // sx={{ display: { xs: "none", sm: "block" } }}
           >
             {pathText(pathName)}
           </Typography>

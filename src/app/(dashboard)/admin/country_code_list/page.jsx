@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Button, FormHelperText, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,15 +16,15 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteOrginService, GetOrginIdService, GetOrginService } from '@/services/orginService';
+import { DeleteCountryCodeService, GetCountryCodeIdService, GetCountryCodeService } from '@/services/countryCodeService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function OrginList() {
-    const { orginList, orgin } = useSelector((state) => state.orginData)
+function CountryCodeList() {
+    const { countryCodeList, countryCode } = useSelector((state) => state.countryCodeData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
@@ -41,14 +41,14 @@ function OrginList() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetOrginService(page, showNo, search))
+        dispatch(GetCountryCodeService(page, showNo, search))
     }, [page, showNo, search])
 
     const searchSubmit = () => {
-        dispatch(GetOrginService(page, showNo, search))
+        dispatch(GetCountryCodeService(page, showNo, search))
     }
 
-    console.log("orginList", orginList);
+    console.log("countryCodeList", countryCodeList);
 
     return (
         <Box>
@@ -59,16 +59,16 @@ function OrginList() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Product Country Orgin List
+                    Country Code List
                 </Typography>
                 <Button
                     color="secondary"
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/orginlist/add`)}
+                    onClick={() => router.push(`/admin/country_code_list/add`)}
                 >
-                    Add Country of Orgin
+                    Add Country Code
                 </Button>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -107,7 +107,9 @@ function OrginList() {
                     <TableHead sx={{ backgroundColor: "#7d5e69" }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Country</TableCell>
+                            <TableCell style={rowText}>Country Name</TableCell>
+                            <TableCell style={rowText}>Country Code</TableCell>
+                            <TableCell style={rowText}>Country Flag</TableCell>
                             <TableCell style={rowText}>Status</TableCell>
                             <TableCell align="right" style={rowText}>
                                 Action
@@ -115,7 +117,7 @@ function OrginList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {orginList && orginList?.orgins?.map((row, i) => (
+                        {countryCodeList && countryCodeList?.country_code_lists?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -125,10 +127,25 @@ function OrginList() {
                                 </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily }}
-                                    component="th"
-                                    scope="row"
                                 >
-                                    {row?.orginname}
+                                    {row?.country}
+                                </TableCell>
+                                <TableCell
+                                    sx={{ fontFamily: rowText.fontFamily }}
+                                >
+                                    {row?.code}
+                                </TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                    {row?.flag ? (
+                                        <Avatar
+                                            alt="Remy Sharp"
+                                            src={`https://assets1.drugcarts.com/admincolor/countryflag/${row?.flag}`}
+                                            style={{ width: 24, height: 24 }}
+                                            variant="rounded"
+                                        />
+                                    ) : (
+                                        <FormHelperText error>No Image</FormHelperText>
+                                    )}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.status}
@@ -138,13 +155,13 @@ function OrginList() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/orginlist/${row?._id}`)
+                                        router.push(`/admin/country_code_list/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
                                     <button onClick={async () => {
                                         setOpenModal(true)
-                                        await dispatch(GetOrginIdService(row?._id))
+                                        await dispatch(GetCountryCodeIdService(row?._id))
                                     }}>
                                         <DeleteIcon color='error' />
                                     </button>
@@ -152,9 +169,9 @@ function OrginList() {
                                 <DeleteModal
                                     open={openModal}
                                     setOpen={setOpenModal}
-                                    title={"Delete Orgin"}
-                                    description={`Are you sure you want to delete ${orgin?.orginname}`}
-                                    onSubmit={() => dispatch(DeleteOrginService(orgin?._id))} />
+                                    title={"Delete Country"}
+                                    description={`Are you sure you want to delete ${countryCode?.country}`}
+                                    onSubmit={() => dispatch(DeleteCountryCodeService(countryCode?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>
@@ -168,11 +185,11 @@ function OrginList() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {orginList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {countryCodeList?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"
-                    count={orginList?.pagination?.totalPages}
+                    count={countryCodeList?.pagination?.totalPages}
                     page={page}
                     color="secondary"
                     onChange={(_, value) => setPage(value)}
@@ -182,4 +199,4 @@ function OrginList() {
     );
 }
 
-export default OrginList;
+export default CountryCodeList;

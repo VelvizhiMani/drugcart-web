@@ -69,9 +69,14 @@ export async function GET(req) {
         const totalItems = await Storage.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
+        const StorageItemsIndex = StorageItems.map((item, index) => ({
+            ...item.toObject(),
+            sno: skip + index + 1,
+        }));
+
         return NextResponse.json(
             {
-                storages: StorageItems,
+                storages: StorageItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
