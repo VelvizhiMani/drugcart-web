@@ -286,16 +286,21 @@ function AdminLayout(props) {
     },
     {
       id: 16,
-      path: "/admin/healthvideo",
-      name: "health video",
+      path: "/admin/knowbody",
+      name: "Know Your Body",
     },
     {
       id: 17,
-      path: "/admin/articles",
-      name: "Articles",
+      path: "/admin/healthvideo",
+      name: "Health Video",
     },
     {
       id: 18,
+      path: "/admin/articles",
+      name: "Heath Articles",
+    },
+    {
+      id: 19,
       path: "/admin/blog",
       name: "Blog",
     },
