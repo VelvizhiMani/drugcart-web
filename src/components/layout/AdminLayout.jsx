@@ -286,8 +286,13 @@ function AdminLayout(props) {
     },
     {
       id: 16,
-      path: "/admin/knowbody",
-      name: "Know Your Body",
+      path: "/admin/healthvideo",
+      name: "health video",
+    },
+    {
+      id: 17,
+      path: "/admin/articles",
+      name: "Articles",
     },
   ];
 
@@ -416,7 +421,7 @@ function AdminLayout(props) {
           <List component="div" disablePadding>
             {userRoutes.map((item, i) => i > 14 &&
               <Link
-              key={i}
+                key={i}
                 href={{
                   pathname: item.path,
                 }}
@@ -444,7 +449,7 @@ function AdminLayout(props) {
           </List>
         </Collapse>
 
-        {userRoutes.map((item, i) => i > 13 && (
+        {/* {userRoutes.map((item, i) => i > 13 && (
           <Link
             href={{
               pathname: item.path,
@@ -474,7 +479,7 @@ function AdminLayout(props) {
               </Box>
             </ListItem>
           </Link>
-        ))}
+        ))} */}
       </List>
     </div>
   );
