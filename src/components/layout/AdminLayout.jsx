@@ -294,6 +294,11 @@ function AdminLayout(props) {
       path: "/admin/articles",
       name: "Articles",
     },
+    {
+      id: 18,
+      path: "/admin/blog",
+      name: "Blog",
+    },
   ];
 
   const drawer = (

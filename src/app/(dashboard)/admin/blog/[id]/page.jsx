@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
     Box,
     Button,
@@ -16,12 +16,18 @@ import TextEditor from "@/components/admin/input/TextEditor";
 import ImageInput from "@/components/admin/input/ImageInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PostArticleService } from '@/services/articleService';
-import { useDispatch } from "react-redux";
+import { PutBlogService, GetBlogIdService } from '@/services/blogService';
+import { useSelector, useDispatch } from "react-redux";
 
-function ArticlesAdd() {
+function EditBlog() {
+    const { blog } = useSelector((state) => state.blogData)
     const router = useRouter();
     const dispatch = useDispatch()
+    const params = useParams()
+
+    useEffect(() => {
+        dispatch(GetBlogIdService(params?.id))
+    }, [params?.id])
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -30,24 +36,26 @@ function ArticlesAdd() {
     }
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            blogname: "",
-            blogimg: "",
-            url: "",
-            description: "",
-            imagealt: "",
-            metatitle: "",
-            metadesc: "",
-            metakeyboard: "",
+            blogname: blog?.blogname ||  "",
+            blogimg: blog?.blogimg ||  "",
+            blogspoturl: blog?.blogspoturl ||  "",
+            url: blog?.url ||  "",
+            description: blog?.description ||  "",
+            imagealt: blog?.imagealt ||  "",
+            metatitle: blog?.blogname ||  "",
+            metadesc: blog?.blogname ||  "",
+            metakeyboard: blog?.blogname ||  "",
         },
         validationSchema: yup.object({
-            blogname: yup.string().required("Article Name is required"),
+            blogname: yup.string().required("Blog Name is required"),
             url: yup.string().required("URL is required"),
             blogimg: yup.string().required("Image is required"),
         }),
-        onSubmit: async (data, { resetForm }) => {
+        onSubmit: async (data) => {
             console.log(data);
-            await dispatch(PostArticleService(data, resetForm))
+            await dispatch(PutBlogService(blog?._id, data))
         },
     });
 
@@ -70,15 +78,15 @@ function ArticlesAdd() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Articles
+                    Add Blog
                 </Typography>
                 <Button
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/articles`)}
+                    onClick={() => router.push(`/admin/blog`)}
                 >
-                    Articles List
+                    Blog List
                 </Button>
             </Box>
             <Paper
@@ -93,7 +101,7 @@ function ArticlesAdd() {
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
-                            title={"Article Name"}
+                            title={"Blog Name"}
                             value={formik.values.blogname}
                             onChange={formik.handleChange("blogname")}
                             helperText={
@@ -115,7 +123,7 @@ function ArticlesAdd() {
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
-                            title={"Image"}
+                            title={"Blog Image"}
                             image={formik.values.blogimg}
                             onChange={handleImage}
                             error={
@@ -134,6 +142,17 @@ function ArticlesAdd() {
                                 formik.touched.imagealt ? formik.errors.imagealt : null
                             }
                             error={formik.touched.imagealt ? formik.errors.imagealt : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <TextInput
+                            title={"Blogspot URL"}
+                            value={formik.values.blogspoturl}
+                            onChange={formik.handleChange("blogspoturl")}
+                            helperText={
+                                formik.touched.blogspoturl ? formik.errors.blogspoturl : null
+                            }
+                            error={formik.touched.blogspoturl ? formik.errors.blogspoturl : null}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
@@ -193,4 +212,4 @@ function ArticlesAdd() {
     );
 }
 
-export default ArticlesAdd;
+export default EditBlog;

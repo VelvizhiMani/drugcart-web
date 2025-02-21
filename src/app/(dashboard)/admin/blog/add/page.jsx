@@ -16,10 +16,10 @@ import TextEditor from "@/components/admin/input/TextEditor";
 import ImageInput from "@/components/admin/input/ImageInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PostArticleService } from '@/services/articleService';
+import { PostBlogService } from '@/services/blogService';
 import { useDispatch } from "react-redux";
 
-function ArticlesAdd() {
+function BlogAdd() {
     const router = useRouter();
     const dispatch = useDispatch()
 
@@ -33,6 +33,7 @@ function ArticlesAdd() {
         initialValues: {
             blogname: "",
             blogimg: "",
+            blogspoturl: "",
             url: "",
             description: "",
             imagealt: "",
@@ -41,13 +42,13 @@ function ArticlesAdd() {
             metakeyboard: "",
         },
         validationSchema: yup.object({
-            blogname: yup.string().required("Article Name is required"),
+            blogname: yup.string().required("Blog Name is required"),
             url: yup.string().required("URL is required"),
             blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             console.log(data);
-            await dispatch(PostArticleService(data, resetForm))
+            await dispatch(PostBlogService(data, resetForm))
         },
     });
 
@@ -70,15 +71,15 @@ function ArticlesAdd() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Articles
+                    Add Blog
                 </Typography>
                 <Button
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/articles`)}
+                    onClick={() => router.push(`/admin/blog`)}
                 >
-                    Articles List
+                    Blog List
                 </Button>
             </Box>
             <Paper
@@ -93,7 +94,7 @@ function ArticlesAdd() {
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
-                            title={"Article Name"}
+                            title={"Blog Name"}
                             value={formik.values.blogname}
                             onChange={formik.handleChange("blogname")}
                             helperText={
@@ -115,7 +116,7 @@ function ArticlesAdd() {
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
-                            title={"Image"}
+                            title={"Blog Image"}
                             image={formik.values.blogimg}
                             onChange={handleImage}
                             error={
@@ -134,6 +135,17 @@ function ArticlesAdd() {
                                 formik.touched.imagealt ? formik.errors.imagealt : null
                             }
                             error={formik.touched.imagealt ? formik.errors.imagealt : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <TextInput
+                            title={"Blogspot URL"}
+                            value={formik.values.blogspoturl}
+                            onChange={formik.handleChange("blogspoturl")}
+                            helperText={
+                                formik.touched.blogspoturl ? formik.errors.blogspoturl : null
+                            }
+                            error={formik.touched.blogspoturl ? formik.errors.blogspoturl : null}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
@@ -193,4 +205,4 @@ function ArticlesAdd() {
     );
 }
 
-export default ArticlesAdd;
+export default BlogAdd;
