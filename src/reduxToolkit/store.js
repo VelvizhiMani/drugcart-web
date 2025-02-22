@@ -21,6 +21,7 @@ import countryCodeReducer from "@/reduxToolkit/slices/CountryCodeSlice"
 import knowBodyReducer from "@/reduxToolkit/slices/knowBodySlice"
 import articleReducer from "@/reduxToolkit/slices/articleSlice"
 import blogReducer from "@/reduxToolkit/slices/blogSlice"
+import stockReducer from "@/reduxToolkit/slices/stockSlice"
 
 export const store = configureStore({
     reducer: {
@@ -45,6 +46,7 @@ export const store = configureStore({
         knowBodyData: knowBodyReducer,
         articlesData: articleReducer,
         blogData: blogReducer,
+        stockData: stockReducer,
         adminUserData: adminUserReducer
     }
 })

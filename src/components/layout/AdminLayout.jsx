@@ -301,11 +301,12 @@ function AdminLayout(props) {
     },
     {
       id: 19,
-      path: "/admin/blog",
-      name: "Blog",
+      path: "/admin/stocklist",
+      name: "Add Status Status",
     },
   ];
-
+  const filteredRoutes = userRoutes.slice(14, 18);
+  const filtereTwodRoutes = userRoutes.slice(19, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
@@ -429,7 +430,7 @@ function AdminLayout(props) {
 
         <Collapse in={isAwareness} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {userRoutes.map((item, i) => i > 14 &&
+            {filteredRoutes.map((item, i) => 
               <Link
                 key={i}
                 href={{
@@ -459,7 +460,7 @@ function AdminLayout(props) {
           </List>
         </Collapse>
 
-        {/* {userRoutes.map((item, i) => i > 13 && (
+        {filtereTwodRoutes.map((item, i) => (
           <Link
             href={{
               pathname: item.path,
@@ -489,7 +490,7 @@ function AdminLayout(props) {
               </Box>
             </ListItem>
           </Link>
-        ))} */}
+        ))}
       </List>
     </div>
   );
