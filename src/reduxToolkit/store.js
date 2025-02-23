@@ -22,6 +22,7 @@ import knowBodyReducer from "@/reduxToolkit/slices/knowBodySlice"
 import articleReducer from "@/reduxToolkit/slices/articleSlice"
 import blogReducer from "@/reduxToolkit/slices/blogSlice"
 import stockReducer from "@/reduxToolkit/slices/stockSlice"
+import healthTipReducer from "@/reduxToolkit/slices/healthTipSlice"
 
 export const store = configureStore({
     reducer: {
@@ -47,6 +48,7 @@ export const store = configureStore({
         articlesData: articleReducer,
         blogData: blogReducer,
         stockData: stockReducer,
+        healthTipData: healthTipReducer,
         adminUserData: adminUserReducer
     }
 })
