@@ -18,6 +18,7 @@ const modules = {
     [{ script: "sub" }, { script: "super" }],
     ["blockquote", "code-block"],
     [{ list: "ordered" }, { list: "bullet" }],
+    ["table"],
     [{ indent: "-1" }, { indent: "+1" }, { align: [] }],
     ["link", "image", "video"],
     ["clean"],
