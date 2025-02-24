@@ -1,5 +1,5 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
     Box,
     Button,
@@ -15,18 +15,12 @@ import TextEditor from "@/components/admin/input/TextEditor";
 import InputArea from "@/components/admin/input/InputArea";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PutHealthTipService, GetHealthTipIdService } from '@/services/HealthTipService';
-import { useSelector, useDispatch } from "react-redux";
+import { PostHealthNewsService } from '@/services/heathNewsService';
+import { useDispatch } from "react-redux";
 
-function HeathTipsEdit() {
-    const { healthTip } = useSelector((state) => state.healthTipData)
+function HeathNewsAdd() {
     const router = useRouter();
     const dispatch = useDispatch()
-    const params = useParams()
-
-    useEffect(() => {
-        dispatch(GetHealthTipIdService(params?.id))
-    }, [params?.id])
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -35,28 +29,27 @@ function HeathTipsEdit() {
     }
 
     const formik = useFormik({
-        enableReinitialize: true,
         initialValues: {
-            name: healthTip?.name || "",
-            url: healthTip?.url || "",
-            description: healthTip?.description || "",
-            metatitle: healthTip?.metatitle || "",
-            metakeyboard: healthTip?.metakeyboard || "",
-            metadesc: healthTip?.metadesc || "",
+            title: "",
+            url: "",
+            description: "",
+            metatitle: "",
+            metakeyboard: "",
+            metadesc: ""
         },
         validationSchema: yup.object({
-            name: yup.string().required("Name is required"),
+            title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
         }),
-        onSubmit: async (data) => {
+        onSubmit: async (data, { resetForm }) => {
             console.log(data);
-            await dispatch(PutHealthTipService(healthTip?._id, data))
+            await dispatch(PostHealthNewsService(data, resetForm))
         },
     });
 
     useEffect(() => {
-        formik.values.url = URLText(formik.values.name)
-    }, [formik.values.name])
+        formik.values.url = URLText(formik.values.title)
+    }, [formik.values.title])
 
     return (
         <Box>
@@ -67,15 +60,15 @@ function HeathTipsEdit() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Edit Daily Health Tips
+                    Add Health News
                 </Typography>
                 <Button
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/healthtips`)}
+                    onClick={() => router.push(`/admin/newslist`)}
                 >
-                    Daily Health Tips
+                    News List
                 </Button>
             </Box>
             <Paper
@@ -90,19 +83,19 @@ function HeathTipsEdit() {
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
-                            title={"Name"}
-                            value={formik.values.name}
-                            onChange={formik.handleChange("name")}
+                            title={"Title"}
+                            value={formik.values.title}
+                            onChange={formik.handleChange("title")}
                             helperText={
-                                formik.touched.name ? formik.errors.name : null
+                                formik.touched.title ? formik.errors.title : null
                             }
-                            error={formik.touched.name ? formik.errors.name : null}
+                            error={formik.touched.title ? formik.errors.title : null}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
-                            title={"URL(Ex:lennox-gastaut-syndrome)"}
-                            value={URLText(formik.values.url)}
+                            title={"URL"}
+                            value={URLText(formik.values.title)}
                             onChange={formik.handleChange("url")}
                             helperText={
                                 formik.touched.url ? formik.errors.url : null
@@ -110,9 +103,9 @@ function HeathTipsEdit() {
                             error={formik.touched.url ? formik.errors.url : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 10 }}>
                         <TextEditor
-                            title={"Description:"}
+                            title={"Description"}
                             value={formik.values.description}
                             onChange={formik.handleChange("description")}
                         />
@@ -167,4 +160,4 @@ function HeathTipsEdit() {
     );
 }
 
-export default HeathTipsEdit;
+export default HeathNewsAdd;

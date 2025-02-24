@@ -47,6 +47,10 @@ function HeathTipsAdd() {
         },
     });
 
+    useEffect(() => {
+        formik.values.url = URLText(formik.values.name)
+    }, [formik.values.name])
+
     return (
         <Box>
             <Box sx={{ display: "flex" }}>
@@ -91,7 +95,7 @@ function HeathTipsAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
                             title={"URL(Ex:lennox-gastaut-syndrome)"}
-                            value={URLText(formik.values.url)}
+                            value={URLText(formik.values.name)}
                             onChange={formik.handleChange("url")}
                             helperText={
                                 formik.touched.url ? formik.errors.url : null

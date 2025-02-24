@@ -306,12 +306,17 @@ function AdminLayout(props) {
     },
     {
       id: 20,
+      path: "/admin/newslist",
+      name: "Health News",
+    },
+    {
+      id: 21,
       path: "/admin/stocklist",
       name: "Add Status Status",
     },
   ];
-  const filteredRoutes = userRoutes.slice(14, 19);
-  const filtereTwodRoutes = userRoutes.slice(20, userRoutes.length);
+  const filteredRoutes = userRoutes.slice(14, 21);
+  const filtereTwodRoutes = userRoutes.slice(21, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
