@@ -199,14 +199,14 @@ function MyCart() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-10">
-                    <p className="text-lg font-bold">$299.00</p>
+                    <p className="text-lg font-bold">₹299.00</p>
                     <button className="text-red-500">🗑️</button>
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 text-right text-xl font-bold text-pink-700 border-b pb-4">
-                Total Cart Value: $600
+                Total Cart Value: ₹600
               </div>
             </div>
 
@@ -219,26 +219,26 @@ function MyCart() {
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Total MRP</span>
-                  <span>$700</span>
+                  <span>₹700</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">-$150</span>
+                  <span className="text-green-600">-₹150</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Total Cart Value</span>
-                  <span>$600</span>
+                  <span>₹600</span>
                 </div>
                 <div className="border-t pt-2 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>$600</span>
+                  <span>₹600</span>
                 </div>
               </div>
               <button className="w-full mt-4 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700">
                 Checkout
               </button>
               <div className="mt-2 text-center text-sm text-gray-500 bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of $150 on this order
+                💰 Total Savings of ₹150 on this order
               </div>
             </div>
           </div>

@@ -194,14 +194,14 @@ const OrderSummary = () => {
                     </div>
                   </div>
                   <div className="flex items-center space-x-10">
-                    <p className="text-lg font-bold">$299.00</p>
+                    <p className="text-lg font-bold">₹299.00</p>
                     <button className="text-red-500">🗑️</button>
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 text-right text-xl font-bold text-pink-700 border-b pb-4">
-                Total Cart Value: $600
+                Total Cart Value: ₹600
               </div>
               <div className="bg-blue-100 p-6 rounded-lg w-full my-4">
                 <h2 className="font-bold text-xl">Shipping Info</h2>
@@ -231,26 +231,26 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total MRP</span>
-                  <span>$700</span>
+                  <span>₹700</span>
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">-$150</span>
+                  <span className="text-green-600">-₹150</span>
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Cart Value</span>
-                  <span>$600</span>
+                  <span>₹600</span>
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>$600</span>
+                  <span>₹600</span>
                 </div>
               </div>
               <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700">
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of $150 on this order
+                💰 Total Savings of ₹150 on this order
               </div>
             </div>
           </div>
