@@ -3,7 +3,7 @@ import Clientreview from '@/assets/client-review-icon.png'
 
 const Feedback = () => {
   return (
-    <section className='px-10 mt-5'>
+    <section className='md:px-10 mt-5'>
         <div className='bg-bgclient rounded-md px-10'>
           <h1 className='font-bold text-xl text-center p-4 md:p-8'>Our Clients Feedback</h1>
           <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 text-center md:text-left md:px-5 pb-10'>
