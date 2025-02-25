@@ -311,22 +311,27 @@ function AdminLayout(props) {
     },
     {
       id: 21,
+      path: "/admin/blog",
+      name: "Blog",
+    },
+    {
+      id: 22,
       path: "/admin/newslist",
       name: "Health News",
     },
     {
-      id: 22,
+      id: 23,
       path: "/admin/infographics",
       name: "Infographics",
     },
     {
-      id: 23,
+      id: 24,
       path: "/admin/stocklist",
       name: "Add Status Status",
     },
   ];
-  const filteredRoutes = userRoutes.slice(14, 23);
-  const filtereTwodRoutes = userRoutes.slice(23, userRoutes.length);
+  const filteredRoutes = userRoutes.slice(14, 24);
+  const filtereTwodRoutes = userRoutes.slice(24, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
@@ -382,19 +387,6 @@ function AdminLayout(props) {
           </ListItemButton>
         </ListItem>
 
-        <ListItem disablePadding>
-          <ListItemButton onClick={handleAwarenessToggle}>
-            {/* <ListItemIcon>
-                            <BarChart sx={{ color: '#fff' }} />
-                        </ListItemIcon> */}
-            <Typography variant="body1" fontFamily={"Poppins"} fontSize={14} color='#fff'>
-              Awareness
-            </Typography>
-            {isAwareness ? <ExpandLess sx={{ color: '#fff', marginLeft: 'auto' }} /> : <ExpandMore sx={{ color: '#fff', marginLeft: 'auto' }} />}
-          </ListItemButton>
-        </ListItem>
-
-
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <Link
@@ -448,9 +440,21 @@ function AdminLayout(props) {
           </List>
         </Collapse>
 
+        <ListItem disablePadding>
+          <ListItemButton onClick={handleAwarenessToggle}>
+            {/* <ListItemIcon>
+                            <BarChart sx={{ color: '#fff' }} />
+                        </ListItemIcon> */}
+            <Typography variant="body1" fontFamily={"Poppins"} fontSize={14} color='#fff'>
+              Awareness
+            </Typography>
+            {isAwareness ? <ExpandLess sx={{ color: '#fff', marginLeft: 'auto' }} /> : <ExpandMore sx={{ color: '#fff', marginLeft: 'auto' }} />}
+          </ListItemButton>
+        </ListItem>
+
         <Collapse in={isAwareness} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {filteredRoutes.map((item, i) => 
+            {filteredRoutes.map((item, i) =>
               <Link
                 key={i}
                 href={{
