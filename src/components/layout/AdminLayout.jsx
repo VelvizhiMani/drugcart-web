@@ -296,32 +296,37 @@ function AdminLayout(props) {
     },
     {
       id: 18,
+      path: "/admin/herbs",
+      name: "Know about Herbs",
+    },
+    {
+      id: 19,
       path: "/admin/healthtips",
       name: "Health Tips",
     },
     {
-      id: 19,
+      id: 20,
       path: "/admin/articles",
       name: "Heath Articles",
     },
     {
-      id: 20,
+      id: 21,
       path: "/admin/newslist",
       name: "Health News",
     },
     {
-      id: 21,
+      id: 22,
       path: "/admin/infographics",
       name: "Infographics",
     },
     {
-      id: 22,
+      id: 23,
       path: "/admin/stocklist",
       name: "Add Status Status",
     },
   ];
-  const filteredRoutes = userRoutes.slice(14, 22);
-  const filtereTwodRoutes = userRoutes.slice(22, userRoutes.length);
+  const filteredRoutes = userRoutes.slice(14, 23);
+  const filtereTwodRoutes = userRoutes.slice(23, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
