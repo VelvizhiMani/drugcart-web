@@ -187,7 +187,7 @@ const Product = () => {
       </section>
       <section className="px-3 mt-5">
         <div className="grid grid-cols-6 gap-4">
-          <div className="md:col-span-1 col-span-2 order-3">
+          <div className="md:col-span-1 col-span-2 order-3 md:order-1">
             <h2 className="font-bold hidden md:block">Product Summary</h2>
             <div className="bg-[#CEDEFC] text-[14px] hidden">
               <ul className="list-disc pl-4 m-2 leading-10">
@@ -552,7 +552,7 @@ const Product = () => {
               </ul>
             </div>
           </div>
-          <div className="col-span-6 md:col-span-3 order-1">
+          <div className="col-span-6 md:col-span-3 order-1 md:order-2">
             <div className="border-[1px] p-3 mb-4">
               <div className="flex gap-2">
                 <Image src={IMAGES.DESCICON} alt="Description" className="w-[25px] h-[25px]" />
@@ -872,7 +872,7 @@ const Product = () => {
             </div>
 
           </div>
-          <div className="md:col-span-2 col-span-4 order-2">
+          <div className="md:col-span-2 col-span-4 order-2 md:order-3">
             <div className="">
               <h2 className="font-bold text-center m-2 text-xl">Generic Name</h2>
               <div className="bg-[#F3F8FC] text-[14px] text-center border-[1.5px] m-2 rounded">
