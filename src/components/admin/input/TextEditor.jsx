@@ -9,7 +9,6 @@ const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 // Quill.register("modules/resize", QuillImageResize);
 
-
 function TextEditor({ title, value, type, onChange, helperText, error }) {
   const [quillModules, setQuillModules] = useState(null);
   // console.log(value);

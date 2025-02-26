@@ -17,7 +17,7 @@ const Product = () => {
           <span>&gt;</span>
           <Link href="#" className="hover:text-gray-700">Common Cold</Link>
           <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">Caffeine + Cetirizine + Paracetamol + Phenylephrine</Link>
+          <Link href="#" className="hover:text-gray-700">Caffeine + Cetirizine + Paracetamol</Link>
         </div>
       </section>
       <section className="px-3 mt-3">
@@ -187,9 +187,9 @@ const Product = () => {
       </section>
       <section className="px-3 mt-5">
         <div className="grid grid-cols-6 gap-4">
-          <div className='col-span-2 md:col-span-1'>
-            <h2 className="font-bold">Product Summary</h2>
-            <div className="bg-[#CEDEFC] text-[14px]">
+          <div className="md:col-span-1 col-span-2 order-2">
+            <h2 className="font-bold hidden md:block">Product Summary</h2>
+            <div className="bg-[#CEDEFC] text-[14px] hidden">
               <ul className="list-disc pl-4 m-2 leading-10">
                 <li>Overview</li>
                 <li>Description</li>
@@ -551,10 +551,8 @@ const Product = () => {
                 <li>It may also be beneficial for several conditions, including a dry cough</li>
               </ul>
             </div>
-
-
           </div>
-          <div className="col-span-4 md:col-span-3">
+          <div className="col-span-6 md:col-span-3 order-1">
             <div className="border-[1px] p-3 mb-4">
               <div className="flex gap-2">
                 <Image src={IMAGES.DESCICON} alt="Description" className="w-[25px] h-[25px]" />
@@ -658,7 +656,7 @@ const Product = () => {
                 <Image src={IMAGES.SIDEEFFECTS} alt="Description" className="w-[25px] h-[25px]" />
                 <h1 className="text-md font-bold">PRECAUTIONS AND GENERAL WARNING OF ZUCET PLUS TABLET</h1>
               </div>
-              <div className="flex flex-wrap gap-2 justify-between">
+              <div className="flex flex-wrap justify-between md:justify-start">
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
                   <Image src={IMAGES.ALCOHOL} alt="Description" className="w-24 h-24 mx-auto rounded-full border-2" />
                   <h3 className="text-[14px] py-1 font-bold px-5 text-center">ALCOHOL</h3>
@@ -687,7 +685,7 @@ const Product = () => {
                 </div>
               </div>
               <div className="border-t-2 py-4"></div>
-              <div className="flex flex-wrap gap-2 justify-between">
+              <div className="flex flex-wrap md:gap-0 justify-between md:justify-start">
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
                   <Image src={IMAGES.BREASTFEEDING} alt="Description" className="w-24 h-24 mx-auto rounded-full border-2" />
                   <h3 className="text-[14px] py-1 font-bold px-5 text-center">BREAST FEEDING</h3>
@@ -874,7 +872,7 @@ const Product = () => {
             </div>
 
           </div>
-          <div className="col-span-2 hidden md:block">
+          <div className="md:col-span-2 col-span-4 order-3">
             <div className="">
               <h2 className="font-bold text-center m-2 text-xl">Generic Name</h2>
               <div className="bg-[#F3F8FC] text-[14px] text-center border-[1.5px] m-2 rounded">

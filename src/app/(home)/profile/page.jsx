@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
 import PersonIcon from '@mui/icons-material/Person';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -20,26 +20,7 @@ import SourceIcon from '@mui/icons-material/Source';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import LogoutIcon from '@mui/icons-material/Logout';
-
-const mobiletabs = [
-    { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
-    { id: 'orders', label: 'My Order', icon: <ListAltIcon /> },
-    { id: 'address', label: 'My Address', icon: <LocationOnIcon /> },
-    { id: 'prescription', label: 'My Prescription', icon: <SummarizeIcon /> },
-    { id: 'labtest', label: 'My Lab Test', icon: <ScienceIcon /> },
-    { id: 'appointment', label: 'My Appointment', icon: <InterpreterModeIcon /> },
-    { id: 'family', label: 'My Family', icon: <SettingsAccessibilityIcon /> },
-    { id: 'healthrecords', label: 'Health Records', icon: <MonitorHeartIcon /> },
-    { id: 'social', label: 'Social Pages', icon: <TransgenderIcon /> },
-    { id: 'contactus', label: 'Contact Us', icon: <TtyIcon /> },
-    { id: 'aboutus', label: 'About Us', icon: <AnnouncementIcon /> },
-    { id: 'faqs', label: 'FAQs', icon: <StickyNote2Icon /> },
-    { id: 'feedback', label: 'Send Feedback', icon: <ThumbUpOffAltIcon /> },
-    { id: 'terms', label: 'Terms and Conditon', icon: <SourceIcon /> },
-    { id: 'policy', label: 'Private Policy', icon: <AdminPanelSettingsIcon /> },
-    { id: 'refund', label: 'Refund Policy', icon: <AgricultureIcon /> },
-    { id: 'logout', label: 'Logout', icon: <LogoutIcon /> },
-];
+import MyOrders from '@/components/profile/MyOrders';
 
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
@@ -74,11 +55,14 @@ export default function ProfileTab() {
     const [edit, setEdit] = useState(false);
     return (
         <>
-            <div className='flex max-w-7xl mx-auto mb-3 space-x-4 text-sm text-gray-300'>
-                <div>Home </div>
-                <div><ArrowRightAltIcon /></div>
-                <div>My Account</div>
-            </div>
+            <section className="px-2 md:px-12 mt-3">
+                <div className="flex flex-wrap items-center space-x-2 text-sm text-gray-500 ">
+                    <Link href="#" className="hover:text-gray-700">Home</Link>
+                    <span>&gt;</span>
+                    <Link href="#" className="hover:text-gray-700">My Account</Link>
+                </div>
+            </section>
+            <section className="px-2 md:px-12 mt-3">
             <div className="flex max-w-7xl mx-auto md:my-6">
                 {/* Sidebar Tabs */}
                 <div className="w-12 md:w-64 border-2 bg-white p-0 min-h-screen text-[14px]">
@@ -158,17 +142,6 @@ export default function ProfileTab() {
 
                 {/* Main Content */}
                 <div className="flex-1 p-3 md:p-8">
-                    {/* <div className="flex flex-wrap md:flex-nowrap rounded-md space-x-2 md:hidden bg-gray-200 text-sm p-2">
-                        {mobiletabs.map((tab) => (
-                            <button
-                                key={tab.id}
-                                className={`p-3 flex items-center gap-2 cursor-pointer rounded-md ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
-                                onClick={() => setActiveTab(tab.id)}
-                            >
-                                {tab.icon} {tab.label}
-                            </button>
-                        ))}
-                    </div> */}
                     {activeTab === 'profile' && (
                         <div>
                             <h2 className="text-2xl font-bold mb-4">My Account Information</h2>
@@ -189,14 +162,6 @@ export default function ProfileTab() {
                                     <input type="text" placeholder="Blood Group" disabled={!edit} className="border p-2 rounded w-full" />
                                 </div>
                             </div>
-                            {/* <div className="bg-white shadow-md p-6 rounded-lg mb-6">
-                                <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <input type="text" placeholder="Full Name" className="border p-2 rounded w-full" />
-                                    <input type="text" placeholder="Mobile Number" className="border p-2 rounded w-full" />
-                                    <input type="email" placeholder="E-Mail Address" className="border p-2 rounded w-full" />
-                                </div>
-                            </div> */}
                             {/* Address Details */}
                             <div className="bg-white shadow-md p-6 rounded-lg">
                                 <div className="flex flex-wrap justify-between items-center mb-4">
@@ -240,6 +205,7 @@ export default function ProfileTab() {
                         <div>
                             <h2 className="text-2xl font-bold mb-4">My Orders</h2>
                             <p>Order details will be displayed here.</p>
+                            <MyOrders />
                         </div>
                     )}
 
@@ -258,6 +224,7 @@ export default function ProfileTab() {
                     )}
                 </div>
             </div>
+            </section>
         </>
     );
 }
