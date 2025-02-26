@@ -3,13 +3,23 @@ import Alovera from "@/assets/product/alovera.png";
 import Breathe from "@/assets/product/breathe-eazy.png";
 import Honitus from "@/assets/product/honitus.png";
 import Wheatgrass from "@/assets/product/wheatgrass-juice.png";
-import FavouriteIcon from "@/assets/Icons/FavouriteIcon";
 import CartIcon from "@/assets/Icons/CartIcon";
 import discountImg from "@/assets/trendingimg/dealofday.png";
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { GetProductService } from "@/services/productService"
 
 const TrandingProduct = () => {
-  const products = [
+  const { productList } = useSelector((state) => state.productData)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(GetProductService(1, 8))
+  }, [])
+
+  console.log('productList', productList);
+
+  const productsData = [
     {
       id: 1,
       name: "Pankajakasthuri Syrup",
@@ -115,9 +125,9 @@ const TrandingProduct = () => {
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:p-3 content-center place-items-center border border-t-0">
-            {products?.map((product) => (
+            {productList && productList?.products?.map((product, i) => (
               <div
-                key={product?.id}
+                key={i}
                 className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
               >
                 <div className="grid justify-end">
@@ -128,15 +138,15 @@ const TrandingProduct = () => {
                   </button>
                 </div>
                 <Image
-                  src={product?.image}
-                  alt={product?.name}
+                  src={productsData[i]?.image}
+                  alt={product?.product_name}
                   className="w-48 h-48 ml-3"
                 />
                 <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1">
-                  {product?.name}
+                  {product?.product_name}
                 </h3>
                 <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1">
-                  {product?.name}
+                  {product?.product_name}
                 </p>
                 <div className="bg-white mt-1 flex justify-items-center justify-between">
                   <p className="text-black font-poppins font-semibold text-[14px] mt-1">

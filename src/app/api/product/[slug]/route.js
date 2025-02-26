@@ -6,27 +6,30 @@ import { NextResponse } from "next/server";
 export async function GET(request, { params }) {
   try {
     await connectionToDatabase();
-    const { success, user, message } = await authenticateUser();
+    // const { success, user, message } = await authenticateUser();
 
-    if (!success) {
-      return NextResponse.json({ error: message }, { status: 401 });
+    // if (!success) {
+    //   return NextResponse.json({ error: message }, { status: 401 });
+    // }
+
+    const { slug } = await params;
+    console.log("Fetching product for slug:", slug);
+
+    let product = await Product.findOne({ url: slug });
+    if (!product) {
+      product = await Product.findById(slug).catch(() => null); 
     }
-    const { id } = await params;
-    const product = await Product.findById(id);
-    console.log(product);
+
     if (!product) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
     return NextResponse.json(product, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error fetching Product" },
-      { status: 500 }
-    );
+    console.error("Error fetching product:", error);
+    return NextResponse.json({ error: "Error fetching product" }, { status: 500 });
   }
 }
-
 export async function PUT(request, { params }) {
   try {
     const { success, user, message } = await authenticateUser();
