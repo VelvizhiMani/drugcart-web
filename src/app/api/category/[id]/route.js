@@ -6,11 +6,7 @@ import { NextResponse } from 'next/server'
 export async function GET(request, { params }) {
     try {
         await connectionToDatabase();
-        const { success, user, message } = await authenticateUser();
 
-        if (!success) {
-            return NextResponse.json({ error: message }, { status: 401 });
-        }
         const { id } = await params;
         const categoryId = await Category.findById(id);
         if (!categoryId) {
