@@ -82,7 +82,7 @@ const ProductAdd = () => {
       tabscount: "",
       orgin: "",
       strength: "",
-      package: "",
+      packageName: "",
       price: "",
       packing: "",
       product_img: "",
@@ -163,7 +163,10 @@ const ProductAdd = () => {
       url: yup.string().required("URL is required"),
     }),
     onSubmit: async (data, { resetForm }) => {
-      await dispatch(PostProductService(data, resetForm));
+      const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
+      console.log("packGetID", packGetID.id);
+
+      await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.id }, resetForm));
     },
   });
   // const salePriceDetails = () => {
@@ -200,6 +203,7 @@ const ProductAdd = () => {
   // const filterOthervarient = productList?.productItems?.filter(
   //   (item) => item?.subcat_name === formik.values.subcaturl
   // );
+
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
@@ -402,7 +406,7 @@ const ProductAdd = () => {
             <SearchField
               title="Pack"
               data={packageList?.packages}
-              value={formik.values.package}
+              value={formik.values.packageName}
               getOptionLabel={(option) =>
                 typeof option === "string" ? option : option?.packagename || ""
               }
@@ -410,7 +414,7 @@ const ProductAdd = () => {
                 formik.setFieldValue("packageName", newValue);
               }}
               helperText={
-                formik.touched.packagename ? formik.errors.packagename : null
+                formik.touched.packageName ? formik.errors.packageName : null
               }
               error={
                 formik.touched.packageName ? formik.errors.packageName : null
@@ -631,13 +635,13 @@ const ProductAdd = () => {
               value={formik.values.reviewbyid}
               onChange={formik.handleChange("reviewbyid")}
               data={gst}
-              // data={reviewByList?.review_by_lists}
-              // getOptionLabel={(option) =>
-              //   typeof option === "string" ? option : option?.name || ""
-              // }
-              // onInputChange={(event, newValue) => {
-              //   formik.setFieldValue("reviewbyid", newValue);
-              // }}
+            // data={reviewByList?.review_by_lists}
+            // getOptionLabel={(option) =>
+            //   typeof option === "string" ? option : option?.name || ""
+            // }
+            // onInputChange={(event, newValue) => {
+            //   formik.setFieldValue("reviewbyid", newValue);
+            // }}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
@@ -646,13 +650,13 @@ const ProductAdd = () => {
               value={formik.values.writebyid}
               onChange={formik.handleChange("writebyid")}
               data={gst}
-              // data={writtenByList?.written_by_lists}
-              // getOptionLabel={(option) =>
-              //   typeof option === "string" ? option : option?.name || ""
-              // }
-              // onInputChange={(event, newValue) => {
-              //   formik.setFieldValue("writebyid", newValue);
-              // }}
+            // data={writtenByList?.written_by_lists}
+            // getOptionLabel={(option) =>
+            //   typeof option === "string" ? option : option?.name || ""
+            // }
+            // onInputChange={(event, newValue) => {
+            //   formik.setFieldValue("writebyid", newValue);
+            // }}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
