@@ -226,23 +226,28 @@ function AdminLayout(props) {
     },
     {
       id: 5,
+      path: "/admin/customers",
+      name: "Customers Data",
+    },
+    {
+      id: 6,
       path: "/admin/writtenbylist",
       name: "Written by List",
     },
     {
-      id: 6,
+      id: 7,
       path: "/admin/reviewbylist",
       name: "Review by List",
     },
     {
-      id: 7,
+      id: 8,
       path: "/admin/stocklist",
       name: "Add Status Status",
     },
   ];
-  const mainMenu = userRoutes.slice(0, 4);
+  const mainMenu = userRoutes.slice(0, 5);
   const filteredRoutes = userRoutes.slice(7, 16);
-  const filtereTwodRoutes = userRoutes.slice(6, userRoutes.length);
+  const filtereTwodRoutes = userRoutes.slice(7, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
@@ -302,30 +307,6 @@ function AdminLayout(props) {
           <List component="div" disablePadding>
             <Link
               href={{
-                pathname: userRoutes[4].path,
-              }}
-            >
-              <ListItem sx={{ pl: 4 }} style={{
-                marginTop: 8,
-                backgroundColor: pathName === userRoutes[4].path ? "#00a65a" : null,
-              }}
-                onClick={() => {
-                  router.push(userRoutes[4].path);
-                  setMobileOpen(false);
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  color={pathName === userRoutes[4].path ? "#fff" : "#fff"}
-                  fontFamily={"Poppins"}
-                  fontSize={14}
-                >
-                  {userRoutes[4].name}
-                </Typography>
-              </ListItem>
-            </Link>
-            <Link
-              href={{
                 pathname: userRoutes[5].path,
               }}
             >
@@ -345,6 +326,30 @@ function AdminLayout(props) {
                   fontSize={14}
                 >
                   {userRoutes[5].name}
+                </Typography>
+              </ListItem>
+            </Link>
+            <Link
+              href={{
+                pathname: userRoutes[6].path,
+              }}
+            >
+              <ListItem sx={{ pl: 4 }} style={{
+                marginTop: 8,
+                backgroundColor: pathName === userRoutes[6].path ? "#00a65a" : null,
+              }}
+                onClick={() => {
+                  router.push(userRoutes[6].path);
+                  setMobileOpen(false);
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  color={pathName === userRoutes[6].path ? "#fff" : "#fff"}
+                  fontFamily={"Poppins"}
+                  fontSize={14}
+                >
+                  {userRoutes[6].name}
                 </Typography>
               </ListItem>
             </Link>
