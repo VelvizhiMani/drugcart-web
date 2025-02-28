@@ -123,9 +123,9 @@ function AdminLayout(props) {
     const newSplit = text.split('/');
     const newStr = newSplit[2]
     if (newStr === undefined) {
-      return "dashboard"
+      return "Dashboard"
     } else {
-      return newStr
+      return newStr.charAt(0).toUpperCase() + newStr.slice(1)
     }
   }
 
@@ -211,127 +211,38 @@ function AdminLayout(props) {
     },
     {
       id: 2,
-      path: "/admin/category",
-      name: "Category",
+      path: "/admin/medicine",
+      name: "Medicine",
     },
     {
       id: 3,
-      path: "/admin/subcategory",
-      name: "Subcategory",
-    },
-    {
-      id: 4,
-      path: "/admin/genericlist",
-      name: "Generice Name",
-    },
-    {
-      id: 5,
-      path: "/admin/medicinecat",
-      name: "Medicine List",
-    },
-    {
-      id: 6,
-      path: "/admin/manufactuerlist",
-      name: "Manufactuer List",
-    },
-    {
-      id: 7,
-      path: "/admin/formlist",
-      name: "Form List",
-    },
-    {
-      id: 7,
-      path: "/admin/storagelist",
-      name: "Storage List",
-    },
-    {
-      id: 8,
-      path: "/admin/packagelist",
-      name: "Pack List",
-    },
-    {
-      id: 9,
-      path: "/admin/courierlist",
-      name: "Courier List",
-    },
-    {
-      id: 10,
-      path: "/admin/orginlist",
-      name: "Product Country of List",
-    },
-    {
-      id: 11,
       path: "/admin/referlist",
       name: "Reference List",
     },
     {
-      id: 12,
+      id: 4,
+      path: "/admin/awareness",
+      name: "Awareness List",
+    },
+    {
+      id: 5,
       path: "/admin/writtenbylist",
       name: "Written by List",
     },
     {
-      id: 13,
+      id: 6,
       path: "/admin/reviewbylist",
       name: "Review by List",
     },
     {
-      id: 14,
-      path: "/admin/country_code_list",
-      name: "Country Code",
-    },
-    {
-      id: 15,
-      path: "/admin/diseaseslist",
-      name: "Know about diseases",
-    },
-    {
-      id: 16,
-      path: "/admin/knowbody",
-      name: "Know Your Body",
-    },
-    {
-      id: 17,
-      path: "/admin/healthvideo",
-      name: "Health Video",
-    },
-    {
-      id: 18,
-      path: "/admin/herbs",
-      name: "Know about Herbs",
-    },
-    {
-      id: 19,
-      path: "/admin/healthtips",
-      name: "Health Tips",
-    },
-    {
-      id: 20,
-      path: "/admin/articles",
-      name: "Heath Articles",
-    },
-    {
-      id: 21,
-      path: "/admin/blog",
-      name: "Blog",
-    },
-    {
-      id: 22,
-      path: "/admin/newslist",
-      name: "Health News",
-    },
-    {
-      id: 23,
-      path: "/admin/infographics",
-      name: "Infographics",
-    },
-    {
-      id: 24,
+      id: 7,
       path: "/admin/stocklist",
       name: "Add Status Status",
     },
   ];
-  const filteredRoutes = userRoutes.slice(14, 24);
-  const filtereTwodRoutes = userRoutes.slice(24, userRoutes.length);
+  const mainMenu = userRoutes.slice(0, 4);
+  const filteredRoutes = userRoutes.slice(7, 16);
+  const filtereTwodRoutes = userRoutes.slice(6, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
@@ -341,7 +252,7 @@ function AdminLayout(props) {
 
       <Divider />
       <List>
-        {userRoutes.map((item, i) => i < 12 && (
+        {mainMenu.map((item, i) => (
           <Link
             href={{
               pathname: item.path,
@@ -391,68 +302,65 @@ function AdminLayout(props) {
           <List component="div" disablePadding>
             <Link
               href={{
-                pathname: userRoutes[12].path,
+                pathname: userRoutes[4].path,
               }}
             >
               <ListItem sx={{ pl: 4 }} style={{
                 marginTop: 8,
-                backgroundColor: pathName === userRoutes[12].path ? "#00a65a" : null,
+                backgroundColor: pathName === userRoutes[4].path ? "#00a65a" : null,
               }}
                 onClick={() => {
-                  router.push(userRoutes[12].path);
+                  router.push(userRoutes[4].path);
                   setMobileOpen(false);
                 }}
               >
                 <Typography
                   variant="body1"
-                  color={pathName === userRoutes[12].path ? "#fff" : "#fff"}
+                  color={pathName === userRoutes[4].path ? "#fff" : "#fff"}
                   fontFamily={"Poppins"}
                   fontSize={14}
                 >
-                  {userRoutes[12].name}
+                  {userRoutes[4].name}
                 </Typography>
               </ListItem>
             </Link>
             <Link
               href={{
-                pathname: userRoutes[13].path,
+                pathname: userRoutes[5].path,
               }}
             >
               <ListItem sx={{ pl: 4 }} style={{
                 marginTop: 8,
-                backgroundColor: pathName === userRoutes[13].path ? "#00a65a" : null,
+                backgroundColor: pathName === userRoutes[5].path ? "#00a65a" : null,
               }}
                 onClick={() => {
-                  router.push(userRoutes[13].path);
+                  router.push(userRoutes[5].path);
                   setMobileOpen(false);
                 }}
               >
                 <Typography
                   variant="body1"
-                  color={pathName === userRoutes[13].path ? "#fff" : "#fff"}
+                  color={pathName === userRoutes[5].path ? "#fff" : "#fff"}
                   fontFamily={"Poppins"}
                   fontSize={14}
                 >
-                  {userRoutes[13].name}
+                  {userRoutes[5].name}
                 </Typography>
               </ListItem>
             </Link>
           </List>
         </Collapse>
 
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton onClick={handleAwarenessToggle}>
-            {/* <ListItemIcon>
-                            <BarChart sx={{ color: '#fff' }} />
-                        </ListItemIcon> */}
             <Typography variant="body1" fontFamily={"Poppins"} fontSize={14} color='#fff'>
               Awareness
             </Typography>
             {isAwareness ? <ExpandLess sx={{ color: '#fff', marginLeft: 'auto' }} /> : <ExpandMore sx={{ color: '#fff', marginLeft: 'auto' }} />}
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
 
-        <Collapse in={isAwareness} timeout="auto" unmountOnExit>
+        {/* <Collapse in={isAwareness} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {filteredRoutes.map((item, i) =>
               <Link
@@ -482,7 +390,7 @@ function AdminLayout(props) {
               </Link>
             )}
           </List>
-        </Collapse>
+        </Collapse> */}
 
         {filtereTwodRoutes.map((item, i) => (
           <Link
