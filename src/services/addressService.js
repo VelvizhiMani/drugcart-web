@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addAddress, getAddressList, getAddress } from '../reduxToolkit/slices/addressSlice'
+import { addAddress, getAddressList, getAddress, getUserAddress } from '../reduxToolkit/slices/addressSlice'
 
 const PostAddressService = (data, resetForm) => async (dispatch) => {
     try {
@@ -35,7 +35,7 @@ const GetAddressIdService = (id) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
         const getIdData = await axios.get(`/api/address/${id}`, { headers: await Authorization() })
-        dispatch(getAddress(getIdData.data))
+        dispatch(getUserAddress(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -55,8 +55,8 @@ const PutAddressService = (id, userData) => async (dispatch) => {
 
 const DeleteAddressService = (id) => async (dispatch) => {
     await axios.delete(`/api/address/${id}`, { headers: await Authorization() }).then(() => {
-        dispatch(getArticle(id))
-        dispatch(GetAddressService())
+        dispatch(getAddress(id))
+        // dispatch(GetAddressService())
     }).catch((error) => {
         console.log("error", error.message)
     })

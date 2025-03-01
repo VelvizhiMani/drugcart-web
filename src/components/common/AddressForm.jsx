@@ -2,11 +2,12 @@
 import { useFormik } from "formik";
 import Image from "next/image";
 import { useState } from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from "react-redux";
-import { PostAddressService } from '@/services/addressService';
+import { PostAddressService, DeleteAddressService, GetAddressIdService } from '@/services/addressService';
 
 const AddressForm = () => {
-    const { addresses } = useSelector((state) => state.addressData)
+    const { userAddress } = useSelector((state) => state.addressData)
     const [type, setType] = useState('Home');
     const [activeTab, setActiveTab] = useState("add");
     const dispatch = useDispatch();
@@ -88,7 +89,7 @@ const AddressForm = () => {
                                             required
                                         />
                                         <input
-                                            type="text"
+                                            type="number"
                                             placeholder="Phone Number"
                                             className="border p-2 rounded w-full"
                                             value={formik.values.del_phone}
@@ -105,7 +106,7 @@ const AddressForm = () => {
                                     />
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <input
-                                            type="test"
+                                            type="number"
                                             placeholder="Postal Code"
                                             className="border p-2 rounded w-full"
                                             value={formik.values.postcode}
@@ -181,9 +182,17 @@ const AddressForm = () => {
                                 <>
                                     <div className="text-start text-gray-600 py-6">
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            {addresses && addresses?.map((addressItem, i) => (
+                                            {userAddress && userAddress?.map((addressItem, i) => (
                                                 <div className="border-2 p-3 bg-[#EEFFE4]" key={i}>
-                                                    <h2 className="font-semibold">Address {i + 1}</h2>
+                                                    <div className="flex justify-between">
+                                                        <h2 className="font-semibold">Address {i + 1}</h2>
+                                                        <button onClick={async () => {
+                                                            await dispatch(DeleteAddressService(addressItem?._id))
+                                                            await dispatch(GetAddressIdService(addressItem?.cus_id))
+                                                        }}>
+                                                            <DeleteIcon color="error" />
+                                                        </button>
+                                                    </div>
                                                     <p>
                                                         {addressItem?.cus_name} {addressItem?.lastname}, <br />
                                                         {addressItem?.address},
@@ -230,7 +239,7 @@ const AddressForm = () => {
                     </div>
                 </div>
                 {/* Valid Prescription Section */}
-            </div>
+            </div >
         </>
     );
 };

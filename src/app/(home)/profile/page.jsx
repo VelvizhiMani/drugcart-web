@@ -54,7 +54,7 @@ const tabslegal = [
 
 export default function ProfileTab() {
     const { profile } = useSelector((state) => state.profileData)
-    const { addresses } = useSelector((state) => state.addressData)
+    const { userAddress } = useSelector((state) => state.addressData)
     const [activeTab, setActiveTab] = useState('profile');
     const [selected, setSelected] = useState('Home');
     const [edit, setEdit] = useState(false);
@@ -64,7 +64,7 @@ export default function ProfileTab() {
         dispatch(GetAddressIdService(profile?._id))
     }, [profile?._id])
 
-    console.log("addresses", addresses);
+    console.log("userAddress", userAddress);
     
     return (
         <>

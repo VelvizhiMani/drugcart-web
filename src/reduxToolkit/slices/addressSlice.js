@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     addressList: [],
     newAddress: {},
-    addresses: {},
+    userAddress: [],
+    addresses: {}
 }
 const addressSlice = createSlice({
     name: 'address',
@@ -15,11 +16,14 @@ const addressSlice = createSlice({
         getAddressList: (state, { payload }) => {
             state.addressList = payload
         },
+        getUserAddress: (state, { payload }) => { 
+            state.userAddress = payload
+        },
         getAddress: (state, { payload }) => { 
             state.addresses = payload
         }
     }
 })
 
-export const { addAddress, getAddressList, getAddress } = addressSlice.actions
+export const { addAddress, getAddressList, getUserAddress, getAddress } = addressSlice.actions
 export default addressSlice.reducer
