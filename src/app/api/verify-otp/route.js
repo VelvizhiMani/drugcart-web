@@ -29,12 +29,12 @@ export async function POST(req) {
     delete global.otpStore[phone]; // Remove OTP after verification
     const existingUserser = await User.findOne({ phone });
     if (existingUserser) {
-      const token = jwt.sign({ id: existingUserser._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ id: existingUserser._id }, process.env.JWT_SECRET_KEY);
       return NextResponse.json({ token, success: true, message: "login successfully!", loginUser: existingUserser?.username }, { status: 200 })
     }
     const newUser = new User({ username: username, phone: phone });
     await newUser.save()
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY);
     // return NextResponse.json(newUser, { status: 200 })
     return NextResponse.json({ token, success: true, message: "Register successfully!", data: newUser }, { status: 200 })
 
