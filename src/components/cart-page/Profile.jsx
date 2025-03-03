@@ -3,7 +3,8 @@ import { useState } from 'react';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 
 const Profile = () => {
-    const [edit, setEdit] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const { profile } = useSelector((state) => state.profileData)
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -19,11 +20,11 @@ const Profile = () => {
           <li className="p-3 cursor-pointer">Health Records</li>
         </ul>
       </div>
-      
+
       {/* Main Content */}
       <div className="flex-1 p-8">
         <h2 className="text-2xl font-bold mb-4">My Account Information</h2>
-        
+
         {/* Personal Information */}
         <div className="bg-white shadow-md p-6 rounded-lg mb-6">
           <div className="flex justify-between items-center mb-4">
@@ -33,15 +34,15 @@ const Profile = () => {
             </button>
           </div>
           <div className="grid grid-cols-3 gap-4">
-            <input type="text" placeholder="Full Name" disabled={!edit} className="border p-2 rounded w-full" />
-            <input type="text" placeholder="Mobile Number" disabled={!edit} className="border p-2 rounded w-full" />
+            <input type="text" placeholder="Full Nameddd" disabled={!edit} className="border p-2 rounded w-full" />
+            <input type="text" placeholder="Mobile Number" value={profile?.phone} disabled={true} className="border p-2 rounded w-full" />
             <input type="email" placeholder="E-Mail Address" disabled={!edit} className="border p-2 rounded w-full" />
             <input type="text" placeholder="Gender" disabled={!edit} className="border p-2 rounded w-full" />
             <input type="date" placeholder="Date of Birth" disabled={!edit} className="border p-2 rounded w-full" />
             <input type="text" placeholder="Blood Group" disabled={!edit} className="border p-2 rounded w-full" />
           </div>
         </div>
-        
+
         {/* Address Details */}
         <div className="bg-white shadow-md p-6 rounded-lg">
           <div className="flex justify-between items-center mb-4">

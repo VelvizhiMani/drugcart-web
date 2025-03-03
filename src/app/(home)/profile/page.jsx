@@ -64,7 +64,7 @@ export default function ProfileTab() {
         dispatch(GetAddressIdService(profile?._id))
     }, [profile?._id])
 
-    console.log("userAddress", userAddress);
+    console.log("userAddress", profile);
     
     return (
         <>
@@ -167,8 +167,8 @@ export default function ProfileTab() {
                                         </button>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <input type="text" placeholder="Full Name" disabled={!edit} className="border p-2 rounded w-full" />
-                                        <input type="text" placeholder="Mobile Number" disabled={!edit} className="border p-2 rounded w-full" />
+                                        <input type="text" placeholder="Full Name" value={profile?.username || ""} disabled={!edit} className="border p-2 rounded w-full" />
+                                        <input type="text" placeholder="Mobile Number" value={profile?.phone || ""} disabled={true} className="border p-2 rounded w-full" />
                                         <input type="email" placeholder="E-Mail Address" disabled={!edit} className="border p-2 rounded w-full" />
                                         <input type="text" placeholder="Gender" disabled={!edit} className="border p-2 rounded w-full" />
                                         <input type="date" placeholder="Date of Birth" disabled={!edit} className="border p-2 rounded w-full" />
