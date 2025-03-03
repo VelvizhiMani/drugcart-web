@@ -18,9 +18,9 @@ export async function authenticateUser() {
         const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
         // Ensure both queries resolve before checking
-        let user = await User.findById(decoded.id).select('-username');
+        let user = await User.findById(decoded.id).select('-id');
         if (!user) {
-            user = await AdminUser.findById(decoded.id).select('-username');
+            user = await AdminUser.findById(decoded.id).select('-id');
         }
 
         if (!user) {

@@ -106,7 +106,7 @@ const Menu = () => {
                                 </Link>
                             </div>
                         </div>
-                        <Link href="/" className="px-3 py-2 rounded-md hover:bg-gray-100">
+                        <Link href="/lab-test" className="px-3 py-2 rounded-md hover:bg-gray-100">
                             Lab
                         </Link>
                         <Link href="/" className="px-3 py-2 rounded-md hover:bg-gray-100">

@@ -1,17 +1,103 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const loadCart = () => {
+    if (typeof window !== "undefined") {
+        const storedCart = localStorage.getItem("cart");
+        return storedCart ? JSON.parse(storedCart) : [];
+    }
+    return [];
+};
+
 const initialState = {
     carts: [],
+    items: loadCart(),
 }
+
 const cartSlice = createSlice({
     name: 'carts',
     initialState: initialState,
     reducers: {
-        getCart: (state, {payload}) => {
+        getCart: (state, { payload }) => {
             state.carts = payload
+        },
+        addToCart: (state, action) => {
+            const existingItem = state.items.find((item) => item._id === action.payload._id);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                state.items.push({ ...action.payload, quantity: 1 });
+            }
+            localStorage.setItem("cart", JSON.stringify(state.items));
+        },
+        removeFromCart: (state, action) => {
+            state.items = state.items.filter((item) => item._id !== action.payload);
+            localStorage.setItem("cart", JSON.stringify(state.items));
+        },
+        incrementQuantity: (state, action) => {
+            const item = state.items.find((item) => item._id === action.payload);
+            if (item) {
+                item.quantity += 1;
+            }
+            localStorage.setItem("cart", JSON.stringify(state.items));
+        },
+        decrementQuantity: (state, action) => {
+            const itemIndex = state.items.findIndex((item) => item._id === action.payload);
+            if (itemIndex !== -1) {
+                if (state.items[itemIndex].quantity > 1) {
+                    state.items[itemIndex].quantity -= 1;
+                } else {
+                    state.items.splice(itemIndex, 1);
+                }
+            }
+            localStorage.setItem("cart", JSON.stringify(state.items));
+        },
+        clearCart: (state) => {
+            state.items = [];
+            localStorage.removeItem("cart");
+        },
+        setCartFromDB: (state, action) => {
+            state.items = action.payload;
+        },
+        applyDiscount: (state, action) => {
+            state.discount = action.payload;
         },
     }
 })
 
-export const { getCart } = cartSlice.actions
-export default cartSlice.reducer
+export const selectCartTotal = (state) =>
+    state.cartData.items.reduce((total, item) => total + item.price * item.quantity, 0);
+
+export const selectTotalDiscount = (state) =>
+    state.cartData.items.reduce((totalDiscount, item) => {
+        const discountAmount = (item.price * item.quantity * (item.percentage || 0)) / 100;
+        return totalDiscount + discountAmount;
+    }, 0);
+
+export const selectTotalAfterDiscount = (state) => {
+    const total = selectCartTotal(state);
+    const totalDiscount = selectTotalDiscount(state);
+
+    return total - totalDiscount;
+};
+
+export const selectTotalDiscountPercentage = (state) => {
+    const total = selectCartTotal(state);
+    const totalDiscount = selectTotalDiscount(state);
+
+    if (total === 0) return 0;
+
+    return (totalDiscount / total) * 100;
+};
+
+export const selectTotalSavings = (state) => selectTotalDiscount(state);
+
+export const {
+    addToCart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    clearCart,
+    setCartFromDB,
+    getCart
+} = cartSlice.actions;
+export default cartSlice.reducer;

@@ -8,6 +8,7 @@ import discountImg from "@/assets/trendingimg/dealofday.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetProductService } from "@/services/productService"
+import { addToCart } from "../../reduxToolkit/slices/cartSlice";
 
 const TrandingProduct = () => {
   const { productList } = useSelector((state) => state.productData)
@@ -152,7 +153,7 @@ const TrandingProduct = () => {
                   <p className="text-black font-poppins font-semibold text-[14px] mt-1">
                     {product?.price}
                   </p>
-                  <button>
+                  <button onClick={() => dispatch(addToCart(product))}>
                     <CartIcon />
                   </button>
                 </div>

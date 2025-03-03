@@ -4,6 +4,7 @@ import TopHeader from "@/components/layout/topHeader";
 import Menu from "@/components/layout/Menu";
 import Footer from "@/components/layout/Footer";
 import DropSpinner from "@/components/admin/spinner/DropSpinner";
+import Breadcrumb from "@/components/common/Breadcrumb";
 import { useSelector } from 'react-redux';
 import ToastMessage from '../common/ToastMessage';
 
@@ -15,6 +16,9 @@ function CustomerLayout({ children }) {
             <ToastMessage />
             <TopHeader />
             <Menu />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <Breadcrumb />
+            </div>
             {children}
             <Footer />
         </>
