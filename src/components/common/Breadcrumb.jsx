@@ -21,7 +21,7 @@ const Breadcrumb = () => {
                     return (
                         <li key={fullPath} className="flex items-center">
                             <span className="mx-1">›</span>
-                            <Link href={fullPath} className="text-black hover:underline capitalize font-[family-name:var(--font-poppins)]">
+                            <Link href={fullPath} className="text-black hover:underline font-[family-name:var(--font-poppins)]">
                                 {formattedPath}
                             </Link>
                         </li>

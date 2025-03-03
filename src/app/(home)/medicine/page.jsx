@@ -4,10 +4,12 @@ import { GetCategoryService } from "@/services/categoryService";
 import { Box, Pagination, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Medicine = () => {
+  const router = useRouter();
   const { categories } = useSelector((state) => state.categoryData);
   const [showNo, setShowNo] = useState(54)
   const dispatch = useDispatch();
@@ -24,6 +26,10 @@ const Medicine = () => {
     selectedLetter === "All"
       ? categories?.categories
       : categories?.categories?.filter((c) => c.category_name.startsWith(selectedLetter));
+
+  const categroyClick = (cat_url) => {
+    router.push(`/catalog/${cat_url}`)
+  }
 
   return (
     <>
@@ -51,7 +57,11 @@ const Medicine = () => {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 pb-20">
           {filteredConditions &&
             filteredConditions?.map((category, i) => (
-              <div className="bg-bgshop rounded-lg p-4" key={i}>
+              <div
+                className="bg-bgshop rounded-lg p-4 cursor-pointer"
+                key={i}
+                onClick={() => categroyClick(category?.url)}
+              >
                 <p className="text-center">
                   <Image
                     width={100}

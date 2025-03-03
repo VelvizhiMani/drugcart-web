@@ -4,6 +4,7 @@ const initialState = {
     subCategories: [],
     newSubCategory: {},
     subCategory: {},
+    subCategoryUrl: []
 }
 const subCategorySlice = createSlice({
     name: 'subcategory',
@@ -15,11 +16,14 @@ const subCategorySlice = createSlice({
         getSubCategories: (state, { payload }) => {
             state.subCategories = payload
         },
-        getSubCategory: (state, { payload }) => { 
+        getSubCategory: (state, { payload }) => {
             state.subCategory = payload
+        },
+        getSubCategoryUrl: (state, { payload }) => {
+            state.subCategoryUrl = payload
         }
     }
 })
 
-export const { addSubCategory, getSubCategories, getSubCategory } = subCategorySlice.actions
+export const { addSubCategory, getSubCategories, getSubCategory, getSubCategoryUrl } = subCategorySlice.actions
 export default subCategorySlice.reducer
