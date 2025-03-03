@@ -183,6 +183,7 @@ const IMAGES = {
   EUGEBRAL: require("@/assets/Icons/eugebra-l.png"),
   SHOP: require("@/assets/Icons/shop.png"),
   LOCATION: require("@/assets/Icons/location.png"),
+  NO_IMAGE: require("@/assets/product/no_image.png"),
 
   // Social Media
   WHATSAPP: require("@/assets/social/whatsapp.png"),
@@ -200,6 +201,14 @@ const IMAGES = {
   PRESCRIPTIONSAVE: require("@/assets/saveprescription.png"),
   DELIVERYADDRESS: require("@/assets/delivery-address-image.png"),
   SUCCESS: require("@/assets/success.png"),
+
+  // blog
+  BLOGBANNER: require("@/assets/blog/blog-banner1.png"),
+  BLOGIMAGE: require("@/assets/blog/blogmedicine.png"),
+  DUMMYIMAGE: require("@/assets/dummyimage.png"),
+
+  // lab test
+  LAB_ICON: require("@/assets/lab-test/lab_icon.png"),
 };
 
 export { IMAGES };

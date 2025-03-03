@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect } from "react";
 import Slider from "@/components/layout/Slider";
 import TopCategory from "@/components/home-page/topCategory";
@@ -9,16 +9,15 @@ import FeaturedPackage from "@/components/home-page/featuredPackage";
 import HealthHacks from "@/components/home-page/healthHacks";
 import ShopbyCategory from "@/components/home-page/shopbyCategory";
 import FameSection from "@/components/home-page/fameSection";
-import Blog from "@/components/home-page/blog";
+import BlogCard from "@/components/home-page/blogCard";
 import Feedback from "@/components/home-page/feedback";
 import CustomerSaying from "@/components/home-page/customerSaying";
 import { useDispatch, useSelector } from "react-redux";
-import { getProfileService } from "@/services/profileService"
+import { getProfileService } from "@/services/profileService";
 
-
-  const Home = () => {
-  const { profile } = useSelector((state) => state.profileData)
-  const dispatch = useDispatch()
+const Home = () => {
+  const { profile } = useSelector((state) => state.profileData);
+  const dispatch = useDispatch();
   // await new Promise((resolve) => {
   //   setTimeout(() => {
   //     resolve("Intentional Delay");
@@ -26,14 +25,21 @@ import { getProfileService } from "@/services/profileService"
   // })
 
   useEffect(() => {
-    dispatch(getProfileService())
-  }, [])
+    dispatch(getProfileService());
+  }, []);
   console.log(profile);
-  
+
   return (
     <main className="p-2">
       <Slider />
-      <TopCategory />
+      <section className="px-10 mt-4">
+        <div className="p-2 bg-gray-100 font-bold mb-4">
+          <h1>Shop of Categories</h1>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+          <TopCategory />
+        </div>
+      </section>
       <TrandingProduct />
       <BannerGroup />
       <ServiceGroup />
@@ -41,11 +47,16 @@ import { getProfileService } from "@/services/profileService"
       <HealthHacks />
       <ShopbyCategory />
       <FameSection />
-      <Blog />
+      <section className="px-10 mt-10">
+        <div className="bg-bgblog rounded-md px-5 md:px-10">
+          <h1 className="font-bold text-xl md:text-2xl p-5">Our Latest Blog</h1>
+          <BlogCard />
+        </div>
+      </section>
       <Feedback />
       <CustomerSaying />
     </main>
   );
-}
+};
 
 export default Home;
