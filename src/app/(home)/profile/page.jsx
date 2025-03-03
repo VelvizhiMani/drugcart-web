@@ -60,11 +60,8 @@ export default function ProfileTab() {
     const [edit, setEdit] = useState(false);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(GetAddressIdService(profile?._id))
-    }, [profile?._id])
 
-    console.log("userAddress", profile);
+    console.log("userAddress", userAddress);
     
     return (
         <>
