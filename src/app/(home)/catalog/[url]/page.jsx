@@ -6,19 +6,20 @@ import { useEffect } from "react";
 import { IMAGES } from "@/components/common/images";
 import { GetSubCategoryUrlService } from "@/services/subCategoryService";
 import CategoryCard from "@/components/common/CategoryCard";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const Catalog = () => {
   const { subCategoryUrl } = useSelector((state) => state.subCategoryData)
   const params = useParams()
   const dispatch = useDispatch()
+  const router = useRouter()
 
   useEffect(() => {
     dispatch(GetSubCategoryUrlService(params?.url))
   }, [params?.url])
 
-  const categroyClick = (cat_url) => {
-    router.push(`/catalog/${cat_url}`)
+  const subCategroyClick = (cat_url) => {
+    router.push(`/generic-index/${cat_url}`)
   }
 
 
@@ -31,6 +32,7 @@ const Catalog = () => {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 py-4">
           {subCategoryUrl && subCategoryUrl.map((sub, i) => (
             <CategoryCard
+            onClick={() => subCategroyClick(sub?.url)}
               title={sub?.subcat_name}
               imageAlt={sub?.cat_name}
               imagUrl={sub?.cat_img ? `https://assets2.drugcarts.com/category/thumb/${sub?.cat_img}` : IMAGES.NO_IMAGE}
