@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addGeneric, getGenericList, getGeneric } from '../reduxToolkit/slices/genericSlice'
+import { addGeneric, getGenericList, getGeneric, getGenericUrl } from '../reduxToolkit/slices/genericSlice'
 
 const PostGeneticService = (data, resetForm) => async (dispatch) => {
     try {
@@ -62,4 +62,16 @@ const DeleteGeneticService = (id) => async (dispatch) => {
     })
 }
 
-export { PostGeneticService, GetGeneticService, GetGeneticIdService, PutGeneticService, DeleteGeneticService }
+const GetGeneticUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/generic/subname?search=${url}`, { headers: await Authorization() })
+        dispatch(getGenericUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+export { PostGeneticService, GetGeneticService, GetGeneticIdService, PutGeneticService, DeleteGeneticService, GetGeneticUrlService }
