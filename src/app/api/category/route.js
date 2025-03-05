@@ -71,7 +71,7 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const categoryItems = await Category.find(filters)
+        const categoryItems = await Category.find({$nor: [{cat_type: "non-prescriptions"}]}, filters)
             .skip(skip)
             .limit(limit)
 
