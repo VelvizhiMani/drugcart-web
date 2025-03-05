@@ -20,7 +20,7 @@ export async function POST(request) {
             return NextResponse.json({ error: 'Invalid password' }, { status: 401 })
         }
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
+        const token = jwt.sign({ id: user._id }, "admin");
         return NextResponse.json({ token, role: user?.role }, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })

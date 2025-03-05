@@ -1,12 +1,12 @@
 import connectionToDatabase from '../../../../lib/mongodb'
 import AdminUser from '../../../../models/AdminUser'
-import { authenticateUser } from '../../../../utils/middleware';
+import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
 export async function GET(request, { params }) {
     try {
         await connectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
@@ -26,7 +26,7 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
     try {
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
@@ -47,7 +47,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
     try {
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });

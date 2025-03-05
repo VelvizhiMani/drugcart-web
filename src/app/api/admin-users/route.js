@@ -1,14 +1,14 @@
 import connectionToDatabase from '@/lib/mongodb'
 import AdminUser from '@/models/AdminUser'
-import { authenticateUser } from '../../../utils/middleware';
+import { adminAuthorization, authenticateUser } from '../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
 
     try {
         await connectionToDatabase()
-        const { success, user, message } = await authenticateUser();
-        console.log(success);
+        const { success, user, message } = await adminAuthorization();
+        console.log(user);
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })
@@ -56,7 +56,7 @@ export async function GET(req) {
     console.log(filters);
     try {
         await connectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })

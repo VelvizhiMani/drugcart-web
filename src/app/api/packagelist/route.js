@@ -1,4 +1,4 @@
-import { authenticateUser } from '../../../utils/middleware';
+import { authenticateUser, adminAuthorization } from '../../../utils/middleware';
 import Pack from '../../../models/Pack';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
@@ -17,7 +17,7 @@ const s3 = new S3Client({
 export async function POST(request) {
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })
@@ -54,7 +54,7 @@ export async function GET(req) {
 
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })
