@@ -19,7 +19,7 @@ const GenericIndex = () => {
   }, [params?.url])
 
   const GenericClick = (cat_url) => {
-    router.push(`/generic-index/${cat_url}`)
+    router.push(`/generic-list/${cat_url}`)
   }
 
   console.log('params', genericUrl);

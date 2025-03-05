@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addProduct, getProducts, getProduct } from '../reduxToolkit/slices/productSlice'
+import { addProduct, getProducts, getProduct, getGenericProductUrl } from '../reduxToolkit/slices/productSlice'
 
 const PostProductService = (data, resetForm) => async (dispatch) => {
     try {
@@ -62,4 +62,17 @@ const DeleteProductService = (id) => async (dispatch) => {
     })
 }
 
-export { PostProductService, GetProductService, GetProductIdService, PutProductService, DeleteProductService }
+const GetProductGeneticUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/product/generices?search=${url}`, { headers: await Authorization() })
+        dispatch(getGenericProductUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+
+export { PostProductService, GetProductService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService }
