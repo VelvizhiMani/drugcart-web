@@ -32,7 +32,7 @@ const GenericProductList = () => {
   ];
 
   const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(10000);
+  const [maxPrice, setMaxPrice] = useState(50000);
 
   // Handle Min & Max Price Inputs
   // const handleMinChange = (e) => {
@@ -82,7 +82,36 @@ const GenericProductList = () => {
       <div className="py-2 text-xl font-bold">
         <h2>List of Medicine in Cold and Cough</h2>
       </div>
-
+      <div className="flex flex-wrap">
+        <div className="w-[20%] flex-none">
+          <div className="border-[1.5px] m-2 rounded-md">
+            <h2 className="bg-[#B7084B] p-2 mx-auto text-white font-bold">
+              Latest Product
+            </h2>
+            <div className="m-2">
+              <div className="flex justify-start border-[1.5px] p-2">
+                <Image
+                  src={IMAGES.ALOVERA}
+                  alt="Health hacks"
+                  className="w-16 h-16 object-cover"
+                />
+                <div className="ml-2">
+                  <h3 className="font-bold text-sm">Zucet Plus Tablet</h3>
+                  <h3 className="text-gray-400 text-xs">Cold Cough</h3>
+                  <div className="flex items-center mt-2">
+                    <span className="text-yellow-500 text-xs">&#9733;</span>
+                    <span className="text-yellow-500 text-xs">&#9733;</span>
+                    <span className="text-yellow-500 text-xs">&#9733;</span>
+                    <span className="text-yellow-500 text-xs">&#9733;</span>
+                    <span className="text-gray-500 text-xs">&#9733;</span>
+                  </div>
+                  <h4 className="text-bgcolor text-sm">Banned for sale</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Layout: Sidebar + Products */}
       <div className="flex flex-wrap">
         {/* Sidebar */}
@@ -98,7 +127,7 @@ const GenericProductList = () => {
                 <input
                   type="range"
                   min="0"
-                  max="10000"
+                  max="50000"
                   value={minPrice}
                   onChange={handleMinChange}
                   className="absolute w-full h-1 appearance-none bg-transparent"
@@ -107,7 +136,7 @@ const GenericProductList = () => {
                 <input
                   type="range"
                   min="0"
-                  max="10000"
+                  max="50000"
                   value={maxPrice}
                   onChange={handleMaxChange}
                   className="absolute w-full h-1 appearance-none bg-transparent"
