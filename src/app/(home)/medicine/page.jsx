@@ -1,6 +1,6 @@
 "use client"
 import { IMAGES } from "@/components/common/images";
-import { GetCategoryService } from "@/services/categoryService";
+import { GetCategoryService, GetLetterCategoryService } from "@/services/categoryService";
 import { Box, Pagination, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,17 +10,17 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Medicine = () => {
   const router = useRouter();
-  const { categories } = useSelector((state) => state.categoryData);
-  const [showNo, setShowNo] = useState(54)
+  const { firstLetter, categories } = useSelector((state) => state.categoryData);
+  const [showNo, setShowNo] = useState(10)
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [selectedLetter, setSelectedLetter] = useState("A");
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   useEffect(() => {
-    dispatch(GetCategoryService(page, showNo));
-  }, [page]);
-  console.log(categories);
+    dispatch(GetLetterCategoryService(page, 10, selectedLetter));
+  }, [page, selectedLetter]);
+  console.log("firstLetter", firstLetter);
 
   const filteredConditions =
     selectedLetter === "All"
@@ -41,22 +41,28 @@ const Medicine = () => {
               <button
                 className={`${selectedLetter === letter ? "bg-[#B7084B]" : "bg-[#35A24D]"} px-2 text-white rounded-md`}
                 key={i}
-                onClick={() => setSelectedLetter(letter)}
+                onClick={() => {
+                  setSelectedLetter(letter);
+                  setPage(1)
+                }}
               >
                 {letter}
               </button>
             ))}
             <button
-              className={`${selectedLetter === "All" ? "bg-[#B7084B]" : "bg-[#35A24D]"} px-2 text-white rounded-md`}
-              onClick={() => setSelectedLetter("All")}
+              className={`${selectedLetter === "" ? "bg-[#B7084B]" : "bg-[#35A24D]"} px-2 text-white rounded-md`}
+              onClick={() => {
+                setSelectedLetter("")
+                setPage(1)
+              }}
             >
               View All
             </button>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 pb-20">
-          {filteredConditions &&
-            filteredConditions?.map((category, i) => (
+          {firstLetter?.categories &&
+            firstLetter?.categories?.map((category, i) => (
               <div
                 className="bg-bgshop rounded-lg p-4 cursor-pointer"
                 key={i}
@@ -76,11 +82,11 @@ const Medicine = () => {
             ))}
         </div>
         <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
-          <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {categories?.pagination?.totalItems} entries</Typography>
+          <Typography fontFamily={"Poppins"}>Showing 1-{10} of {firstLetter?.pagination?.totalItems} entries</Typography>
           <br />
           <Pagination
             size="large"
-            count={categories?.pagination?.totalPages}
+            count={firstLetter?.pagination?.totalPages}
             page={page}
             color="secondary"
             onChange={(_, value) => setPage(value)}

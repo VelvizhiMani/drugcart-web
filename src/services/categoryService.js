@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addCategory, getCategories, getCategory } from '../reduxToolkit/slices/categorySlice'
+import { addCategory, getCategories, getCategory, getCategoryLetter } from '../reduxToolkit/slices/categorySlice'
 
 const PostCategoryService = (data, resetForm) => async (dispatch) => {
     try {
@@ -24,6 +24,18 @@ const GetCategoryService = (page = 1, limit, search = "") => async (dispatch) =>
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/category?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
         dispatch(getCategories(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetLetterCategoryService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/category/first-letter?search=${search}&page=${page}&limit=${limit}`, { headers: await Authorization() })
+        dispatch(getCategoryLetter(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -62,4 +74,4 @@ const DeleteCategoryService = (id) => async (dispatch) => {
     })
 }
 
-export { PostCategoryService, GetCategoryService, GetCategoryIdService, PutCategoryService, DeleteCategoryService }
+export { PostCategoryService, GetCategoryService, GetLetterCategoryService, GetCategoryIdService, PutCategoryService, DeleteCategoryService }
