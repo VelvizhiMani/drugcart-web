@@ -1,4 +1,4 @@
-import { authenticateUser } from '../../../utils/middleware';
+import { authenticateUser, adminAuthorization } from '../../../utils/middleware';
 import Category from '../../../models/Category';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
@@ -17,7 +17,7 @@ const s3 = new S3Client({
 export async function POST(request) {
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })
@@ -71,11 +71,11 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const categoryItems = await Category.find({$nor: [{cat_type: "non-prescriptions"}]}, filters)
+        const categoryItems = await Category.find({ $nor: [{ cat_type: "non-prescriptions" }] }, filters)
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await Category.countDocuments(filters);
+        const totalItems = await Category.countDocuments({ $nor: [{ cat_type: "non-prescriptions" }] }, filters);
         const totalPages = Math.ceil(totalItems / limit);
 
         const categoriesWithIndex = categoryItems.map((category, index) => ({

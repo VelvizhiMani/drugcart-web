@@ -1,4 +1,4 @@
-import { authenticateUser } from '../../../utils/middleware';
+import { authenticateUser, adminAuthorization } from '../../../utils/middleware';
 import Subcategory from '../../../models/SubCategory';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
@@ -18,7 +18,7 @@ export async function POST(request) {
     try {
         await connnectionToDatabase();
 
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
         console.log(success);
 
         if (!success) {
@@ -63,7 +63,7 @@ export async function POST(request) {
 export async function GET(req) {
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
         console.log(success);
 
         if (!success) {
