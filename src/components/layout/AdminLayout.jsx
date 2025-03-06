@@ -231,13 +231,13 @@ function AdminLayout(props) {
     },
     {
       id: 6,
-      path: "/admin/writtenbylist",
-      name: "Written by List",
+      path: "/admin/ayushcategory",
+      name: "Ayush List",
     },
     {
       id: 7,
-      path: "/admin/reviewbylist",
-      name: "Review by List",
+      path: "/admin/healthstorecat",
+      name: "Health Store",
     },
     {
       id: 8,
@@ -245,7 +245,7 @@ function AdminLayout(props) {
       name: "Add Status Status",
     },
   ];
-  const mainMenu = userRoutes.slice(0, 5);
+  const mainMenu = userRoutes.slice(0, 7);
   const filteredRoutes = userRoutes.slice(7, 16);
   const filtereTwodRoutes = userRoutes.slice(7, userRoutes.length);
   const drawer = (
@@ -291,19 +291,16 @@ function AdminLayout(props) {
       </List>
 
       <List>
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <ListItemButton onClick={handleToggle}>
-            {/* <ListItemIcon>
-                            <BarChart sx={{ color: '#fff' }} />
-                        </ListItemIcon> */}
             <Typography variant="body1" fontFamily={"Poppins"} fontSize={14} color='#fff'>
               Prouduct Author Details
             </Typography>
             {open ? <ExpandLess sx={{ color: '#fff', marginLeft: 'auto' }} /> : <ExpandMore sx={{ color: '#fff', marginLeft: 'auto' }} />}
           </ListItemButton>
-        </ListItem>
+        </ListItem> */}
 
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        {/* <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             <Link
               href={{
@@ -354,7 +351,7 @@ function AdminLayout(props) {
               </ListItem>
             </Link>
           </List>
-        </Collapse>
+        </Collapse> */}
 
         {/* <ListItem disablePadding>
           <ListItemButton onClick={handleAwarenessToggle}>

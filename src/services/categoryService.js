@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addCategory, getCategories, getCategory, getCategoryLetter } from '../reduxToolkit/slices/categorySlice'
+import { addCategory, getCategories, getCategory, getCategoryLetter, getNonCategory } from '../reduxToolkit/slices/categorySlice'
 
 const PostCategoryService = (data, resetForm) => async (dispatch) => {
     try {
@@ -22,8 +22,20 @@ const PostCategoryService = (data, resetForm) => async (dispatch) => {
 const GetCategoryService = (page = 1, limit, search = "") => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/category?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/category?page=${page}&limit=${limit}&search=${search}&cat_type=prescriptions`, { headers: await Authorization() })
         dispatch(getCategories(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetNonCategoryService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/category?page=${page}&limit=${limit}&search=${search}&cat_type=non-prescriptions`, { headers: await Authorization() })
+        dispatch(getNonCategory(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -74,4 +86,4 @@ const DeleteCategoryService = (id) => async (dispatch) => {
     })
 }
 
-export { PostCategoryService, GetCategoryService, GetLetterCategoryService, GetCategoryIdService, PutCategoryService, DeleteCategoryService }
+export { PostCategoryService, GetCategoryService, GetLetterCategoryService, GetNonCategoryService, GetCategoryIdService, PutCategoryService, DeleteCategoryService }

@@ -17,6 +17,8 @@ import { GetStorageService } from '@/services/storageService';
 import { GetPackageService } from '@/services/packageService';
 import { GetCourierService } from '@/services/courierService';
 import { GetCountryCodeService } from '@/services/countryCodeService';
+import { GetWrittenByService } from '@/services/writtenByService';
+import { GetReviewByService } from '@/services/reviewByService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -46,6 +48,8 @@ function MedicinePage() {
     const { packageList } = useSelector((state) => state.packageData)
     const { courierList } = useSelector((state) => state.courierData)
     const { countryCodeList } = useSelector((state) => state.countryCodeData)
+    const { writtenByList } = useSelector((state) => state.writtenbyData)
+    const { reviewByList } = useSelector((state) => state.reviewbyData)
 
     useEffect(() => {
         dispatch(GetCategoryService(0, 0))
@@ -58,6 +62,8 @@ function MedicinePage() {
         dispatch(GetPackageService(0, 0))
         dispatch(GetCourierService(0, 0))
         dispatch(GetCountryCodeService())
+        dispatch(GetWrittenByService())
+        dispatch(GetReviewByService())
     }, [])
 
     return (
@@ -231,6 +237,40 @@ function MedicinePage() {
                             </Typography>
                         </Box>
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countryCodeList?.pagination?.totalItems}</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                        <Box>
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Total Written by list
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{writtenByList?.pagination?.totalItems}</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                        <Box>
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Total Review by list
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{reviewByList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>

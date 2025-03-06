@@ -63,22 +63,24 @@ export async function GET(req) {
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
-
-    const filters = search ? { category_name: { $regex: search, $options: "i" } } : {};
+    const cat_type = searchParams.get("cat_type") || "";
 
     try {
         await connnectionToDatabase();
-
         const skip = (page - 1) * limit;
-        
-        const query = {
-            $and: [
-                { cat_type: { $ne: "non-prescriptions" } },
-                filters,
-            ],
-        };
+
+        let query = {};
+
+        if (search) {
+            query.category_name = { $regex: search, $options: "i" };
+        }
+
+        if (cat_type) {
+            query.cat_type = cat_type;
+        }
 
         const categoryItems = await Category.find(query)
+            .sort({ category_name: 1 })
             .skip(skip)
             .limit(limit);
 
