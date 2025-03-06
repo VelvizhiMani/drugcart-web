@@ -70,12 +70,19 @@ export async function GET(req) {
         await connnectionToDatabase();
 
         const skip = (page - 1) * limit;
+        
+        const query = {
+            $and: [
+                { cat_type: { $ne: "non-prescriptions" } },
+                filters,
+            ],
+        };
 
-        const categoryItems = await Category.find({ $nor: [{ cat_type: "non-prescriptions" }] }, filters)
+        const categoryItems = await Category.find(query)
             .skip(skip)
-            .limit(limit)
+            .limit(limit);
 
-        const totalItems = await Category.countDocuments({ $nor: [{ cat_type: "non-prescriptions" }] }, filters);
+        const totalItems = await Category.countDocuments(query);
         const totalPages = Math.ceil(totalItems / limit);
 
         const categoriesWithIndex = categoryItems.map((category, index) => ({

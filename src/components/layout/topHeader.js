@@ -28,6 +28,7 @@ const TopHeader = () => {
 
   const logout = async () => {
     await localStorage.removeItem("token");
+    router.push("/");
     window.location.reload();
   };
 
@@ -133,7 +134,7 @@ const TopHeader = () => {
                             <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
                               Refer & Earn
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer">
+                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={logout}>
                               Logout
                             </li>
                           </ul>
