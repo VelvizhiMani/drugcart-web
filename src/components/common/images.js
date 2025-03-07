@@ -209,6 +209,15 @@ const IMAGES = {
 
   // lab test
   LAB_ICON: require("@/assets/lab-test/lab_icon.png"),
+  DISCOUNT: require("@/assets/lab-test/discount.png"),
+  DIABETES: require("@/assets/lab-test/Diabetes.png"),
+  COMPLETE: require("@/assets/lab-test/Complete.png"),
+  THYROID: require("@/assets/lab-test/Thyroid.png"),
+  LIPID: require("@/assets/lab-test/Lipid.png"),
+  LIVER: require("@/assets/lab-test/Liver.png"),
+  KIDNEY: require("@/assets/lab-test/Kidney.png"),
+  VITAMIN: require("@/assets/lab-test/Vitamin.png"),
+  INFECTION: require("@/assets/lab-test/Infection.png"),
 };
 
 export { IMAGES };

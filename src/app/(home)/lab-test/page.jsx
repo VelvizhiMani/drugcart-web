@@ -1,20 +1,299 @@
+"use client"
 import { IMAGES } from '@/components/common/images'
 import Image from 'next/image'
 import React from 'react'
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+const slides = [
+    {
+        id: 1,
+        title: "50% - 80% Off",
+        subtitle: "On all Pathology Tests and Packages",
+        button: "Book Now",
+        buttonLink: "#",
+        discountText: "At The Lowest Prices",
+        image: "https://4kwallpapers.com/images/wallpapers/porsche-911-5k-8k-3840x2160-12576.jpeg", // Replace with your actual image path
+    },
+    {
+        id: 2,
+        title: "50% - 80% Off",
+        subtitle: "On all Pathology Tests and Packages",
+        button: "Book Now",
+        buttonLink: "#",
+        discountText: "At The Lowest Prices",
+        image: "https://www.motorbeam.com/wp-content/uploads/Porsche-911-Hybrid-Specs.jpg", // Replace with your actual image path
+    },
+    // Add more slides as needed
+];
 
 function page() {
     return (
         <div>
-            <div className='bg-[#F7C9B0] p-5'>
-                <div className='flex justify-center items-center'>
+            <div className='bg-[#F7C9B0]'>
+                <div className='flex justify-center items-center mx-2'>
                     <Image
-                        src={IMAGES.LAB_ICON}
+                        src={IMAGES.LAB_ICON.default || null}
                         alt="Product"
                         // className="w-16 h-16"
                         width={12}
                         height={12}
                     />
+                    <p className='text-[16px] mx-2 my-2 Jost font-bold'>Get your sample collected in the next 30 minutes!</p>
                 </div>
+            </div>
+            <div className='container mx-auto'>
+                <div className="p-8">
+                    <Swiper
+                        modules={[Pagination, Navigation, Autoplay]}
+                        spaceBetween={10}
+                        slidesPerView={1}
+                        pagination={{ clickable: true }}
+                        autoplay={{ delay: 3000 }}
+                        loop={true}
+                        className="rounded-lg shadow-lg w-[95%] h-[400px]"
+                    >
+                        {slides.map((slide) => (
+                            <SwiperSlide key={slide.id}>
+                                <img
+                                    src={slide.image}
+                                    alt="Lab Test"
+                                    className="rounded-lg h-[400px] w-full"
+                                />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                    <div className='container mx-auto'>
+                        <p className="text-[16px] font-medium text-center mx-2 mt-8">
+                            We are on our mission of making quality healthcare services available to every individual.
+                            We understand how necessary a health test can be and how important it is in detecting diseases at the earlier stages and find a cure.
+                            Thyrocare is one of the leading diagnostic centres in India and we are associated with them for the grand purpose of bringing the world-class diagnostic facilities at your doorstep.
+                            Our wide range of Thyrocare packages cover all kinds of medical checkup. Book a full body checkup package from our portal today.
+                        </p>
+                    </div>
+                    <p className='text-[22px] mx-2 mt-10 mb-5 font-bold'>Popular Lab Test</p>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 border border-t-1">
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.DIABETES || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Diabetes</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.COMPLETE || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Complete Hemogram</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.THYROID || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Thyroid Test</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.LIPID || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Lipid Profile</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.LIVER || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Liver Profile</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.KIDNEY || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Kidney Function Test</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.VITAMIN || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Vitamin Test</p>
+                        </div>
+                        <div className="border border-t-1 p-2 rounded-lg flex">
+                            <Image
+                                src={IMAGES.INFECTION || null}
+                                alt="Product"
+                                className="mx-2"
+                                width={35}
+                                height={35}
+                            />
+                            <p className='text-[16px] mx-2 mt-2 font-bold'>Infection</p>
+                        </div>
+                    </div>
+                    <p className='text-[22px] mx-2 mt-10 mb-5 font-bold'>Popular health checkups</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-8 gap-4 p-1">
+                        <div className="border border-t-1 rounded-lg bg-[#FFE5EF] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#B7084B] p-2 font-bold'>Full Body Checkups</p>
+                        </div>
+                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#000] p-2 font-bold'>Fever</p>
+                        </div>
+                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#000] p-2 font-bold'>Women Health</p>
+                        </div>
+                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#000] p-2 font-bold'>Men Health</p>
+                        </div>
+                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#000] p-2 font-bold'>Vitamin Profile</p>
+                        </div>
+                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#000] p-2 font-bold'>Food Intolerance</p>
+                        </div>
+                        <div className="rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
+                            <p className='text-[13px] text-[#B7084B] p-2 font-bold'>View All</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-6">
+                        <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white">
+                            <h2 className="text-lg font-semibold">
+                                Comprehensive Silver Full Body Checkup
+                            </h2>
+                            <div className="flex items-center mt-1">
+                                <span className="text-lg font-bold">4.0</span>
+                                <div className="ml-2 flex">
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-gray-300 text-lg">&#9733;</span>
+                                </div>
+                            </div>
+                            <p className="text-gray-600 font-semibold mt-2">Include 71 Tests</p>
+                            <ul className="text-gray-500 text-sm mt-1">
+                                <li>TSH (Thyroid Stimulating Hormone)</li>
+                                <li>Cholesterol - Total</li>
+                                <li>HbA1c (Hemoglobin A1c)</li>
+                            </ul>
+                            <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
+                            <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
+                            <p className="text-red-600 text-xl font-bold">Price 1440</p>
+                            <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
+                            <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
+                                50% OFF
+                            </div>
+                            <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
+                                Book Now
+                            </button>
+                        </div>
+
+                        <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white">
+                            <h2 className="text-lg font-semibold">
+                                Comprehensive Silver Full Body Checkup
+                            </h2>
+                            <div className="flex items-center mt-1">
+                                <span className="text-lg font-bold">4.0</span>
+                                <div className="ml-2 flex">
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-gray-300 text-lg">&#9733;</span>
+                                </div>
+                            </div>
+                            <p className="text-gray-600 font-semibold mt-2">Include 71 Tests</p>
+                            <ul className="text-gray-500 text-sm mt-1">
+                                <li>TSH (Thyroid Stimulating Hormone)</li>
+                                <li>Cholesterol - Total</li>
+                                <li>HbA1c (Hemoglobin A1c)</li>
+                            </ul>
+                            <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
+                            <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
+                            <p className="text-red-600 text-xl font-bold">Price 1440</p>
+                            <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
+                            <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
+                                50% OFF
+                            </div>
+                            <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
+                                Book Now
+                            </button>
+                        </div>
+
+                        <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white">
+                            <h2 className="text-lg font-semibold">
+                                Comprehensive Silver Full Body Checkup
+                            </h2>
+                            <div className="flex items-center mt-1">
+                                <span className="text-lg font-bold">4.0</span>
+                                <div className="ml-2 flex">
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-yellow-500 text-lg">&#9733;</span>
+                                    <span className="text-gray-300 text-lg">&#9733;</span>
+                                </div>
+                            </div>
+                            <p className="text-gray-600 font-semibold mt-2">Include 71 Tests</p>
+                            <ul className="text-gray-500 text-sm mt-1">
+                                <li>TSH (Thyroid Stimulating Hormone)</li>
+                                <li>Cholesterol - Total</li>
+                                <li>HbA1c (Hemoglobin A1c)</li>
+                            </ul>
+                            <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
+                            <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
+                            <p className="text-red-600 text-xl font-bold">Price 1440</p>
+                            <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
+                            <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
+                                50% OFF
+                            </div>
+                            <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="bg-purple-800 text-white py-6 px-6 flex flex-col md:flex-row items-center justify-between w-full">
+                <div className="text-center md:text-left mx-auto">
+                    <span className="text-yellow-400 font-bold text-lg md:text-[50px]">
+                        Up to 75% Off
+                    </span>{" "}
+                    <span className="text-lg m-5">On Lab Test and Health Package</span>
+                </div>
+                <a
+                    href="#"
+                    className="bg-green-500 text-white font-bold px-4 py-2 rounded-md text-sm md:text-base hover:bg-green-600 transition mt-2 md:mt-0"
+                >
+                    BOOK NOW
+                </a>
             </div>
         </div>
     )
