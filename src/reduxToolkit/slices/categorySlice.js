@@ -4,7 +4,8 @@ const initialState = {
     categories: [],
     newCategory: {},
     category: {},
-    firstLetter: []
+    firstLetter: [],
+    non_category: []
 }
 const categorySlice = createSlice({
     name: 'category',
@@ -21,9 +22,12 @@ const categorySlice = createSlice({
         },
         getCategoryLetter: (state, { payload }) => {
             state.firstLetter = payload
-        }
+        },
+        getNonCategory: (state, { payload }) => {
+            state.non_category = payload
+        },
     }
 })
 
-export const { addCategory, getCategories, getCategory, getCategoryLetter } = categorySlice.actions
+export const { addCategory, getCategories, getCategory, getCategoryLetter, getNonCategory } = categorySlice.actions
 export default categorySlice.reducer
