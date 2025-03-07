@@ -5,10 +5,10 @@ import { Box, Pagination, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TocIcon from "@mui/icons-material/Toc";
-import { GetGeneticService } from "@/services/genericService";
+import { GetGeneticService, GetLetterGeneticService } from "@/services/genericService";
 
 const GenericMoleculeIndex = () => {
-  const { genericList, generic } = useSelector((state) => state.genericData);
+  const { genericList, firstLetter } = useSelector((state) => state.genericData);
   const dispatch = useDispatch();
   const pathname = usePathname();
   const router = useRouter();
@@ -19,15 +19,15 @@ const GenericMoleculeIndex = () => {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   useEffect(() => {
-    dispatch(GetGeneticService(page, showNo, search));
-  }, [page, showNo, search]);
+    dispatch(GetLetterGeneticService(page, 10, selectedLetter));
+  }, [page, selectedLetter]);
 
   const filteredConditions =
     selectedLetter === "All"
       ? genericList?.generics
       : genericList?.generics?.filter((c) =>
-          c.generices.startsWith(selectedLetter)
-        );
+        c.generices.startsWith(selectedLetter)
+      );
 
   const genericmoleculeClick = (gen_url) => {
     router.push(`/generic-products/${gen_url}`);
@@ -40,9 +40,8 @@ const GenericMoleculeIndex = () => {
           <div className="flex justify-center gap-2 my-4">
             {alphabet.map((letter, i) => (
               <button
-                className={`${
-                  selectedLetter === letter ? "bg-[#B7084B]" : "bg-[#35A24D]"
-                } px-2 text-white rounded-md`}
+                className={`${selectedLetter === letter ? "bg-[#B7084B]" : "bg-[#35A24D]"
+                  } px-2 text-white rounded-md`}
                 key={i}
                 onClick={() => setSelectedLetter(letter)}
               >
@@ -50,18 +49,19 @@ const GenericMoleculeIndex = () => {
               </button>
             ))}
             <button
-              className={`${
-                selectedLetter === "All" ? "bg-[#B7084B]" : "bg-[#35A24D]"
-              } px-2 text-white rounded-md`}
-              onClick={() => setSelectedLetter("All")}
+              className={`${selectedLetter === "" ? "bg-[#B7084B]" : "bg-[#35A24D]"} px-2 text-white rounded-md`}
+              onClick={() => {
+                setSelectedLetter("")
+                setPage(1)
+              }}
             >
               View All
             </button>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-4">
-          {filteredConditions &&
-            filteredConditions?.map((row, i) => (
+          {firstLetter?.generics &&
+            firstLetter?.generics?.map((row, i) => (
               <div
                 key={i}
                 className="grid border-[1.5px] p-4 cursor-pointer bg-white border-gray-200 py-5"
@@ -86,12 +86,12 @@ const GenericMoleculeIndex = () => {
           }}
         >
           <Typography fontFamily={"Poppins"}>
-            Showing 1-{showNo} of {genericList?.pagination?.totalItems} entries
+            Showing 1-{showNo} of {firstLetter?.pagination?.totalItems} entries
           </Typography>
           <br />
           <Pagination
             size="large"
-            count={genericList?.pagination?.totalPages}
+            count={firstLetter?.pagination?.totalPages}
             page={page}
             color="secondary"
             onChange={(_, value) => setPage(value)}

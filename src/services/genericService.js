@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addGeneric, getGenericList, getGeneric, getGenericUrl } from '../reduxToolkit/slices/genericSlice'
+import { addGeneric, getGenericList, getGeneric, getGenericUrl, getGenericLetter } from '../reduxToolkit/slices/genericSlice'
 
 const PostGeneticService = (data, resetForm) => async (dispatch) => {
     try {
@@ -24,6 +24,18 @@ const GetGeneticService = (page = 1, limit, search = "") => async (dispatch) => 
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/generic?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
         dispatch(getGenericList(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetLetterGeneticService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/generic/first-letter?search=${search}&page=${page}&limit=${limit}`, { headers: await Authorization() })
+        dispatch(getGenericLetter(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -74,4 +86,4 @@ const GetGeneticUrlService = (url) => async (dispatch) => {
     }
 }
 
-export { PostGeneticService, GetGeneticService, GetGeneticIdService, PutGeneticService, DeleteGeneticService, GetGeneticUrlService }
+export { PostGeneticService, GetGeneticService, GetLetterGeneticService, GetGeneticIdService, PutGeneticService, DeleteGeneticService, GetGeneticUrlService }

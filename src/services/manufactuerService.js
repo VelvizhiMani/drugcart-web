@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addManufactuer, getManufactuers, getManufactuer } from '../reduxToolkit/slices/manufactuerSlice'
+import { addManufactuer, getManufactuers, getManufactuer, getManufactuerLetter } from '../reduxToolkit/slices/manufactuerSlice'
 
 const PostManufactuerService = (data, resetForm) => async (dispatch) => {
     try {
@@ -24,6 +24,18 @@ const GetManufactuerService = (page = 1, limit, search = "") => async (dispatch)
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/manufactuerlist?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
         dispatch(getManufactuers(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetLetterManufactuerService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/manufactuerlist/first-letter?search=${search}&page=${page}&limit=${limit}`, { headers: await Authorization() })
+        dispatch(getManufactuerLetter(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -62,4 +74,4 @@ const DeleteManufactuerService = (id) => async (dispatch) => {
     })
 }
 
-export { PostManufactuerService, GetManufactuerService, GetManufactuerIdService, PutManufactuerService, DeleteManufactuerService }
+export { PostManufactuerService, GetManufactuerService, GetLetterManufactuerService, GetManufactuerIdService, PutManufactuerService, DeleteManufactuerService }

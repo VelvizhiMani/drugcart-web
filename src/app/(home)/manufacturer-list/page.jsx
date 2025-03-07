@@ -10,19 +10,20 @@ import FeaturedPlayListIcon from "@mui/icons-material/FeaturedPlayList";
 import TocIcon from "@mui/icons-material/Toc";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
-import { GetManufactuerService } from "@/services/manufactuerService";
+import { GetLetterManufactuerService } from "@/services/manufactuerService";
+import { Box, Pagination, Typography } from "@mui/material";
 
 const ManufactuerList = () => {
-  const { manufactuerList } = useSelector((state) => state.manufactuerData);
+  const { manufactuerList, firstLetter } = useSelector((state) => state.manufactuerData);
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const [page, setPage] = useState(1);
   const [selectedLetter, setSelectedLetter] = useState("A");
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   useEffect(() => {
-    dispatch(GetManufactuerService(1, 113));
-  }, [1, 113]);
+    dispatch(GetLetterManufactuerService(page, 10, selectedLetter));
+  }, [page, selectedLetter]);
 
   const ManufactuerIcons = [
     {
@@ -50,6 +51,9 @@ const ManufactuerList = () => {
       Icons: <SpeakerNotesIcon />,
     },
   ];
+
+  console.log('firstLetter', firstLetter);
+
   return (
     <>
       <section className="max-w-7xl mx-auto ">
@@ -58,9 +62,8 @@ const ManufactuerList = () => {
           <div className="flex justify-center gap-2 my-4">
             {alphabet.map((letter, i) => (
               <button
-                className={`${
-                  selectedLetter === letter ? "bg-[#B7084B]" : "bg-[#35A24D]"
-                } px-2 text-white rounded-md`}
+                className={`${selectedLetter === letter ? "bg-[#B7084B]" : "bg-[#35A24D]"
+                  } px-2 text-white rounded-md`}
                 key={i}
                 onClick={() => setSelectedLetter(letter)}
               >
@@ -68,17 +71,18 @@ const ManufactuerList = () => {
               </button>
             ))}
             <button
-              className={`${
-                selectedLetter === "All" ? "bg-[#B7084B]" : "bg-[#35A24D]"
-              } px-2 text-white rounded-md`}
-              onClick={() => setSelectedLetter("All")}
+              className={`${selectedLetter === "" ? "bg-[#B7084B]" : "bg-[#35A24D]"} px-2 text-white rounded-md`}
+              onClick={() => {
+                setSelectedLetter("")
+                setPage(1)
+              }}
             >
               View All
             </button>
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-4">
-          {manufactuerList?.manufactuers?.map((row, i) => (
+          {firstLetter?.manufactuers?.map((row, i) => (
             <div
               key={i}
               className="grid border-[1.5px] p-4 cursor-pointer bg-white border-gray-200 py-5"
@@ -88,11 +92,22 @@ const ManufactuerList = () => {
                 style={{ fontSize: "40px" }}
               />
               <p className="text-center font-bold">
-                <span>{row.manufactuername}</span>
+                <span>{row?.manufactuername}</span>
               </p>
             </div>
           ))}
         </div>
+        <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
+          <Typography fontFamily={"Poppins"}>Showing 1-{10} of {firstLetter?.pagination?.totalItems} entries</Typography>
+          <br />
+          <Pagination
+            size="large"
+            count={firstLetter?.pagination?.totalPages}
+            page={page}
+            color="secondary"
+            onChange={(_, value) => setPage(value)}
+          />
+        </Box>
       </section>
     </>
   );

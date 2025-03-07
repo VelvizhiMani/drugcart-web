@@ -4,7 +4,8 @@ const initialState = {
     genericList: [],
     newGeneric: {},
     generic: {},
-    genericUrl: []
+    genericUrl: [],
+    firstLetter: [],
 }
 const genericSlice = createSlice({
     name: 'generic',
@@ -21,9 +22,12 @@ const genericSlice = createSlice({
         },
         getGenericUrl: (state, { payload }) => {
             state.genericUrl = payload
-        }
+        },
+        getGenericLetter: (state, { payload }) => {
+            state.firstLetter = payload
+        },
     }
 })
 
-export const { addGeneric, getGenericList, getGeneric, getGenericUrl } = genericSlice.actions
+export const { addGeneric, getGenericList, getGeneric, getGenericUrl, getGenericLetter } = genericSlice.actions
 export default genericSlice.reducer

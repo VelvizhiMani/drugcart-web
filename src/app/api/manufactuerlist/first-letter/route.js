@@ -1,4 +1,4 @@
-import Category from '../../../../models/Category';
+import Manufactuer from '../../../../models/Manufactuer';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 
@@ -7,39 +7,28 @@ export async function GET(req) {
     const search = searchParams.get("search") || "";
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
-    const cat_type = searchParams.get("cat_type") || "";
 
     try {
         await connnectionToDatabase();
         const skip = (page - 1) * limit;
 
-        // ✅ Extract the first letter of the search query
         const firstLetter = search.charAt(0).toUpperCase();
 
-        // ✅ Create dynamic query
-        let query = {};
+        const filters = firstLetter
+            ? { manufactuername: { $regex: `^${firstLetter}`, $options: "i" } }
+            : {};
 
-        if (search) {
-            query.category_name = { $regex: `^${firstLetter}`, $options: "i" };
-        }
-
-        if (cat_type) {
-            query.cat_type = cat_type;
-        }
-
-        // ✅ Fetch sorted categories with pagination
-        const categories = await Category.find(query)
-            .sort({ category_name: 1 }) // Sort alphabetically
+        const manufactuers = await Manufactuer.find(filters)
+            .sort({ manufactuername: 1 })
             .skip(skip)
             .limit(limit);
 
-        // ✅ Count total items for pagination
-        const totalItems = await Category.countDocuments(query);
+        const totalItems = await Manufactuer.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
         return NextResponse.json(
             {
-                categories,
+                manufactuers,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -49,9 +38,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching category items:", error);
+        console.error("Error fetching Manufactuer items:", error);
         return NextResponse.json(
-            { error: "Failed to fetch category items" },
+            { error: "Failed to fetch Manufactuer items" },
             { status: 500 }
         );
     }
