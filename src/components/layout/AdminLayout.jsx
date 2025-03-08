@@ -216,31 +216,26 @@ function AdminLayout(props) {
     },
     {
       id: 3,
-      path: "/admin/referlist",
-      name: "Reference List",
-    },
-    {
-      id: 4,
       path: "/admin/awareness",
       name: "Awareness List",
     },
     {
-      id: 5,
+      id: 4,
       path: "/admin/customers",
       name: "Customers Data",
     },
     {
-      id: 6,
+      id: 5,
       path: "/admin/ayushcategory",
       name: "Ayush List",
     },
     {
-      id: 7,
+      id: 6,
       path: "/admin/healthstorecat",
       name: "Health Store",
     },
     {
-      id: 8,
+      id: 7,
       path: "/admin/stocklist",
       name: "Add Status Status",
     },

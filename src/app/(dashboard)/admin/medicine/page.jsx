@@ -19,6 +19,7 @@ import { GetCourierService } from '@/services/courierService';
 import { GetCountryCodeService } from '@/services/countryCodeService';
 import { GetWrittenByService } from '@/services/writtenByService';
 import { GetReviewByService } from '@/services/reviewByService';
+import { GetReferenceService } from '@/services/referenceService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -50,6 +51,7 @@ function MedicinePage() {
     const { countryCodeList } = useSelector((state) => state.countryCodeData)
     const { writtenByList } = useSelector((state) => state.writtenbyData)
     const { reviewByList } = useSelector((state) => state.reviewbyData)
+    const { referenceList } = useSelector((state) => state.referenceData)
 
     useEffect(() => {
         dispatch(GetCategoryService(0, 0))
@@ -61,9 +63,10 @@ function MedicinePage() {
         dispatch(GetStorageService(0, 0))
         dispatch(GetPackageService(0, 0))
         dispatch(GetCourierService(0, 0))
-        dispatch(GetCountryCodeService())
-        dispatch(GetWrittenByService())
-        dispatch(GetReviewByService())
+        dispatch(GetCountryCodeService(0, 0))
+        dispatch(GetWrittenByService(0, 0))
+        dispatch(GetReviewByService(0, 0))
+        dispatch(GetReferenceService(0, 0))
     }, [])
 
     return (
@@ -271,6 +274,23 @@ function MedicinePage() {
                             </Typography>
                         </Box>
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{reviewByList?.pagination?.totalItems}</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/referlist')}>
+                        <Box>
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Total Reference list
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{referenceList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>

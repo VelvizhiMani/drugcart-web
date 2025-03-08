@@ -6,19 +6,8 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2';
 import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetNonCategoryService } from '@/services/categoryService';
 import { GetSubCategoryService, GetSubCategoryUrlService } from '@/services/subCategoryService';
 import { useParams, useRouter } from 'next/navigation';
-import { GetGeneticService } from '@/services/genericService';
-import { GetProductService } from '@/services/productService';
-import { GetManufactuerService } from '@/services/manufactuerService';
-import { GetFormService } from '@/services/formService';
-import { GetStorageService } from '@/services/storageService';
-import { GetPackageService } from '@/services/packageService';
-import { GetCourierService } from '@/services/courierService';
-import { GetCountryCodeService } from '@/services/countryCodeService';
-import { GetWrittenByService } from '@/services/writtenByService';
-import { GetReviewByService } from '@/services/reviewByService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#7d5c68',
@@ -57,7 +46,7 @@ function HealthStoreUrl() {
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }} key={i}>
                         <CardItem
                             elevation={6}
-                            onClick={() => router.push(`/admin/ayushlist/${item?.url}`)}
+                            onClick={() => router.push(`/admin/healthstorelist/${item?.url}`)}
                         >
                             <Box>
                                 <Typography
