@@ -60,7 +60,6 @@ function HealthStore() {
                         </CardItem>
                     </Grid>
                 ))}
-
             </Grid>
         </Box>
     )
