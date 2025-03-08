@@ -62,7 +62,7 @@ function HealthStoreDeviceUrl() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Health Store Product List
+                    Health Store Device Product List
                 </Typography>
                 <Button
                     color="secondary"
