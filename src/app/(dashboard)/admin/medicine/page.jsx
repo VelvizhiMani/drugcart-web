@@ -20,6 +20,7 @@ import { GetCountryCodeService } from '@/services/countryCodeService';
 import { GetWrittenByService } from '@/services/writtenByService';
 import { GetReviewByService } from '@/services/reviewByService';
 import { GetReferenceService } from '@/services/referenceService';
+import { GetStockService } from '@/services/stockService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -52,6 +53,7 @@ function MedicinePage() {
     const { writtenByList } = useSelector((state) => state.writtenbyData)
     const { reviewByList } = useSelector((state) => state.reviewbyData)
     const { referenceList } = useSelector((state) => state.referenceData)
+    const { stockList } = useSelector((state) => state.stockData)
 
     useEffect(() => {
         dispatch(GetCategoryService(0, 0))
@@ -67,6 +69,7 @@ function MedicinePage() {
         dispatch(GetWrittenByService(0, 0))
         dispatch(GetReviewByService(0, 0))
         dispatch(GetReferenceService(0, 0))
+        dispatch(GetStockService(0, 0))
     }, [])
 
     return (
@@ -291,6 +294,23 @@ function MedicinePage() {
                             </Typography>
                         </Box>
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{referenceList?.pagination?.totalItems}</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/stocklist')}>
+                        <Box>
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Total Stock list
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{stockList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>
