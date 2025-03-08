@@ -46,7 +46,7 @@ const GetNonCategoryService = (page = 1, limit, search = "") => async (dispatch)
 const GetLetterCategoryService = (page = 1, limit, search = "") => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/category/first-letter?search=${search}&page=${page}&limit=${limit}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/category/first-letter?search=${search}&page=${page}&limit=${limit}&cat_type=prescriptions`, { headers: await Authorization() })
         dispatch(getCategoryLetter(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
