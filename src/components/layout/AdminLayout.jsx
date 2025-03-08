@@ -237,7 +237,7 @@ function AdminLayout(props) {
     {
       id: 7,
       path: "/admin/storedevicecat",
-      name: "Health Store Device",
+      name: "Health Care Device",
     },
   ];
   const mainMenu = userRoutes.slice(0, 7);
