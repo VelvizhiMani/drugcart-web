@@ -236,8 +236,8 @@ function AdminLayout(props) {
     },
     {
       id: 7,
-      path: "/admin/stocklist",
-      name: "Add Status Status",
+      path: "/admin/storedevicecat",
+      name: "Health Store Device",
     },
   ];
   const mainMenu = userRoutes.slice(0, 7);
