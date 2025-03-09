@@ -203,7 +203,7 @@ const EditProduct = () => {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-          Add Product
+          Edit Product
         </Typography>
         <Button
           color="success"

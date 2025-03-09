@@ -108,11 +108,11 @@ function MedicineCat() {
         <Grid2 container spacing={2}>
           {filteredConditions?.map((condition, index) => (
             <Grid2 key={index} size={{ xs: 12, sm: 6, md: 4 }}>
-              <Link href={`/admin/genericproducts/${condition.category_name}`}>
+              <Link href={`/admin/medicinesubcategory/${condition?.url}`}>
                 <Card elevation={3} className="p-2 cursor-pointer">
                   <CardContent className="flex flex-col items-center">
                     <Typography variant="h6" align="center" fontWeight="bold">
-                      {condition.category_name}
+                      {condition?.category_name}
                     </Typography>
                   </CardContent>
                 </Card>
