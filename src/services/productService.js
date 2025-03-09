@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory } from '../reduxToolkit/slices/productSlice'
+import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName } from '../reduxToolkit/slices/productSlice'
 
 const PostProductService = (data, resetForm) => async (dispatch) => {
     try {
@@ -24,6 +24,18 @@ const GetProductService = (page = 1, limit, search = "", generics = "") => async
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/product?page=${page}&limit=${limit}&search=${search}&generices=${generics}`, { headers: await Authorization() })
         dispatch(getProducts(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetProductNameService = (page = 1, limit, search = "", generics = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/product/name?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        dispatch(getProductName(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -87,4 +99,4 @@ const GetProductGeneticUrlService = (url) => async (dispatch) => {
 }
 
 
-export { PostProductService, GetProductService, GetProductCategoryService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService }
+export { PostProductService, GetProductService, GetProductNameService, GetProductCategoryService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService }

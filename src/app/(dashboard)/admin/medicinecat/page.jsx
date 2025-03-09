@@ -15,13 +15,16 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCategoryService } from '@/services/categoryService';
 import { GetGeneticService } from "@/services/genericService";
+import { GetProductNameService } from "@/services/productService";
 
 function MedicineCat() {
   const router = useRouter();
   const { categories } = useSelector((state) => state.categoryData)
   const { genericList } = useSelector((state) => state.genericData)
+  const { productList, productName } = useSelector((state) => state.productData);
   const dispatch = useDispatch()
   const [search, setSearch] = useState("")
+  const [protectsearch, setProductSearch] = useState("")
   const [selectedLetter, setSelectedLetter] = useState("A");
 
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -29,7 +32,8 @@ function MedicineCat() {
   useEffect(() => {
     dispatch(GetCategoryService())
     dispatch(GetGeneticService())
-  }, [])
+    dispatch(GetProductNameService(1, 10, protectsearch))
+  }, [protectsearch])
 
   // Filter conditions based on first letter of the name
   const filteredConditions =
@@ -42,6 +46,11 @@ function MedicineCat() {
   const handleValueSelect = (event, newValue) => {
     if (newValue) {
       router.push(`/admin/genericproducts/${newValue?.url}`);
+    }
+  };
+  const handleValueProductSelect = (event, newValue) => {
+    if (newValue) {
+      router.push(`/admin/productlist/${newValue?._id}`);
     }
   };
 
@@ -60,7 +69,11 @@ function MedicineCat() {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }} marginLeft={"auto"}>
-            <ImageField title={"Brand Name Search (Product name)"} />
+            <ImageField title={"Brand Name Search (Product name)"} data={productName?.products}
+              value={protectsearch}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.product_name || "")}
+              onInputChange={(event, newValue) => setProductSearch(newValue)}
+              onChange={handleValueProductSelect} />
           </Grid2>
         </Grid2>
       </Box>

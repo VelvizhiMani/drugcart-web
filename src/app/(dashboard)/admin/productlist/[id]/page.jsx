@@ -70,6 +70,7 @@ const EditProduct = () => {
   };
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       cat_name: product?.cat_name || "",
       subcat_name: product?.subcat_name || "",

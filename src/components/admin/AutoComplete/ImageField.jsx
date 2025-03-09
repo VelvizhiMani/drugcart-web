@@ -29,11 +29,11 @@ const medicines = [
   },
 ];
 
-function ImageField({ title }) {
+function ImageField({ title, size = "small", data, getOptionLabel, value, helperText, error, onInputChange, onChange }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   // console.log(searchTerm);
-  
+
   return (
     <div>
       <InputLabel
@@ -51,20 +51,23 @@ function ImageField({ title }) {
       </InputLabel>
       <Autocomplete
         freeSolo
-        options={medicines}
-        getOptionLabel={(option) => option.name || searchTerm}
-        value={searchTerm}
-        onInputChange={(event, newValue) => setSearchTerm(newValue)}
+        size={size}
+        noOptionsText="No Data Found"
+        options={data}
+        getOptionLabel={getOptionLabel}
+        value={value}
+        onInputChange={onInputChange}
+        onChange={onChange}
         renderOption={(props, option) => (
           <li {...props} className="flex items-center space-x-2 p-2 cursor-pointer">
             <img
-              src={option.img}
-              alt={option.name}
+              src={"https://www.mannafoods.in/cdn/shop/products/2_93661738-cc28-4602-a979-202238ab5aa9.jpg?v=1675151098&width=480"}
+              alt={option?.product_name}
               width={40}
               height={40}
               className="rounded"
             />
-            <span className="font-semibold">{option.name}</span>
+            <span className="font-semibold">{option?.product_name}</span>
           </li>
         )}
         renderInput={(params) => (
@@ -72,6 +75,8 @@ function ImageField({ title }) {
             {...params}
             variant="outlined"
             fullWidth
+            error={error}
+            helperText={helperText}
           />
         )}
       />
