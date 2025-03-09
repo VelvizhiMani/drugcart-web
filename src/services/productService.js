@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName } from '../reduxToolkit/slices/productSlice'
+import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName, GetProductCats } from '../reduxToolkit/slices/productSlice'
 
 const PostProductService = (data, resetForm) => async (dispatch) => {
     try {
@@ -55,6 +55,20 @@ const GetProductCategoryService = (page = 1, limit = 20, subname = "", search = 
     }
 }
 
+
+const GetProductCatsService = (page = 1, limit = 4, cat_name = "", search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/product/categorys?page=${page}&limit=${limit}&cat_name=${cat_name}&search=${search}`, { headers: await Authorization() })
+        dispatch(GetProductCats(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+
 const GetProductIdService = (id) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
@@ -99,4 +113,4 @@ const GetProductGeneticUrlService = (url) => async (dispatch) => {
 }
 
 
-export { PostProductService, GetProductService, GetProductNameService, GetProductCategoryService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService }
+export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService }
