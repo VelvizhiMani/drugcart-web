@@ -70,6 +70,7 @@ const EditProduct = () => {
   };
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
       cat_name: product?.cat_name || "",
       subcat_name: product?.subcat_name || "",
@@ -202,7 +203,7 @@ const EditProduct = () => {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-          Add Product
+          Edit Product
         </Typography>
         <Button
           color="success"
