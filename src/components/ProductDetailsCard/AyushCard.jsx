@@ -1,29 +1,33 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../reduxToolkit/slices/cartSlice";
 import { IMAGES } from "../common/images";
-import { GetProductCategoryService, GetProductCatsService } from "@/services/productService";
+import { GetProductCategoryService } from "@/services/productService";
 
-const ProductCard = ({data}) => {
-  const { productCategory, categoryProducts } = useSelector((state) => state.productData);
+const AyushCard = () => {
+  const { productCategory } = useSelector((state) => state.productData);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
   const dispatch = useDispatch();
   const params = useParams();
 
+  useEffect(() => {
+    dispatch(GetProductCategoryService(page, 4, params?.url, search));
+  }, [page, 4, search]);
+
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:p-3 content-center place-items-center">
-        {data &&
-          data?.map((product, i) => (
+        {productCategory &&
+          productCategory?.products?.map((product, i) => (
             <div
               key={i}
-              className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 border-2 cursor-pointer"
+              className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 border-2"
             >
               <div className="grid justify-end">
                 <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
@@ -58,15 +62,15 @@ const ProductCard = ({data}) => {
                 width={250}
                 height={250}
               />
-              <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1">
-                {product?.generices}
+              <h3 className="text-gray-500 font-poppins capitalize font-medium text-[13px] w-[60%] line-clamp-1">
+                {product?.cat_name} / {product?.subcat_name}
               </h3>
               <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1">
                 {product?.product_name}
               </p>
               <div className="bg-white mt-1 flex justify-items-center justify-between">
                 <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                  ${product?.price}
+                  {product?.price}
                 </p>
                 <button onClick={() => dispatch(addToCart(product))}>
                   <CartIcon />
@@ -86,4 +90,4 @@ const ProductCard = ({data}) => {
   );
 };
 
-export default ProductCard;
+export default AyushCard;

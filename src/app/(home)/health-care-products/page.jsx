@@ -1,42 +1,24 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { IMAGES } from "@/components/common/images";
 import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
 import ProductCategoryCard from "@/components/ProductDetailsCard/ProductCategoryCard";
-import ProductCard from "@/components/ProductDetailsCard/ProductCard";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { GetProductCatsService } from "@/services/productService";
 
-const Ayush = () => {
-  const { productCategory, categoryProducts } = useSelector((state) => state.productData);
-  const router = useRouter();
-  const [search, setSearch] = useState("");
-  const dispatch = useDispatch();
+const HealthCareProducts = () => {
+  const pathname = usePathname();
+  let pathSegments = pathname.split("/").filter(Boolean);
+  pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
 
-  useEffect(() => {
-    dispatch(GetProductCatsService(1, 10, "ayush", search));
-  }, [search]);
-
-  const ayushFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "ayurvedic")
-  const homeopathyFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "homeopathy")
-  const siddhaFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "siddha")
-  const unaniFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "unani")
-
-  console.log(categoryProducts);
-  const categroyProductClick = (sub_url) => {
-    router.push(`/category/${sub_url}`);
-  };
   return (
     <section className="max-w-7xl mx-auto mt-3">
-      {/* <Image
+      <Image
         priority
-        src={IMAGES.AYUSHBANNER}
+        src={IMAGES.AYURVEDICBNNR}
         alt="Ayush Banner"
-        className="w-[100%] h-[450px] rounded-xl"
-      /> */}
+        className="w-[100%] h-[450px] rounded-lg"
+      />
       <div className="flex py-2">
         <div className="w-[20%] m-3 max-h-auto">
           <h2 className="text-lg text-center uppercase py-3 font-bold border-b-[1.5px] bg-[#35A24D] text-white">
@@ -220,57 +202,21 @@ const Ayush = () => {
           <OtcProduct />
         </div>
         <div className="w-[80%]">
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-3">
-            <span className="text-lg">Best Seller Ayurvedic Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("ayurvedic")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={ayushFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Homeopathy Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("homeopathy")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={homeopathyFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Siddha Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("siddha")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={siddhaFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Unani Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("unani")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={unaniFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Recommanded Product</span>
+          <div className="flex justify-between items-center bg-green-600 text-white font-semibold p-3 my-3">
+            <span className="text-lg capitalize">
+              {pathSegments[0]} Product{" "}
+            </span>
             <button className="text-sm flex items-center hover:underline">
               View All
             </button>
           </div>
-          {/* <ProductCard /> */}
+          <div className="bg-[#F0F4FF]">
+            <ProductCategoryCard />
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default Ayush;
+export default HealthCareProducts;
