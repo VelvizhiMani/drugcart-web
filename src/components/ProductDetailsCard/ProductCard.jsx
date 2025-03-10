@@ -8,13 +8,20 @@ import { addToCart } from "../../reduxToolkit/slices/cartSlice";
 import { IMAGES } from "../common/images";
 import { GetProductCategoryService, GetProductCatsService } from "@/services/productService";
 
-const ProductCard = ({data}) => {
+const ProductCard = ({ data }) => {
   const { productCategory, categoryProducts } = useSelector((state) => state.productData);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
   const dispatch = useDispatch();
   const params = useParams();
+
+  const formatText = (input) => {
+    return input
+      .split("-")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 
   return (
     <>
@@ -59,9 +66,9 @@ const ProductCard = ({data}) => {
                 height={250}
               />
               <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1">
-                {product?.generices}
+                {product?.generices || formatText(product?.cat_name)}
               </h3>
-              <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1">
+              <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[80%] line-clamp-1">
                 {product?.product_name}
               </p>
               <div className="bg-white mt-1 flex justify-items-center justify-between">

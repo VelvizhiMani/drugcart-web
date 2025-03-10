@@ -8,6 +8,7 @@ import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
 import ProductCategoryCard from "@/components/ProductDetailsCard/ProductCategoryCard";
 import { GetProductCatsService } from "@/services/productService";
+import ProductCard from "@/components/ProductDetailsCard/ProductCard";
 
 const PersonalCare = () => {
   const pathname = usePathname();
@@ -21,7 +22,8 @@ const PersonalCare = () => {
   const { categoryProducts } = useSelector((state) => state.productData);
 
   useEffect(() => {
-    dispatch(GetProductCatsService(page, showNo, params?.url, search));
+    // dispatch(GetProductCatsService(page, showNo, params?.url, search));
+    dispatch(GetProductCatsService(1, 10, "personal-care", search));
   }, [page, showNo, search]);
 
   console.log(categoryProducts, "URL");
@@ -225,11 +227,7 @@ const PersonalCare = () => {
             </button>
           </div>
           <div className="bg-[#F0F4FF]">
-            {/* {categoryProducts &&
-              categoryProducts?.catproducts?.map((product, i) => (
-                <p>{product?.product_name}</p>
-              ))} */}
-            <ProductCategoryCard />
+            <ProductCard data={categoryProducts?.catproducts} />
           </div>
         </div>
       </div>

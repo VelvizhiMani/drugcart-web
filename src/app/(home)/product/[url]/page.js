@@ -7,7 +7,6 @@ const ProductPage = () => {
   const productUrl = params?.url;
 
   return <ProductView url={productUrl} />;
-  s;
 };
 
 export default ProductPage;
