@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Main menu toggle
   const [submenuOpen, setSubmenuOpen] = useState(null); // Submenu toggle
+  const router = useRouter()
 
   return (
     <nav className="bg-white mt-5 text-black border-t-2 border-b-2 border-gray-100 font-[family-name:var(--font-poppins)] text-sm">
@@ -45,7 +47,7 @@ const Menu = () => {
               Medicine
             </Link>
             <div className="relative group">
-              <button className="px-3 py-2 rounded-md hover:bg-gray-100">
+              <button className="px-3 py-2 rounded-md hover:bg-gray-100" onClick={() => router.push('/ayush')}>
                 Ayush
               </button>
               <div className="absolute left-0 mt-0 hidden group-hover:block bg-white text-gray-800 rounded-md shadow-lg w-40">
@@ -298,35 +300,35 @@ const Menu = () => {
         {submenuOpen === "healthcare" && (
           <div className="m-2 space-y-1 bg-white">
             <Link
-                  href="/category/blood-test-kit"
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
-                >
-                  Blood Test Kit
-                </Link>
-                <Link
-                  href="/category/covid-test-kit"
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
-                >
-                  Covid Test Kit
-                </Link>
-                <Link
-                  href="/category/diabetes-monitor"
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
-                >
-                  Diabetes Monitor
-                </Link>
-                <Link
-                  href="/category/fitness-equipment"
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
-                >
-                  Fitness Equipment
-                </Link>
-                <Link
-                  href="/category/hiv-test-kit"
-                  className="block px-4 py-2 text-black hover:bg-gray-100"
-                >
-                  HIV Test Kit
-                </Link>
+              href="/category/blood-test-kit"
+              className="block px-4 py-2 text-black hover:bg-gray-100"
+            >
+              Blood Test Kit
+            </Link>
+            <Link
+              href="/category/covid-test-kit"
+              className="block px-4 py-2 text-black hover:bg-gray-100"
+            >
+              Covid Test Kit
+            </Link>
+            <Link
+              href="/category/diabetes-monitor"
+              className="block px-4 py-2 text-black hover:bg-gray-100"
+            >
+              Diabetes Monitor
+            </Link>
+            <Link
+              href="/category/fitness-equipment"
+              className="block px-4 py-2 text-black hover:bg-gray-100"
+            >
+              Fitness Equipment
+            </Link>
+            <Link
+              href="/category/hiv-test-kit"
+              className="block px-4 py-2 text-black hover:bg-gray-100"
+            >
+              HIV Test Kit
+            </Link>
           </div>
         )}
 

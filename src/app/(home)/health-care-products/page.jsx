@@ -1,16 +1,32 @@
 "use client";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useRouter, useParams, usePathname } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import { IMAGES } from "@/components/common/images";
 import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
 import ProductCategoryCard from "@/components/ProductDetailsCard/ProductCategoryCard";
+import { GetProductCatsService } from "@/services/productService";
+import ProductCard from "@/components/ProductDetailsCard/ProductCard";
 
 const HealthCareProducts = () => {
   const pathname = usePathname();
+  const params = useParams();
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [showNo, setShowNo] = useState(10);
+  const dispatch = useDispatch();
   let pathSegments = pathname.split("/").filter(Boolean);
   pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
+  const { categoryProducts } = useSelector((state) => state.productData);
 
+  useEffect(() => {
+    // dispatch(GetProductCatsService(page, showNo, params?.url, search));
+    dispatch(GetProductCatsService(1, 10, "health-care-products", search));
+  }, [page, showNo, search]);
+
+  console.log(categoryProducts, "URL");
   return (
     <section className="max-w-7xl mx-auto mt-3">
       <Image
@@ -204,14 +220,14 @@ const HealthCareProducts = () => {
         <div className="w-[80%]">
           <div className="flex justify-between items-center bg-green-600 text-white font-semibold p-3 my-3">
             <span className="text-lg capitalize">
-              {pathSegments[0]} Product{" "}
+              {pathSegments[0]} Product
             </span>
             <button className="text-sm flex items-center hover:underline">
               View All
             </button>
           </div>
           <div className="bg-[#F0F4FF]">
-            <ProductCategoryCard />
+            <ProductCard data={categoryProducts?.catproducts} />
           </div>
         </div>
       </div>
