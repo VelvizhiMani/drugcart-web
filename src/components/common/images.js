@@ -218,6 +218,13 @@ const IMAGES = {
   KIDNEY: require("@/assets/lab-test/Kidney.png"),
   VITAMIN: require("@/assets/lab-test/Vitamin.png"),
   INFECTION: require("@/assets/lab-test/Infection.png"),
+
+  //Ayush
+  AYUSHBANNER: require("@/assets/ayush/ayush.png"),
+  AYURVEDICBNNR: require("@/assets/ayush/ayurvedic.png"),
+  HOMEOPATHYBANNER: require("@/assets/ayush/homeopathy.png"),
+  SIDDHABANNER: require("@/assets/ayush/siddha.png"),
+  UNANIBANNER: require("@/assets/ayush/unani.png"),
 };
 
 export { IMAGES };

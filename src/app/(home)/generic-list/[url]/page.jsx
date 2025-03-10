@@ -11,14 +11,32 @@ import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetProductService } from "@/services/productService";
+import { useParams, useRouter } from "next/navigation";
 
 const GenericProductList = () => {
-  const { productList } = useSelector((state) => state.productData);
+  const { productList, product } = useSelector((state) => state.productData);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [showNo, setShowNo] = useState(10);
+  const [openModal, setOpenModal] = useState(false);
+  const params = useParams();
   const dispatch = useDispatch();
 
+  const handleNoChange = (event) => {
+    setShowNo(event.target.value);
+  };
+
+  const router = useRouter();
+
+  const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   useEffect(() => {
-    dispatch(GetProductService(1, 8));
-  }, []);
+    dispatch(GetProductService(page, showNo, search, params?.url));
+  }, [page, showNo, search, params?.url]);
+
+  // useEffect(() => {
+  //   dispatch(GetProductService(1, 8));
+  // }, []);
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(10000);
@@ -99,22 +117,12 @@ const GenericProductList = () => {
       fav: true,
     },
   ];
-
+  const ProductClick = (url) => {
+    router.push(`/product/${url}`);
+  };
   return (
     <>
       <section className="max-w-7xl mx-auto ">
-        <div className="flex flex-wrap items-center space-x-2 text-sm text-gray-500 py-3">
-          <Link href="#" className="hover:text-gray-700">
-            Home
-          </Link>
-          <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">
-            Hepatitis-B
-          </Link>
-          <Link href="#" className="hover:text-gray-700">
-            Entecavir
-          </Link>
-        </div>
         <div className="py-2 text-xl font-bold">
           <h2>List of Medicine in Cold and Cough</h2>
         </div>
@@ -228,7 +236,7 @@ const GenericProductList = () => {
                 productList?.products?.map((product, i) => (
                   <div
                     key={i}
-                    className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
+                    className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 "
                   >
                     <div className="grid justify-end">
                       <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
@@ -253,16 +261,26 @@ const GenericProductList = () => {
                       </button>
                     </div>
                     <Image
-                      src={productsData[i]?.image}
+                      // src={productsData[i]?.image}
+                      src={
+                        product?.product_img
+                          ? `https://assets2.drugcarts.com/${product?.product_img}`
+                          : IMAGES.NO_IMAGE
+                      }
                       alt={product?.product_name}
-                      className="w-48 h-48 ml-3"
+                      className="sml-3"
+                      width={250}
+                      height={250}
                     />
-                    <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1">
-                      {product?.product_name}
+                    <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 capitalize">
+                      {product?.cat_name} / {product?.generices}
                     </h3>
-                    <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1">
+                    <h2
+                      className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
+                      onClick={() => ProductClick(product?.url)}
+                    >
                       {product?.product_name}
-                    </p>
+                    </h2>
                     <div className="bg-white mt-1 flex justify-items-center justify-between">
                       <p className="text-black font-poppins font-semibold text-[14px] mt-1">
                         {product?.price}
