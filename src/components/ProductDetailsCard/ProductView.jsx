@@ -6,16 +6,20 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IMAGES } from "../common/images";
 import Feedback from "@/components/home-page/feedback";
-import { GetProductUrlService } from "@/services/productService";
+import { GetProductUrlService, GetProductGeneticUrlService } from "@/services/productService";
 
 const ProductView = ({ url }) => {
   const dispatch = useDispatch();
-  const { product } = useSelector((state) => state.productData);
+  const { product, productGenericUrl } = useSelector((state) => state.productData);
 
   useEffect(() => {
     dispatch(GetProductUrlService(url));
-  }, [url]);
+    dispatch(GetProductGeneticUrlService(product?.generices))
+  }, [url, product?.generices]);
 
+  const alterBrands = productGenericUrl.filter((item) => item?.url !== url)
+
+  console.log('alterBrands', alterBrands);
   return (
     <>
       <section className="px-3 mt-3">
@@ -1754,125 +1758,46 @@ const ProductView = ({ url }) => {
                 Alternate Brands
               </h2>
               <div className="bg-[#F3F8FC] text-[14px] border-[1.5px] m-2 rounded">
-                <div className="flex m-3">
-                  <div className="w-2/3">
-                    <h2 className="text-lg">Pan L Capsule</h2>
-                    <div className="flex text-[10px] gap-3 font-semibold">
-                      <p>Precription</p>
-                      <p>Anti Cancer</p>
-                      <p>Rx required</p>
+                {alterBrands?.map((product, i) => (
+                  <div key={i}>
+                    <div className="flex m-3">
+                      <div className="w-2/3">
+                        <h2 className="text-lg">{product?.product_name}</h2>
+                        <div className="flex text-[10px] gap-3 font-semibold">
+                          <p>Precription</p>
+                          <p>Anti Cancer</p>
+                          <p>Rx required</p>
+                        </div>
+                        <h3 className="text-[#B7084B] font-bold text-lg">
+                          &#8377; {product?.price}
+                        </h3>
+                        <h3 className="text-[#35A24D] font-semibold">
+                          Get this at $87.50
+                        </h3>
+                        <p className="text-xs my-1 text-gray-500">
+                          15 Tablet(s)in a strip
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Mft : Eugenics Pharma Pvt Ltd
+                        </p>
+                      </div>
+                      <div className="w-1/3">
+                        <Image
+                          src={
+                            product?.product_img
+                              ? `https://assets2.drugcarts.com/${product?.product_img}`
+                              : IMAGES.NO_IMAGE
+                          }
+                          alt={product?.product_name}
+                          width={96}
+                          height={96}
+                          className="w-24 h-24 mx-auto"
+                        />
+                      </div>
                     </div>
-                    <h3 className="text-[#B7084B] font-bold text-lg">
-                      &#8377; 7.50
-                    </h3>
-                    <h3 className="text-[#35A24D] font-semibold">
-                      Get this at $87.50
-                    </h3>
-                    <p className="text-xs my-1 text-gray-500">
-                      15 Tablet(s)in a strip
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Mft : Eugenics Pharma Pvt Ltd
-                    </p>
+                    <div className="border-[1px] m-3"></div>
                   </div>
-                  <div className="w-1/3">
-                    <Image
-                      src={IMAGES.ALOVERA}
-                      alt="Description"
-                      className="w-24 h-24 mx-auto"
-                    />
-                  </div>
-                </div>
-                <div className="border-[1px] m-3"></div>
-                <div className="flex m-3">
-                  <div className="w-2/3">
-                    <h2 className="text-lg">Pan L Capsule</h2>
-                    <div className="flex text-[10px] gap-3 font-semibold">
-                      <p>Precription</p>
-                      <p>Anti Cancer</p>
-                      <p>Rx required</p>
-                    </div>
-                    <h3 className="text-[#B7084B] font-bold text-lg">
-                      &#8377; 7.50
-                    </h3>
-                    <h3 className="text-[#35A24D] font-semibold">
-                      Get this at $87.50
-                    </h3>
-                    <p className="text-xs my-1 text-gray-500">
-                      15 Tablet(s)in a strip
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Mft : Eugenics Pharma Pvt Ltd
-                    </p>
-                  </div>
-                  <div className="w-1/3">
-                    <Image
-                      src={IMAGES.ALOVERA}
-                      alt="Description"
-                      className="w-24 h-24 mx-auto"
-                    />
-                  </div>
-                </div>
-                <div className="border-[1px] m-3"></div>
-                <div className="flex m-3">
-                  <div className="w-2/3">
-                    <h2 className="text-lg">Pan L Capsule</h2>
-                    <div className="flex text-[10px] gap-3 font-semibold">
-                      <p>Precription</p>
-                      <p>Anti Cancer</p>
-                      <p>Rx required</p>
-                    </div>
-                    <h3 className="text-[#B7084B] font-bold text-lg">
-                      &#8377; 7.50
-                    </h3>
-                    <h3 className="text-[#35A24D] font-semibold">
-                      Get this at $87.50
-                    </h3>
-                    <p className="text-xs my-1 text-gray-500">
-                      15 Tablet(s)in a strip
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Mft : Eugenics Pharma Pvt Ltd
-                    </p>
-                  </div>
-                  <div className="w-1/3">
-                    <Image
-                      src={IMAGES.ALOVERA}
-                      alt="Description"
-                      className="w-24 h-24 mx-auto"
-                    />
-                  </div>
-                </div>
-                <div className="border-[1px] m-3"></div>
-                <div className="flex m-3">
-                  <div className="w-2/3">
-                    <h2 className="text-lg">Pan L Capsule</h2>
-                    <div className="flex text-[10px] gap-3 font-semibold">
-                      <p>Precription</p>
-                      <p>Anti Cancer</p>
-                      <p>Rx required</p>
-                    </div>
-                    <h3 className="text-[#B7084B] font-bold text-lg">
-                      &#8377; 7.50
-                    </h3>
-                    <h3 className="text-[#35A24D] font-semibold">
-                      Get this at $87.50
-                    </h3>
-                    <p className="text-xs my-1 text-gray-500">
-                      15 Tablet(s)in a strip
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      Mft : Eugenics Pharma Pvt Ltd
-                    </p>
-                  </div>
-                  <div className="w-1/3">
-                    <Image
-                      src={IMAGES.ALOVERA}
-                      alt="Description"
-                      className="w-24 h-24 mx-auto"
-                    />
-                  </div>
-                </div>
+                ))}
                 <Link
                   href="#"
                   className="justify-center flex text-blue-500 font-bold py-3"
