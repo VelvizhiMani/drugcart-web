@@ -2,15 +2,15 @@ import mongoose, { Schema } from "mongoose";
 
 const questionFormSchema = new Schema(
     {
-        product_name: {
-            type: String,
-            required: true
-        },
         name: {
             type: String,
             default: "",
         },
         email: {
+            type: String,
+            default: "",
+        },
+        mobile: {
             type: String,
             default: "",
         },

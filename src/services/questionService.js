@@ -10,7 +10,7 @@ const PostQuestionService = (data, resetForm) => async (dispatch) => {
         dispatch(addQuestion(postData.data))
         dispatch(GetQuestionIdService(postData.data?._id))
         dispatch(IsLoading(false))
-        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
+        dispatch(showToast({ message: "Question sent Successfully!!!", severity: "success" }))
         resetForm()
     } catch (error) {
         dispatch(IsLoading(false))

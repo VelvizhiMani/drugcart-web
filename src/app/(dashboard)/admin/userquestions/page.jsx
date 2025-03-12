@@ -98,8 +98,9 @@ function UserQuestions() {
                     <TableHead sx={{ backgroundColor: "#7d5e69" }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Product</TableCell>
                             <TableCell style={rowText}>Name</TableCell>
+                            <TableCell style={rowText}>Email</TableCell>
+                            <TableCell style={rowText}>Mobile</TableCell>
                             <TableCell style={rowText}>Status</TableCell>
                             <TableCell align="right" style={rowText}>
                                 Action
@@ -120,10 +121,13 @@ function UserQuestions() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {row?.product_name}
+                                    {row?.name}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.name}
+                                    {row?.email}
+                                </TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                    {row?.mobile}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.status}

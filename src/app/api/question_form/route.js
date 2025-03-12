@@ -8,16 +8,16 @@ export async function POST(request) {
         await connnectionToDatabase();
 
         const {
-            product_name,
             name,
             email,
+            mobile,
             question,
         } = await request.json();
 
         const addQuestion = new QuestionForm({
-            product_name,
             name,
             email,
+            mobile,
             question,
         });
 

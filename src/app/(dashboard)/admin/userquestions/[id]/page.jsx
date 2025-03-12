@@ -56,16 +56,6 @@ function ViewQuestions() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Product Name:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {question?.product_name}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
                             Name:
                         </Typography>
                         <Typography
@@ -81,6 +71,16 @@ function ViewQuestions() {
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
                             {question?.email}
+                        </Typography>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                            Mobile:
+                        </Typography>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                            {question?.mobile}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>

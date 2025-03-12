@@ -6,6 +6,8 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IMAGES } from "../common/images";
 import Feedback from "@/components/home-page/feedback";
+import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
+import QuestionCard from "@/components/ProductDetailsCard/QuestionCard";
 import { GetProductUrlService, GetProductGeneticUrlService } from "@/services/productService";
 
 const ProductView = ({ url }) => {
@@ -515,45 +517,7 @@ const ProductView = ({ url }) => {
             <h2 className="text-2xl font-bold my-5 text-center">
               Something doesn’t feel right ?
             </h2>
-            <div className="bg-[#DAEAF7] p-3">
-              <h2 className="text-lg text-[#CA292C] py-3">Report on Error</h2>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                className="w-[98%] p-1 rounded-md mb-3"
-              />
-              <input
-                type="text"
-                name="mobile"
-                placeholder="Mobile Number"
-                className="w-[98%] p-1 rounded-md mb-3"
-              />
-              <input
-                type="text"
-                name="email"
-                placeholder="Email Id"
-                className="w-[98%] p-1 rounded-md mb-3"
-              />
-              <input
-                type="text"
-                name="countrycode"
-                placeholder="Country Code"
-                className="w-[98%] p-1 rounded-md mb-3"
-              />
-              <textarea
-                type="text"
-                name="subject"
-                placeholder="Subject"
-                className="w-[98%] p-1 rounded-md mb-3 h-24"
-              />
-              <button
-                type="submit"
-                className="bg-[#1877F2] text-white p-2 px-6 mx-auto flex"
-              >
-                Report
-              </button>
-            </div>
+            <ReportErrorCard />
             <h2 className="text-2xl font-bold my-5 text-center">
               Most search Medicine Categories
             </h2>
@@ -1896,45 +1860,7 @@ const ProductView = ({ url }) => {
                 </div>
               </div>
 
-              <div className="border-2 border-gray-300 p-4 rounded-md">
-                <h2 className="font-bold text-center m-2 text-xl">
-                  How You Question ?
-                </h2>
-                <div className="bg-[#D5F1C3] p-4">
-                  <p className="text-sm py-5">
-                    Although we strive to provide the most up-to-date
-                    information about our products and services
-                  </p>
-
-                  <input
-                    type="text"
-                    name="name"
-                    className="p-2 w-[100%] mb-3"
-                  />
-                  <input
-                    type="text"
-                    name="mobile"
-                    className="p-2 w-[100%] mb-3"
-                  />
-                  <input
-                    type="text"
-                    name="email"
-                    className="p-2 w-[100%] mb-3"
-                  />
-                  <textarea
-                    type="text"
-                    name="query"
-                    className="p-2 w-[100%] mb-3 h-24"
-                  />
-                  <button
-                    type="submit"
-                    className="flex mx-auto grid bg-[#4CAF50] p-2 px-10 text-white rounded-md"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-
+              <QuestionCard />
               <h2 className="font-bold text-center m-2 text-xl">
                 Medicine Related Indication
               </h2>

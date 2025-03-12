@@ -10,7 +10,7 @@ const PostReportErrorService = (data, resetForm) => async (dispatch) => {
         dispatch(addReportError(postData.data))
         dispatch(GetReportErrorIdService(postData.data?._id))
         dispatch(IsLoading(false))
-        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
+        dispatch(showToast({ message: "Report sent Successfully!!!", severity: "success" }))
         resetForm()
     } catch (error) {
         dispatch(IsLoading(false))
