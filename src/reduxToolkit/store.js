@@ -28,6 +28,9 @@ import infoGraphicssReducer from "@/reduxToolkit/slices/infoGraphicsSlice"
 import herbsReducer from "@/reduxToolkit/slices/herbsSlice"
 import diseasesReducer from "@/reduxToolkit/slices/diseasesSlice"
 import addressReducer from "@/reduxToolkit/slices/addressSlice"
+import questionFormReducer from "@/reduxToolkit/slices/questionFormSlice"
+import reportErroReducer from "@/reduxToolkit/slices/reportErrorSlice"
+import labPackageReducer from "@/reduxToolkit/slices/labPackageSlice"
 
 export const store = configureStore({
     reducer: {
@@ -59,6 +62,9 @@ export const store = configureStore({
         herbsData: herbsReducer,
         diseasesData: diseasesReducer,
         addressData: addressReducer,
+        questionData: questionFormReducer,
+        reportErrorData: reportErroReducer,
+        labPackageData: labPackageReducer,
         adminUserData: adminUserReducer
     }
 })

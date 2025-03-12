@@ -239,10 +239,25 @@ function AdminLayout(props) {
       path: "/admin/storedevicecat",
       name: "Health Care Device",
     },
+    {
+      id: 8,
+      path: "/admin/userquestions",
+      name: "User Questions",
+    },
+    {
+      id: 9,
+      path: "/admin/reporterror",
+      name: "Report Error",
+    },
+    {
+      id: 10,
+      path: "/admin/lab-package",
+      name: "Lab Package",
+    },
   ];
-  const mainMenu = userRoutes.slice(0, 7);
-  const filteredRoutes = userRoutes.slice(7, 16);
-  const filtereTwodRoutes = userRoutes.slice(7, userRoutes.length);
+  const mainMenu = userRoutes.slice(0, 10);
+  const filteredRoutes = userRoutes.slice(10, 16);
+  const filtereTwodRoutes = userRoutes.slice(10, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
