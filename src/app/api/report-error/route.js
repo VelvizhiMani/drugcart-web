@@ -1,5 +1,5 @@
 import { authenticateUser, adminAuthorization } from '../../../utils/middleware';
-import QuestionForm from '../../../models/QuestionForm';
+import ReportError from '../../../models/ReportError';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 
@@ -8,21 +8,23 @@ export async function POST(request) {
         await connnectionToDatabase();
 
         const {
-            product_name,
             name,
             email,
-            question,
+            mobile,
+            country,
+            subject,
         } = await request.json();
 
-        const addQuestion = new QuestionForm({
-            product_name,
+        const addReportError = new ReportError({
             name,
             email,
-            question,
+            mobile,
+            country,
+            subject,
         });
 
-        await addQuestion.save();
-        return NextResponse.json(addQuestion, { status: 200 })
+        await addReportError.save();
+        return NextResponse.json(addReportError, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
@@ -46,21 +48,21 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const QuestionFormItems = await QuestionForm.find(filters)
+        const ReportErrorItems = await ReportError.find(filters)
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await QuestionForm.countDocuments(filters);
+        const totalItems = await ReportError.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
-        const QuestionFormItemsIndex = QuestionFormItems.map((item, index) => ({
+        const ReportErrorItemsIndex = ReportErrorItems.map((item, index) => ({
             ...item.toObject(),
             sno: skip + index + 1,
         }));
 
         return NextResponse.json(
             {
-                questions: QuestionFormItemsIndex,
+                report_errors: ReportErrorItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -70,9 +72,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching Questions:", error);
+        console.error("Error fetching Report Error:", error);
         return NextResponse.json(
-            { error: "Failed to fetch Questions" },
+            { error: "Failed to fetch Report Error" },
             { status: 500 }
         );
     }

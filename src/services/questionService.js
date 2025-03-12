@@ -8,7 +8,7 @@ const PostQuestionService = (data, resetForm) => async (dispatch) => {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/question_form', data, { headers: await Authorization() })
         dispatch(addQuestion(postData.data))
-        dispatch(GetPackageIdService(postData.data?._id))
+        dispatch(GetQuestionIdService(postData.data?._id))
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
         resetForm()

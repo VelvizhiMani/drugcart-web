@@ -29,6 +29,7 @@ import herbsReducer from "@/reduxToolkit/slices/herbsSlice"
 import diseasesReducer from "@/reduxToolkit/slices/diseasesSlice"
 import addressReducer from "@/reduxToolkit/slices/addressSlice"
 import questionFormReducer from "@/reduxToolkit/slices/questionFormSlice"
+import reportErroReducer from "@/reduxToolkit/slices/reportErrorSlice"
 
 export const store = configureStore({
     reducer: {
@@ -61,6 +62,7 @@ export const store = configureStore({
         diseasesData: diseasesReducer,
         addressData: addressReducer,
         questionData: questionFormReducer,
+        reportErrorData: reportErroReducer,
         adminUserData: adminUserReducer
     }
 })
