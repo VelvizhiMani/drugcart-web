@@ -28,6 +28,7 @@ import infoGraphicssReducer from "@/reduxToolkit/slices/infoGraphicsSlice"
 import herbsReducer from "@/reduxToolkit/slices/herbsSlice"
 import diseasesReducer from "@/reduxToolkit/slices/diseasesSlice"
 import addressReducer from "@/reduxToolkit/slices/addressSlice"
+import questionFormReducer from "@/reduxToolkit/slices/questionFormSlice"
 
 export const store = configureStore({
     reducer: {
@@ -59,6 +60,7 @@ export const store = configureStore({
         herbsData: herbsReducer,
         diseasesData: diseasesReducer,
         addressData: addressReducer,
+        questionData: questionFormReducer,
         adminUserData: adminUserReducer
     }
 })

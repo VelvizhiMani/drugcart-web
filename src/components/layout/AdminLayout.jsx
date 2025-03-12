@@ -239,10 +239,15 @@ function AdminLayout(props) {
       path: "/admin/storedevicecat",
       name: "Health Care Device",
     },
+    {
+      id: 8,
+      path: "/admin/userquestions",
+      name: "User Questions",
+    },
   ];
-  const mainMenu = userRoutes.slice(0, 7);
-  const filteredRoutes = userRoutes.slice(7, 16);
-  const filtereTwodRoutes = userRoutes.slice(7, userRoutes.length);
+  const mainMenu = userRoutes.slice(0, 8);
+  const filteredRoutes = userRoutes.slice(8, 16);
+  const filtereTwodRoutes = userRoutes.slice(8, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
