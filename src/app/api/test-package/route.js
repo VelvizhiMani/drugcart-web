@@ -33,6 +33,8 @@ export async function POST(request) {
             testincludes,
             deliverytiming,
             procedure,
+            note,
+            status
         } = await request.json();
 
         const isTestPackage = await TestPackage.findOne({ testname });
@@ -61,6 +63,8 @@ export async function POST(request) {
             testincludes,
             deliverytiming,
             procedure,
+            status,
+            note,
             userId: user?._id
         });
 

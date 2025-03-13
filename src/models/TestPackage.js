@@ -4,66 +4,87 @@ const testPackageSchema = new Schema(
     {
         name: {
             type: String,
-            required: true
+            default: ""
         },
         packageName: {
             type: String,
+            default: ""
         },
         packageurl: {
             type: String,
+            default: ""
         },
         testname: {
             type: String,
-            required: true
+            default: ""
         },
         url: {
             type: String,
-            required: true
+            default: ""
         },
         nooftest: {
             type: String,
+            default: ""
         },
         logo: {
             type: String,
+            default: ""
         },
         image: {
             type: String,
+            default: ""
         },
         price: {
             type: String,
+            default: ""
         },
         saleprice: {
             type: String,
+            default: ""
         },
         discount: {
             type: String,
+            default: ""
         },
         type: {
             type: String,
+            default: ""
         },
         required: {
             type: String,
+            default: ""
         },
         offervalid: {
             type: String,
+            default: ""
         },
         labdescription: {
             type: String,
+            default: ""
         },
         description: {
             type: String,
+            default: ""
         },
         certificates: {
             type: String,
+            default: ""
         },
         testincludes: {
             type: String,
+            default: ""
         },
         deliverytiming: {
             type: String,
+            default: ""
         },
         procedure: {
             type: String,
+            default: ""
+        },
+        note: {
+            type: String,
+            default: ""
         },
         userId: {
             type: mongoose.Schema.ObjectId,

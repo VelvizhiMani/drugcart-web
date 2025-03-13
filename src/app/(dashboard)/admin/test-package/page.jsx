@@ -112,8 +112,10 @@ function AdminLabTest() {
           <TableHead sx={{ backgroundColor: "#7d5e69" }}>
             <TableRow>
               <TableCell style={rowText}>Sno</TableCell>
-              <TableCell style={rowText}>Lab Package</TableCell>
-              <TableCell style={rowText}>Url</TableCell>
+              <TableCell style={rowText}>Test Package Name</TableCell>
+              <TableCell style={rowText}>Lab Name</TableCell>
+              <TableCell style={rowText}>Test Name</TableCell>
+              <TableCell style={rowText}>No of Test</TableCell>
               <TableCell style={rowText}>Status</TableCell>
               <TableCell align="right" style={rowText}>
                 Action
@@ -137,7 +139,13 @@ function AdminLabTest() {
                   {row?.packageName}
                 </TableCell>
                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.url}
+                  {row?.name}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.testname}
+                </TableCell>
+                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                  {row?.nooftest}
                 </TableCell>
                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                   {row?.status}

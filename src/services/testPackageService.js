@@ -46,7 +46,7 @@ const GetTestPackageIdService = (id) => async (dispatch) => {
 const PutTestPackageService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/test-package/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getTestPackage(response.data))
-        dispatch(GetLabPackageIdService(id))
+        dispatch(GetTestPackageIdService(id))
         dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)

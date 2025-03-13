@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import {
     Box,
     Button,
@@ -17,17 +17,23 @@ import ImageInput from "@/components/admin/input/ImageInput";
 import SearchField from "@/components/admin/AutoComplete/SearchField";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PostTestPackageService } from '@/services/testPackageService';
+import { PutTestPackageService, GetTestPackageIdService } from '@/services/testPackageService';
 import { GetLabPackagesService } from '@/services/labPackageService';
 import { useSelector, useDispatch } from "react-redux";
 import { GetLabsService } from "@/services/labService";
 import SelectInput from "@/components/admin/input/SelectInput";
 
-function AdminLabTestAdd() {
+function EditAdminLabTest() {
+    const { testPackage } = useSelector((state) => state.testPackageData)
     const { labPackageList } = useSelector((state) => state.labPackageData)
     const { labList } = useSelector((state) => state.labData)
     const router = useRouter();
     const dispatch = useDispatch()
+    const params = useParams()
+
+    useEffect(() => {
+        dispatch(GetTestPackageIdService(params?.id))
+    }, [params?.id])
 
     useEffect(() => {
         dispatch(GetLabPackagesService())
@@ -37,29 +43,30 @@ function AdminLabTestAdd() {
     const statusType = ["Active", "InActive"]
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            name: "",
-            packageName: "",
-            packageurl: "",
-            testname: "",
-            url: "",
-            nooftest: "",
-            logo: "",
-            image: "",
-            price: "",
-            saleprice: "",
-            discount: "",
-            type: "",
-            required: "",
-            offervalid: "",
-            labdescription: "",
-            description: "",
-            certificates: "",
-            testincludes: "",
-            deliverytiming: "",
-            procedure: "",
-            note: "",
-            status: ""
+            name: testPackage?.name || "",
+            packageName: testPackage?.packageName || "",
+            packageurl: testPackage?.packageurl || "",
+            testname: testPackage?.testname || "",
+            url: testPackage?.url || "",
+            nooftest: testPackage?.nooftest || "",
+            logo: testPackage?.logo || "",
+            image: testPackage?.image || "",
+            price: testPackage?.price || "",
+            saleprice: testPackage?.saleprice || "",
+            discount: testPackage?.discount || "",
+            type: testPackage?.type || "",
+            required: testPackage?.required || "",
+            offervalid: testPackage?.offervalid || "",
+            labdescription: testPackage?.labdescription || "",
+            description: testPackage?.description || "",
+            certificates: testPackage?.certificates || "",
+            testincludes: testPackage?.testincludes || "",
+            deliverytiming: testPackage?.deliverytiming || "",
+            procedure: testPackage?.procedure || "",
+            note: testPackage?.note || "",
+            status: testPackage?.status || "",
         },
         validationSchema: yup.object({
             name: yup.string().required("Lab Name is required"),
@@ -69,9 +76,9 @@ function AdminLabTestAdd() {
             testname: yup.string().required("Test Name is required"),
             status: yup.string().required("Status is required"),
         }),
-        onSubmit: async (data, { resetForm }) => {
+        onSubmit: async (data) => {
             console.log(data);
-            await dispatch(PostTestPackageService(data, resetForm))
+            await dispatch(PutTestPackageService(testPackage?._id, data))
         },
     });
 
@@ -104,7 +111,7 @@ function AdminLabTestAdd() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Test Package
+                    Edit Test Package
                 </Typography>
                 <Button
                     color="success"
@@ -314,4 +321,4 @@ function AdminLabTestAdd() {
     );
 }
 
-export default AdminLabTestAdd;
+export default EditAdminLabTest;
