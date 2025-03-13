@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const labLabSchema = new Schema(
+const testPackageSchema = new Schema(
     {
         name: {
             type: String,
@@ -80,6 +80,6 @@ const labLabSchema = new Schema(
 
 
 
-const LabTest = mongoose.models.LabTest || mongoose.model("LabTest", labLabSchema, "labtest");
+const TestPackage = mongoose.models.TestPackage || mongoose.model("TestPackage", testPackageSchema, "labtest");
 
-export default LabTest;
+export default TestPackage;
