@@ -31,6 +31,7 @@ import addressReducer from "@/reduxToolkit/slices/addressSlice"
 import questionFormReducer from "@/reduxToolkit/slices/questionFormSlice"
 import reportErroReducer from "@/reduxToolkit/slices/reportErrorSlice"
 import labPackageReducer from "@/reduxToolkit/slices/labPackageSlice"
+import labReducer from "@/reduxToolkit/slices/labSlice"
 import tastPackageReducer from "@/reduxToolkit/slices/tastPackageSlice"
 
 export const store = configureStore({
@@ -66,6 +67,7 @@ export const store = configureStore({
         questionData: questionFormReducer,
         reportErrorData: reportErroReducer,
         labPackageData: labPackageReducer,
+        labData: labReducer,
         testPackageData: tastPackageReducer,
         adminUserData: adminUserReducer
     }
