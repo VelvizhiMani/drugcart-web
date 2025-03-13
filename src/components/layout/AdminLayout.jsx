@@ -251,8 +251,8 @@ function AdminLayout(props) {
     },
     {
       id: 10,
-      path: "/admin/lab-package",
-      name: "Lab Package",
+      path: "/admin/lab-list",
+      name: "Lab List",
     },
   ];
   const mainMenu = userRoutes.slice(0, 10);
