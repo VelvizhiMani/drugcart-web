@@ -33,6 +33,7 @@ import reportErroReducer from "@/reduxToolkit/slices/reportErrorSlice"
 import labPackageReducer from "@/reduxToolkit/slices/labPackageSlice"
 import labReducer from "@/reduxToolkit/slices/labSlice"
 import tastPackageReducer from "@/reduxToolkit/slices/tastPackageSlice"
+import labBookingReducer from "@/reduxToolkit/slices/labBookingSlice"
 
 export const store = configureStore({
     reducer: {
@@ -69,6 +70,7 @@ export const store = configureStore({
         labPackageData: labPackageReducer,
         labData: labReducer,
         testPackageData: tastPackageReducer,
+        labBookingData: labBookingReducer,
         adminUserData: adminUserReducer
     }
 })

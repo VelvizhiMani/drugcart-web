@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { GetLabPackagesService } from '@/services/labPackageService';
 import { GetLabsService } from '@/services/labService';
 import { GetTestPackagesService } from '@/services/testPackageService';
+import { GetLabBookingsService } from '@/services/labBookingService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -32,11 +33,13 @@ function LabListPage() {
     const { labPackageList } = useSelector((state) => state.labPackageData)
     const { labList } = useSelector((state) => state.labData)
     const { testPackageList } = useSelector((state) => state.testPackageData)
+    const { labBookingList } = useSelector((state) => state.labBookingData)
 
     useEffect(() => {
         dispatch(GetLabPackagesService(0, 0))
         dispatch(GetLabsService(0, 0))
         dispatch(GetTestPackagesService(0, 0))
+        dispatch(GetLabBookingsService(0, 0))
     }, [])
 
     return (
@@ -91,6 +94,23 @@ function LabListPage() {
                             </Typography>
                         </Box>
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{testPackageList?.pagination?.totalItems}</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/lab-booking')}>
+                        <Box>
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Total Lab Bookings
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{labBookingList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>
