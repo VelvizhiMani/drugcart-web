@@ -1,15 +1,28 @@
 "use client";
 import Image from 'next/image'
 import { IMAGES } from "@/components/common/images";
+import { useEffect } from 'react';
+import { GetArticleUrlService } from '@/services/articleService';
+import { useParams } from 'next/navigation';
+import { useSelector, useDispatch } from "react-redux";
 
 const HealthArticleDetails = () => {
+  const { articleUrl } = useSelector((state) => state.articlesData)
+  const params = useParams()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(GetArticleUrlService(params?.url))
+  }, [params?.url])
+
+  console.log('articleUrl', articleUrl);
+  
   return (
     <section className="max-w-7xl mt-3 mx-auto">
-    <h2 className="text-lg font-semibold text-gray-800 uppercase">How to Act FAST at Stroke</h2>
-    <hr className='mb-6'/>
-    <Image src={IMAGES.ARTICLES} alt="Weight Loss Tips" className="w-[50%] object-cover mx-auto" />
-    <p className='text-sm md:text-md py-6'>A stroke, also known as a cerebrovascular accident (CVA), is a medical emergency that occurs when the blood supply to a part of the brain is disrupted or reduced. This lack of blood flow deprives brain cells of oxygen and nutrients, leading to their rapid deterioration. Strokes can have severe and often permanent consequences, depending on the duration and location of the interrupted blood flow.</p>
-</section>
+      <h2 className="text-lg font-semibold text-gray-800 uppercase">{articleUrl?.blogname}</h2>
+      <hr className='mb-6' />
+      <div dangerouslySetInnerHTML={{ __html: articleUrl?.description }} />
+    </section>
   )
 }
 

@@ -4,6 +4,7 @@ const initialState = {
     articleList: [],
     newArticle: {},
     article: {},
+    articleUrl: {},
 }
 const articleSlice = createSlice({
     name: 'articles',
@@ -15,11 +16,14 @@ const articleSlice = createSlice({
         getArticles: (state, { payload }) => {
             state.articleList = payload
         },
-        getArticle: (state, { payload }) => { 
+        getArticle: (state, { payload }) => {
             state.article = payload
+        },
+        getArticleUrl: (state, { payload }) => {
+            state.articleUrl = payload
         }
     }
 })
 
-export const { addArticle, getArticles, getArticle } = articleSlice.actions
+export const { addArticle, getArticles, getArticle, getArticleUrl } = articleSlice.actions
 export default articleSlice.reducer
