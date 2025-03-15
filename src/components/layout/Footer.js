@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
+import Link from "next/link";
 
 const Footer = () => {
   return (
@@ -158,47 +159,47 @@ const Footer = () => {
             <div className="py-3">
               <h3 className="text-xl pb-4 font-bold">Company</h3>
               <ul className="list-none leading-8 text-sm">
-                <li>About Drugcarts</li>
-                <li>Need Help</li>
-                <li>Feedback</li>
-                <li>Contact Us</li>
-                <li>Promotion</li>
-                <li>Prescription</li>
-                <li>Franchise</li>
-                <li>Store Locator</li>
+                <li><Link href={'/about-us'}>About Drugcarts</Link></li>
+                <li><Link href={'/needhelp'}>Need Help</Link></li>
+                <li><Link href={'/feedback'}>Feedback</Link></li>
+                <li><Link href={'/feedback'}>Contact Us</Link></li>
+                <li><Link href={'/promotion'}>Promotion</Link></li>
+                <li><Link href={'/prescription'}>Prescription</Link></li>
+                <li><Link href={'/franchise'}>Franchise</Link></li>
+                <li><Link href={'/storelocator'}>Store Locator</Link></li>
               </ul>
             </div>
             <div className="py-3">
               <h3 className="text-xl pb-4 font-bold">Categories</h3>
               <ul className="list-none leading-8 text-sm">
-                <li>Ayush</li>
-                <li>Healthstore</li>
-                <li>Medicine</li>
-                <li>Healthcare Device</li>
-                <li>Generic Molecule Index</li>
-                <li>Manufacturer List</li>
+                <li><Link href={'/ayush'}>Ayush</Link></li>
+                <li><Link href={'/health-store'}>Healthstore</Link></li>
+                <li><Link href={'/medicine'}>Medicine</Link></li>
+                <li><Link href={'/health-care-devices'}>Healthcare Device</Link></li>
+                <li><Link href={'/generic-molecule-index'}>Generic Molecule Index</Link></li>
+                <li><Link href={'/manufacturer-list'}>Manufacturer List</Link></li>
               </ul>
             </div>
             <div className="py-3">
               <h3 className="text-xl pb-4 font-bold">Our Policies</h3>
               <ul className="list-none leading-8 text-sm">
-                <li>Terms and Conditions</li>
-                <li>Privacy Policy</li>
-                <li>Cancellation & Refund</li>
-                <li>Shipping Policy</li>
-                <li>Intelectual Policy</li>
-                <li>Editorial Policy</li>
+                <li><Link href={'/terms-and-conditions'}>Terms and Conditions</Link></li>
+                <li><Link href={'/privacy-policy'}>Privacy Policy</Link></li>
+                <li><Link href={'/cancellation-return-refund-policy'}>Cancellation & Refund</Link></li>
+                <li><Link href={'/shipping-policy'}>Shipping Policy</Link></li>
+                <li><Link href={'/intellectual-policy'}>Intelectual Policy</Link></li>
+                <li><Link href={'/editorial-policy'}>Editorial Policy</Link></li>
               </ul>
             </div>
             <div className="py-3">
               <h3 className="text-xl pb-4 font-bold">Our Service</h3>
               <ul className="list-none leading-8 text-sm">
-                <li>Order Medicine</li>
-                <li>Nursing</li>
-                <li>Physiotherapist</li>
-                <li>Book Lab Test</li>
-                <li>Doctor Consult</li>
-                <li>Our Services</li>
+                <li><Link href={'/medicine'}>Order Medicine</Link></li>
+                <li><Link href={'/nursing'}>Nursing</Link></li>
+                <li><Link href={'/physiotherapist'}>Physiotherapist</Link></li>
+                <li><Link href={'/lab-test'}>Book Lab Test</Link></li>
+                <li><Link href={'/specialty'}>Doctor Consult</Link></li>
+                <li><Link href={'/services'}>Our Services</Link></li>
               </ul>
             </div>
             <div className="col-span-2 py-3">
@@ -256,52 +257,52 @@ const Footer = () => {
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Health Video
+               <Link href={'/health-video'}> Health Video </Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Health Article
+              <Link href={'/health-article'}> Health Article</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Health News
+                <Link href={'/health-news'}>Health News</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Health Package
+                <Link href={'/health-packages'}>Health Package</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Our Blogs
+                <Link href={'/blog'}>Our Blogs</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Daily Health Tips
+               <Link href={'/daily-health-tips'}>Daily Health Tips</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Infographics
+                <Link href={'/infographics'}>Infographics</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Lab Test Information
+              <Link href={'/lab-test-information'}>Lab Test Information</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Know about Herbs
+                <Link href={'/herbs'}>Know about Herbs</Link>
               </button>
             </div>
             <div className="flex my-auto justify-center">
               <button className="w-full bg-white py-2 px-6 rounded-md text-bgcolor font-bold">
-                Know about Diseases
+              <Link href={'/know-about-diseases'}> Know about Diseases</Link>
               </button>
             </div>
           </div>

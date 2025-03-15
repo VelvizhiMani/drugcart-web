@@ -225,6 +225,27 @@ const IMAGES = {
   HOMEOPATHYBANNER: require("@/assets/ayush/homeopathy.png"),
   SIDDHABANNER: require("@/assets/ayush/siddha.png"),
   UNANIBANNER: require("@/assets/ayush/unani.png"),
+
+  //Footer
+  EPILEPSY: require("@/assets/footer/Epilepsy.jpg"),
+  ABOUTUS: require("@/assets/common/about-us.png"),
+  ABOUTUSCHECKMEDINE: require("@/assets/common/about-us.jpg"),
+  VISSION: require("@/assets/common/vission.png"),
+  RESOLUTION: require("@/assets/common/resolution.png"),
+  MISSION: require("@/assets/common/mission.png"),
+  NEEDHELP: require("@/assets/common/needhelp.png"),
+  NEEDHELPDRUG: require("@/assets/common/needhelp-drugcarts.png"),
+  PRIVACYPOLICY: require("@/assets/common/privacy-policy.png"),
+  CONTACTUS24: require("@/assets/common/contactus-24.png"),
+  ARTICLES: require("@/assets/common/articles.png"),
+  TURMERIC: require("@/assets/common/tumeric.png"),
+  HEALTHTIPS: require("@/assets/common/health-tips.jpg"),
+  HEALTHTIPSBANNER: require("@/assets/common/health-tips-banner.png"),
+  HEALTHNEWS: require("@/assets/common/health-news.jpg"),
+  HEALTHNEWSBANNER: require("@/assets/common/health-news-banner.jpg"),
+  HERBSBANNER: require("@/assets/common/herbs-banner.jpg"),
+  DISEASES: require("@/assets/common/diseases.jpg"),
+  DISEASESBANNER: require("@/assets/common/diseases-banner.jpg"),
 };
 
 export { IMAGES };
