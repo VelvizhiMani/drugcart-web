@@ -11,7 +11,7 @@ import ShopbyCategory from "@/components/home-page/shopbyCategory";
 import FameSection from "@/components/home-page/fameSection";
 import BlogCard from "@/components/home-page/blogCard";
 import Feedback from "@/components/home-page/feedback";
-import CustomerSaying from "@/components/home-page/customerSaying";
+import CustomerSaying from "@/components/home-page/CustomerSaying";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileService } from "@/services/profileService";
 
