@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addhealthNews, gethealthNewes, gethealthNews } from '../reduxToolkit/slices/healthNewsSlice'
+import { addhealthNews, gethealthNewes, gethealthNews, gethealthNewsUrl } from '../reduxToolkit/slices/healthNewsSlice'
 
 const PostHealthNewsService = (data, resetForm) => async (dispatch) => {
     try {
@@ -24,6 +24,18 @@ const GetHealthNewsService = (page = 1, limit, search = "") => async (dispatch) 
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/newslist?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
         dispatch(gethealthNewes(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetHealthNewsUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/newslist/health-news-details/${url}`, { headers: await Authorization() })
+        dispatch(gethealthNewsUrl(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -62,4 +74,4 @@ const DeleteHealthNewsService = (id) => async (dispatch) => {
     })
 }
 
-export { PostHealthNewsService, GetHealthNewsService, GetHealthNewsIdService, PutHealthNewsService, DeleteHealthNewsService }
+export { PostHealthNewsService, GetHealthNewsService, GetHealthNewsIdService, GetHealthNewsUrlService, PutHealthNewsService, DeleteHealthNewsService }
