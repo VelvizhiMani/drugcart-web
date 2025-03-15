@@ -19,7 +19,7 @@ const DailyNewsDetails = () => {
     <section className="max-w-7xl mt-3 mx-auto">
       <h2 className="text-lg font-semibold text-gray-800 uppercase">{healthNewsUrl?.title}</h2>
       <hr className='mb-6' />
-      <div dangerouslySetInnerHTML={{ __html: healthNewsUrl?.description }} />
+      <div className="space-y-4" dangerouslySetInnerHTML={{ __html: healthNewsUrl?.description }} />
     </section>
   )
 }

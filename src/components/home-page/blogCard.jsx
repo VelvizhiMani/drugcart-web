@@ -3,10 +3,12 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetBlogService } from "@/services/blogService";
+import { useRouter } from "next/navigation";
 
 const BlogCard = () => {
   const { blogList } = useSelector((state) => state.blogData);
   const dispatch = useDispatch();
+  const router = useRouter()
 
   useEffect(() => {
     dispatch(GetBlogService(1, 3));
@@ -29,7 +31,7 @@ const BlogCard = () => {
           <p className="mt-6 font-bold text-md h-10">{blog?.blogname}</p>
           {/* <div dangerouslySetInnerHTML={{ __html: blog.description }} /> */}
           <div className="flex justify-center items-center font-bold mt-7 pb-0">
-            <span className="text-right text-blue-500">Read More</span>
+            <span className="text-right text-blue-500 cursor-pointer"  onClick={() => router.push(`blog/blog-details/${blog?.url}`)}>Read More</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

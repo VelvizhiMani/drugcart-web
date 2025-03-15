@@ -4,6 +4,7 @@ const initialState = {
     blogList: [],
     newBlog: {},
     blog: {},
+    blogUrl: {}
 }
 const blogSlice = createSlice({
     name: 'blog',
@@ -15,11 +16,14 @@ const blogSlice = createSlice({
         getBlogs: (state, { payload }) => {
             state.blogList = payload
         },
-        getBlog: (state, { payload }) => { 
+        getBlog: (state, { payload }) => {
             state.blog = payload
+        },
+        getBlogUrl: (state, { payload }) => {
+            state.blogUrl = payload
         }
     }
 })
 
-export const { addBlog, getBlogs, getBlog } = blogSlice.actions
+export const { addBlog, getBlogs, getBlog, getBlogUrl } = blogSlice.actions
 export default blogSlice.reducer

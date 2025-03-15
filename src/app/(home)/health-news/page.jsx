@@ -5,6 +5,7 @@ import { IMAGES } from "@/components/common/images";
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { GetHealthNewsService } from "@/services/heathNewsService";
+import { DateFormat } from "../../../utils/dateFormat";
 
 const HealthNews = () => {
     const { healthNewsList } = useSelector((state) => state.healthNewsData)
@@ -85,7 +86,7 @@ const HealthNews = () => {
                                 <h3 className="font-bold text-sm">
                                     {article?.title}
                                 </h3>
-                                <p className="mt-3 text-xs">{article?.date}</p>
+                                <p className="mt-2 text-xs">{DateFormat(article?.date)}</p>
                             </div>
                         </div>
                     ))}
@@ -112,7 +113,7 @@ const HealthNews = () => {
                                 <h3 className="font-bold text-sm">
                                     {article?.title}
                                 </h3>
-                                <p className="mt-3 text-xs">{article?.date}</p>
+                                <p className="mt-2 text-xs">{DateFormat(article?.date)}</p>
                             </div>
                         </div>
                     </div>

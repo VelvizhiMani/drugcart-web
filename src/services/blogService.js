@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addBlog, getBlogs, getBlog } from '../reduxToolkit/slices/blogSlice'
+import { addBlog, getBlogs, getBlog, getBlogUrl } from '../reduxToolkit/slices/blogSlice'
 
 const PostBlogService = (data, resetForm) => async (dispatch) => {
     try {
@@ -24,6 +24,18 @@ const GetBlogService = (page = 1, limit, search = "") => async (dispatch) => {
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/blog?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
         dispatch(getBlogs(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetBlogUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/blog/blog-details/${url}`, { headers: await Authorization() })
+        dispatch(getBlogUrl(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -62,4 +74,4 @@ const DeleteBlogService = (id) => async (dispatch) => {
     })
 }
 
-export { PostBlogService, GetBlogService, GetBlogIdService, PutBlogService, DeleteBlogService }
+export { PostBlogService, GetBlogService, GetBlogIdService, GetBlogUrlService, PutBlogService, DeleteBlogService }
