@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
 import ServiceGroup from "@/components/home-page/serviceGroup";
-import CustomerSaying from "@/components/home-page/CustomerSaying";
+// import CustomerSaying from "@/components/home-page/CustomerSaying";
 
 const About = () => {
   return (
@@ -77,7 +77,7 @@ one touch of click</p>
           </div>
         </div>
         <div>
-          <CustomerSaying/>
+          {/* <CustomerSaying/> */}
         </div>
     </section>
   )
