@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addArticle, getArticles, getArticle } from '../reduxToolkit/slices/articleSlice'
+import { addArticle, getArticles, getArticle, getArticleUrl } from '../reduxToolkit/slices/articleSlice'
 
 const PostArticleService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetArticleIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetArticleUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/articles/health-article-details/${url}`, { headers: await Authorization() })
+        dispatch(getArticleUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutArticleService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/articles/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getArticle(response.data))
@@ -62,4 +74,4 @@ const DeleteArticleService = (id) => async (dispatch) => {
     })
 }
 
-export { PostArticleService, GetArticleService, GetArticleIdService, PutArticleService, DeleteArticleService }
+export { PostArticleService, GetArticleService, GetArticleIdService, GetArticleUrlService, PutArticleService, DeleteArticleService }

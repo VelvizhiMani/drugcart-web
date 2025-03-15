@@ -8,15 +8,6 @@ const Blog = () => {
   return (
     <>
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-wrap items-center space-x-2 text-sm text-gray-500 mb-4">
-          <Link href="#" className="hover:text-gray-700">
-            Home
-          </Link>
-          <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">
-            Blog
-          </Link>
-        </div>
         <Image
           src={IMAGES.BLOGBANNER}
           alt="Blog Banner"
