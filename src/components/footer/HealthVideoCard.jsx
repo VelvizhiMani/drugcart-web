@@ -84,7 +84,7 @@ const HealthVideoCard = () => {
                 ))}
             </div>
             <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography fontFamily={"Poppins"}>Showing 1-{healthVideoList?.health_videos?.length} of {healthVideoList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing {page}-{10} of {healthVideoList?.pagination?.totalItems} entries</Typography>
                 <Pagination
                     size="large"
                     count={healthVideoList?.pagination?.totalPages}

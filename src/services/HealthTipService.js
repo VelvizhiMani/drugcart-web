@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addhealthTip, gethealthTips, gethealthTip } from '../reduxToolkit/slices/healthTipSlice'
+import { addhealthTip, gethealthTips, gethealthTip, gethealthTipUrl } from '../reduxToolkit/slices/healthTipSlice'
 
 const PostHealthTipService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetHealthTipIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetHealthTipUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/healthtips/daily-health-tips-details/${url}`, { headers: await Authorization() })
+        dispatch(gethealthTipUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutHealthTipService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/healthtips/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(gethealthTip(response.data))
@@ -62,4 +74,4 @@ const DeleteHealthTipService = (id) => async (dispatch) => {
     })
 }
 
-export { PostHealthTipService, GetHealthTipService, GetHealthTipIdService, PutHealthTipService, DeleteHealthTipService }
+export { PostHealthTipService, GetHealthTipService, GetHealthTipIdService, GetHealthTipUrlService, PutHealthTipService, DeleteHealthTipService }
