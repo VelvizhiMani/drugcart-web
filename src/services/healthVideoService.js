@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addHealthVideo, getHealthVideos, getHealthVideo } from '../reduxToolkit/slices/healthVideoSlice'
+import { addHealthVideo, getHealthVideos, getHealthVideo, getHealthVideoUrl } from '../reduxToolkit/slices/healthVideoSlice'
 
 const PostHealthVideoService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetHealthVideoIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetHealthVideoUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/health-video/health-video-detail/${url}`, { headers: await Authorization() })
+        dispatch(getHealthVideoUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutHealthVideoService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/health-video/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getHealthVideo(response.data))
@@ -62,4 +74,4 @@ const DeleteHealthVideoService = (id) => async (dispatch) => {
     })
 }
 
-export { PostHealthVideoService, GetHealthVideosService, GetHealthVideoIdService, PutHealthVideoService, DeleteHealthVideoService }
+export { PostHealthVideoService, GetHealthVideosService, GetHealthVideoIdService, GetHealthVideoUrlService, PutHealthVideoService, DeleteHealthVideoService }

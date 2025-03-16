@@ -4,6 +4,7 @@ const initialState = {
     healthVideoList: [],
     newHealthVideo: {},
     healthVideo: {},
+    healthVideoUrl: {}
 }
 
 const healthVideoSlice = createSlice({
@@ -18,9 +19,12 @@ const healthVideoSlice = createSlice({
         },
         getHealthVideo: (state, { payload }) => {
             state.healthVideo = payload
+        },
+        getHealthVideoUrl: (state, { payload }) => {
+            state.healthVideoUrl = payload
         }
     }
 })
 
-export const { addHealthVideo, getHealthVideos, getHealthVideo } = healthVideoSlice.actions
+export const { addHealthVideo, getHealthVideos, getHealthVideo, getHealthVideoUrl } = healthVideoSlice.actions
 export default healthVideoSlice.reducer
