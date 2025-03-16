@@ -4,6 +4,7 @@ const initialState = {
     infoGraphicsList: [],
     newInfoGraphics: {},
     infoGraphics: {},
+    infoGraphicsUrl: {}
 }
 const infoGraphicsSlice = createSlice({
     name: 'infoGraphics',
@@ -17,9 +18,12 @@ const infoGraphicsSlice = createSlice({
         },
         getInfoGraphics: (state, { payload }) => {
             state.infoGraphics = payload
+        },
+        getInfoGraphicsUrl: (state, { payload }) => {
+            state.infoGraphicsUrl = payload
         }
     }
 })
 
-export const { addInfoGraphics, getInfoGraphicsList, getInfoGraphics } = infoGraphicsSlice.actions
+export const { addInfoGraphics, getInfoGraphicsList, getInfoGraphics, getInfoGraphicsUrl } = infoGraphicsSlice.actions
 export default infoGraphicsSlice.reducer

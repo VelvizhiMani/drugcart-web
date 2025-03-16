@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addInfoGraphics, getInfoGraphicsList, getInfoGraphics } from '../reduxToolkit/slices/infoGraphicsSlice'
+import { addInfoGraphics, getInfoGraphicsList, getInfoGraphics, getInfoGraphicsUrl } from '../reduxToolkit/slices/infoGraphicsSlice'
 
 const PostInfoGraphicsService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetInfoGraphicsIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetInfoGraphicsUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/infographics/infographics-view/${url}`, { headers: await Authorization() })
+        dispatch(getInfoGraphicsUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutInfoGraphicsService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/infographics/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getInfoGraphics(response.data))
@@ -62,4 +74,4 @@ const DeleteInfoGraphicsService = (id) => async (dispatch) => {
     })
 }
 
-export { PostInfoGraphicsService, GetInfoGraphicsService, GetInfoGraphicsIdService, PutInfoGraphicsService, DeleteInfoGraphicsService }
+export { PostInfoGraphicsService, GetInfoGraphicsService, GetInfoGraphicsIdService, GetInfoGraphicsUrlService, PutInfoGraphicsService, DeleteInfoGraphicsService }
