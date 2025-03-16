@@ -53,7 +53,7 @@ const HealthVideoCard = () => {
         <section className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {healthVideoList?.health_videos?.map((item, i) => (
-                    <div className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer" key={i} onClick={() => healthVideoClick("welcome")}>
+                    <div className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer" key={i} onClick={() => healthVideoClick(item?.url)}>
                         <div className="relative">
                             {articleImages[i] ? (
                                 <img src={articleImages[i]} alt="Video Thumbnail" className="w-full h-48 object-cover" />
