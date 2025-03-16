@@ -23,6 +23,7 @@ import articleReducer from "@/reduxToolkit/slices/articleSlice"
 import blogReducer from "@/reduxToolkit/slices/blogSlice"
 import stockReducer from "@/reduxToolkit/slices/stockSlice"
 import healthTipReducer from "@/reduxToolkit/slices/healthTipSlice"
+import healthVideoReducer from "@/reduxToolkit/slices/healthVideoSlice"
 import healthNewsReducer from "@/reduxToolkit/slices/healthNewsSlice"
 import infoGraphicssReducer from "@/reduxToolkit/slices/infoGraphicsSlice"
 import herbsReducer from "@/reduxToolkit/slices/herbsSlice"
@@ -60,6 +61,7 @@ export const store = configureStore({
         blogData: blogReducer,
         stockData: stockReducer,
         healthTipData: healthTipReducer,
+        healthVideoData: healthVideoReducer,
         healthNewsData: healthNewsReducer,
         infoGraphicssData: infoGraphicssReducer,
         herbsData: herbsReducer,

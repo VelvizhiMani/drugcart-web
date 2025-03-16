@@ -26,3 +26,18 @@ body {
   resize: vertical;
   min-height: 18em;
 }
+
+.rich-content ul {
+  list-style-type: disc;
+  margin-left: 1rem;
+  padding-left: 1rem;
+}
+
+.rich-content-card ul {
+  list-style-type: disc;
+  margin-left: 1rem;
+}
+
+.rich-content li {
+  margin-bottom: 0.5rem;
+}

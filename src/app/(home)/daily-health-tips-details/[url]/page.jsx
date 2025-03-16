@@ -1,18 +1,27 @@
 "use client";
 import Image from 'next/image'
 import { IMAGES } from "@/components/common/images";
+import { useEffect } from 'react';
+import { GetHealthTipUrlService } from '@/services/HealthTipService';
+import { useParams } from 'next/navigation';
+import { useSelector, useDispatch } from "react-redux";
 
+const HealthTipDetails = () => {
+  const { healthTipUrl } = useSelector((state) => state.healthTipData);
+  const params = useParams()
+  const dispatch = useDispatch()
 
-const DailyTipsDetails = () => {
+  useEffect(() => {
+    dispatch(GetHealthTipUrlService(params?.url))
+  }, [params?.url])
+
   return (
     <section className="max-w-7xl mt-3 mx-auto">
-      <Image src={IMAGES.HEALTHTIPSBANNER} alt="Weight Loss Tips" className="w-full h-64 object-cover mx-auto" />
-    <h2 className="text-lg font-semibold text-gray-800 uppercase">Cold Milk</h2>
-    <hr className='mb-6'/>
-    <Image src={IMAGES.HEALTHTIPS} alt="Weight Loss Tips" className="w-[50%] object-cover mx-auto" />
-    <p className='text-sm md:text-md py-6'>A stroke, also known as a cerebrovascular accident (CVA), is a medical emergency that occurs when the blood supply to a part of the brain is disrupted or reduced. This lack of blood flow deprives brain cells of oxygen and nutrients, leading to their rapid deterioration. Strokes can have severe and often permanent consequences, depending on the duration and location of the interrupted blood flow.</p>
-</section>
+      <h2 className="text-lg font-semibold text-gray-800 uppercase">{healthTipUrl?.name}</h2>
+      <hr className='mb-6' />
+      <div className="rich-content space-y-4" dangerouslySetInnerHTML={{ __html: healthTipUrl?.description }} />
+    </section>
   )
 }
 
-export default DailyTipsDetails
+export default HealthTipDetails

@@ -15,6 +15,7 @@ import { GetHealthTipService } from '@/services/HealthTipService';
 import { GetBlogService } from '@/services/blogService';
 import { GetHealthNewsService } from '@/services/heathNewsService';
 import { GetInfoGraphicsService } from '@/services/infoGraphicsService';
+import { GetHealthVideosService } from '@/services/healthVideoService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -34,6 +35,7 @@ const CardItem = styled(Paper)(({ theme }) => ({
 function AwarenessPage() {
     const dispatch = useDispatch()
     const router = useRouter()
+     const { healthVideoList } = useSelector((state) => state.healthVideoData)
     const { diseasesList } = useSelector((state) => state.diseasesData)
     const { knowBodyList } = useSelector((state) => state.knowBodyData)
     const { herbsList } = useSelector((state) => state.herbsData)
@@ -51,6 +53,7 @@ function AwarenessPage() {
         dispatch(GetArticleService(0, 0))
         dispatch(GetBlogService(0, 0))
         dispatch(GetHealthNewsService(0, 0))
+        dispatch(GetHealthVideosService(0, 0))
         dispatch(GetInfoGraphicsService(0, 0))
     }, [])
 
@@ -105,7 +108,7 @@ function AwarenessPage() {
                                 Total Health Video
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{"0"}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{healthVideoList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>

@@ -1,5 +1,5 @@
 import { authenticateUser, adminAuthorization } from '../../../utils/middleware';
-import InfoGraphics from '../../../models/InfoGraphics';
+import HealthVideo from '../../../models/HealthVideo';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -25,10 +25,9 @@ export async function POST(request) {
         const {
             title,
             url,
-            thuming,
-            thumbalt,
-            picture,
-            alt,
+            description,
+            vedio,
+            image,
             status,
             date,
             timestamp,
@@ -38,18 +37,17 @@ export async function POST(request) {
             metakeyboard
         } = await request.json();
 
-        const isInfoGraphics = await InfoGraphics.findOne({ title });
-        if (isInfoGraphics) {
-            return NextResponse.json({ error: 'InfoGraphics already exist' }, { status: 401 })
+        const isHealthVideo = await HealthVideo.findOne({ title });
+        if (isHealthVideo) {
+            return NextResponse.json({ error: 'Health Video already exist' }, { status: 401 })
         }
 
-        const addInfoGraphics = new InfoGraphics({
+        const addHealthVideo = new HealthVideo({
             title,
             url,
-            thuming,
-            thumbalt,
-            picture,
-            alt,
+            description,
+            vedio,
+            image,
             status,
             date,
             timestamp,
@@ -59,8 +57,8 @@ export async function POST(request) {
             metakeyboard
         });
 
-        await addInfoGraphics.save();
-        return NextResponse.json(addInfoGraphics, { status: 200 })
+        await addHealthVideo.save();
+        return NextResponse.json(addHealthVideo, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
@@ -79,21 +77,21 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const InfoGraphicsItems = await InfoGraphics.find(filters)
+        const HealthVideoItems = await HealthVideo.find(filters)
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await InfoGraphics.countDocuments(filters);
+        const totalItems = await HealthVideo.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
-        const InfoGraphicsIndex = InfoGraphicsItems.map((item, index) => ({
+        const HealthVideoIndex = HealthVideoItems.map((item, index) => ({
             ...item.toObject(),
             sno: skip + index + 1,
         }));
 
         return NextResponse.json(
             {
-                infoGraphics_list: InfoGraphicsIndex,
+                health_videos: HealthVideoIndex,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -103,9 +101,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching InfoGraphics items:", error);
+        console.error("Error fetching Health Video items:", error);
         return NextResponse.json(
-            { error: "Failed to fetch InfoGraphics items" },
+            { error: "Failed to fetch Health Video items" },
             { status: 500 }
         );
     }
