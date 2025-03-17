@@ -4,6 +4,7 @@ const initialState = {
     herbsList: [],
     newHerbs: {},
     herbs: {},
+    herbsUrl: {}
 }
 const herbsSlice = createSlice({
     name: 'herbs',
@@ -17,9 +18,12 @@ const herbsSlice = createSlice({
         },
         getHerbs: (state, { payload }) => {
             state.herbs = payload
+        },
+        getHerbsUrl: (state, { payload }) => {
+            state.herbsUrl = payload
         }
     }
 })
 
-export const { addHerbs, getHerbsList, getHerbs } = herbsSlice.actions
+export const { addHerbs, getHerbsList, getHerbs, getHerbsUrl } = herbsSlice.actions
 export default herbsSlice.reducer
