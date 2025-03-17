@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addDiseases, getDiseasesList, getDiseases } from '../reduxToolkit/slices/diseasesSlice'
+import { addDiseases, getDiseasesList, getDiseases, getDiseasesUrl } from '../reduxToolkit/slices/diseasesSlice'
 
 const PostDiseasesService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetDiseasesIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetDiseasesUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/dieases/disease-details/${url}`, { headers: await Authorization() })
+        dispatch(getDiseasesUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutDiseasesService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/dieases/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getDiseases(response.data))
@@ -62,4 +74,4 @@ const DeleteDiseasesService = (id) => async (dispatch) => {
     })
 }
 
-export { PostDiseasesService, GetDiseasesService, GetDiseasesIdService, PutDiseasesService, DeleteDiseasesService }
+export { PostDiseasesService, GetDiseasesService, GetDiseasesIdService, GetDiseasesUrlService, PutDiseasesService, DeleteDiseasesService }

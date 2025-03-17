@@ -15,7 +15,6 @@ const HerbsDetails = () => {
         dispatch(GetHerbsUrlService(params?.url))
     }, [params?.url])
 
-    console.log('herbsUrl', herbsUrl);
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             {/* <Image src={IMAGES.HERBSBANNER} alt="Herbs Details" className="w-full h-64 object-cover mx-auto" />

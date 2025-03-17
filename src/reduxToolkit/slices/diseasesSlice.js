@@ -4,6 +4,7 @@ const initialState = {
     diseasesList: [],
     newDiseases: {},
     diseases: {},
+    diseasesUrl: {}
 }
 const diseasesSlice = createSlice({
     name: 'diseases',
@@ -15,11 +16,14 @@ const diseasesSlice = createSlice({
         getDiseasesList: (state, { payload }) => {
             state.diseasesList = payload
         },
-        getDiseases: (state, { payload }) => { 
+        getDiseases: (state, { payload }) => {
             state.diseases = payload
+        },
+        getDiseasesUrl: (state, { payload }) => {
+            state.diseasesUrl = payload
         }
     }
 })
 
-export const { addDiseases, getDiseasesList, getDiseases } = diseasesSlice.actions
+export const { addDiseases, getDiseasesList, getDiseases, getDiseasesUrl } = diseasesSlice.actions
 export default diseasesSlice.reducer
