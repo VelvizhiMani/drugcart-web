@@ -74,11 +74,6 @@ export async function GET(req) {
 
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await adminAuthorization();
-
-        if (!success) {
-            return NextResponse.json({ error: message }, { status: 401 })
-        }
 
         const skip = (page - 1) * limit;
 
