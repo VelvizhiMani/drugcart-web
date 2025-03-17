@@ -57,7 +57,7 @@ const Herbs = () => {
                     <div
                         key={i}
                         className="border border-gray-300 p-3 rounded-lg cursor-pointer"
-                        onClick={() => herbsClick("Welcome")}>
+                        onClick={() => herbsClick(item?.url)}>
                         <div className="flex place-items-start">
                             <Image
                                 src={articleImages[i] ? articleImages[i] : IMAGES.NO_IMAGE}

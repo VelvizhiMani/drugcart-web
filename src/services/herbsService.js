@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addHerbs, getHerbsList, getHerbs } from '../reduxToolkit/slices/herbsSlice'
+import { addHerbs, getHerbsList, getHerbs, getHerbsUrl } from '../reduxToolkit/slices/herbsSlice'
 
 const PostHerbsService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetHerbsIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetHerbsUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/herbs/herbs-details/${url}`, { headers: await Authorization() })
+        dispatch(getHerbsUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutHerbsService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/herbs/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getHerbs(response.data))
@@ -62,4 +74,4 @@ const DeleteHerbsService = (id) => async (dispatch) => {
     })
 }
 
-export { PostHerbsService, GetHerbsService, GetHerbsIdService, PutHerbsService, DeleteHerbsService }
+export { PostHerbsService, GetHerbsService, GetHerbsIdService, GetHerbsUrlService, PutHerbsService, DeleteHerbsService }
