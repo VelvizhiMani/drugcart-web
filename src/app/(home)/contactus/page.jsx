@@ -7,6 +7,9 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import QuickreplyIcon from '@mui/icons-material/Quickreply';
 import RecommendIcon from '@mui/icons-material/Recommend';
 import { useState } from "react";
+import { useFormik } from "formik";
+import { useDispatch } from 'react-redux';
+import { PostContacUsService } from "../../../services/contactService";
 
 const options = [
     { id: "medicine", label: "Medicine" },
@@ -18,14 +21,31 @@ const options = [
 ];
 
 const ContactUs = () => {
-    const [isChecked, setIsChecked] = useState(false);
-    const [selected, setSelected] = useState([]);
+    const dispatch = useDispatch();
+
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            email: "",
+            mobile: "",
+            type: [],
+            message: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log("Form Data:", data);
+            await dispatch(PostContacUsService(data, resetForm))
+        },
+    });
 
     const handleCheckboxChange = (id) => {
-        setSelected((prev) =>
-            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+        formik.setFieldValue(
+            "type",
+            formik.values.type.includes(id)
+                ? formik.values.type.filter((item) => item !== id)
+                : [...formik.values.type, id]
         );
     };
+
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap justify-center items-center bg-[#117DA6]">
@@ -112,81 +132,87 @@ const ContactUs = () => {
                             <h1 className="font-bold text-md md:text-xl">LETS GET IN TOUCH</h1>
                             <h3>Drop Us A Message!</h3>
                             <div className="mx-auto bg-white py-4">
-                                <div className="flex flex-wrap gap-4 md:gap-0 justify-center items-center text-md">
-                                    {options.map((option) => (
-                                        <label key={option.id} className="flex items-center space-x-2 cursor-pointer">
-                                            <input
-                                                type="checkbox"
-                                                className="hidden"
-                                                checked={selected.includes(option.id)}
-                                                onChange={() => handleCheckboxChange(option.id)}
-                                            />
-
-                                            {/* Custom Checkbox */}
-                                            <div
-                                                className={`w-6 h-6 flex items-center justify-center border-2 rounded-md transition-all ${selected.includes(option.id) ? "bg-blue-500 border-blue-500" : "border-gray-400"
-                                                    }`}
-                                            >
-                                                {selected.includes(option.id) && (
-                                                    <svg
-                                                        className="w-4 h-4 text-white"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        strokeWidth="2"
-                                                        viewBox="0 0 24 24"
-                                                        xmlns="http://www.w3.org/2000/svg"
+                                <form className="space-y-4 mt-4" onSubmit={formik.handleSubmit}>
+                                    {/* Checkbox Group */}
+                                    <div className="mx-auto bg-white py-4">
+                                        <div className="flex flex-wrap gap-4 md:gap-0 justify-center items-center text-md">
+                                            {options.map((option) => (
+                                                <label key={option.id} className="flex items-center space-x-2 cursor-pointer">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="hidden"
+                                                        checked={formik.values.type.includes(option.id)}
+                                                        onChange={() => handleCheckboxChange(option.id)}
+                                                    />
+                                                    <div
+                                                        className={`w-6 h-6 flex items-center justify-center border-2 rounded-md transition-all ${formik.values.type.includes(option.id) ? "bg-blue-500 border-blue-500" : "border-gray-400"
+                                                            }`}
                                                     >
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                                                    </svg>
-                                                )}
-                                            </div>
-
-                                            <span className="text-gray-800 text-xs">{option.label}</span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                <div className="max-w-lg mx-auto p-6">
-                                    <form className="space-y-4">
-                                        {/* Name */}
-                                        <div>
-                                            <label className="block font-medium text-gray-700">Full Name</label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
-                                                placeholder="Enter your name"
-                                            />
-                                            <label className="block font-medium text-gray-700 mt-3">Phone Number</label>
-                                            <input
-                                                type="text"
-                                                name="phone"
-                                                className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
-                                                placeholder="Enter your phone number"
-                                            />
-                                            <label className="block font-medium text-gray-700 mt-3">Email ID</label>
-                                            <input
-                                                type="text"
-                                                name="mail"
-                                                className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
-                                                placeholder="Enter your Mail ID"
-                                            />
-                                            <label className="block font-medium text-gray-700 mt-3">Message</label>
-                                            <textarea
-                                                type="text"
-                                                name="message"
-                                                className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
-                                                placeholder="Enter your message"
-                                            />
-                                            <button
-                                                type="submit"
-                                                className="w-full bg-blue-500 mt-6 text-white p-3 rounded-lg hover:bg-blue-600 transition"
-                                            >
-                                                Submit
-                                            </button>
+                                                        {formik.values.type.includes(option.id) && (
+                                                            <svg
+                                                                className="w-4 h-4 text-white"
+                                                                fill="none"
+                                                                stroke="currentColor"
+                                                                strokeWidth="2"
+                                                                viewBox="0 0 24 24"
+                                                            >
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                            </svg>
+                                                        )}
+                                                    </div>
+                                                    <span className="text-gray-800 text-xs">{option.label}</span>
+                                                </label>
+                                            ))}
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                    <div className="max-w-lg mx-auto p-6">
+                                        <label className="block font-medium text-gray-700">Full Name</label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+                                            placeholder="Enter your name"
+                                            value={formik.values.name}
+                                            onChange={formik.handleChange("name")}
+                                            required
+                                        />
+                                        <label className="block font-medium text-gray-700 mt-3">Phone Number</label>
+                                        <input
+                                            type="text"
+                                            name="phone"
+                                            className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+                                            placeholder="Enter your phone number"
+                                            value={formik.values.mobile}
+                                            onChange={formik.handleChange("mobile")}
+                                            required
+                                        />
+                                        <label className="block font-medium text-gray-700 mt-3">Email ID</label>
+                                        <input
+                                            type="mail"
+                                            name="email"
+                                            className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+                                            placeholder="Enter your Mail ID"
+                                            value={formik.values.email}
+                                            onChange={formik.handleChange("email")}
+                                            required
+                                        />
+                                        <label className="block font-medium text-gray-700 mt-3">Message</label>
+                                        <textarea
+                                            type="text"
+                                            name="message"
+                                            className="w-full p-3 border rounded-lg focus:ring focus:ring-blue-300"
+                                            placeholder="Enter your message"
+                                            value={formik.values.message}
+                                            onChange={formik.handleChange("message")}
+                                            required
+                                        />
+                                    </div>
+                                    {/* Submit Button */}
+                                    <button type="submit" className="w-full bg-blue-500 mt-6 text-white p-3 rounded-lg hover:bg-blue-600 transition">
+                                        Submit
+                                    </button>
+                                </form>
+
                                 {/* Selected Items Display */}
                                 {/* <div className="mt-4 text-gray-600">
                                     <p className="font-medium">Selected:</p>
