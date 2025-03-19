@@ -246,6 +246,18 @@ const IMAGES = {
   HERBSBANNER: require("@/assets/common/herbs-banner.jpg"),
   DISEASES: require("@/assets/common/diseases.jpg"),
   DISEASESBANNER: require("@/assets/common/diseases-banner.jpg"),
+
+  MEDICINEPRESCRIPTION: require("@/assets/common/medicine-prescription.png"),
+  UPLOADICONS: require("@/assets/common/upload-icons.png"),
+  CALLICONS: require("@/assets/common/call-icons.png"),
+  DELIVERYICONS: require("@/assets/common/delivery-icons.png"),
+  RXPRESCRIPTION: require("@/assets/common/rx-prescription.png"),
+  POLICY: require("@/assets/common/policy.png"),
+  CANCELLATION: require("@/assets/common/cancellation.png"),
+  EDITORIAL: require("@/assets/common/editorial.png"),
+  INTELLECTUAL: require("@/assets/common/intellectual-drugcarts.png"),
+  EDITORIALBANNER: require("@/assets/common/editorial-drugcart.png"),
+  HHEALTHSTOREBANNER: require("@/assets/common/healthstore-banner.png"),
 };
 
 export { IMAGES };
