@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName, GetProductCats } from '../reduxToolkit/slices/productSlice'
+import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct } from '../reduxToolkit/slices/productSlice'
 
 const PostProductService = (data, resetForm) => async (dispatch) => {
     try {
@@ -68,6 +68,42 @@ const GetProductCatsService = (page = 1, limit = 4, cat_name = "", search = "") 
     }
 }
 
+const GetProductPersonalCareService = (page = 1, limit = 4) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/product/categorys?page=${page}&limit=${limit}&cat_name=personal-care`, { headers: await Authorization() })
+        dispatch(GetPersonalCareProduct(getData.data?.catproducts))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetProductFitnessService = (page = 1, limit = 4) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/product/categorys?page=${page}&limit=${limit}&cat_name=fitness-supplement`, { headers: await Authorization() })
+        dispatch(GetFitnessProduct(getData.data?.catproducts))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetProductTreatmentService = (page = 1, limit = 4) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/product/categorys?page=${page}&limit=${limit}&cat_name=treatment`, { headers: await Authorization() })
+        dispatch(GetTreatmentProduct(getData.data?.catproducts))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const GetProductUrlService = (url) => async (dispatch) => {
     try {
         dispatch(IsLoading(true));
@@ -126,4 +162,4 @@ const GetProductGeneticUrlService = (url) => async (dispatch) => {
 }
 
 
-export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService }
+export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService }
