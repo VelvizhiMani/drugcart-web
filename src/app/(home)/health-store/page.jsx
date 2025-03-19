@@ -11,24 +11,27 @@ import ShareFriendsCard from "@/components/ProductDetailsCard/ShareFriendsCard";
 import DownloadAppCard from "@/components/ProductDetailsCard/DownloadAppCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { GetProductCatsService } from "@/services/productService";
+import { GetNonCategoryService } from '@/services/categoryService';
+import { GetProductCatsService, GetProductFitnessService, GetProductPersonalCareService, GetProductTreatmentService } from "@/services/productService";
 
 const HealthStore = () => {
-    const { productCategory, categoryProducts } = useSelector((state) => state.productData);
+    const { productCategory, categoryProducts, personalCareProduct, fitnessProduct, treatmentProduct } = useSelector((state) => state.productData);
+    const { non_category } = useSelector((state) => state.categoryData)
     const router = useRouter();
     const [search, setSearch] = useState("");
     const dispatch = useDispatch();
   
     useEffect(() => {
-      dispatch(GetProductCatsService(1, 10, "ayush", search));
+      dispatch(GetProductPersonalCareService(1, 8));
+      dispatch(GetProductFitnessService(1, 8));
+      dispatch(GetProductTreatmentService(1, 8));
+      dispatch(GetNonCategoryService(1, 10))
+      dispatch(GetProductCatsService(1, 10))
     }, [search]);
   
-    const ayushFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "ayurvedic")
-    const homeopathyFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "homeopathy")
-    const siddhaFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "siddha")
-    const unaniFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "unani")
+    const ayush_FilterData = non_category?.categories?.filter((item) => item?.url !== "ayush" && item?.url !== "health-care-device")
   
-    console.log(categoryProducts);
+    console.log(fitnessProduct);
     const categroyProductClick = (sub_url) => {
       router.push(`/category/${sub_url}`);
     };
@@ -61,7 +64,7 @@ const HealthStore = () => {
                     priority
                     className="w-10 bg-white"
                   />
-                  <h2 className="text-md font-bold ps-7">Personal Care</h2>
+                  <h2 className="text-md font-bold ps-7">{ayush_FilterData?.[1]?.category_name}</h2>
                 </div>
                 <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
                   <Image
@@ -70,7 +73,7 @@ const HealthStore = () => {
                     priority
                     className="w-10 bg-white"
                   />
-                  <h2 className="text-md font-bold ps-7">Fitness Supplements</h2>
+                  <h2 className="text-md font-bold ps-7">{ayush_FilterData?.[0]?.category_name}</h2>
                 </div>
                 <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
                   <Image
@@ -79,7 +82,7 @@ const HealthStore = () => {
                     priority
                     className="w-10 bg-white"
                   />
-                  <h2 className="text-md font-bold ps-7">Health Care Products</h2>
+                  <h2 className="text-md font-bold ps-7">{ayush_FilterData?.[2]?.category_name}</h2>
                 </div>
               </div>
               <OurCareCard/>
@@ -167,7 +170,7 @@ const HealthStore = () => {
             </div>
             <div className="w-[80%]">
               <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-3">
-                <span className="text-lg">Best Seller Product</span>
+                <span className="text-lg">BEST SELLER PERSONAL CARE PRODUCTS</span>
                 <button
                   className="text-sm flex items-center hover:underline"
                   onClick={() => categroyProductClick("ayurvedic")}
@@ -175,9 +178,9 @@ const HealthStore = () => {
                   View All
                 </button>
               </div>
-              <ProductCard data={ayushFilter} />
+              <ProductCard data={personalCareProduct} />
               <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-                <span className="text-lg">Best Seller Personal Care Product</span>
+                <span className="text-lg">BEST SELLER FITNESS SUPPLEMENTS PRODUCTS</span>
                 <button
                   className="text-sm flex items-center hover:underline"
                   onClick={() => categroyProductClick("homeopathy")}
@@ -185,9 +188,9 @@ const HealthStore = () => {
                   View All
                 </button>
               </div>
-              <ProductCard data={homeopathyFilter} />
+              <ProductCard data={fitnessProduct} />
               <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-                <span className="text-lg">Best Seller Supplement Product</span>
+                <span className="text-lg">BEST SELLER TREATMENTS PRODUCTS</span>
                 <button
                   className="text-sm flex items-center hover:underline"
                   onClick={() => categroyProductClick("siddha")}
@@ -195,8 +198,8 @@ const HealthStore = () => {
                   View All
                 </button>
               </div>
-              <ProductCard data={siddhaFilter} />
-              <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
+              <ProductCard data={treatmentProduct} />
+              {/* <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
                 <span className="text-lg">Best Seller Women Care Product</span>
                 <button
                   className="text-sm flex items-center hover:underline"
@@ -215,7 +218,7 @@ const HealthStore = () => {
                   View All
                 </button>
               </div>
-              <ProductCard data={unaniFilter} />
+              <ProductCard data={unaniFilter} /> */}
             </div>
           </div>
         </section>

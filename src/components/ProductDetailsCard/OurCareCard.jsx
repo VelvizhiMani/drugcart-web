@@ -2,7 +2,9 @@
 import Image from "next/image";
 import { IMAGES } from "../common/images";
 
-const OurCareCard = () => {
+const OurCareCard = ({data}) => {
+  console.log('data', data);
+  
   return (
     <>
         <h2 className="font-bold text-center m-2 text-2xl my-8">
