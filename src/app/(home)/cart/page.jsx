@@ -19,8 +19,8 @@ function MyCart() {
     dispatch(getCartService());
   }, []);
 
-  console.log("carts", totalAfterDiscount);
-
+  console.log("carts items", items);
+const onAuth = items || carts?.carts
   return (
     <>
       {/* <section className="px-2 md:px-12 mt-3">
@@ -172,7 +172,7 @@ function MyCart() {
                       <h3>Total Price</h3>
                     </div>
                   </div>
-                  {items.map((item, i) => (
+                  {onAuth.map((item, i) => (
                     <div className="flex flex-wrap gap-4 items-center justify-between border-b pb-4" key={i}>
                       <div className="flex items-center space-x-4">
                         <Image

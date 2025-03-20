@@ -5,10 +5,11 @@ import Otpbanner from "@/assets/common/otpbanner.png"
 import Logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
 import { sendOTPService, verifyOTPService } from '@/services/userService';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTimer } from '@/hooks/useTimer';
 
 const OTP = ({searchParams}) => {
+  const { carts, items } = useSelector((state) => state.cartData);
   const { timer, startTimer, resetTimer } = useTimer({ initcounter: 300 });
   const dispatch = useDispatch()
   const router = useRouter()
@@ -62,7 +63,7 @@ const OTP = ({searchParams}) => {
       phone,
       otp: digit
     }
-    await dispatch(verifyOTPService(userdata, router))
+    await dispatch(verifyOTPService(userdata, router, items))
   }
 
   return (
