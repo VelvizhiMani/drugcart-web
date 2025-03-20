@@ -41,7 +41,7 @@ function MyCart() {
     const cartData = JSON.parse(cart)
     console.log(cartData);
     if (cartData === null) {
-      return null
+      router.push('/prescription')
     } else {
       router.push('/login')
     }
