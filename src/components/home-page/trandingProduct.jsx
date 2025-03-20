@@ -156,7 +156,7 @@ const TrandingProduct = () => {
                     {product?.price}
                   </p>
                   <button onClick={() => {
-                    dispatch(addToCart(product))
+                    // dispatch(addToCart(product))
                     dispatch(PostCartService(product))
                   }}>
                     <CartIcon />
