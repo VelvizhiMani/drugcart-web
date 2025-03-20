@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { createUser, userRegister } from '@/reduxToolkit/slices/userSlice'
+import { PostCartService } from './cartService'
+import { mergeCartAfterLogin } from '@/reduxToolkit/slices/cartSlice'
 
 const registerService = () => async (dispatch) => {
     await axios.get('https://jsonplaceholder.typicode.com/posts').then((response) => {
@@ -30,10 +32,13 @@ const sendOTPService = (userData, router) => async (dispatch) => {
     })
 }
 
-const verifyOTPService = (userData, router) => async (dispatch) => {
-    await axios.post('/api/verify-otp', userData).then((response) => {
+const verifyOTPService = (userData, router, items) => async (dispatch) => {
+    await axios.post('/api/verify-otp', userData).then(async(response) => {
         console.log("user data", response.data);
         localStorage.setItem('token', response?.data?.token);
+        items.map((item) => {
+            dispatch(PostCartService(item))
+        })
         router.push(`/`)
     }).catch((error) => {
         console.log("error", error?.response?.data?.error)

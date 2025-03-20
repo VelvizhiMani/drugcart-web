@@ -18,16 +18,23 @@ const cartSlice = createSlice({
     initialState: initialState,
     reducers: {
         getCart: (state, { payload }) => {
-            state.carts = payload
+            state.items = payload
         },
         addToCart: (state, action) => {
-            const existingItem = state.items.find((item) => item._id === action.payload._id);
-            if (existingItem) {
-                existingItem.quantity += 1;
+
+            console.log(action.payload.hasOwnProperty('userId'));
+            if (action.payload.hasOwnProperty('userId') === false) {
+                const existingItem = state.items.find((item) => item._id === action.payload._id);
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    state.items.push({ ...action.payload, quantity: 1 });
+                }
+                localStorage.setItem("cart", JSON.stringify(state.items));
             } else {
-                state.items.push({ ...action.payload, quantity: 1 });
+                localStorage.removeItem("cart")
             }
-            localStorage.setItem("cart", JSON.stringify(state.items));
+
         },
         removeFromCart: (state, action) => {
             state.items = state.items.filter((item) => item._id !== action.payload);
@@ -45,11 +52,16 @@ const cartSlice = createSlice({
             if (itemIndex !== -1) {
                 if (state.items[itemIndex].quantity > 1) {
                     state.items[itemIndex].quantity -= 1;
-                } else {
-                    state.items.splice(itemIndex, 1);
                 }
+                // else {
+                //     state.items.splice(itemIndex, 1);
+                // }
             }
             localStorage.setItem("cart", JSON.stringify(state.items));
+        },
+        mergeCartAfterLogin: (state, action) => {
+            state.items = [...state.items, ...action.payload];
+            localStorage.removeItem("cart");
         },
         clearCart: (state) => {
             state.items = [];
@@ -98,6 +110,7 @@ export const {
     decrementQuantity,
     clearCart,
     setCartFromDB,
-    getCart
+    getCart,
+    mergeCartAfterLogin
 } = cartSlice.actions;
 export default cartSlice.reducer;
