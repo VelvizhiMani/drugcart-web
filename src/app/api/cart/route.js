@@ -103,6 +103,11 @@ export async function POST(request) {
     } = await request.json();
     console.log('carts', quantity);
 
+    const isCart = await Cart.findOne({ product_name });
+    if (isCart) {
+        return NextResponse.json({ error: 'cart already exist' }, { status: 401 })
+    }
+
     try {
         // const existingItem = await Cart.find((item) => item.productId.toString() === productId);
 
