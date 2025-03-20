@@ -19,9 +19,11 @@ import {
   selectTotalDiscountPercentage,
   selectTotalSavings,
 } from "@/reduxToolkit/slices/cartSlice";
+import { useRouter } from "next/navigation";
 
 function MyCart() {
   const { carts, items } = useSelector((state) => state.cartData);
+  const router = useRouter()
   const totalPrice = useSelector(selectCartTotal);
   const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
   const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
@@ -33,6 +35,17 @@ function MyCart() {
   }, []);
 
   const onAuth = items.length > 0 ? items : carts?.carts || [];
+
+  const checkoutClick = async () => {
+    const cart = await localStorage.getItem('cart')
+    const cartData = JSON.parse(cart)
+    console.log(cartData);
+    if (cartData === null) {
+      return null
+    } else {
+      router.push('/login')
+    }
+  }
 
   return (
     <section className="px-2 md:px-12 mt-3">
@@ -79,7 +92,7 @@ function MyCart() {
                         className="px-2 py-1 bg-red-500 text-white"
                         onClick={() => {
                           if (item.quantity > 1) {
-                            dispatch(CartDecrementService(item._id,{quantity: item.quantity - 1 }));
+                            dispatch(CartDecrementService(item._id, { quantity: item.quantity - 1 }));
                           }
                         }}
                       >
@@ -88,7 +101,7 @@ function MyCart() {
                       <span className="px-4">{item?.quantity}</span>
                       <button
                         className="px-2 py-1 bg-green-500 text-white"
-                        onClick={() => dispatch(CartIncrementService(item._id,{ quantity: item.quantity + 1 }))}
+                        onClick={() => dispatch(CartIncrementService(item._id, { quantity: item.quantity + 1 }))}
                       >
                         +
                       </button>
@@ -133,7 +146,7 @@ function MyCart() {
               </div>
             </div>
 
-            <button className="w-full mt-4 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700">
+            <button className="w-full mt-4 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700" onClick={checkoutClick}>
               Checkout
             </button>
 

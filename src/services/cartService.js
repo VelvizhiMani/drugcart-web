@@ -15,6 +15,7 @@ const getCartService = () => async (dispatch) => {
 }
 
 const PostCartService = (data) => async (dispatch) => {
+    dispatch(addToCart(data))
     try {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/cart', data, { headers: await Authorization() })
