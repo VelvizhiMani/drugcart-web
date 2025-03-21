@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getProfileService } from "@/services/profileService";
 import { useRouter } from "next/navigation";
 import PersonIcon from "@mui/icons-material/Person";
+import { getCartService } from "@/services/cartService";
 
 const TopHeader = () => {
   const cart = useSelector((state) => state.cartData.items);
@@ -25,6 +26,7 @@ const TopHeader = () => {
 
   useEffect(() => {
     dispatch(getProfileService());
+    dispatch(getCartService())
   }, []);
 
   const logout = async () => {
@@ -96,67 +98,67 @@ const TopHeader = () => {
                       {cart?.length}
                     </div>
                   )}
-                  </div>
                 </div>
-                <div className="flex justify-center items-center">
-                  <div className="relative inline-block">
-                    {/* User Profile Button */}
-                    {profile?.username ? (
-                      <>
-                        <button
-                          onClick={() => setIsOpen(!isOpen)}
-                          className="flex items-center space-x-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
-                        >
-                          <span className="bg-blue-500 text-white rounded-full p-2 text-xs">
-                            <PersonIcon className="w-2 h-2" />
-                          </span>
-                          <span className="font-medium">{profile?.username}</span>
-                        </button>
-
-                        {/* Dropdown Menu */}
-                        {isOpen && (
-                          <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-40">
-                            <ul className="text-gray-700">
-                              <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                                My Profile
-                              </li>
-                              <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                                My Orders
-                              </li>
-                              <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                                My Prescription
-                              </li>
-                              <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                                My Wallet
-                              </li>
-                              <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                                Refer & Earn
-                              </li>
-                              <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={logout}>
-                                Logout
-                              </li>
-                            </ul>
-                          </div>
-                        )}
-                      </>
-                    ) : (
+              </div>
+              <div className="flex justify-center items-center">
+                <div className="relative inline-block">
+                  {/* User Profile Button */}
+                  {profile?.username ? (
+                    <>
                       <button
-                        type="button"
-                        className="text-white bg-bgcolor hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
-                        onClick={loginLink}
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="flex items-center space-x-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
                       >
-                        LogIn 🔒
+                        <span className="bg-blue-500 text-white rounded-full p-2 text-xs">
+                          <PersonIcon className="w-2 h-2" />
+                        </span>
+                        <span className="font-medium">{profile?.username}</span>
                       </button>
-                    )}
-                  </div>
-                </div>
 
-                {/* <div className="flex justify-center items-center">
+                      {/* Dropdown Menu */}
+                      {isOpen && (
+                        <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-40">
+                          <ul className="text-gray-700">
+                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                              My Profile
+                            </li>
+                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                              My Orders
+                            </li>
+                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                              My Prescription
+                            </li>
+                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                              My Wallet
+                            </li>
+                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                              Refer & Earn
+                            </li>
+                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                              Logout
+                            </li>
+                          </ul>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      className="text-white bg-bgcolor hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
+                      onClick={loginLink}
+                    >
+                      LogIn 🔒
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* <div className="flex justify-center items-center">
                 <h2 className="text-md text-center">English</h2>
               </div> */}
-              </div>
             </div>
           </div>
+        </div>
       </section>
     </>
   );
