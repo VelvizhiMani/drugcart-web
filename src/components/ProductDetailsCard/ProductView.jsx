@@ -9,6 +9,7 @@ import Feedback from "@/components/home-page/feedback";
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
 import QuestionCard from "@/components/ProductDetailsCard/QuestionCard";
 import { GetProductUrlService, GetProductGeneticUrlService } from "@/services/productService";
+import { getCartService, PostCartService } from "@/services/cartService"
 
 const ProductView = ({ url }) => {
   const dispatch = useDispatch();
@@ -139,7 +140,10 @@ const ProductView = ({ url }) => {
                 <p className="text-xs md:text-md">10 Capsule(s) in Strip</p>
               </div>
               <div className="flex items-center gap-3 mt-3">
-                <button className="bg-[#4CAF50] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-3 rounded shadow-md">
+                <button
+                  className="bg-[#4CAF50] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-3 rounded shadow-md"
+                  onClick={() => dispatch(PostCartService(product))}
+                >
                   <div className="flex justify-center items-center gap-1">
                     <svg
                       className="w-6 h-6 text-white dark:text-white"

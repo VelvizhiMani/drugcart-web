@@ -20,9 +20,11 @@ const PostCartService = (data) => async (dispatch) => {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/cart', data, { headers: await Authorization() })
         dispatch(addToCart(postData.data))
+        dispatch(getCartService())
         dispatch(IsLoading(false))
-        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
+        dispatch(showToast({ message: "Cart added Successfully!!!", severity: "success" }))
     } catch (error) {
+        dispatch(getCartService())
         dispatch(IsLoading(false))
         if (error?.response?.data?.error !== "Unauthorized") {
             dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))

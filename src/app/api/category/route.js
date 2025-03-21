@@ -80,6 +80,7 @@ export async function GET(req) {
         }
 
         const categoryItems = await Category.find(query)
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 

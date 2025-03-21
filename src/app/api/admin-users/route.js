@@ -65,6 +65,7 @@ export async function GET(req) {
 
         // Fetch cart items with pagination
         const userItems = await AdminUser.find(filters)
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
 

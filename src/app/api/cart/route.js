@@ -101,11 +101,15 @@ export async function POST(request) {
         gst,
         hsn,
     } = await request.json();
-    console.log('carts', quantity);
 
     const isCart = await Cart.findOne({ product_name });
     if (isCart) {
-        return NextResponse.json({ error: 'cart already exist' }, { status: 401 })
+        const updatedCart = await Cart.findOneAndUpdate(
+            { userId: user?._id, product_name },
+            { $inc: { quantity: 1 } },
+            { new: true, upsert: false }
+        );
+        return NextResponse.json(updatedCart, { status: 200 })
     }
 
     try {

@@ -63,6 +63,7 @@ export async function GET(req) {
         const skip = (page - 1) * limit;
 
         const OrginItems = await Orgin.find(filters)
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
 

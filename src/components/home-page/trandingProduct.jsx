@@ -17,7 +17,6 @@ const TrandingProduct = () => {
 
   useEffect(() => {
     dispatch(GetProductService(1, 8))
-    dispatch(getCartService())
   }, [])
 
   console.log('productList', productList);
