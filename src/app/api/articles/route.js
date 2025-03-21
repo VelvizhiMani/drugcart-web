@@ -67,10 +67,11 @@ export async function GET(req) {
 
     try {
         await connnectionToDatabase();
-        
+
         const skip = (page - 1) * limit;
 
         const ArticlesItems = await Articles.find(filters)
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
 

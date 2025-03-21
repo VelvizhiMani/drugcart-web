@@ -30,9 +30,9 @@ function MyCart() {
   const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getCartService());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getCartService());
+  // }, []);
 
   const onAuth = items.length > 0 ? items : carts?.carts || [];
 
@@ -76,9 +76,11 @@ function MyCart() {
                 >
                   <div className="flex items-center space-x-4">
                     <Image
-                      src={IMAGES.Product_Eugebra}
+                      src={item?.product_img ? `https://assets1.drugcarts.com/${item?.product_img}` : IMAGES.NO_IMAGE}
                       alt="Product"
                       className="w-16 h-16"
+                      width={50}
+                      height={50}
                     />
                     <div>
                       <h3 className="font-semibold">{item?.product_name}</h3>

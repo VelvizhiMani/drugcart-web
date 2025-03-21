@@ -21,9 +21,7 @@ export async function GET(req) {
         const filters = search ? { product_name: { $regex: search, $options: "i" } } : {};
         const skip = (page - 1) * limit;
 
-        const ProductItems = await Product.find(filters)
-            .skip(skip)
-            .limit(limit)
+        const ProductItems = await Product.find(filters).sort({ createdAt: -1 }).skip(skip).limit(limit)
 
         const totalItems = await Product.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
