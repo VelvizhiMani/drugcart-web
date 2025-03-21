@@ -22,7 +22,7 @@ const PostCartService = (data) => async (dispatch) => {
         dispatch(addToCart(postData.data))
         dispatch(getCartService())
         dispatch(IsLoading(false))
-        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
+        dispatch(showToast({ message: "Cart added Successfully!!!", severity: "success" }))
     } catch (error) {
         dispatch(getCartService())
         dispatch(IsLoading(false))
