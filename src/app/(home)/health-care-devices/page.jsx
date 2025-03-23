@@ -18,24 +18,17 @@ import { GetProductCategoryService, GetProductCatsService } from "@/services/pro
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
 
 const HealthCareDevices = () => {
-  const { productCategory, categoryProducts } = useSelector((state) => state.productData);
+  const { categoryProducts } = useSelector((state) => state.productData);
   const router = useRouter();
-  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(GetProductCatsService(1, 10, "health-care-device", search));
-    dispatch(GetProductCategoryService(1, 10, 'blood-test-kit', search))
-  }, [search]);
+    dispatch(GetProductCatsService(1, 4, "health-care-device"));
+    dispatch(GetProductCategoryService(1, 10, 'blood-test-kit'))
+  }, []);
 
-  const ayushFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "ayurvedic")
-  const homeopathyFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "homeopathy")
-  const siddhaFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "siddha")
-  const unaniFilter = categoryProducts?.catproducts?.filter((item) => item?.subcat_name === "unani")
-
-  console.log(productCategory);
   const categroyProductClick = (sub_url) => {
-    router.push(`/category/${sub_url}`);
+    router.push(`/${sub_url}`);
   };
   return (
     <section className="max-w-7xl mx-auto mt-3">
@@ -147,82 +140,32 @@ const HealthCareDevices = () => {
             <span className="text-lg">Best Seller Product</span>
             <button
               className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("ayurvedic")}
+              onClick={() => categroyProductClick("Health-Care-Device")}
             >
               View All
             </button>
           </div>
           <ProductCard data={categoryProducts?.catproducts} />
           <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Personal Care Product</span>
+            <span className="text-lg">Best Seller Health Care Product</span>
             <button
               className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("homeopathy")}
+              onClick={() => categroyProductClick("Health-Care-Device")}
             >
               View All
             </button>
           </div>
-          <ProductCard data={productCategory?.products} />
+          <ProductCard data={categoryProducts?.catproducts?.slice(2, 4)} />
           <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
             <span className="text-lg">Best Seller Ortho Product</span>
             <button
               className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("siddha")}
+              onClick={() => categroyProductClick("Health-Care-Device")}
             >
               View All
             </button>
           </div>
-          <ProductCard data={siddhaFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Gloves Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("unani")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={unaniFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Equipment Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("unani")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={unaniFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Diabetes Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("unani")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={unaniFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Mask Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("unani")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={unaniFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Best Seller Pulse Oximete Product</span>
-            <button
-              className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("unani")}
-            >
-              View All
-            </button>
-          </div>
-          <ProductCard data={unaniFilter} />
+          <ProductCard data={categoryProducts?.catproducts?.slice(1, 5)} />
         </div>
       </div>
     </section>

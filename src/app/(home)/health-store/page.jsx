@@ -22,18 +22,18 @@ const HealthStore = () => {
     const dispatch = useDispatch();
   
     useEffect(() => {
-      dispatch(GetProductPersonalCareService(1, 8));
+      dispatch(GetProductPersonalCareService(1, 4));
       dispatch(GetProductFitnessService(1, 8));
       dispatch(GetProductTreatmentService(1, 8));
-      dispatch(GetNonCategoryService(1, 10))
-      dispatch(GetProductCatsService(1, 10))
+      dispatch(GetNonCategoryService(1, 4))
+      dispatch(GetProductCatsService(1, 4))
     }, [search]);
   
     const ayush_FilterData = non_category?.categories?.filter((item) => item?.url !== "ayush" && item?.url !== "health-care-device")
   
-    console.log(fitnessProduct);
-    const categroyProductClick = (sub_url) => {
-      router.push(`/category/${sub_url}`);
+    const categroyProductClick = (cat_url) => {
+      router.push(`/${cat_url}`);
+      window.scrollTo({ top: 0, behavior: "auto" });
     };
   return (
      <section className="max-w-7xl mx-auto mt-3">
@@ -173,7 +173,7 @@ const HealthStore = () => {
                 <span className="text-lg">BEST SELLER PERSONAL CARE PRODUCTS</span>
                 <button
                   className="text-sm flex items-center hover:underline"
-                  onClick={() => categroyProductClick("ayurvedic")}
+                  onClick={() => categroyProductClick("personal-care")}
                 >
                   View All
                 </button>
@@ -183,7 +183,7 @@ const HealthStore = () => {
                 <span className="text-lg">BEST SELLER FITNESS SUPPLEMENTS PRODUCTS</span>
                 <button
                   className="text-sm flex items-center hover:underline"
-                  onClick={() => categroyProductClick("homeopathy")}
+                  onClick={() => categroyProductClick("fitness-supplements")}
                 >
                   View All
                 </button>
@@ -193,7 +193,7 @@ const HealthStore = () => {
                 <span className="text-lg">BEST SELLER TREATMENTS PRODUCTS</span>
                 <button
                   className="text-sm flex items-center hover:underline"
-                  onClick={() => categroyProductClick("siddha")}
+                  onClick={() => categroyProductClick("treatments")}
                 >
                   View All
                 </button>
