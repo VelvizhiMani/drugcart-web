@@ -140,7 +140,7 @@ const HealthCareDevices = () => {
             <span className="text-lg">Best Seller Product</span>
             <button
               className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("Health-Care-Device")}
+              onClick={() => categroyProductClick("health-care-device")}
             >
               View All
             </button>
@@ -150,7 +150,7 @@ const HealthCareDevices = () => {
             <span className="text-lg">Best Seller Health Care Product</span>
             <button
               className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("Health-Care-Device")}
+              onClick={() => categroyProductClick("health-care-device")}
             >
               View All
             </button>
@@ -160,7 +160,7 @@ const HealthCareDevices = () => {
             <span className="text-lg">Best Seller Ortho Product</span>
             <button
               className="text-sm flex items-center hover:underline"
-              onClick={() => categroyProductClick("Health-Care-Device")}
+              onClick={() => categroyProductClick("health-care-device")}
             >
               View All
             </button>

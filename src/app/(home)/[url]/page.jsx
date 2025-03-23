@@ -216,11 +216,8 @@ const HomeCategoryProduct = () => {
                 <div className="w-[80%]">
                     <div className="flex justify-between items-center bg-green-600 text-white font-semibold p-3 my-3">
                         <span className="text-lg capitalize">
-                            {pathSegments[0]} Product{" "}
+                            {pathSegments[0]} Products{" "}
                         </span>
-                        <button className="text-sm flex items-center hover:underline">
-                            View All
-                        </button>
                     </div>
                     <div className="bg-[#F0F4FF]">
                         <ProductCard data={categoryProducts?.catproducts} />
