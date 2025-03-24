@@ -9,6 +9,7 @@ const prescriptionSchema = new Schema(
     },
     rximage: {
       type: String,
+      default: "",
     },
     role: {
       type: String,

@@ -12,7 +12,7 @@ export async function POST(request) {
       return NextResponse.json({ error: message }, { status: 401 });
     }
 
-    const { rximage, role } = await request.json();
+    const { rximage } = await request.json();
 
     const isPrescription = await Prescription.findOne({ rximage });
     if (isPrescription) {
@@ -24,7 +24,6 @@ export async function POST(request) {
 
     const addPrescription = await new Prescription({
       rximage,
-      role,
       userId: user?._id
     });
 
