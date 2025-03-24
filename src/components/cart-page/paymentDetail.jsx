@@ -5,26 +5,23 @@ import { getCartService } from "@/services/cartService";
 import { IMAGES } from "@/components/common/images";
 import Link from 'next/link';
 import Image from "next/image";
+import { selectCartTotal, selectTotalAfterDiscount, selectTotalDiscountPercentage, selectTotalSavings } from "@/reduxToolkit/slices/cartSlice";
+import { useRouter } from "next/navigation";
 
 const PaymentDetail = () => {
-  const { carts } = useSelector((state) => state.cartData);
+  const { carts, items } = useSelector((state) => state.cartData);
+  const { userAddress, addresses } = useSelector((state) => state.addressData)
+  const totalPrice = useSelector(selectCartTotal);
+  const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
+  const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
+  const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getCartService());
-  }, []);
+  const router = useRouter()
 
   console.log("carts", carts);
 
   return (
     <>
-    <section className="px-2 md:px-12 mt-3">
-        <div className="flex flex-wrap items-center space-x-2 text-sm text-gray-500 ">
-          <Link href="#" className="hover:text-gray-700">Home</Link>
-          <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">Payment Details</Link>
-          </div>
-      </section>
       <section className="px-2 md:px-12 mt-3">
         <div className="max-w-7xl mx-auto bg-white p-2">
           <div className="flex justify-center items-center space-x-2 py-2">
@@ -195,30 +192,26 @@ const PaymentDetail = () => {
               <div className="space-y-6">
                 <div className="flex justify-between text-black">
                   <span>Sub total</span>
-                  <span>2 items</span>
+                  <span>{items?.length} items</span>
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total MRP</span>
-                  <span>$700</span>
+                  <span>₹{totalPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">-$150</span>
-                </div>
-                <div className="flex justify-between text-black">
-                  <span>Total Cart Value</span>
-                  <span>$600</span>
+                  <span className="text-green-600">-{totalDiscountPercentage.toFixed(0)}%</span>
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>$600</span>
+                  <span>₹{totalSavings.toFixed(2)}</span>
                 </div>
               </div>
               <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700">
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of $150 on this order
+                💰 Total Savings of ₹{totalAfterDiscount.toFixed(2)} on this order
               </div>
             </div>
           </div>

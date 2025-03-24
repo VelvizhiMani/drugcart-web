@@ -8,6 +8,7 @@ const PostAddressService = (data, resetForm) => async (dispatch) => {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/address', data, { headers: await Authorization() })
         dispatch(addAddress(postData.data))
+        dispatch(getAddress(postData.data))
         dispatch(GetAddressIdService(postData.data?.cus_id))
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
@@ -43,6 +44,20 @@ const GetAddressIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetUserAddressIdService = (id) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/address/user-address/${id}`, { headers: await Authorization() })
+        dispatch(getAddress(getIdData.data))
+        console.log(getIdData.data);
+        
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutAddressService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/address/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getAddress(response.data))
@@ -62,4 +77,4 @@ const DeleteAddressService = (id) => async (dispatch) => {
     })
 }
 
-export { PostAddressService, GetAddressService, GetAddressIdService, PutAddressService, DeleteAddressService }
+export { PostAddressService, GetAddressService, GetAddressIdService, GetUserAddressIdService, PutAddressService, DeleteAddressService }

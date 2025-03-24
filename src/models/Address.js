@@ -3,12 +3,12 @@ import mongoose, { Schema } from "mongoose";
 const addressSchema = new Schema(
   {
     cus_id: {
-      type: String,
-      default: ""
+      type: mongoose.Schema.Types.ObjectId,
+      default: "User"
     },
     type: {
       type: String,
-      default: ""
+      default: "Home"
     },
     cus_name: {
       type: String,
@@ -18,19 +18,11 @@ const addressSchema = new Schema(
       type: String,
       default: ""
     },
+    phone: {
+      type: String,
+      default: ""
+    },
     email: {
-      type: String,
-      default: ""
-    },
-    dob: {
-      type: String,
-      default: ""
-    },
-    age: {
-      type: String,
-      default: ""
-    },
-    gender: {
       type: String,
       default: ""
     },
@@ -54,45 +46,10 @@ const addressSchema = new Schema(
       type: String,
       default: ""
     },
-    del_name: {
-      type: String,
-      default: ""
-    },
-    del_lastname: {
-      type: String,
-      default: ""
-    },
-    del_email: {
-      type: String,
-      default: ""
-    },
-    del_phone: {
-      type: String,
-      default: ""
-    },
-    del_city: {
-      type: String,
-      default: ""
-    },
-    del_state: {
-      type: String,
-      default: ""
-    },
-    del_country: {
-      type: String,
-      default: ""
-    },
-    del_pincode: {
-      type: String,
-      default: ""
-    },
-    del_address: {
-      type: String,
-      default: ""
-    },
     status: {
       type: String,
-      default: ""
+      default: "Active",
+      enum: ["Active", "InActive"]
     },
     timestamp: {
       type: Date,
@@ -106,6 +63,6 @@ const addressSchema = new Schema(
 );
 const Customer =
   mongoose.models.Customer ||
-  mongoose.model("Customer", addressSchema, "customer");
+  mongoose.model("Customer", addressSchema, "address");
 
 export default Customer;

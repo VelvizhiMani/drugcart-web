@@ -5,11 +5,6 @@ const Prescription = () => {
   return (
     <>
       <section className="px-2 md:px-12 mt-3">
-        <div className="flex flex-wrap items-center space-x-2 text-sm text-gray-500 ">
-          <Link href="#" className="hover:text-gray-700">Home</Link>
-          <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">Upload Prescription</Link>
-        </div>
       </section>
       <section className="px-2 md:px-12 mt-3">
         <div className="max-w-7xl mx-auto bg-white p-2">

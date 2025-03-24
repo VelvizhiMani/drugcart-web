@@ -4,11 +4,37 @@ import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
 import Button from "@/components/common/button";
 import { useState } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { PostPrescriptionService } from '@/services/prescriptionService'
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const PrescriptionUpload = () => {
-  const [image, setImage] = useState();
+  const dispatch = useDispatch();
+  const [image, setImage] = useState(null);
+  const router = useRouter()
+
+  const handleImage = (event) => {
+    const file = event.target.files[0];
+    formik.setFieldValue("rximage", URL.createObjectURL(file));
+    setImage(URL.createObjectURL(file));
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      rximage: "",
+    },
+    onSubmit: async (data, { resetForm }) => {
+      console.log(data);
+      // await dispatch(PostPrescriptionService(data, resetForm))
+      router.push('/address')
+    },
+  });
+
+
   return (
-    
+
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
       {/* Upload Prescription Section */}
       <div className="border p-4 rounded-lg shadow-sm">
@@ -16,10 +42,11 @@ const PrescriptionUpload = () => {
         <p className="text-gray-500">Please attach a prescription to proceed</p>
         <PrescriptionCard
           className="p-10 shadow-lg rounded-2xl"
-          image={IMAGES.PRESCRIPTIONICON}
+          image={IMAGES.PRESCRIPTIONICON || image}
           title={"Browse files to upload your prescription"}
           imageformat={"(JPG, JPEG, PNG, PDF)"}
           btntext={"Upload"}
+          onChange={handleImage}
         />
         <PrescriptionCard
           className="p-10 shadow-lg rounded-2xl"
@@ -30,7 +57,7 @@ const PrescriptionUpload = () => {
         {image ? (
           <div className="relative w-64 h-64 mb-4">
             <Image
-              src={IMAGES.PRESCRIPTIONSAVE}
+              src={image ? image : IMAGES.PRESCRIPTIONSAVE}
               alt="Uploaded Image"
               layout="fill"
               objectFit="cover"
@@ -42,7 +69,7 @@ const PrescriptionUpload = () => {
         )}
 
         <div className="text-end">
-          <Button text="Save & Continue" />
+          <Button text="Save & Continue" onClick={formik.handleSubmit}/>
         </div>
       </div>
       {/* Valid Prescription Section */}

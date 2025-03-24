@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-const PrescriptionCard = ({ title, image, imageformat, btntext }) => {
+const PrescriptionCard = ({ title, image, imageformat, btntext, onChange }) => {
   return (
     <>
       <div className="flex flex-wrap gap-3 items-center justify-between border p-4 rounded-lg shadow-md w-full bg-white my-7 mx-auto">
@@ -18,7 +18,7 @@ const PrescriptionCard = ({ title, image, imageformat, btntext }) => {
         {/* Upload Button */}
         <label className="bg-green-500 text-white px-8 py-2 rounded-md hover:bg-green-600">
           {btntext}
-          <input type="file" accept="image/*" className="hidden" />
+          <input type="file" accept="image/*" className="hidden" onChange={onChange}/>
         </label>
       </div>
     </>
