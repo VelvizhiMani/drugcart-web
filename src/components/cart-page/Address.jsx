@@ -18,10 +18,11 @@ const AddressUpload = () => {
   const formik = useFormik({
     initialValues: {
       cus_name: "",
+      type: "",
       lastname: "",
       email: "",
       lastname: "",
-      del_phone: "",
+      phone: "",
       address: "",
       postcode: "",
       state: "",
@@ -34,7 +35,7 @@ const AddressUpload = () => {
     },
   });
 
-  console.log('addresses', addresses);
+  console.log('addresses', formik.values.type);
 
   return (
     <>
@@ -96,8 +97,8 @@ const AddressUpload = () => {
                       type="number"
                       placeholder="Phone Number"
                       className="border p-2 rounded w-full"
-                      value={formik.values.del_phone}
-                      onChange={formik.handleChange("del_phone")}
+                      value={formik.values.phone}
+                      onChange={formik.handleChange("phone")}
                       required
                     />
                   </div>
@@ -152,21 +153,30 @@ const AddressUpload = () => {
                       <button
                         type="button"
                         className={`px-4 py-2 ${type === "Home" ? "bg-green-600 text-white" : "bg-gray-300 text-black"} rounded mr-2`}
-                        onClick={() => setType('Home')}
+                        onClick={() => {
+                          setType('Home')
+                          formik.setFieldValue("type", 'Home');
+                        }}
                       >
                         Home
                       </button>
                       <button
                         type="button"
                         className={`px-4 py-2 ${type === "Office" ? "bg-green-600 text-white" : "bg-gray-300 text-black"} rounded mr-2`}
-                        onClick={() => setType('Office')}
+                        onClick={() => {
+                          setType('Office')
+                          formik.setFieldValue("type", 'Office');
+                        }}
                       >
                         Office
                       </button>
                       <button
                         type="button"
                         className={`px-4 py-2 ${type === "Others" ? "bg-green-600 text-white" : "bg-gray-300 text-black"} rounded mr-2`}
-                        onClick={() => setType('Others')}
+                        onClick={() => {
+                          setType('Others')
+                          formik.setFieldValue("type", 'Others');
+                        }}
                       >
                         Others
                       </button>
@@ -203,6 +213,8 @@ const AddressUpload = () => {
                           </div>
                           <p>
                             {addressItem?.cus_name} {addressItem?.lastname}, <br />
+                            {addressItem?.phone},
+                            <br />
                             {addressItem?.address},
                             <br />
                             {addressItem?.town},
@@ -212,6 +224,8 @@ const AddressUpload = () => {
                             {addressItem?.state},
                             <br />
                             {addressItem?.country}.
+                            <br />
+                            ({addressItem?.type})
                           </p>
                         </div>
                       ))}

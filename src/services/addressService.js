@@ -8,6 +8,7 @@ const PostAddressService = (data, resetForm) => async (dispatch) => {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/address', data, { headers: await Authorization() })
         dispatch(addAddress(postData.data))
+        dispatch(getAddress(postData.data))
         dispatch(GetAddressIdService(postData.data?.cus_id))
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))

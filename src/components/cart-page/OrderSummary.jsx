@@ -207,20 +207,43 @@ const OrderSummary = () => {
                 Total Cart Value: ₹{totalPrice.toFixed(2)}
               </div>
               <div className="bg-blue-100 p-6 rounded-lg w-full my-4">
-                <h2 className="font-bold text-xl">Shipping Info</h2>
+                <h2 className="font-bold text-xl mb-2">Shipping Info</h2>
                 <div className="flex space-x-8">
                   <p className="font-bold">Name</p>
-                  <p>: {addresses?.cus_name}</p>
+                  <p>: {addresses?.cus_name} {addresses?.lastname}</p>
                 </div>
 
                 <div className="flex space-x-7">
                   <p className="font-bold">Phone</p>
-                  <p>: {addresses?.del_phone}</p>
+                  <p>: {addresses?.phone}</p>
                 </div>
-
+                <div className="flex space-x-7">
+                  <p className="font-bold">Email</p>
+                  <p>: {addresses?.email}</p>
+                </div>
                 <div className="flex space-x-3">
                   <p className="font-bold">Address</p>
                   <p>: {addresses?.address}</p>
+                </div>
+                <div className="flex space-x-7">
+                  <p className="font-bold">Town</p>
+                  <p>: {addresses?.town}</p>
+                </div>
+                <div className="flex space-x-4">
+                  <p className="font-bold">Postal</p>
+                  <p>: {addresses?.postcode}</p>
+                </div>
+                <div className="flex space-x-7">
+                  <p className="font-bold">State</p>
+                  <p>: {addresses?.state}</p>
+                </div>
+                <div className="flex space-x-3">
+                  <p className="font-bold">Country</p>
+                  <p>: {addresses?.country}</p>
+                </div>
+                <div className="flex space-x-7">
+                  <p className="font-bold">Type</p>
+                  <p>: {addresses?.type}</p>
                 </div>
               </div>
             </div>
