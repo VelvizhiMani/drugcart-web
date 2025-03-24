@@ -144,7 +144,7 @@ function MyCart() {
               </div>
               <div className="border-t pt-2 flex justify-between text-lg font-bold text-red-600">
                 <span>Total Amount</span>
-                <span>₹{totalAfterDiscount.toFixed(2)}</span>
+                <span>₹{totalSavings.toFixed(2)}</span>
               </div>
             </div>
 
@@ -153,7 +153,7 @@ function MyCart() {
             </button>
 
             <div className="mt-2 text-center text-sm text-gray-500 bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-              💰 Total Savings: ₹{totalSavings.toFixed(2)}
+              💰 Total Savings: ₹{totalAfterDiscount.toFixed(2)}
             </div>
           </div>
         </div>

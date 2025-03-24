@@ -27,7 +27,7 @@ const PrescriptionUpload = () => {
     },
     onSubmit: async (data, { resetForm }) => {
       console.log(data);
-      await dispatch(PostPrescriptionService(data, resetForm))
+      // await dispatch(PostPrescriptionService(data, resetForm))
       router.push('/address')
     },
   });

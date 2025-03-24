@@ -1,11 +1,41 @@
 "use client";
 import Image from "next/image";
+import { useFormik } from "formik";
 import { IMAGES } from "@/components/common/images";
 import { useState } from "react";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useDispatch, useSelector } from "react-redux";
+import { PostAddressService, DeleteAddressService, GetAddressIdService, GetUserAddressIdService } from '@/services/addressService';
+import { useRouter } from "next/navigation";
 
-const PrescriptionUpload = () => {
-  const [image, setImage] = useState();
+const AddressUpload = () => {
+  const { userAddress, addresses } = useSelector((state) => state.addressData)
+  const [type, setType] = useState('Home');
   const [activeTab, setActiveTab] = useState("add");
+  const dispatch = useDispatch();
+  const router = useRouter()
+
+  const formik = useFormik({
+    initialValues: {
+      cus_name: "",
+      lastname: "",
+      email: "",
+      lastname: "",
+      del_phone: "",
+      address: "",
+      postcode: "",
+      state: "",
+      country: "",
+      town: "",
+    },
+    onSubmit: async (data, { resetForm }) => {
+      console.log(data);
+      await dispatch(PostAddressService(data, resetForm))
+    },
+  });
+
+  console.log('addresses', addresses);
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
@@ -15,89 +45,103 @@ const PrescriptionUpload = () => {
             <div className="bg-white p-6 rounded-lg w-full max-w-2xl">
               <div className="flex border-b pb-2 mb-4">
                 <button
-                  className={`px-4 py-2 font-semibold rounded-md ${
-                    activeTab === "add"
-                      ? "bg-pink-200 text-pink-700"
-                      : "text-gray-600"
-                  }`}
+                  className={`px-4 py-2 font-semibold rounded-md ${activeTab === "add"
+                    ? "bg-pink-200 text-pink-700"
+                    : "text-gray-600"
+                    }`}
                   onClick={() => setActiveTab("add")}
                 >
                   Add New Address
                 </button>
                 <button
-                  className={`px-4 py-2 font-semibold rounded-md ${
-                    activeTab === "saved"
-                      ? "bg-pink-200 text-pink-700"
-                      : "text-gray-600"
-                  }`}
+                  className={`px-4 py-2 font-semibold rounded-md ${activeTab === "saved"
+                    ? "bg-pink-200 text-pink-700"
+                    : "text-gray-600"
+                    }`}
                   onClick={() => setActiveTab("saved")}
                 >
                   Saved Address
                 </button>
               </div>
               {activeTab === "add" && (
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={formik.handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input
                       type="text"
-                      placeholder="Delivery Type"
+                      placeholder="First Name"
                       className="border p-2 rounded w-full"
+                      value={formik.values.cus_name}
+                      onChange={formik.handleChange("cus_name")}
+                      required
                     />
                     <input
                       type="text"
-                      placeholder="Name"
+                      placeholder="Last Name"
                       className="border p-2 rounded w-full"
+                      value={formik.values.lastname}
+                      onChange={formik.handleChange("lastname")}
+                      required
                     />
                   </div>
-                  <input
-                    type="email"
-                    placeholder="E-Mail Address"
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="email"
+                      placeholder="E-Mail Address"
+                      className="border p-2 rounded w-full"
+                      value={formik.values.email}
+                      onChange={formik.handleChange("email")}
+                      required
+                    />
+                    <input
+                      type="number"
+                      placeholder="Phone Number"
+                      className="border p-2 rounded w-full"
+                      value={formik.values.del_phone}
+                      onChange={formik.handleChange("del_phone")}
+                      required
+                    />
+                  </div>
+                  <textarea
+                    placeholder="Door no/Apart no/Street name"
                     className="border p-2 rounded w-full"
+                    value={formik.values.address}
+                    onChange={formik.handleChange("address")}
+                    required
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <input
-                      type="text"
-                      placeholder="Phone Number"
+                      type="number"
+                      placeholder="Postal Code"
                       className="border p-2 rounded w-full"
+                      value={formik.values.postcode}
+                      onChange={formik.handleChange("postcode")}
+                      required
                     />
                     <input
                       type="text"
-                      placeholder="LandMark"
+                      placeholder="Town"
                       className="border p-2 rounded w-full"
+                      value={formik.values.town}
+                      onChange={formik.handleChange("town")}
+                      required
                     />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <textarea
-                      placeholder="Door no/Apart no/Street name"
-                      className="border p-2 rounded w-full"
-                    ></textarea>
-                    <textarea
-                      placeholder="District/Taluk"
-                      className="border p-2 rounded w-full"
-                    ></textarea>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="City"
-                      className="border p-2 rounded w-full"
-                    />
                     <input
                       type="text"
                       placeholder="State"
                       className="border p-2 rounded w-full"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      placeholder="Postal Code"
-                      className="border p-2 rounded w-full"
+                      value={formik.values.state}
+                      onChange={formik.handleChange("state")}
+                      required
                     />
                     <input
                       type="text"
                       placeholder="Country"
                       className="border p-2 rounded w-full"
+                      value={formik.values.country}
+                      onChange={formik.handleChange("country")}
+                      required
                     />
                   </div>
                   <div>
@@ -105,93 +149,86 @@ const PrescriptionUpload = () => {
                       Type of Place
                     </label>
                     <div className="flex flex-wrap gap-4 mx-4">
-                        <button
-                          type="button"
-                          className="px-4 py-2 bg-green-600 text-white rounded mr-2"
-                        >
-                          Home
-                        </button>
-                        <button
-                          type="button"
-                          className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2"
-                        >
-                          Office
-                        </button>
-                        <button
-                          type="button"
-                          className="px-4 py-2 bg-gray-300 text-gray-700 rounded mr-2"
-                        >
-                          Others
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        className={`px-4 py-2 ${type === "Home" ? "bg-green-600 text-white" : "bg-gray-300 text-black"} rounded mr-2`}
+                        onClick={() => setType('Home')}
+                      >
+                        Home
+                      </button>
+                      <button
+                        type="button"
+                        className={`px-4 py-2 ${type === "Office" ? "bg-green-600 text-white" : "bg-gray-300 text-black"} rounded mr-2`}
+                        onClick={() => setType('Office')}
+                      >
+                        Office
+                      </button>
+                      <button
+                        type="button"
+                        className={`px-4 py-2 ${type === "Others" ? "bg-green-600 text-white" : "bg-gray-300 text-black"} rounded mr-2`}
+                        onClick={() => setType('Others')}
+                      >
+                        Others
+                      </button>
+                    </div>
                     <div className="flex justify-end my-3">
-                        <button
-                          type="submit"
-                          className="w-40 bg-pink-700 text-white py-2 rounded mr-2"
-                        >
-                          ADD
-                        </button>
-                      </div>
+                      <button
+                        type="submit"
+                        className="w-40 bg-pink-700 text-white py-2 rounded mr-2"
+                      >
+                        Submit
+                      </button>
+                    </div>
                   </div>
                 </form>
               )}
               {activeTab === "saved" ? (
-                <div className="text-start text-gray-600 py-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="border-2 p-3 bg-[#EEFFE4]">
-                      <h2 className="font-semibold">Office</h2>
-                      <p>
-                        Velvizhi, <br />
-                        105, Reddiayar Street,
-                        <br />
-                        Alagramam & Post,
-                        <br />
-                        Tindivanam Taluk
-                        <br />
-                        Villupuram
-                      </p>
-                    </div>
-                    <div className="border-2 p-3">
-                      <h2 className="font-semibold">Home</h2>
-                      <p>
-                        Nithya, <br />
-                        105, Reddiayar Street,
-                        <br />
-                        Alagramam & Post,
-                        <br />
-                        Tindivanam Taluk
-                        <br />
-                        Villupuram
-                      </p>
-                    </div>
-                    <div className="border-2 p-3">
-                      <h2 className="font-semibold">Office</h2>
-                      <p>
-                        Nithya, <br />
-                        105, Reddiayar Street,
-                        <br />
-                        Alagramam & Post,
-                        <br />
-                        Tindivanam Taluk
-                        <br />
-                        Villupuram
-                      </p>
+                <>
+                  <div className="text-start text-gray-600 py-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {userAddress && userAddress?.map((addressItem, i) => (
+                        <div
+                          className={`border-2 p-3 ${addressItem?._id === addresses?._id ? "bg-[#EEFFE4]" : null} cursor-pointer`}
+                          key={i}
+                          onClick={() => dispatch(GetUserAddressIdService(addressItem?._id))}
+                        >
+                          <div className="flex justify-between">
+                            <h2 className="font-semibold">Address {i + 1}</h2>
+                            <button onClick={async () => {
+                              await dispatch(DeleteAddressService(addressItem?._id))
+                              await dispatch(GetAddressIdService(addressItem?.cus_id))
+                            }}>
+                              <DeleteIcon color="error" />
+                            </button>
+                          </div>
+                          <p>
+                            {addressItem?.cus_name} {addressItem?.lastname}, <br />
+                            {addressItem?.address},
+                            <br />
+                            {addressItem?.town},
+                            <br />
+                            {addressItem?.postcode},
+                            <br />
+                            {addressItem?.state},
+                            <br />
+                            {addressItem?.country}.
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="bg-pink-700 text-white py-2 px-4 text-center rounded my-4"
-                  >
-                    ADD
-                  </button>
-                </div>
-                </div>
-              ) : (
-                <div className="text-center text-gray-600 py-6">
-                  No saved addresses found.
-                </div>
-              )}
+                  <div className="flex justify-end my-3">
+                    <button
+                      type="submit"
+                      className="w-40 bg-pink-700 text-white py-2 rounded mr-2"
+                      disabled={Object.values(addresses).length === 0 ? true : false}
+                      onClick={() => router.push('/summary')}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </>
+              ) : null}
             </div>
           </div>
         </div>
@@ -208,4 +245,4 @@ const PrescriptionUpload = () => {
   );
 };
 
-export default PrescriptionUpload;
+export default AddressUpload;
