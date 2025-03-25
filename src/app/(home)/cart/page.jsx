@@ -69,7 +69,7 @@ function MyCart() {
                 </div>
               </div>
 
-              {onAuth.map((item, i) => (
+              {items.map((item, i) => (
                 <div
                   className="flex flex-wrap gap-4 items-center justify-between border-b pb-4"
                   key={i}

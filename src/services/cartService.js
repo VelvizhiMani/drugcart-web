@@ -5,9 +5,9 @@ import { addToCart, getCart, incrementQuantity, decrementQuantity, removeFromCar
 
 const getCartService = () => async (dispatch) => {
     await axios.get('/api/cart', { headers: await Authorization() }).then((response) => {
-        dispatch(getCart(response.data?.carts))
+        dispatch(getCart(response.data))
         // localStorage.setItem('cart', cart);
-        console.log(response.data?.carts);
+        console.log(response.data);
 
     }).catch((error) => {
         console.log("error", error.message)
