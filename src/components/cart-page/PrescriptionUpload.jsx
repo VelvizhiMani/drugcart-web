@@ -3,23 +3,22 @@ import PrescriptionCard from "@/components/common/PrescriptionCard";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
 import Button from "@/components/common/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PostPrescriptionService } from '@/services/prescriptionService'
-import { useDispatch } from "react-redux";
+import { GetPrescriptionIdService, GetPrescriptionService, PostPrescriptionService } from '@/services/prescriptionService'
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
 const PrescriptionUpload = () => {
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
+  const { prescriptionList, prescription } = useSelector((state) => state.prescriptionData)
   const router = useRouter()
 
-  const handleImage = (event) => {
-    const file = event.target.files[0];
-    formik.setFieldValue("rximage", URL.createObjectURL(file));
-    setImage(URL.createObjectURL(file));
-  };
+  useEffect(() => {
+    dispatch(GetPrescriptionService())
+  }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -27,10 +26,19 @@ const PrescriptionUpload = () => {
     },
     onSubmit: async (data, { resetForm }) => {
       console.log(data);
-      // await dispatch(PostPrescriptionService(data, resetForm))
-      router.push('/address')
+      await dispatch(PostPrescriptionService(data, resetForm))
+      // router.push('/address')
     },
   });
+
+  const handleImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      formik.setFieldValue("rximage", URL.createObjectURL(file));
+      formik.handleSubmit()
+    }
+    setImage(URL.createObjectURL(file));
+  };
 
 
   return (
@@ -54,22 +62,25 @@ const PrescriptionUpload = () => {
           title={"Select from saved prescription"}
           btntext={"Select"}
         />
-        {image ? (
-          <div className="relative w-64 h-64 mb-4">
+        <h2 className="text-xl font-semibold mb-4 text-blue-700">You Select Prescription Below,</h2>
+        <div className=" grid grid-cols-2 md:grid-cols-5 gap-5 relative w-full h-64 mb-4">
+          {prescriptionList && prescriptionList?.map((item, i) => (
             <Image
-              src={image ? image : IMAGES.PRESCRIPTIONSAVE}
+              onClick={() => dispatch(GetPrescriptionIdService(item?._id))}
+              key={i}
+              src={item?.rximage ? item?.rximage : IMAGES.PRESCRIPTIONSAVE}
               alt="Uploaded Image"
-              layout="fill"
+              // layout="fill"
               objectFit="cover"
-              className="rounded-lg"
+              className={`rounded-md w-24 h-24 border-2 cursor-pointer ${item?._id === prescription?._id ? "border-[#B7084B]" : null} mb-3`}
+              width={200}
+              height={200}
             />
-          </div>
-        ) : (
-          <p className="text-gray-500 mb-4">No image uploaded</p>
-        )}
-
+          ))}
+        </div>
+        {prescriptionList?.length === 0 && <p className="text-gray-500">No image uploaded</p>}
         <div className="text-end">
-          <Button text="Save & Continue" onClick={formik.handleSubmit}/>
+          <Button disabled={prescription?._id ? false : true } text="Save & Continue" onClick={() => router.push('/address')} />
         </div>
       </div>
       {/* Valid Prescription Section */}

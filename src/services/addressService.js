@@ -37,6 +37,7 @@ const GetAddressIdService = (id) => async (dispatch) => {
         dispatch(IsLoading(true))
         const getIdData = await axios.get(`/api/address/${id}`, { headers: await Authorization() })
         dispatch(getUserAddress(getIdData.data))
+        dispatch(getAddress(getIdData.data[0]))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))

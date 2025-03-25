@@ -36,3 +36,14 @@ export async function POST(request) {
     );
   }
 }
+
+export async function GET() {
+  const { success, user, message } = await authenticateUser();
+
+  if (!success) {
+    return NextResponse.json({ error: message }, { status: 401 })
+  }
+
+  const userWithPrescription = await Prescription.find({ userId: user?._id });
+  return NextResponse.json(userWithPrescription, { status: 200 })
+}
