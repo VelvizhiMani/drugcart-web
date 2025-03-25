@@ -37,6 +37,7 @@ import tastPackageReducer from "@/reduxToolkit/slices/tastPackageSlice"
 import labBookingReducer from "@/reduxToolkit/slices/labBookingSlice"
 import contactUsReducer from "@/reduxToolkit/slices/contactSlice"
 import prescriptionReducer from "@/reduxToolkit/slices/prescriptionSlice"
+import orderReducer from "@/reduxToolkit/slices/orderSlice"
 
 export const store = configureStore({
     reducer: {
@@ -77,6 +78,7 @@ export const store = configureStore({
         labBookingData: labBookingReducer,
         contactUsData: contactUsReducer,
         prescriptionData: prescriptionReducer,
+        orderData: orderReducer,
         adminUserData: adminUserReducer
     }
 })

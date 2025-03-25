@@ -7,9 +7,11 @@ import Link from 'next/link';
 import Image from "next/image";
 import { selectCartTotal, selectTotalAfterDiscount, selectTotalDiscountPercentage, selectTotalSavings } from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
+import { PostOrderService } from "@/services/orderService";
 
 const PaymentDetail = () => {
   const { carts, items } = useSelector((state) => state.cartData);
+  const { prescription } = useSelector((state) => state.prescriptionData)
   const { userAddress, addresses } = useSelector((state) => state.addressData)
   const totalPrice = useSelector(selectCartTotal);
   const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
@@ -18,7 +20,22 @@ const PaymentDetail = () => {
   const dispatch = useDispatch();
   const router = useRouter()
 
-  console.log("carts", carts);
+  const orderConfirm = async() => {
+    const orderData = {
+      shippingInfo: addresses,
+      orderItems: items,
+      rximage: prescription?.rximage,
+      paymentInfo: {
+        id: Date.now(),
+      },
+      itemsPrice: totalPrice,
+      shippingPrice: totalPrice,
+      totalPrice: totalSavings
+    }
+    console.log("orderData", orderData);
+    await dispatch(PostOrderService(orderData, router))
+  }
+
 
   return (
     <>
@@ -207,7 +224,7 @@ const PaymentDetail = () => {
                   <span>₹{totalSavings.toFixed(2)}</span>
                 </div>
               </div>
-              <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700">
+              <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700" onClick={orderConfirm}>
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
