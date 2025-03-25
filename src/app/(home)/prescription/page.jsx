@@ -5,8 +5,6 @@ const Prescription = () => {
   return (
     <>
       <section className="px-2 md:px-12 mt-3">
-      </section>
-      <section className="px-2 md:px-12 mt-3">
         <div className="max-w-7xl mx-auto bg-white p-2">
           <div className="flex justify-center items-center space-x-2 py-2">
             <div className="flex flex-col items-center">

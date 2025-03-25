@@ -9,6 +9,7 @@ const PostPrescriptionService = (data, resetForm) => async (dispatch) => {
         const postData = await axios.post('/api/prescription', data, { headers: await Authorization() })
         dispatch(addPrescription(postData.data))
         dispatch(GetPrescriptionIdService(postData.data?._id))
+        dispatch(GetPrescriptionService())
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Uploaded Successfully!!!", severity: "success" }))
         resetForm()
@@ -19,11 +20,12 @@ const PostPrescriptionService = (data, resetForm) => async (dispatch) => {
     }
 }
 
-const GetPrescriptionService = (page = 1, limit, search = "") => async (dispatch) => {
+const GetPrescriptionService = () => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/prescription?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/prescription`, { headers: await Authorization() })
         dispatch(getPrescriptions(getData.data))
+        dispatch(getPrescription(getData.data[0]))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))

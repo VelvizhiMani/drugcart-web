@@ -10,7 +10,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material';
 
-function SearchInput({ filterOption, rowCount, value, onChange, Submit }) {
+function SearchInput({ filterOption, rowCount, value, onChange, Submit, placeholder = "Search" }) {
     const theme = useTheme()
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -31,7 +31,7 @@ function SearchInput({ filterOption, rowCount, value, onChange, Submit }) {
         >
             <InputBase
                 sx={{ ml: 1, flex: 1, fontFamily: "Poppins" }}
-                placeholder="Search"
+                placeholder={placeholder}
                 inputProps={{ 'aria-label': 'search' }}
                 value={value}
                 onChange={onChange}

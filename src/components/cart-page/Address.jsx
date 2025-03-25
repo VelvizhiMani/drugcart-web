@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useFormik } from "formik";
 import { IMAGES } from "@/components/common/images";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from "react-redux";
 import { PostAddressService, DeleteAddressService, GetAddressIdService, GetUserAddressIdService } from '@/services/addressService';
@@ -34,8 +34,12 @@ const AddressUpload = () => {
       await dispatch(PostAddressService(data, resetForm))
     },
   });
-
-  console.log('addresses', formik.values.type);
+  
+  useEffect(() => {
+    if (addresses?._id) {
+      setActiveTab("saved")
+    }
+  }, [addresses?._id])
 
   return (
     <>
