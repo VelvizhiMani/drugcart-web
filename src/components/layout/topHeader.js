@@ -26,7 +26,7 @@ const TopHeader = () => {
 
   useEffect(() => {
     dispatch(getProfileService());
-    dispatch(getCartService())
+    // dispatch(getCartService())
   }, []);
 
   const logout = async () => {

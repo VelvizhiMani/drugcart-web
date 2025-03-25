@@ -14,6 +14,7 @@ import Feedback from "@/components/home-page/feedback";
 // import CustomerSaying from "@/components/home-page/CustomerSaying";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileService } from "@/services/profileService";
+import { getCartService } from "@/services/cartService";
 
 const Home = () => {
   const { profile } = useSelector((state) => state.profileData);
@@ -26,6 +27,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getProfileService());
+     dispatch(getCartService())
   }, []);
   console.log(profile);
 
