@@ -1,7 +1,9 @@
 import mongoose, { Schema } from "mongoose";
+import shortid from "shortid";
 
 const orderSchema = new Schema(
     {
+        orderId: { type: String, default: shortid.generate, unique: true },
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
