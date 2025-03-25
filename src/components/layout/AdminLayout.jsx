@@ -259,10 +259,15 @@ function AdminLayout(props) {
       path: "/admin/lab-list",
       name: "Lab List",
     },
+    {
+      id: 12,
+      path: "/admin/orders",
+      name: "Orders",
+    },
   ];
-  const mainMenu = userRoutes.slice(0, 11);
-  const filteredRoutes = userRoutes.slice(11, 16);
-  const filtereTwodRoutes = userRoutes.slice(11, userRoutes.length);
+  const mainMenu = userRoutes.slice(0, 12);
+  const filteredRoutes = userRoutes.slice(12, 16);
+  const filtereTwodRoutes = userRoutes.slice(12, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}

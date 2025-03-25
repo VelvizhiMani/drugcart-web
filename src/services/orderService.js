@@ -19,10 +19,10 @@ const PostOrderService = (data, router) => async (dispatch) => {
     }
 }
 
-const GetOrderService = (page = 1, limit, search = "") => async (dispatch) => {
+const GetOrdersService = (page = 1, limit, search = "", status = "") => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/order?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/order?page=${page}&limit=${limit}&search=${search}&orderStatus=${status}`, { headers: await Authorization() })
         dispatch(getAllOrders(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
@@ -56,10 +56,10 @@ const PutOrderService = (id, userData) => async (dispatch) => {
 const DeleteOrderService = (id) => async (dispatch) => {
     await axios.delete(`/api/order/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getOrder(id))
-        dispatch(GetOrderService())
+        dispatch(GetOrdersService())
     }).catch((error) => {
         console.log("error", error.message)
     })
 }
 
-export { PostOrderService, GetOrderService, GetOrderIdService, PutOrderService, DeleteOrderService }
+export { PostOrderService, GetOrdersService, GetOrderIdService, PutOrderService, DeleteOrderService }
