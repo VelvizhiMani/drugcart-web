@@ -9,9 +9,11 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import CustomerSaying from "@/components/home-page/CustomerSaying";
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useSelector, useDispatch } from "react-redux";
 import { GetServiceUrlService } from '@/services/drugService';
+import { PostServiceQuiryService } from '@/services/serviceenquiryService';
+import { useFormik } from "formik";
 
 const steps = [
     { icon: <PhoneAndroidIcon className="text-red-500 text-3xl" />, title: "REQUEST", desc: "Request for therapeutic massage" },
@@ -66,7 +68,6 @@ const faqs = [
 const Physiotherapist = () => {
     const [openIndex, setOpenIndex] = useState(0);
     const { serviceUrl } = useSelector((state) => state.serviceData);
-    const params = useParams()
     const dispatch = useDispatch()
     const pathname = usePathname();
 
@@ -76,6 +77,21 @@ const Physiotherapist = () => {
     useEffect(() => {
         dispatch(GetServiceUrlService(pathSegments[0]))
     }, [])
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            service: serviceUrl?.title || "",
+            name: "",
+            email: "",
+            mobile: "",
+            city: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log(data);
+            await dispatch(PostServiceQuiryService(data, resetForm))
+        },
+    });
 
     return (
         <section className="max-w-7xl mt-3 mx-auto">
@@ -94,7 +110,7 @@ const Physiotherapist = () => {
                         </div>
                     </div>
                 </div>
-                <div className="w-full md:w-[40%] p-2 text-center bg-[#CEDEFC] rounded-md">
+                <form onSubmit={formik.handleSubmit} className="w-full md:w-[40%] p-2 text-center bg-[#CEDEFC] rounded-md">
                     <h2 className="font-bold">{serviceUrl?.title}</h2>
                     <p className="text-sm">Visit at Home</p>
                     <p className="text-sm mb-6">Contact Drugcarts when you need best people for healthcare of your loved ones!</p>
@@ -103,6 +119,8 @@ const Physiotherapist = () => {
                         <input
                             type="text" name="name"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.name}
+                            onChange={formik.handleChange("name")}
                             required
                         />
                         <label className="w-[30%] block md:mt-4 md:mb-2 text-gray-900">Mobile</label>
@@ -110,6 +128,8 @@ const Physiotherapist = () => {
                             type="tel" name="mobile"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange("mobile")}
                         />
                     </div>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -117,12 +137,16 @@ const Physiotherapist = () => {
                         <input
                             type="email" name="email"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.email}
+                            onChange={formik.handleChange("email")}
                             required
                         />
                         <label className="w-[30%] block  md:mt-4 md:mb-2 text-gray-900">City</label>
                         <input
                             type="text" name="city"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.city}
+                            onChange={formik.handleChange("city")}
                             required
                         />
                     </div>
@@ -132,7 +156,7 @@ const Physiotherapist = () => {
                     >
                         Book Now
                     </button>
-                </div>
+                </form>
             </div>
             <div className="flex">
                 <div className="w-full md:w-[68%] p-2">

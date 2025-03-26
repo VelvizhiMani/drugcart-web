@@ -39,6 +39,7 @@ import contactUsReducer from "@/reduxToolkit/slices/contactSlice"
 import prescriptionReducer from "@/reduxToolkit/slices/prescriptionSlice"
 import orderReducer from "@/reduxToolkit/slices/orderSlice"
 import serviceReducer from "@/reduxToolkit/slices/serviceSlice"
+import serviceenquiryReducer from "@/reduxToolkit/slices/serviceenquirySlice"
 
 export const store = configureStore({
     reducer: {
@@ -81,6 +82,7 @@ export const store = configureStore({
         prescriptionData: prescriptionReducer,
         orderData: orderReducer,
         serviceData: serviceReducer,
+        serviceenquiryData: serviceenquiryReducer,
         adminUserData: adminUserReducer
     }
 })
