@@ -59,7 +59,7 @@ const Nursing = () => {
                         />
                         <label className="w-[30%] block md:mt-4 md:mb-2">Mobile</label>
                         <input
-                            type="tel" name="mobile"
+                            type="number" name="mobile"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
                             value={formik.values.mobile}
