@@ -4,6 +4,8 @@ import Image from 'next/image'
 import React from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import CustomerSaying from '@/components/home-page/CustomerSaying';
+import FeedbackCard from '@/components/home-page/FeedbackCard';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -30,9 +32,9 @@ const slides = [
     // Add more slides as needed
 ];
 
-function page() {
+const LabTest = () => {
     return (
-        <div>
+        <div className="max-w-7xl mx-auto">
             <div className='bg-[#F7C9B0]'>
                 <div className='flex justify-center items-center mx-2'>
                     <Image
@@ -295,8 +297,140 @@ function page() {
                     BOOK NOW
                 </a>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5 text-center md:text-left pb-10 mt-6">
+                <div className="bg-white rounded-lg p-5 border-[1.5px]">
+                    <Image
+                        src={IMAGES.CLINICCORNER1}
+                        alt="Clinic Corner"
+                        width={200}
+                        height={200}
+                        className="w-[100%] h-56 object-cover"
+                    />
+                    <p className="mt-6 font-bold text-md h-10">What You Need to Know About Blood Testing</p>
+                    <p className='text-sm mt-4'>Blood tests are used to measure or examine cells, chemicals,
+                        proteins, or other substances in the blood.
+                        Blood testing, also known as blood work,
+                        is one of the most common types of lab tests.
+                        Blood work is often included as part of a regular checkup.</p>
+                    <div className="flex justify-center items-center font-bold mt-7 pb-0">
+                        <span className="text-right text-blue-500">Read More</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="size-6 font-bold text-blue-500"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div className="bg-white rounded-lg p-5 border-[1.5px]">
+                    <Image
+                        src={IMAGES.CLINICCORNER2}
+                        alt="Clinic Corner"
+                        width={200}
+                        height={200}
+                        className="w-[100%] h-56 object-cover"
+                    />
+                    <p className="mt-6 font-bold text-md h-10">What You Need to Know About Blood Testing</p>
+                    <p className='text-sm mt-4'>Blood tests are used to measure or examine cells, chemicals,
+                        proteins, or other substances in the blood.
+                        Blood testing, also known as blood work,
+                        is one of the most common types of lab tests.
+                        Blood work is often included as part of a regular checkup.</p>
+                    <div className="flex justify-center items-center font-bold mt-7 pb-0">
+                        <span className="text-right text-blue-500">Read More</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="size-6 font-bold text-blue-500"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div className="bg-white rounded-lg p-5 border-[1.5px]">
+                    <Image
+                        src={IMAGES.CLINICCORNER3}
+                        alt="Clinic Corner"
+                        width={200}
+                        height={200}
+                        className="w-[100%] h-56 object-cover"
+                    />
+                    <p className="mt-6 font-bold text-md h-10">What You Need to Know About Blood Testing</p>
+                    <p className='text-sm mt-4'>Blood tests are used to measure or examine cells, chemicals,
+                        proteins, or other substances in the blood.
+                        Blood testing, also known as blood work,
+                        is one of the most common types of lab tests.
+                        Blood work is often included as part of a regular checkup.</p>
+                    <div className="flex justify-center items-center font-bold mt-7 pb-0">
+                        <span className="text-right text-blue-500">Read More</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="size-6 font-bold text-blue-500"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div className="bg-white rounded-lg p-5 border-[1.5px]">
+                    <Image
+                        src={IMAGES.CLINICCORNER4}
+                        alt="Clinic Corner"
+                        width={200}
+                        height={200}
+                        className="w-[100%] h-56 object-cover"
+                    />
+                    <p className="mt-6 font-bold text-md h-10">What You Need to Know About Blood Testing</p>
+                    <p className='text-sm mt-4'>Blood tests are used to measure or examine cells, chemicals,
+                        proteins, or other substances in the blood.
+                        Blood testing, also known as blood work,
+                        is one of the most common types of lab tests.
+                        Blood work is often included as part of a regular checkup.</p>
+                    <div className="flex justify-center items-center font-bold mt-7 pb-0">
+                        <span className="text-right text-blue-500">Read More</span>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="size-6 font-bold text-blue-500"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                            />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <CustomerSaying/>
+            <FeedbackCard/>
         </div>
     )
 }
 
-export default page
+export default LabTest;
