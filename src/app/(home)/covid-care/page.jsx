@@ -1,9 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { usePathname } from 'next/navigation';
+import { useSelector, useDispatch } from "react-redux";
+import { GetServiceUrlService } from '@/services/drugService';
+import { PostServiceQuiryService } from '@/services/serviceenquiryService';
+import { useFormik } from "formik";
 
 const faqs = [
     {
@@ -81,13 +86,43 @@ const faqs = [
 ]
 const CovidCare = () => {
     const [openIndex, setOpenIndex] = useState(0);
+    const { serviceUrl } = useSelector((state) => state.serviceData);
+    const dispatch = useDispatch()
+    const pathname = usePathname();
+
+    let pathSegments = pathname.split("/").filter(Boolean);
+    pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
+
+    const urlText = pathSegments[0].split(" ").join("-")
+
+    useEffect(() => {
+        if (pathSegments.length > 0) {
+            dispatch(GetServiceUrlService(urlText));
+        }
+    }, []);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            service: serviceUrl?.title || "",
+            name: "",
+            email: "",
+            mobile: "",
+            city: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log(data);
+            await dispatch(PostServiceQuiryService(data, resetForm))
+        },
+    });
+
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap h-62 justify-center items-center mx-auto">
                 <div className="w-full md:w-[58%] m-2 rounded-md">
                     <Image priority src={IMAGES.COVIDDRUGCARTS} alt="Logo" className="w-[100%] md:h-[300px] rounded-lg" />
                 </div>
-                <div className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#EBEBEB] rounded-md">
+                <form onSubmit={formik.handleSubmit} className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#EBEBEB] rounded-md">
                     <h2 className="font-bold text-[16px]">Covid Protection at Home</h2>
                     <p className="text-sm mb-6">Get ahold of the best-in-class COVID Protection / Care services at Zorgers & provide the finest health care to your loved ones</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -95,13 +130,17 @@ const CovidCare = () => {
                         <input
                             type="text" name="name"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.name}
+                            onChange={formik.handleChange("name")}
                             required
                         />
                         <label className="w-[30%] block md:mt-4 md:mb-2">Mobile</label>
                         <input
-                            type="tel" name="mobile"
+                            type="number" name="mobile"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange("mobile")}
                         />
                     </div>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -109,12 +148,16 @@ const CovidCare = () => {
                         <input
                             type="email" name="email"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.email}
+                            onChange={formik.handleChange("email")}
                             required
                         />
                         <label className="w-[30%] block  md:mt-4 md:mb-2">City</label>
                         <input
                             type="text" name="city"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.city}
+                            onChange={formik.handleChange("city")}
                             required
                         />
                     </div>
@@ -124,7 +167,7 @@ const CovidCare = () => {
                     >
                         Book Now
                     </button>
-                </div>
+                </form>
             </div>
             <div className="flex">
                 <div className="w-full md:w-[68%] p-2">
@@ -204,73 +247,73 @@ const CovidCare = () => {
                 </div>
             </div>
             <div>
-            <div className="shadow-md rounded-lg p-6 mt-5">
-                        <h3 className="text-md md:text-xl font-bold my-2">HOW DOES IT SPREAD COVID-19 </h3>
-                        <p className="my-2 font-bold"> A) CONTACT FROM PERSON TO PERSON :</p>
-                        <p> The virus is spreading mainly from one person to another. It generally observed spreads between people who are in close contact (6 feet or lesser) with each other. When the infected person sneezes, the respiratory droplets that enter the mouths, noses to nearest people get inhaled into the lungs.</p>
-                        <p> People who are in severe condition (most symptomatic level) are must be contagious diseases.</p>
-                        <p> If any symptoms causes severely for people to be contagious.</p>
-                        <p className="my-2 font-bold"> B) CONTAMINATION OF OBJECTS OR SURFACES WITH VIRUS:</p>
-                        <p> There are many possible that a person can get COVID-19 and it one of the main way for spreading of virus if he/she touches a contaminated surface or object and it has the virus and then touches their own nose, mouth or eyes causes diseases.</p>
-                        <Image priority src={IMAGES.COVIDBANNER2} alt="COVIDBANNER2" className="w-[60%] mx-auto my-2" />
-                    </div>
-                    <div className="shadow-md rounded-lg p-6 mt-5">
-                        <h3 className="text-md md:text-xl font-bold my-2"> RECOMMENDED FOR THE DIAGNOSIS OF COVID-19</h3>
-                        <p> Infection of the Coronavirus can be diagnosed on the basis of patient symptoms, history of travel, and contact with infected patients and diagnostic imaging. Suggested test for COVID-19 is performing real-time fluorescence (RT-PCR) to detect the positive nucleic acid of SARS-CoV</p>
-                    </div>
-                    <div className="shadow-md rounded-lg p-6 mt-5">
-                        <h3 className="text-md md:text-xl font-bold my-2">PREVENTION AND SYMPTOMS OF COVID-19</h3>
-                        <p className="my-2 font-bold">Symptoms for Covid-19</p>
-                        <p className="my-2"> The COVID-19 have ranged from mild to severe illness some of the following symptoms may appear from 2 to 14 days</p>
+                <div className="shadow-md rounded-lg p-6 mt-5">
+                    <h3 className="text-md md:text-xl font-bold my-2">HOW DOES IT SPREAD COVID-19 </h3>
+                    <p className="my-2 font-bold"> A) CONTACT FROM PERSON TO PERSON :</p>
+                    <p> The virus is spreading mainly from one person to another. It generally observed spreads between people who are in close contact (6 feet or lesser) with each other. When the infected person sneezes, the respiratory droplets that enter the mouths, noses to nearest people get inhaled into the lungs.</p>
+                    <p> People who are in severe condition (most symptomatic level) are must be contagious diseases.</p>
+                    <p> If any symptoms causes severely for people to be contagious.</p>
+                    <p className="my-2 font-bold"> B) CONTAMINATION OF OBJECTS OR SURFACES WITH VIRUS:</p>
+                    <p> There are many possible that a person can get COVID-19 and it one of the main way for spreading of virus if he/she touches a contaminated surface or object and it has the virus and then touches their own nose, mouth or eyes causes diseases.</p>
+                    <Image priority src={IMAGES.COVIDBANNER2} alt="COVIDBANNER2" className="w-[60%] mx-auto my-2" />
+                </div>
+                <div className="shadow-md rounded-lg p-6 mt-5">
+                    <h3 className="text-md md:text-xl font-bold my-2"> RECOMMENDED FOR THE DIAGNOSIS OF COVID-19</h3>
+                    <p> Infection of the Coronavirus can be diagnosed on the basis of patient symptoms, history of travel, and contact with infected patients and diagnostic imaging. Suggested test for COVID-19 is performing real-time fluorescence (RT-PCR) to detect the positive nucleic acid of SARS-CoV</p>
+                </div>
+                <div className="shadow-md rounded-lg p-6 mt-5">
+                    <h3 className="text-md md:text-xl font-bold my-2">PREVENTION AND SYMPTOMS OF COVID-19</h3>
+                    <p className="my-2 font-bold">Symptoms for Covid-19</p>
+                    <p className="my-2"> The COVID-19 have ranged from mild to severe illness some of the following symptoms may appear from 2 to 14 days</p>
 
-                        <p className="my-2"> * The affected people with a fever and dry cough</p>
-                        <p className="my-2"> * Other symptoms include myalgia or fatigue and shortness of breath</p>
-                        <p className="my-2"> * Some common symptoms are headache, sputum production, muscle pain, and sore throat</p>
-                        <p className="my-2"> Most cases result in mild symptoms it may lead to pneumonia and multi-organ failure. The COVID-19 is estimated at between 1% and 5% worldwide and is highly dependent on the age of the patient its fatality rate. 15% of death for patients more than 80 years old is worldwide.</p>
-                        <Image priority src={IMAGES.COVIDBANNER3} alt="COVIDBANNER3" className="w-[60%] mx-auto" />
-                    </div>
-                    <div className="shadow-md rounded-lg p-6 mt-5">
-                        <h3 className="text-md md:text-xl font-bold my-2"> TO PREVENT FROM ILLNESS THE FOLLOWING STEPS</h3>
-                        <p className="my-2"> Currently there is no vaccine to prevent corona virus disease 2019 (COVID-19). The most important way to prevent illness is to avoid getting exposed to this virus.</p>
+                    <p className="my-2"> * The affected people with a fever and dry cough</p>
+                    <p className="my-2"> * Other symptoms include myalgia or fatigue and shortness of breath</p>
+                    <p className="my-2"> * Some common symptoms are headache, sputum production, muscle pain, and sore throat</p>
+                    <p className="my-2"> Most cases result in mild symptoms it may lead to pneumonia and multi-organ failure. The COVID-19 is estimated at between 1% and 5% worldwide and is highly dependent on the age of the patient its fatality rate. 15% of death for patients more than 80 years old is worldwide.</p>
+                    <Image priority src={IMAGES.COVIDBANNER3} alt="COVIDBANNER3" className="w-[60%] mx-auto" />
+                </div>
+                <div className="shadow-md rounded-lg p-6 mt-5">
+                    <h3 className="text-md md:text-xl font-bold my-2"> TO PREVENT FROM ILLNESS THE FOLLOWING STEPS</h3>
+                    <p className="my-2"> Currently there is no vaccine to prevent corona virus disease 2019 (COVID-19). The most important way to prevent illness is to avoid getting exposed to this virus.</p>
 
-                        <p className="my-2 font-bold">1) IMPORTANT STEPS TO PROTECT OURSELF</p>
-                        <p className="my-2"><b>Wash and clean your hands often : </b></p>
-                        <p className="my-2"> Wash your hands with soap and water for a minimum 20 seconds after from the public place, or after coughing, sneezing or blowing your nose. If soap is not available in your hand or can use a hand sanitizer that has at least 60% alcohol. Without washing your hand do not touch your nose, mouth and eyes with.</p>
-                        <p className="my-2"><b>Avoid close contact with people who are get affected :</b></p>
-                        <p className="my-2"> If COVID-19 is spreading in your region or community, Maintain distance between yourself from other people. This is more important for people who are in older age causes severe risk</p>
-                        <p className="my-2"><b>When you’re sick stay at home :</b></p>
-                        <p className="my-2"> When you are sick, stay at home, except to get medical care. We will explain what to do if you are sick in next content</p>
+                    <p className="my-2 font-bold">1) IMPORTANT STEPS TO PROTECT OURSELF</p>
+                    <p className="my-2"><b>Wash and clean your hands often : </b></p>
+                    <p className="my-2"> Wash your hands with soap and water for a minimum 20 seconds after from the public place, or after coughing, sneezing or blowing your nose. If soap is not available in your hand or can use a hand sanitizer that has at least 60% alcohol. Without washing your hand do not touch your nose, mouth and eyes with.</p>
+                    <p className="my-2"><b>Avoid close contact with people who are get affected :</b></p>
+                    <p className="my-2"> If COVID-19 is spreading in your region or community, Maintain distance between yourself from other people. This is more important for people who are in older age causes severe risk</p>
+                    <p className="my-2"><b>When you’re sick stay at home :</b></p>
+                    <p className="my-2"> When you are sick, stay at home, except to get medical care. We will explain what to do if you are sick in next content</p>
 
-                        <p className="my-2"><b>2) WHEN YOU ARE SICK OR SOMEONE IN YOUR HOME IS INFECTED SOME OF THE STEPS TO PREVENT THE SPREAD OF COVID-19</b></p>
-                        <p className="my-2"> If you are get infected with COVID-19 or suspect for you or someone in your family is infected, follow the some steps to help prevent the disease from spreading to other people.</p>
-                        <p className="my-2"> * Stay home except to get medical care : People who show mild symptoms of COVID-19 are suggested to get isolated at home during their illness,. Do not go to public areas, work or school and avoid using public transportation except for getting medical care</p>
-                        <p className="my-2"> * Stay away from other people:Separate yourself as much as possible. It is also advisable that you must stay in a specific room and away from other people. use a separate bathroom, if it’s there in your home.</p>
-                        <p className="my-2"> * Limit contact with pets: While you are get affected with COVID-19, should restricted contact with pets and other animals. Till now no reports of animals getting sick with COVID-19, its still advisable that people infected with COVID-19 do not touch pets and other animals and still more information is known about the corona virus.</p>
-                        <p className="my-2"> * Call a doctor before visiting your: If you already booked an appointment with the doctor, call and tell them that you may have COVID-19. This is very important and that surely help the healthcare provider to take steps to protect other people from getting exposed.</p>
-                        <p className="my-2"> * If you are infected wear a facemask: The infected person must wear a facemask when he/she is around other people or pets and before they enter a hospital or clinic. If the affected person cannot able to wear a facemask due to breathing issues or some other problem, then people who live in the same house should not stay in the same room, and they must wear a facemask if they have to enter a room of the infected person.</p>
-                        <p className="my-2"> * Cover your sneezes and coughs: When you cough or sneeze, close your mouth and nose with a tissue. Then throw the used tissues in a lined dustbin.</p>
-                        <p className="my-2"> * Do not share personal household items: You must not share drinking glasses, cups, utensils, towels, or bedding with other person or pets in your house. After using household items, wash them thoroughly with soap and water.</p>
-                        <p className="my-2"> * Clean and disinfect all “high-touch” surfaces everyday: You must clean high touch surfaces like tabletops, bathroom fixtures, doorknobs, desktop keyboards, phones and bedside tables. Also, clean any surfaces that may contain body fluids on them.</p>
-                        <Image priority src={IMAGES.COVIDBANNER4} alt="COVIDBANNER3" className="w-[60%] mx-auto" />
-                    </div>
-                    <div className="shadow-md rounded-lg p-6 mt-5">
-                        <h3 className="text-md md:text-xl font-bold my-2">DRUGCARTS WILL HELP YOU FOR SUPPORT IN PREVENTING:</h3>
-                        <p className="my-2"> Drug carts is one the best in-home medical care providers in India. You will get the best support services with comfort and be safe at your home.</p>
-                        <p className="my-2"> People with mobility issues or people recovering from a surgery, who are intending to visit hospital seeking for medical support services can avoid it by availing in-home medical support services.</p>
-                        <p className="my-2"> Have you been in contact with a person affected with COVID-19? Are you a frequent traveler? Are you above the age of 60 yrs? Do you have Diabetes/High BP, Flu like symptoms, fall sick often. Just call Drugcarts to support you medically for self quarantine at home.</p>
-                        <p className="my-2"> People with mild suspected cases or those discharged from hospital post treatment of COVID-19 can take home care services for continuity of medical care. These medical support services are provided through Drugcarts experienced nurses, doctors and health professionals</p>
-                        <p className="my-2"> We also provide Home Quarantine services for COVID-19 and also provide disinfectant kits.</p>
-                        <p className="my-2"><b> DRUGCARTS WILL PROVIDE THE PROMINENT HOME SERVICES SOME OF THEM:</b></p>
-                        <p className="my-2"> * Nursing services at home (Nurse for cancer care, Nubilization, etc)</p>
-                        <p className="my-2"> * Nursing Attendants at home</p>
-                        <p className="my-2"> * Physiotherapy at home</p>
-                        <p className="my-2"> * Medical Equipment like Respiratory Care products and others (Oxygen Concentrator, CPAP and BiPAP System etc,.) </p>
-                        <p className="my-2"> * Eldercare at home</p>
-                        <p className="my-2"> * Diabetic care packages (Diabetic peoples are more sensitive</p>
-                        <p className="my-2"> * Adult vaccinations at home</p>
-                        <p className="my-2"> * Lab tests at home (except COVID-19 tests)</p>
-                        <Image priority src={IMAGES.COVIDBANNER5} alt="COVIDBANNER5" className="w-[60%] mx-auto" />
-                    </div>
+                    <p className="my-2"><b>2) WHEN YOU ARE SICK OR SOMEONE IN YOUR HOME IS INFECTED SOME OF THE STEPS TO PREVENT THE SPREAD OF COVID-19</b></p>
+                    <p className="my-2"> If you are get infected with COVID-19 or suspect for you or someone in your family is infected, follow the some steps to help prevent the disease from spreading to other people.</p>
+                    <p className="my-2"> * Stay home except to get medical care : People who show mild symptoms of COVID-19 are suggested to get isolated at home during their illness,. Do not go to public areas, work or school and avoid using public transportation except for getting medical care</p>
+                    <p className="my-2"> * Stay away from other people:Separate yourself as much as possible. It is also advisable that you must stay in a specific room and away from other people. use a separate bathroom, if it’s there in your home.</p>
+                    <p className="my-2"> * Limit contact with pets: While you are get affected with COVID-19, should restricted contact with pets and other animals. Till now no reports of animals getting sick with COVID-19, its still advisable that people infected with COVID-19 do not touch pets and other animals and still more information is known about the corona virus.</p>
+                    <p className="my-2"> * Call a doctor before visiting your: If you already booked an appointment with the doctor, call and tell them that you may have COVID-19. This is very important and that surely help the healthcare provider to take steps to protect other people from getting exposed.</p>
+                    <p className="my-2"> * If you are infected wear a facemask: The infected person must wear a facemask when he/she is around other people or pets and before they enter a hospital or clinic. If the affected person cannot able to wear a facemask due to breathing issues or some other problem, then people who live in the same house should not stay in the same room, and they must wear a facemask if they have to enter a room of the infected person.</p>
+                    <p className="my-2"> * Cover your sneezes and coughs: When you cough or sneeze, close your mouth and nose with a tissue. Then throw the used tissues in a lined dustbin.</p>
+                    <p className="my-2"> * Do not share personal household items: You must not share drinking glasses, cups, utensils, towels, or bedding with other person or pets in your house. After using household items, wash them thoroughly with soap and water.</p>
+                    <p className="my-2"> * Clean and disinfect all “high-touch” surfaces everyday: You must clean high touch surfaces like tabletops, bathroom fixtures, doorknobs, desktop keyboards, phones and bedside tables. Also, clean any surfaces that may contain body fluids on them.</p>
+                    <Image priority src={IMAGES.COVIDBANNER4} alt="COVIDBANNER3" className="w-[60%] mx-auto" />
+                </div>
+                <div className="shadow-md rounded-lg p-6 mt-5">
+                    <h3 className="text-md md:text-xl font-bold my-2">DRUGCARTS WILL HELP YOU FOR SUPPORT IN PREVENTING:</h3>
+                    <p className="my-2"> Drug carts is one the best in-home medical care providers in India. You will get the best support services with comfort and be safe at your home.</p>
+                    <p className="my-2"> People with mobility issues or people recovering from a surgery, who are intending to visit hospital seeking for medical support services can avoid it by availing in-home medical support services.</p>
+                    <p className="my-2"> Have you been in contact with a person affected with COVID-19? Are you a frequent traveler? Are you above the age of 60 yrs? Do you have Diabetes/High BP, Flu like symptoms, fall sick often. Just call Drugcarts to support you medically for self quarantine at home.</p>
+                    <p className="my-2"> People with mild suspected cases or those discharged from hospital post treatment of COVID-19 can take home care services for continuity of medical care. These medical support services are provided through Drugcarts experienced nurses, doctors and health professionals</p>
+                    <p className="my-2"> We also provide Home Quarantine services for COVID-19 and also provide disinfectant kits.</p>
+                    <p className="my-2"><b> DRUGCARTS WILL PROVIDE THE PROMINENT HOME SERVICES SOME OF THEM:</b></p>
+                    <p className="my-2"> * Nursing services at home (Nurse for cancer care, Nubilization, etc)</p>
+                    <p className="my-2"> * Nursing Attendants at home</p>
+                    <p className="my-2"> * Physiotherapy at home</p>
+                    <p className="my-2"> * Medical Equipment like Respiratory Care products and others (Oxygen Concentrator, CPAP and BiPAP System etc,.) </p>
+                    <p className="my-2"> * Eldercare at home</p>
+                    <p className="my-2"> * Diabetic care packages (Diabetic peoples are more sensitive</p>
+                    <p className="my-2"> * Adult vaccinations at home</p>
+                    <p className="my-2"> * Lab tests at home (except COVID-19 tests)</p>
+                    <Image priority src={IMAGES.COVIDBANNER5} alt="COVIDBANNER5" className="w-[60%] mx-auto" />
+                </div>
             </div>
             <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg shadow-md mt-5">
                 <h2 className="text-md md:text-xl font-bold my-2">FAQ</h2>
