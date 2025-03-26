@@ -1,15 +1,51 @@
 "use client";
+import { useEffect } from "react";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
+import { usePathname } from 'next/navigation';
+import { useSelector, useDispatch } from "react-redux";
+import { GetServiceUrlService } from '@/services/drugService';
+import { PostServiceQuiryService } from '@/services/serviceenquiryService';
+import { useFormik } from "formik";
 
 const Nursing = () => {
+    const { serviceUrl } = useSelector((state) => state.serviceData);
+    const dispatch = useDispatch()
+    const pathname = usePathname();
+
+    let pathSegments = pathname.split("/").filter(Boolean);
+    pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
+
+    const urlText = pathSegments[0].split(" ").join("-")
+
+    useEffect(() => {
+        if (pathSegments.length > 0) {
+            dispatch(GetServiceUrlService(urlText));
+        }
+    }, []);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            service: serviceUrl?.title || "",
+            name: "",
+            email: "",
+            mobile: "",
+            city: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log(data);
+            await dispatch(PostServiceQuiryService(data, resetForm))
+        },
+    });
+
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap h-62 justify-center items-center mx-auto">
                 <div className="w-full md:w-[58%] m-2 rounded-md">
                     <Image priority src={IMAGES.NURSINGBANNER} alt="Logo" className="w-[100%] md:h-[300px] rounded-lg" />
                 </div>
-                <div className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#FFD233] rounded-md">
+                <form onSubmit={formik.handleSubmit} className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#FFD233] rounded-md">
                     <h2 className="font-bold text-[16px]">Elder Care</h2>
                     <p className="text-sm mb-6">Worried about the medical needs of your parents back home? Avail the Care Plan package from Drugcarts to ease the worries. To book a Care Plan , begin here</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -17,6 +53,8 @@ const Nursing = () => {
                         <input
                             type="text" name="name"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.name}
+                            onChange={formik.handleChange("name")}
                             required
                         />
                         <label className="w-[30%] block md:mt-4 md:mb-2">Mobile</label>
@@ -24,6 +62,8 @@ const Nursing = () => {
                             type="tel" name="mobile"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange("mobile")}
                         />
                     </div>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -31,12 +71,16 @@ const Nursing = () => {
                         <input
                             type="email" name="email"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.email}
+                            onChange={formik.handleChange("email")}
                             required
                         />
                         <label className="w-[30%] block  md:mt-4 md:mb-2">City</label>
                         <input
                             type="text" name="city"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.city}
+                            onChange={formik.handleChange("city")}
                             required
                         />
                     </div>
@@ -46,7 +90,7 @@ const Nursing = () => {
                     >
                         Book Now
                     </button>
-                </div>
+                </form>
             </div>
             <div className="flex">
                 <div className="w-full md:w-[68%] p-2">
