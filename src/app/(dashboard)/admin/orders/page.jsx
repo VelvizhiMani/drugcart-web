@@ -251,17 +251,11 @@ function OrderListPage() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/orders/${row?._id}`)
+                                        router.push(`/admin/orderview/${row?.orderId}`)
                                     }}>
                                         <VisibilityIcon color="primary" />
                                     </button>
                                 </TableCell>
-                                <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
-                                    title={"Delete Orgin"}
-                                    description={`Are you sure you want to delete ${order?.orginname}`}
-                                    onSubmit={() => dispatch(DeleteOrderService(order?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>
