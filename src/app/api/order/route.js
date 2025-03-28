@@ -66,7 +66,7 @@ export async function GET(req) {
         }
 
         if (orderStatus) {
-            query.orderStatus = orderStatus;
+            query["trackingInfo.orderStatus"] = orderStatus;
         }
 
         const OrderItems = await Order.find(query)

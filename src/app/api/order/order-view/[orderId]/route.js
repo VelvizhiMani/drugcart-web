@@ -9,7 +9,7 @@ export async function GET(request, { params }) {
 
         const adminAuth = await adminAuthorization();
         const userAuth = await authenticateUser();
-        
+
         const { success, user, message } = adminAuth.success ? adminAuth : userAuth;
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
@@ -37,11 +37,11 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
 
-        if (!params?.orderId) {
-            return NextResponse.json({ error: "Missing orderId in request" }, { status: 400 });
-        }
+        // if (!params?.orderId) {
+        //     return NextResponse.json({ error: "Missing orderId in request" }, { status: 400 });
+        // }
 
-        const { orderId } = params;
+        const { orderId } = await params;
         const body = await request.json();
 
         const updatedOrder = await Order.findOneAndUpdate(

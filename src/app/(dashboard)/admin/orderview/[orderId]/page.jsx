@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GetOrderOneService, PutOrderService } from '@/services/orderService';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,8 +14,10 @@ import {
 } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 import { IMAGES } from '@/components/common/images';
+import NotesModal from '@/components/admin/modal/NotesModal';
 
 function page() {
+    const [openNotes, setNotesModal] = useState(false)
     const { orderGetData } = useSelector((state) => state.orderData)
     const params = useParams()
     const dispatch = useDispatch()
@@ -25,6 +27,7 @@ function page() {
     }, [params?.orderId])
 
     console.log('orderGetData', orderGetData);
+
 
     const handleProcessOrder = async () => {
         const statusChange = {
@@ -53,30 +56,53 @@ function page() {
 
                 {/* Buttons Container */}
                 <Grid2 xs={12} md={6} display="flex" justifyContent="flex-end" gap={2}>
-                    <Button
-                        color="success"
-                        variant="contained"
-                        style={{ textTransform: "capitalize" }}
-                        onClick={handleProcessOrder}
-                    >
-                        Process Order
-                    </Button>
-                    <Button
-                        color="error"
-                        variant="contained"
-                        style={{ textTransform: "capitalize" }}
-                        onClick={() => router.push(`/admin/orders`)}
-                    >
-                        Cancel Order
-                    </Button>
-                    <Button
-                        color="info"
-                        variant="contained"
-                        style={{ textTransform: "capitalize" }}
-                        onClick={() => router.push(`/admin/orders`)}
-                    >
-                        Notes
-                    </Button>
+                    {orderGetData?.trackingInfo?.orderStatus === "Pending" ?
+                        <>
+                            <Button
+                                color="success"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={handleProcessOrder}
+                            >
+                                Generate Invoice
+                            </Button>
+                            <Button
+                                color="error"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                            >
+                                Order Tracking
+                            </Button>
+                        </> :
+                        <>
+                            <Button
+                                color="success"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={() => router.push(`/admin/orders`)}
+                            >
+                                Process Order
+                            </Button>
+                            <Button
+                                color="error"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={() => router.push(`/admin/orders`)}
+                            >
+                                Cancel Order
+                            </Button>
+                            {!orderGetData?.notes ? <Button
+                                color="info"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={() => setNotesModal(true)}
+                            >
+                                Notes
+                            </Button> : null}
+
+                            <NotesModal open={openNotes} setOpen={setNotesModal} />
+                        </>
+                    }
                 </Grid2>
             </Grid2>
             <Box>
