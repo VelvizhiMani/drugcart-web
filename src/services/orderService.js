@@ -55,10 +55,10 @@ const GetOrderOneService = (orderId) => async (dispatch) => {
     }
 }
 
-const PutOrderService = (id, userData) => async (dispatch) => {
-    await axios.put(`/api/order/${id}`, userData, { headers: await Authorization() }).then((response) => {
-        dispatch(getOrder(response.data))
-        dispatch(GetOrderIdService(id))
+const PutOrderService = (orderId, userData) => async (dispatch) => {
+    await axios.put(`/api/order/order-view/${orderId}`, userData, { headers: await Authorization() }).then((response) => {
+        dispatch(getGetOrderData(response.data))
+        dispatch(GetOrderOneService(orderId))
         dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)

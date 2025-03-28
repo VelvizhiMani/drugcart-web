@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect } from 'react'
-import { GetOrderOneService } from '@/services/orderService';
+import { GetOrderOneService, PutOrderService } from '@/services/orderService';
 import { useParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -26,27 +26,59 @@ function page() {
 
     console.log('orderGetData', orderGetData);
 
+    const handleProcessOrder = async () => {
+        const statusChange = {
+            ...orderGetData,
+            trackingInfo: {
+                ...orderGetData?.trackingInfo,
+                orderStatus: "Pending"
+            }
+        };
+        await dispatch(PutOrderService(orderGetData?.orderId, statusChange));
+    };
+
     return (
         <Box>
-            <Box sx={{ display: "flex" }}>
-                <Typography
-                    variant="h6"
-                    fontFamily={"Poppins"}
-                    fontWeight="bold"
-                    sx={{ flexGrow: 1 }}
-                >
-                    Order View
-                </Typography>
-                <Button
-                    color="success"
-                    variant="contained"
-                    style={{ textTransform: "capitalize" }}
-                onClick={() => router.push(`/admin/orders`)}
-                >
-                    Order List
-                </Button>
-            </Box>
+            <Grid2 container spacing={2} alignItems="center" justifyContent={"space-between"}>
+                {/* Title */}
+                <Grid2 xs={12} md={6}>
+                    <Typography
+                        variant="h6"
+                        fontFamily="Poppins"
+                        fontWeight="bold"
+                    >
+                        Order View
+                    </Typography>
+                </Grid2>
 
+                {/* Buttons Container */}
+                <Grid2 xs={12} md={6} display="flex" justifyContent="flex-end" gap={2}>
+                    <Button
+                        color="success"
+                        variant="contained"
+                        style={{ textTransform: "capitalize" }}
+                        onClick={handleProcessOrder}
+                    >
+                        Process Order
+                    </Button>
+                    <Button
+                        color="error"
+                        variant="contained"
+                        style={{ textTransform: "capitalize" }}
+                        onClick={() => router.push(`/admin/orders`)}
+                    >
+                        Cancel Order
+                    </Button>
+                    <Button
+                        color="info"
+                        variant="contained"
+                        style={{ textTransform: "capitalize" }}
+                        onClick={() => router.push(`/admin/orders`)}
+                    >
+                        Notes
+                    </Button>
+                </Grid2>
+            </Grid2>
             <Box>
                 <Paper
                     sx={{
