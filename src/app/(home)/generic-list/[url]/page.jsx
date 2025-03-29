@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { IMAGES } from "@/components/common/images";
+import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
 import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -133,19 +134,7 @@ const GenericProductList = () => {
                 </div>
               </div>
             </div>
-            <div className="border-[1.5px] m-2 rounded-md">
-              <h2 className="bg-[#35A24D] p-2 mx-auto text-white font-bold">
-                Filter By Company
-              </h2>
-              <div className="justify-start py-2">
-                <div className="py-3 border-b-[1.5px] pb-2">
-                  <h3 className="font-bold text-sm ml-2">Eltis organics</h3>
-                </div>
-                <div className="py-3 border-b-[1.5px] pb-2">
-                  <h3 className="font-bold text-sm ml-2">Eltis organics</h3>
-                </div>
-              </div>
-            </div>
+              <FilterCompanyCard/>
           </div>
           <div className="w-[80%] flex-1 m-3">
             <h1 className="text-xl font-bold">Similar Product</h1>
