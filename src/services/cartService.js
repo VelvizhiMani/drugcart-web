@@ -16,13 +16,13 @@ const getCartService = () => async (dispatch) => {
 
 const PostCartService = (data) => async (dispatch) => {
     dispatch(addToCart(data))
+    dispatch(showToast({ message: "Cart added Successfully!!!", severity: "success" }))
     try {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/cart', data, { headers: await Authorization() })
         dispatch(addToCart(postData.data))
         dispatch(getCartService())
         dispatch(IsLoading(false))
-        dispatch(showToast({ message: "Cart added Successfully!!!", severity: "success" }))
     } catch (error) {
         dispatch(getCartService())
         dispatch(IsLoading(false))
