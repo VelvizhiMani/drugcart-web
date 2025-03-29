@@ -396,9 +396,8 @@ const IMAGES = {
   ORTHOPADIC1: require("@/assets/services/orthopadic1.jpg"),
   ORTHOPADIC2: require("@/assets/services/orthopadic2.jpg"),
 
-  
   // scan 
-  SCANBANNER: require("@/assets/scan/scanbanner.jpg"),
+  SCANBANNER: require("@/assets/lab-test/scanbanner.jpg"),
   CTSCAN: require("@/assets/scan/ctscan.jpg"),
   CTSCAN1: require("@/assets/scan/ctscan1.jpg"),
   MRI: require("@/assets/scan/mri.jpg"),

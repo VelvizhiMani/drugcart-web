@@ -1,6 +1,4 @@
 "use client";
-import Link from "next/link";
-import CatalogCard from "@/components/medicine/CatalogCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { IMAGES } from "@/components/common/images";
@@ -32,7 +30,7 @@ const Catalog = () => {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 py-4">
           {subCategoryUrl && subCategoryUrl.map((sub, i) => (
             <CategoryCard
-            onClick={() => subCategroyClick(sub?.url)}
+              onClick={() => subCategroyClick(sub?.url)}
               title={sub?.subcat_name}
               imageAlt={sub?.cat_name}
               imagUrl={sub?.cat_img ? `https://assets2.drugcarts.com/category/thumb/${sub?.cat_img}` : IMAGES.NO_IMAGE}

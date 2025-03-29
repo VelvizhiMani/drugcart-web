@@ -10,7 +10,7 @@ function CategoryCard({ imagUrl, imageAlt, title, onClick }) {
                     height={100}
                     src={imagUrl}
                     alt={imageAlt}
-                    className={`mb-3 mx-auto object-cover ${imagUrl ? "bg-bgcancer" : null} rounded-full p-2`}
+                    className={`mb-3 mx-auto object-cover ${imagUrl ? "bg-bgcancer" : "bg-white"} rounded-full p-2`}
                 />
                 <span>{title}</span>
             </p>
@@ -18,4 +18,4 @@ function CategoryCard({ imagUrl, imageAlt, title, onClick }) {
     )
 }
 
-export default CategoryCard
+export default CategoryCard;
