@@ -264,7 +264,7 @@ const IMAGES = {
   CLINICCORNER2: require("@/assets/lab-test/clinic-corner-2.png"),
   CLINICCORNER3: require("@/assets/lab-test/clinic-corner-3.png"),
   CLINICCORNER4: require("@/assets/lab-test/clinic-corner-4.png"),
-  DIABETESICON: require("@/assets/lab-test/diabetes-icon.png"),
+  DIABETESICON: require("@/assets/lab-test/Diabetes-icon.png"),
   HEMOGRAMICON: require("@/assets/lab-test/hemogram-icon.png"),
   THYROIDICON: require("@/assets/lab-test/thyroid-icon.png"),
   LIPIDICON: require("@/assets/lab-test/lipid-icon.png"),
