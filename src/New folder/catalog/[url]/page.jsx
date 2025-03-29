@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import CatalogCard from "@/components/medicine/CatalogCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { IMAGES } from "@/components/common/images";
