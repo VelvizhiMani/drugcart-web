@@ -32,7 +32,8 @@ const Specialty = () => {
 
             <h2 className="text-md md:text-xl font-bold my-4 px-2">Most Visited Category</h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-2">
-                <div className="bg-gradient-to-r from-indigo-200 from-10% via-sky-200 via-30% to-emerald-200 to-90% rounded-md border-[1.5px] shadow-lg overflow-hidden">
+                <div className="bg-pink-200 rounded-md border-[1.5px] shadow-lg overflow-hidden">
+                {/* <div className="bg-gradient-to-r from-indigo-200 from-10% via-sky-200 via-30% to-emerald-200 to-90% rounded-md border-[1.5px] shadow-lg overflow-hidden"> */}
                     <Image src={IMAGES.SURGERY} alt="Surgery" className="w-full h-32 p-3 object-contain" />
                     <h2 className="text-md md:text-xl font-bold py-2 text-center">Surgery</h2>
                 </div>

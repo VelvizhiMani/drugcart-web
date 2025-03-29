@@ -9,17 +9,12 @@ import { GetProductService } from "@/services/productService";
 import { useParams, useRouter } from "next/navigation";
 
 const GenericProductList = () => {
-  const { productList, product } = useSelector((state) => state.productData);
+  const { productList } = useSelector((state) => state.productData);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
-  const [openModal, setOpenModal] = useState(false);
   const params = useParams();
   const dispatch = useDispatch();
-
-  const handleNoChange = (event) => {
-    setShowNo(event.target.value);
-  };
 
   const router = useRouter();
 

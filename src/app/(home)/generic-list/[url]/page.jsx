@@ -1,12 +1,7 @@
 "use client";
-import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { IMAGES } from "@/components/common/images";
-import Alovera from "@/assets/product/alovera.png";
-import Breathe from "@/assets/product/breathe-eazy.png";
-import Honitus from "@/assets/product/honitus.png";
-import Wheatgrass from "@/assets/product/wheatgrass-juice.png";
 import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -14,29 +9,18 @@ import { GetProductService } from "@/services/productService";
 import { useParams, useRouter } from "next/navigation";
 
 const GenericProductList = () => {
-  const { productList, product } = useSelector((state) => state.productData);
+  const { productList } = useSelector((state) => state.productData);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
-  const [openModal, setOpenModal] = useState(false);
   const params = useParams();
   const dispatch = useDispatch();
 
-  const handleNoChange = (event) => {
-    setShowNo(event.target.value);
-  };
-
   const router = useRouter();
-
-  const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   useEffect(() => {
     dispatch(GetProductService(page, showNo, search, params?.url));
   }, [page, showNo, search, params?.url]);
-
-  // useEffect(() => {
-  //   dispatch(GetProductService(1, 8));
-  // }, []);
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(10000);
@@ -51,72 +35,6 @@ const GenericProductList = () => {
     setMaxPrice(value);
   };
 
-  const productsData = [
-    {
-      id: 1,
-      name: "Pankajakasthuri Syrup",
-      price: "$400",
-      image: Alovera,
-      rating: 4.5,
-      fav: false,
-    },
-    {
-      id: 2,
-      name: "Cough Syrup 100 ml",
-      price: "$440",
-      image: Breathe,
-      rating: 4.0,
-      fav: false,
-    },
-    {
-      id: 3,
-      name: "Pankajakasthuri Syrup",
-      price: "$400",
-      image: Honitus,
-      rating: 4.5,
-      fav: true,
-    },
-    {
-      id: 4,
-      name: "Cough Syrup 100 ml",
-      price: "$440",
-      image: Alovera,
-      rating: 4.0,
-      fav: false,
-    },
-    {
-      id: 5,
-      name: "Cough Syrup 100 ml",
-      price: "$440",
-      image: Wheatgrass,
-      rating: 4.0,
-      fav: true,
-    },
-    {
-      id: 6,
-      name: "Pankajakasthuri Syrup",
-      price: "$400",
-      image: Alovera,
-      rating: 4.5,
-      fav: false,
-    },
-    {
-      id: 7,
-      name: "Cough Syrup 100 ml",
-      price: "$440",
-      image: Breathe,
-      rating: 4.0,
-      fav: false,
-    },
-    {
-      id: 8,
-      name: "Pankajakasthuri Syrup",
-      price: "$400",
-      image: Honitus,
-      rating: 4.5,
-      fav: true,
-    },
-  ];
   const ProductClick = (url) => {
     router.push(`/product/${url}`);
   };
@@ -238,7 +156,7 @@ const GenericProductList = () => {
                     key={i}
                     className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 "
                   >
-                    <div className="grid justify-end">
+                    <div className="grid justify-end mb-3">
                       <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -261,7 +179,6 @@ const GenericProductList = () => {
                       </button>
                     </div>
                     <Image
-                      // src={productsData[i]?.image}
                       src={
                         product?.product_img
                           ? `https://assets2.drugcarts.com/${product?.product_img}`

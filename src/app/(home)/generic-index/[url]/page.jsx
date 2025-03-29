@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
-import GenericCard from "@/components/medicine/GenericCard";
-import { GetGeneticUrlService } from "../../../../services/genericService";
+import { GetGeneticUrlService } from "@/services/genericService";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -22,28 +20,9 @@ const GenericIndex = () => {
     router.push(`/generic-list/${cat_url}`)
   }
 
-  console.log('params', genericUrl);
-
-
   return (
     <>
       <section className="max-w-7xl mx-auto ">
-        <div className="flex flex-wrap items-center space-x-2 text-sm text-gray-500 py-3">
-          <Link href="#" className="hover:text-gray-700">
-            Home
-          </Link>
-          <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">
-            Order Medicine
-          </Link>
-          <Link href="#" className="hover:text-gray-700">
-            Cold cough
-          </Link>
-          <span>&gt;</span>
-          <Link href="#" className="hover:text-gray-700">
-            Common cold
-          </Link>
-        </div>
         <div className="py-2 text-xl font-bold">
           <h2>List of Generic Product</h2>
         </div>
@@ -58,9 +37,9 @@ const GenericIndex = () => {
                 <Image
                   width={100}
                   height={100}
-                  src={IMAGES.DUMMYIMAGE}
-                  alt="Dummy Image"
-                  className="mb-3 mx-auto object-cover p-2 blur-[2px]"
+                  src={IMAGES.NO_IMAGE}
+                  alt="No Image"
+                  className="mb-3 mx-auto object-cover p-2"
                 />
                 <span>{generic?.generices}</span>
               </p>
