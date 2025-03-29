@@ -1,15 +1,51 @@
 "use client";
+import { useEffect } from "react";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
+import { usePathname } from 'next/navigation';
+import { useSelector, useDispatch } from "react-redux";
+import { GetServiceUrlService } from '@/services/drugService';
+import { PostServiceQuiryService } from '@/services/serviceenquiryService';
+import { useFormik } from "formik";
 
 const MedicalAttendant = () => {
+    const { serviceUrl } = useSelector((state) => state.serviceData);
+    const dispatch = useDispatch()
+    const pathname = usePathname();
+
+    let pathSegments = pathname.split("/").filter(Boolean);
+    pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
+
+    const urlText = pathSegments[0].split(" ").join("-")
+
+    useEffect(() => {
+        if (pathSegments.length > 0) {
+            dispatch(GetServiceUrlService(urlText));
+        }
+    }, []);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            service: serviceUrl?.title || "",
+            name: "",
+            email: "",
+            mobile: "",
+            city: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log(data);
+            await dispatch(PostServiceQuiryService(data, resetForm))
+        },
+    });
+
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap h-62 justify-center items-center mx-auto">
                 <div className="w-full md:w-[58%] m-2 rounded-md">
                     <Image priority src={IMAGES.MEDICALATTENDBANNER} alt="Medical Attendant" className="w-[100%] md:h-[300px] rounded-lg" />
                 </div>
-                <div className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#7ceb81] rounded-md">
+                <form onSubmit={formik.handleSubmit} className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#7ceb81] rounded-md">
                     <h2 className="font-bold text-[16px] uppercase">Medical Attendant</h2>
                     <p className="text-sm mb-6">Medical Attendant</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -17,12 +53,16 @@ const MedicalAttendant = () => {
                         <input
                             type="text" name="name"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.name}
+                            onChange={formik.handleChange("name")}
                             required
                         />
                         <label className="w-[30%] block md:mt-4 md:mb-2">Mobile</label>
                         <input
-                            type="tel" name="mobile"
+                            type="number" name="mobile"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange("mobile")}
                             required
                         />
                     </div>
@@ -31,12 +71,16 @@ const MedicalAttendant = () => {
                         <input
                             type="email" name="email"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.email}
+                            onChange={formik.handleChange("email")}
                             required
                         />
                         <label className="w-[30%] block  md:mt-4 md:mb-2">City</label>
                         <input
                             type="text" name="city"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.city}
+                            onChange={formik.handleChange("city")}
                             required
                         />
                     </div>
@@ -46,7 +90,7 @@ const MedicalAttendant = () => {
                     >
                         Book Now
                     </button>
-                </div>
+                </form>
             </div>
             <div className="flex">
                 <div className="w-full md:w-[68%] p-2">

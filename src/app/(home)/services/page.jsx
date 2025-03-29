@@ -1,6 +1,6 @@
 "use client"
 import { IMAGES } from "@/components/common/images";
-import {  GetLetterCategoryService } from "@/services/categoryService";
+import { GetServicesService } from "@/services/drugService";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -8,43 +8,42 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Services = () => {
   const router = useRouter();
-  const { firstLetter, categories } = useSelector((state) => state.categoryData);
+  const { serviceList } = useSelector((state) => state.serviceData);
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(GetLetterCategoryService(page, 10));
-  }, [page]);
+    dispatch(GetServicesService());
+  }, []);
 
-  const categroyClick = (cat_url) => {
-    router.push(`/catalog/${cat_url}`)
+  const serviceClick = (service_url) => {
+    router.push(`/${service_url}`)
   }
 
   return (
     <>
       <section className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3 pb-20">
-          {firstLetter?.categories &&
-            firstLetter?.categories?.map((category, i) => (
+          {serviceList &&
+            serviceList?.map((service, i) => (
               <div
                 className="bg-bgshop rounded-lg p-4 cursor-pointer"
                 key={i}
-                onClick={() => categroyClick(category?.url)}
+                onClick={() => serviceClick(service?.url)}
               >
                 <p className="text-center">
                   <Image
                     width={100}
                     height={100}
-                    src={category?.cat_img ? `https://assets2.drugcarts.com/category/thumb/${category?.cat_img}` : IMAGES.NO_IMAGE}
-                    alt={category?.category_name}
-                    className={`mb-3 mx-auto object-cover ${category?.cat_img ? "bg-bgcancer" : null} rounded-full p-2`}
+                    src={service?.image ? `https://assets3.drugcarts.com/admincolor/${service?.image}` : IMAGES.NO_IMAGE}
+                    alt={service?.title}
+                    className={`mb-3 mx-auto object-cover ${service?.image ? "bg-bgcancer" : null} rounded-full p-2`}
                   />
-                  <span>{category?.category_name}</span>
+                  <span>{service?.title}</span>
                 </p>
               </div>
             ))}
         </div>
-       
+
       </section>
     </>
   );

@@ -37,10 +37,10 @@ function MyCart() {
   const onAuth = items.length > 0 ? items : carts?.carts || [];
 
   const checkoutClick = async () => {
-    const cart = await localStorage.getItem('cart')
-    const cartData = JSON.parse(cart)
-    console.log(cartData);
-    if (cartData === null) {
+    const token = await localStorage.getItem('token')
+    // const cartData = JSON.parse(cart)
+    // console.log(cartData);
+    if (token) {
       router.push('/prescription')
     } else {
       router.push('/login')

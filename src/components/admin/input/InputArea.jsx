@@ -1,7 +1,7 @@
 import { InputLabel, TextField } from '@mui/material'
 import React from 'react'
 
-function InputArea({title}) {
+function InputArea({title, value, onChange}) {
     return (
         <div>
             <InputLabel
@@ -14,6 +14,8 @@ function InputArea({title}) {
                 id="outlined-multiline-flexible"
                 label="Multiline"
                 rows={4}
+                value={value}
+                onChange={onChange}
             />
         </div>
     )

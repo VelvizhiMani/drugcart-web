@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addOrder, getAllOrders, getOrder } from '../reduxToolkit/slices/orderSlice'
+import { addOrder, getAllOrders, getOrder, getGetOrderData } from '../reduxToolkit/slices/orderSlice'
 
 const PostOrderService = (data, router) => async (dispatch) => {
     try {
@@ -43,10 +43,22 @@ const GetOrderIdService = (id) => async (dispatch) => {
     }
 }
 
-const PutOrderService = (id, userData) => async (dispatch) => {
-    await axios.put(`/api/order/${id}`, userData, { headers: await Authorization() }).then((response) => {
-        dispatch(getOrder(response.data))
-        dispatch(GetOrderIdService(id))
+const GetOrderOneService = (orderId) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/order/order-view/${orderId}`, { headers: await Authorization() })
+        dispatch(getGetOrderData(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const PutOrderService = (orderId, userData) => async (dispatch) => {
+    await axios.put(`/api/order/order-view/${orderId}`, userData, { headers: await Authorization() }).then((response) => {
+        dispatch(getGetOrderData(response.data))
+        dispatch(GetOrderOneService(orderId))
         dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)
@@ -62,4 +74,4 @@ const DeleteOrderService = (id) => async (dispatch) => {
     })
 }
 
-export { PostOrderService, GetOrdersService, GetOrderIdService, PutOrderService, DeleteOrderService }
+export { PostOrderService, GetOrdersService, GetOrderIdService, PutOrderService, DeleteOrderService, GetOrderOneService }

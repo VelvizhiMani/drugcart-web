@@ -71,6 +71,11 @@ function OrderListPage() {
         setSearch("")
     }
 
+    const PendingOrderStatus = () => {
+        setOrderStatus("Pending")
+        setSearch("")
+    }
+
     const colorValue = (status) => {
         if (status === "Processing") {
             return "blue"
@@ -79,10 +84,10 @@ function OrderListPage() {
         } else if (status === "Cancelled") {
             return "red"
         } else {
-            return "#000"
+            return "green"
         }
     }
-    console.log("orderList", orderList);
+    console.log("orderList", orderStatus);
 
     return (
         <Box>
@@ -123,6 +128,20 @@ function OrderListPage() {
                         onClick={ProcessOrderStatus}
                     >
                         Processing orders list
+                    </Button>
+                </Grid2>
+                <Grid2
+                    marginTop={2}
+                    size={{ xs: 12, sm: 5, md: 3 }}
+                >
+                    <Button
+                        fullWidth
+                        color="info"
+                        variant="contained"
+                        style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
+                        onClick={PendingOrderStatus}
+                    >
+                        Pending orders list
                     </Button>
                 </Grid2>
                 <Grid2
@@ -216,15 +235,15 @@ function OrderListPage() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {row?.orderId}
+                                    #{row?.orderId}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {DateMonthFormat(row?.createdAt)}
                                 </TableCell>
                                 <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily, fontWeight: "bold", color: colorValue(row?.orderStatus) }}
+                                    sx={{ fontFamily: rowText.fontFamily, fontWeight: "bold", color: colorValue(row?.trackingInfo?.orderStatus) }}
                                 >
-                                    {row?.orderStatus}
+                                    {row?.trackingInfo?.orderStatus}
                                 </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily }}
@@ -251,17 +270,11 @@ function OrderListPage() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/orders/${row?._id}`)
+                                        router.push(`/admin/orderview/${row?.orderId}`)
                                     }}>
                                         <VisibilityIcon color="primary" />
                                     </button>
                                 </TableCell>
-                                <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
-                                    title={"Delete Orgin"}
-                                    description={`Are you sure you want to delete ${order?.orginname}`}
-                                    onSubmit={() => dispatch(DeleteOrderService(order?._id))} />
                             </TableRow>
                         ))}
                     </TableBody>

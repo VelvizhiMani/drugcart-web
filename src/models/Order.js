@@ -1,12 +1,14 @@
 import mongoose, { Schema } from "mongoose";
-import shortid from "shortid";
 
 const orderSchema = new Schema(
     {
-        orderId: { type: String, default: shortid.generate, unique: true },
+        orderId: {
+            type: String,
+            unique: true,
+        },
         userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "User",
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
         },
         shippingInfo: {
             type: {
@@ -19,6 +21,9 @@ const orderSchema = new Schema(
                 type: String,
             },
             phone: {
+                type: String,
+            },
+            email: {
                 type: String,
             },
             address: {
@@ -45,20 +50,60 @@ const orderSchema = new Schema(
         },
         orderItems: [Object],
         paymentInfo: {
-            id: {
+            transaction_id: {
                 type: String,
                 default: "",
             },
-            status: {
+            pg_transaction_id: {
+                type: String,
+                default: "",
+            },
+            pg_mode: {
+                type: String,
+                default: "",
+            },
+            payment_status: {
                 type: String,
                 default: "Active",
                 enum: ["Active", "InActive"],
             },
+            bank_ref_id: {
+                type: String,
+                default: "",
+            },
         },
-        // paidAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
+        trackingInfo: {
+            trackingno: {
+                type: String,
+                unique: true,
+                default: "",
+            },
+            shippingcompany: {
+                type: String,
+                default: "",
+            },
+            shippingweb: {
+                type: String,
+                default: "",
+            },
+            tracksenddate: {
+                type: String,
+                default: "",
+            },
+            trackenddate: {
+                type: String,
+                default: "",
+            },
+            trackingimg: {
+                type: String,
+                default: "",
+            },
+            orderStatus: {
+                type: String,
+                default: "Processing",
+                enum: ["Processing", "Completed", "Cancelled", "Transit", "Delivered", "Pending", "Dispatched"],
+            },
+        },
         itemsPrice: {
             type: Number,
             default: "",
@@ -75,11 +120,6 @@ const orderSchema = new Schema(
             type: Number,
             default: "",
         },
-        orderStatus: {
-            type: String,
-            default: "Processing",
-            enum: ["Processing", "Completed", "Cancelled"],
-        },
         reason: {
             type: String,
             default: "",
@@ -89,14 +129,14 @@ const orderSchema = new Schema(
             default: "InActive",
             enum: ["Active", "InActive"],
         },
-        // delieverdAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
-        // createdAt: {
-        //   type: Date,
-        //   default: Date.now,
-        // },
+        notes: {
+            type: String,
+            default: "",
+        },
+        refundstatus: {
+            type: String,
+            default: "",
+        },
         status: {
             type: String,
             default: "Active",
@@ -107,6 +147,37 @@ const orderSchema = new Schema(
         timestamps: true,
     }
 );
+
+orderSchema.pre("save", async function (next) {
+    if (!this.orderId) {
+        const now = new Date();
+        const year = now.getFullYear().toString().slice(-2);
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+
+        this.orderId = `${year}${hours}${minutes}${seconds}`;
+    }
+    next();
+});
+
+orderSchema.pre("save", async function (next) {
+    if (!this.trackingInfo) {
+        this.trackingInfo = {};
+    }
+
+    if (!this.trackingInfo.trackingno) {
+        const now = new Date();
+        const year = now.getFullYear().toString().slice(-2);
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+
+        this.trackingInfo.trackingno = `M4${year}${hours}${minutes}${seconds}`;
+    }
+    next();
+});
+
 
 const Order =
     mongoose.models.Order || mongoose.model("Order", orderSchema, "order");

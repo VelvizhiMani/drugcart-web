@@ -1,15 +1,50 @@
 "use client";
+import { useEffect } from "react";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
+import { usePathname } from 'next/navigation';
+import { useSelector, useDispatch } from "react-redux";
+import { GetServiceUrlService } from '@/services/drugService';
+import { PostServiceQuiryService } from '@/services/serviceenquiryService';
+import { useFormik } from "formik";
 
 const Nutritionists = () => {
+    const { serviceUrl } = useSelector((state) => state.serviceData);
+    const dispatch = useDispatch()
+    const pathname = usePathname();
+
+    let pathSegments = pathname.split("/").filter(Boolean);
+    pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
+
+    const urlText = pathSegments[0].split(" ").join("-")
+
+    useEffect(() => {
+        if (pathSegments.length > 0) {
+            dispatch(GetServiceUrlService(urlText));
+        }
+    }, []);
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            service: serviceUrl?.title || "",
+            name: "",
+            email: "",
+            mobile: "",
+            city: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log(data);
+            await dispatch(PostServiceQuiryService(data, resetForm))
+        },
+    });
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap h-62 justify-center items-center mx-auto">
                 <div className="w-full md:w-[58%] m-2 rounded-md">
                     <Image priority src={IMAGES.NUTRITIONISTBANNER} alt="YOGA BANNER" className="w-[100%] md:h-[300px] rounded-lg" />
                 </div>
-                <div className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#8bbbf3] rounded-md">
+                <form onSubmit={formik.handleSubmit} className="w-full md:w-[40%] md:h-[300px] p-2 text-center bg-[#8bbbf3] rounded-md">
                     <h2 className="font-bold text-[16px] uppercase">Nutritionists</h2>
                     <p className="text-sm mb-6">Nutritionists</p>
                     <div className="flex flex-col md:flex-row justify-center items-center gap-3 my-2">
@@ -17,12 +52,16 @@ const Nutritionists = () => {
                         <input
                             type="text" name="name"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.name}
+                            onChange={formik.handleChange("name")}
                             required
                         />
                         <label className="w-[30%] block md:mt-4 md:mb-2">Mobile</label>
                         <input
                             type="tel" name="mobile"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange("mobile")}
                             required
                         />
                     </div>
@@ -31,12 +70,16 @@ const Nutritionists = () => {
                         <input
                             type="email" name="email"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.email}
+                            onChange={formik.handleChange("email")}
                             required
                         />
                         <label className="w-[30%] block  md:mt-4 md:mb-2">City</label>
                         <input
                             type="text" name="city"
                             className="w-[70%] px-3 py-1 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={formik.values.city}
+                            onChange={formik.handleChange("city")}
                             required
                         />
                     </div>
@@ -46,7 +89,7 @@ const Nutritionists = () => {
                     >
                         Book Now
                     </button>
-                </div>
+                </form>
             </div>
             <div className="flex">
                 <div className="w-full md:w-[68%] p-2">
@@ -139,32 +182,32 @@ const Nutritionists = () => {
             <div className="shadow-md rounded-lg p-6 mt-5">
                 <h1 className="text-md md:text-xl font-bold">NUTRITIONIST SERVICES AT HOME</h1>
                 <p className="my-2">Good nutrition give you support and enhance our mental and physical health. A Registered Dietitian and nutrition specialist provides nutrition counseling to experts and their Families at home.</p>
-                    <p className="my-2"> Nutritionist counseling for patients at home seeks for support like weight-management, sports nutrition, heart health, diabetes, IBS/IBD, brain health, and the management of food allergies/intolerances. The provide service, assessment of the patient to overcome the realistic lifestyle and create an individualized nutrition plans at home.</p>
+                <p className="my-2"> Nutritionist counseling for patients at home seeks for support like weight-management, sports nutrition, heart health, diabetes, IBS/IBD, brain health, and the management of food allergies/intolerances. The provide service, assessment of the patient to overcome the realistic lifestyle and create an individualized nutrition plans at home.</p>
             </div>
             <div className="shadow-md rounded-lg p-6 mt-5">
                 <h1 className="text-md md:text-xl font-bold">NUTRITIONIST SERVICE AT HOME:</h1>
                 <p className="my-2">• Diabetes education.</p>
-                    <p className="my-2">• General nutrition education sessions and healthy eating</p>
-                    <p className="my-2">• Development of an individualized meal plan by nutrition counseling session</p>
-                    <p className="my-2">• Class for cooking food with nutrition.</p>
-                    <p className="my-2">• Grocery shopping store .</p>
+                <p className="my-2">• General nutrition education sessions and healthy eating</p>
+                <p className="my-2">• Development of an individualized meal plan by nutrition counseling session</p>
+                <p className="my-2">• Class for cooking food with nutrition.</p>
+                <p className="my-2">• Grocery shopping store .</p>
             </div>
             <div className="shadow-md rounded-lg p-6 mt-5">
                 <h1 className="text-md md:text-xl font-bold">NUTRITION CARE SERVICE:</h1>
                 <p className="my-2"> Maintain the health of individuals through the nutrition care services.</p>
-                    <p className="my-2">• assessing the nutrition needs of individuals or groups and determining resources</p>
-                    <p className="my-2">• Establishing priorities, goals, and objectives that meet nutrition needs with consistent </p>
-                    <p className="my-2">• providing nutrition counseling in health and disease management;</p>
-                    <p className="my-2">• Nutrition care systems are developing, implementing, and managing</p>
-                    <p className="my-2">• Evaluating, making changes in plan, and maintain standards of quality in food and nutrition care services.</p>
+                <p className="my-2">• assessing the nutrition needs of individuals or groups and determining resources</p>
+                <p className="my-2">• Establishing priorities, goals, and objectives that meet nutrition needs with consistent </p>
+                <p className="my-2">• providing nutrition counseling in health and disease management;</p>
+                <p className="my-2">• Nutrition care systems are developing, implementing, and managing</p>
+                <p className="my-2">• Evaluating, making changes in plan, and maintain standards of quality in food and nutrition care services.</p>
             </div>
             <div className="shadow-md rounded-lg p-6 mt-5">
                 <h1 className="text-md md:text-xl font-bold">NUTRITION SPECIALIST IN HEALTHCARE PROFESSIONALS</h1>
                 <p className="my-2"> They are various health care professionals and providing the role of nutrition services like.</p>
-                    <p className="my-2">• Registered Dietitian</p>
-                    <p className="my-2">• Certified Nutrition Specialist</p>
-                    <p className="my-2">• Dietetic Technician, Registered</p>
-                    <p className="my-2">• Certified Dietary Manager</p>
+                <p className="my-2">• Registered Dietitian</p>
+                <p className="my-2">• Certified Nutrition Specialist</p>
+                <p className="my-2">• Dietetic Technician, Registered</p>
+                <p className="my-2">• Certified Dietary Manager</p>
             </div>
             <div className="shadow-md rounded-lg p-6 mt-5">
                 <h1 className="text-md md:text-xl font-bold">Drug carts will help you</h1>
