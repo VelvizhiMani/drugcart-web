@@ -10,7 +10,7 @@ import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import { GetLetterManufactuerService } from "@/services/manufactuerService";
 import { Box, Pagination, Typography } from "@mui/material";
 
-const ManufactuerList = () => {
+const Manufactuer = () => {
   const {  firstLetter } = useSelector((state) => state.manufactuerData);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
@@ -54,7 +54,7 @@ const ManufactuerList = () => {
               key={i}
               className="grid border-[1.5px] p-4 cursor-pointer bg-white border-gray-200 py-5"
             >
-              <ListAltIcon
+              <PlaylistAddCheckIcon
                 className="mx-auto opacity-30 text-[red]"
                 style={{ fontSize: "40px" }}
               />
@@ -80,4 +80,4 @@ const ManufactuerList = () => {
   );
 };
 
-export default ManufactuerList;
+export default Manufactuer;
