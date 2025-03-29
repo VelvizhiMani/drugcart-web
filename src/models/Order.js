@@ -75,6 +75,7 @@ const orderSchema = new Schema(
         trackingInfo: {
             trackingno: {
                 type: String,
+                unique: true,
                 default: "",
             },
             shippingcompany: {
@@ -100,7 +101,7 @@ const orderSchema = new Schema(
             orderStatus: {
                 type: String,
                 default: "Processing",
-                enum: ["Processing", "Completed", "Cancelled", "Transit", "Delivered", "Pending"],
+                enum: ["Processing", "Completed", "Cancelled", "Transit", "Delivered", "Pending", "Dispatched"],
             },
         },
         itemsPrice: {

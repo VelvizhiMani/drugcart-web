@@ -15,15 +15,19 @@ import {
 import Avatar from '@mui/material/Avatar';
 import { IMAGES } from '@/components/common/images';
 import NotesModal from '@/components/admin/modal/NotesModal';
+import TrackingModal from '@/components/admin/modal/TrackingModal';
+import { GetCourierService } from '@/services/courierService';
 
 function page() {
     const [openNotes, setNotesModal] = useState(false)
+    const [openTracking, setTrackingModal] = useState(false)
     const { orderGetData } = useSelector((state) => state.orderData)
     const params = useParams()
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(GetOrderOneService(params?.orderId))
+        dispatch(GetCourierService(1, 100))
     }, [params?.orderId])
 
     console.log('orderGetData', orderGetData);
@@ -35,6 +39,28 @@ function page() {
             trackingInfo: {
                 ...orderGetData?.trackingInfo,
                 orderStatus: "Pending"
+            }
+        };
+        await dispatch(PutOrderService(orderGetData?.orderId, statusChange));
+    };
+
+    const handleTransitOrder = async () => {
+        const statusChange = {
+            ...orderGetData,
+            trackingInfo: {
+                ...orderGetData?.trackingInfo,
+                orderStatus: "Transit"
+            }
+        };
+        await dispatch(PutOrderService(orderGetData?.orderId, statusChange));
+    };
+
+    const handleDeliveredOrder = async () => {
+        const statusChange = {
+            ...orderGetData,
+            trackingInfo: {
+                ...orderGetData?.trackingInfo,
+                orderStatus: "Delivered"
             }
         };
         await dispatch(PutOrderService(orderGetData?.orderId, statusChange));
@@ -56,24 +82,7 @@ function page() {
 
                 {/* Buttons Container */}
                 <Grid2 xs={12} md={6} display="flex" justifyContent="flex-end" gap={2}>
-                    {orderGetData?.trackingInfo?.orderStatus === "Pending" ?
-                        <>
-                            <Button
-                                color="success"
-                                variant="contained"
-                                style={{ textTransform: "capitalize" }}
-                                onClick={handleProcessOrder}
-                            >
-                                Generate Invoice
-                            </Button>
-                            <Button
-                                color="error"
-                                variant="contained"
-                                style={{ textTransform: "capitalize" }}
-                            >
-                                Order Tracking
-                            </Button>
-                        </> :
+                    {orderGetData?.trackingInfo?.orderStatus === "Processing" && (
                         <>
                             <Button
                                 color="success"
@@ -87,7 +96,7 @@ function page() {
                                 color="error"
                                 variant="contained"
                                 style={{ textTransform: "capitalize" }}
-                                onClick={() => router.push(`/admin/orders`)}
+                                // onClick={() => router.push(`/admin/orders`)}
                             >
                                 Cancel Order
                             </Button>
@@ -102,7 +111,53 @@ function page() {
 
                             <NotesModal open={openNotes} setOpen={setNotesModal} />
                         </>
-                    }
+                    )}
+                    {orderGetData?.trackingInfo?.orderStatus === "Pending" && (
+                        <>
+                            <Button
+                                color="success"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={handleProcessOrder}
+                            >
+                                Generate Invoice
+                            </Button>
+                            <Button
+                                color="error"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={() => setTrackingModal(true)}
+                            >
+                                Order Tracking
+                            </Button>
+                            <TrackingModal open={openTracking} setOpen={setTrackingModal} />
+                        </>
+                    )}
+                    {orderGetData?.trackingInfo?.orderStatus === "Dispatched" && (
+                        <>
+                            <Button
+                                color="error"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={handleTransitOrder}
+                            >
+                                Order Transit
+                            </Button>
+                        </>
+                    )}
+                    {orderGetData?.trackingInfo?.orderStatus === "Transit" && (
+                        <>
+                            <Button
+                                color="error"
+                                variant="contained"
+                                style={{ textTransform: "capitalize" }}
+                                onClick={handleDeliveredOrder}
+                            >
+                                Delivered
+                            </Button>
+                        </>
+                    )}
+                    {orderGetData?.trackingInfo?.orderStatus === "Delivered" && null}
                 </Grid2>
             </Grid2>
             <Box>
@@ -165,7 +220,7 @@ function page() {
                             </Typography>
                             <Typography
                                 sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                                {orderGetData?.trackingInfo?.trackingno}
+                                {orderGetData?.trackingInfo?.trackingno ? orderGetData?.trackingInfo?.trackingno : "-"}
                             </Typography>
                         </Grid2>
                         <Grid2 size={{ xs: 12, md: 4 }}>
