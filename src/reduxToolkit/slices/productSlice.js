@@ -11,6 +11,7 @@ const initialState = {
     personalCareProduct: [],
     fitnessProduct: [],
     treatmentProduct: [],
+    productManufactuerUrl: [],
 }
 const productSlice = createSlice({
     name: 'product',
@@ -27,6 +28,9 @@ const productSlice = createSlice({
         },
         getGenericProductUrl: (state, { payload }) => {
             state.productGenericUrl = payload
+        },
+        getManufactuerProductUrl: (state, { payload }) => {
+            state.productManufactuerUrl = payload
         },
         getProductCategory: (state, { payload }) => {
             state.productCategory = payload
@@ -49,5 +53,5 @@ const productSlice = createSlice({
     }
 })
 
-export const { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct } = productSlice.actions
+export const { addProduct, getProducts, getProduct, getGenericProductUrl,getManufactuerProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct } = productSlice.actions
 export default productSlice.reducer

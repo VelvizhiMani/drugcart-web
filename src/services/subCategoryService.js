@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addSubCategory, getSubCategories, getSubCategory, getSubCategoryUrl } from '../reduxToolkit/slices/subCategorySlice'
+import { addSubCategory, getSubCategories, getSubCategory,getSubCateUrl, getSubCategoryUrl } from '../reduxToolkit/slices/subCategorySlice'
 
 const PostSubCategoryService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetSubCategoryIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetSubCateUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/sub-category/subcategory/${url}`, { headers: await Authorization() })
+        dispatch(getSubCateUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutSubCategoryService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/sub-category/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getSubCategory(response.data))
@@ -74,4 +86,4 @@ const GetSubCategoryUrlService = (url) => async (dispatch) => {
     }
 }
 
-export { PostSubCategoryService, GetSubCategoryService, GetSubCategoryIdService, PutSubCategoryService, DeleteSubCategoryService, GetSubCategoryUrlService }
+export { PostSubCategoryService, GetSubCategoryService, GetSubCategoryIdService,GetSubCateUrlService, PutSubCategoryService, DeleteSubCategoryService, GetSubCategoryUrlService }

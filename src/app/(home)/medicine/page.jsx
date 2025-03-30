@@ -56,7 +56,7 @@ const Medicine = () => {
           {firstLetter?.categories &&
             firstLetter?.categories?.map((category, i) => (
               <div
-                className="bg-gradient-to-r from-indigo-200 from-10% via-sky-200 via-30% to-emerald-200 to-90% rounded-lg p-4 cursor-pointer"
+                className="bg-bgshop rounded-lg p-4 cursor-pointer"
                 key={i}
                 onClick={() => categroyClick(category?.url)}
               >                    
@@ -66,7 +66,7 @@ const Medicine = () => {
                     height={100}
                     src={category?.cat_img ? `https://assets2.drugcarts.com/category/thumb/${category?.cat_img}` : IMAGES.NO_IMAGE}
                     alt={category?.category_name}
-                    className={`mb-3 mx-auto object-cover ${category?.cat_img ? "bg-bgcolor" : "bg-white"} rounded-full p-2`}
+                    className={`mb-3 mx-auto object-cover ${category?.cat_img ? "bg-bgcancer" : "bg-white"} rounded-full p-2`}
                   />
                   <span className="capitalize">{category?.category_name}</span>
                 </p>

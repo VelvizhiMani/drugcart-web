@@ -2,13 +2,9 @@
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import FeaturedPlayListIcon from "@mui/icons-material/FeaturedPlayList";
-import TocIcon from "@mui/icons-material/Toc";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import { GetLetterManufactuerService } from "@/services/manufactuerService";
 import { Box, Pagination, Typography } from "@mui/material";
+import Link from "next/link";
 
 const ManufactuerList = () => {
   const {  firstLetter } = useSelector((state) => state.manufactuerData);
@@ -54,6 +50,7 @@ const ManufactuerList = () => {
               key={i}
               className="grid border-[1.5px] p-4 cursor-pointer bg-white border-gray-200 py-5"
             >
+              <Link href={`/manufacturer/${row?.manufactuerurl}`} className="text-center">
               <ListAltIcon
                 className="mx-auto opacity-30 text-[red]"
                 style={{ fontSize: "40px" }}
@@ -61,6 +58,7 @@ const ManufactuerList = () => {
               <p className="text-center font-bold">
                 <span>{row?.manufactuername}</span>
               </p>
+              </Link>
             </div>
           ))}
         </div>

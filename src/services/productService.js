@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addProduct, getProducts, getProduct, getGenericProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct } from '../reduxToolkit/slices/productSlice'
+import { addProduct, getProducts, getProduct, getGenericProductUrl,getManufactuerProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct } from '../reduxToolkit/slices/productSlice'
 
 const PostProductService = (data, resetForm) => async (dispatch) => {
     try {
@@ -161,5 +161,16 @@ const GetProductGeneticUrlService = (url) => async (dispatch) => {
     }
 }
 
+const GetProductManufactuerUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/product/manufact?search=${url}`, { headers: await Authorization() })
+        dispatch(getManufactuerProductUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
 
-export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService }
+export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService }

@@ -2,21 +2,21 @@ import Link from "next/link";
 
 const FilterCompanyCard = () => {
   const companys = [
-    { id: 1, name: "Hetero drugs limited",url: "/manufacturer-list/hetero-drugs-limited" },
-    { id: 2, name: "Natco pharma ltd",url: ""  },
-    { id: 3, name: "Dr reddys laboratories ltd",url: ""  },
-    { id: 4, name: "Emcure pharmaceuticals ltd",url: ""  },
-    { id: 5, name: "Mylan pharmaceuticals",url: ""  },
-    { id: 6, name: "Cipla ltd",url: ""  },
-    { id: 7, name: "Cadila healthcare ltd",url: ""  },
-    { id: 8, name: "Strides shasun limited",url: ""  },
-    { id: 9, name: "Sun pharmaceutical industries limited",url: ""  },
-    { id: 10, name: "Biocon",url: ""  },
-    { id: 11, name: "Lupin ltd",url: ""  },
-    { id: 12, name: "Alkem laboratories limited",url: ""  },
-    { id: 13, name: "Aprazer healthcare pvt ltd",url: ""  },
-    { id: 14, name: "Wockhardt ltd",url: ""  },
-    { id: 15, name: "Zuventus healthcare ltd",url: ""  },
+    { id: 1, name: "Hetero drugs limited",url: "/manufacturer/hetero-drugs-limited" },
+    { id: 2, name: "Natco pharma ltd",url: "/manufacturer/natco-pharma-ltd"  },
+    { id: 3, name: "Dr reddys laboratories ltd",url: "/manufacturer/dr-reddys-laboratories-ltd"  },
+    { id: 4, name: "Emcure pharmaceuticals ltd",url: "/manufacturer/emcure-pharmaceuticals-ltd"  },
+    { id: 5, name: "Mylan pharmaceuticals",url: "/manufacturer/mylan-pharmaceuticals"  },
+    { id: 6, name: "Cipla ltd",url: "/manufacturer/cipla-ltd"  },
+    { id: 7, name: "Cadila healthcare ltd",url: "/manufacturer/cadila-healthcare-ltd"  },
+    { id: 8, name: "Strides shasun limited",url: "/manufacturer/strides-shasun-limited"  },
+    { id: 9, name: "Sun pharmaceutical industries limited",url: "/manufacturer/sun-pharmaceutical-industries-limited"  },
+    { id: 10, name: "Biocon",url: "/manufacturer/biocon"  },
+    { id: 11, name: "Lupin ltd",url: "/manufacturer/lupin-ltd"  },
+    { id: 12, name: "Alkem laboratories limited",url: "/manufacturer/alkem-laboratories-limited"  },
+    { id: 13, name: "Aprazer healthcare pvt ltd",url: "/manufacturer/aprazer-healthcare-pvt-ltd"  },
+    { id: 14, name: "Wockhardt ltd",url: "/manufacturer/wockhardt-ltd"  },
+    { id: 15, name: "Zuventus healthcare ltd",url: "/manufacturer/zuventus-healthcare-ltd"  },
   ];
 
   return (
