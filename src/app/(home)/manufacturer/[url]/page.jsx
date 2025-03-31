@@ -1,31 +1,34 @@
 "use client";
-import ListAltIcon from "@mui/icons-material/ListAlt";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
-import FeaturedPlayListIcon from "@mui/icons-material/FeaturedPlayList";
-import TocIcon from "@mui/icons-material/Toc";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
-import { GetLetterManufactuerService } from "@/services/manufactuerService";
 import { Box, Pagination, Typography } from "@mui/material";
+import { GetProductManufactuerUrlService } from "@/services/productService";
+import { useParams, useRouter } from "next/navigation";
 
 const Manufactuer = () => {
-  const {  firstLetter } = useSelector((state) => state.manufactuerData);
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [selectedLetter, setSelectedLetter] = useState("A");
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  const params = useParams();
+  const router = useRouter();
+
+  const { productManufactuerUrl } = useSelector((state) => state.productData);
 
   useEffect(() => {
-    dispatch(GetLetterManufactuerService(page, 10, selectedLetter));
-  }, [page, selectedLetter]);
+    dispatch(GetProductManufactuerUrlService(params?.url))
+  }, [page,params?.url]);
+
+  const ManufactClick = (url) => {
+    router.push(`/product/${url}`);
+  };
 
   return (
     <>
       <section className="max-w-7xl mx-auto ">
         <div className="py-2 text-xl font-bold">
-          <h2>Search Manufacturer Name</h2>
+          <h2>Manufacturer Product List</h2>
           <div className="flex flex-wrap justify-center gap-2 my-4">
             {alphabet.map((letter, i) => (
               <button
@@ -49,27 +52,29 @@ const Manufactuer = () => {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-4">
-          {firstLetter?.manufactuers?.map((row, i) => (
+        {productManufactuerUrl?.map((row, i) => (
+
             <div
               key={i}
               className="grid border-[1.5px] p-4 cursor-pointer bg-white border-gray-200 py-5"
+              onClick={() => ManufactClick(row?.url)}
             >
               <PlaylistAddCheckIcon
                 className="mx-auto opacity-30 text-[red]"
                 style={{ fontSize: "40px" }}
               />
               <p className="text-center font-bold">
-                <span>{row?.manufactuername}</span>
+                <span>{row?.product_name}</span>
               </p>
             </div>
-          ))}
+          ))} 
         </div>
         <Box sx={{ my: 2, display: "flex", justifyContent: 'space-between', alignItems: 'center', }}>
-          <Typography fontFamily={"Poppins"}>Showing 1-{10} of {firstLetter?.pagination?.totalItems} entries</Typography>
+          <Typography fontFamily={"Poppins"}>Showing 1-{10} of {productManufactuerUrl?.pagination?.totalItems} entries</Typography>
           <br />
           <Pagination
             size="large"
-            count={firstLetter?.pagination?.totalPages}
+            count={productManufactuerUrl?.pagination?.totalPages}
             page={page}
             color="secondary"
             onChange={(_, value) => setPage(value)}

@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IMAGES } from "../common/images";
@@ -9,20 +8,22 @@ import Feedback from "@/components/home-page/feedback";
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
 import QuestionCard from "@/components/ProductDetailsCard/QuestionCard";
 import { GetProductUrlService, GetProductGeneticUrlService } from "@/services/productService";
+import { GetSubCateUrlService } from "@/services/subCategoryService";
 import { getCartService, PostCartService } from "@/services/cartService"
 
 const ProductView = ({ url }) => {
   const dispatch = useDispatch();
   const { product, productGenericUrl } = useSelector((state) => state.productData);
+  const { subCateUrl } = useSelector((state) => state.subCategoryData);
 
   useEffect(() => {
     dispatch(GetProductUrlService(url));
+    dispatch(GetSubCateUrlService(product?.subcat_name));
     dispatch(GetProductGeneticUrlService(product?.generices))
   }, [url, product?.generices]);
 
   const alterBrands = productGenericUrl.filter((item) => item?.url !== url)
 
-  console.log('alterBrands', alterBrands);
   return (
     <>
       <section className="px-3 mt-3">
@@ -79,7 +80,7 @@ const ProductView = ({ url }) => {
               </div>
             </div>
             <div className="p-1">
-              <p className="text-sm text-gray-500">{product?.cat_name}</p>
+              <p className="text-sm text-gray-500 capitalize">{product?.cat_name}</p>
               <h2 className="text-xl">{product?.product_name}</h2>
               <div className="flex items-center mt-3">
                 <span className="text-black font-bold mr-2">4.0</span>
@@ -297,7 +298,7 @@ const ProductView = ({ url }) => {
                   </tr>
                   <tr className="border-[1px]">
                     <td className="bg-pink-200 py-[15px] px-1">Subcategory</td>
-                    <td className="px-2">{product?.subcat_name}</td>
+                    <td className="px-2">{product?.subcat_name} / {subCateUrl?.subcat_name}</td>
                   </tr>
                   <tr className="border-[1px]">
                     <td className="bg-pink-200 py-[15px] px-1">Manufacturer</td>
@@ -1723,7 +1724,7 @@ const ProductView = ({ url }) => {
                 <h2>Pantoprazole (40mg) + Levosulpiride (75mg)</h2>
               </div>
               <h2 className="font-bold text-center m-2 text-xl">
-                Alternate Brands
+                Alternate Brands 
               </h2>
               <div className="bg-[#F3F8FC] text-[14px] border-[1.5px] m-2 rounded">
                 {alterBrands?.map((product, i) => (

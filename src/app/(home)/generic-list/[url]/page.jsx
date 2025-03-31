@@ -23,6 +23,7 @@ const GenericProductList = () => {
     dispatch(GetProductService(page, showNo, search, params?.url));
   }, [page, showNo, search, params?.url]);
 
+
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(10000);
 
