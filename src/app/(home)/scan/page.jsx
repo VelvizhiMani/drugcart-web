@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
-import Link from "next/link";
+
 import { useDispatch, useSelector } from "react-redux";
 import { GetScanListService, GetScanIdService } from '@/services/scanService';
 import { useEffect } from "react";
