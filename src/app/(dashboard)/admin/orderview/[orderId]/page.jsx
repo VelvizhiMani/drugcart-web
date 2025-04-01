@@ -16,11 +16,13 @@ import Avatar from '@mui/material/Avatar';
 import { IMAGES } from '@/components/common/images';
 import NotesModal from '@/components/admin/modal/NotesModal';
 import TrackingModal from '@/components/admin/modal/TrackingModal';
+import CanelModal from '@/components/admin/modal/CanelModal';
 import { GetCourierService } from '@/services/courierService';
 
 function page() {
     const [openNotes, setNotesModal] = useState(false)
     const [openTracking, setTrackingModal] = useState(false)
+    const [canelModal, setCancelModal] = useState(false)
     const { orderGetData } = useSelector((state) => state.orderData)
     const params = useParams()
     const dispatch = useDispatch()
@@ -88,7 +90,7 @@ function page() {
                                 color="success"
                                 variant="contained"
                                 style={{ textTransform: "capitalize" }}
-                                onClick={() => router.push(`/admin/orders`)}
+                                onClick={handleProcessOrder}
                             >
                                 Process Order
                             </Button>
@@ -96,19 +98,21 @@ function page() {
                                 color="error"
                                 variant="contained"
                                 style={{ textTransform: "capitalize" }}
-                                // onClick={() => router.push(`/admin/orders`)}
+                                onClick={() => setCancelModal(true)}
                             >
                                 Cancel Order
                             </Button>
-                            {!orderGetData?.notes ? <Button
-                                color="info"
-                                variant="contained"
-                                style={{ textTransform: "capitalize" }}
-                                onClick={() => setNotesModal(true)}
-                            >
-                                Notes
-                            </Button> : null}
-
+                            {!orderGetData?.notes ? (
+                                <Button
+                                    color="info"
+                                    variant="contained"
+                                    style={{ textTransform: "capitalize" }}
+                                    onClick={() => setNotesModal(true)}
+                                >
+                                    Notes
+                                </Button>
+                            ) : null}
+                            <CanelModal open={canelModal} setOpen={setCancelModal} />
                             <NotesModal open={openNotes} setOpen={setNotesModal} />
                         </>
                     )}
@@ -118,7 +122,7 @@ function page() {
                                 color="success"
                                 variant="contained"
                                 style={{ textTransform: "capitalize" }}
-                                onClick={handleProcessOrder}
+                            // onClick={handleProcessOrder}
                             >
                                 Generate Invoice
                             </Button>
@@ -158,6 +162,7 @@ function page() {
                         </>
                     )}
                     {orderGetData?.trackingInfo?.orderStatus === "Delivered" && null}
+                    {orderGetData?.trackingInfo?.orderStatus === "Cancelled" && null}
                 </Grid2>
             </Grid2>
             <Box>
