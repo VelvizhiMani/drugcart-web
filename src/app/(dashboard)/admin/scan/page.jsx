@@ -98,6 +98,7 @@ function ScanPage() {
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                         filterSubmit={searchSubmit}
+                        placeholder="Scan Name"
                     />
                 </Grid2>
             </Grid2>
