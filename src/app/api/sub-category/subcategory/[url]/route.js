@@ -8,7 +8,7 @@ export async function GET(request, { params }) {
     try {
         await connectionToDatabase();
         const { url } = await params;
-        const subcategoryUrl = await Subcategory.find({ url: url });
+        const subcategoryUrl = await Subcategory.findOne({ url: url });
         if (!subcategoryUrl) {
             return NextResponse.json({ error: 'Sub Category not found' }, { status: 404 });
         }
