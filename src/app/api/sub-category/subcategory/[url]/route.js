@@ -7,12 +7,6 @@ export async function GET(request, { params }) {
 
     try {
         await connectionToDatabase();
-        const { success, user, message } = await adminAuthorization();
-
-        if (!success) {
-            return NextResponse.json({ error: message }, { status: 401 });
-        }
-
         const { url } = await params;
         const subcategoryUrl = await Subcategory.find({ url: url });
         if (!subcategoryUrl) {
