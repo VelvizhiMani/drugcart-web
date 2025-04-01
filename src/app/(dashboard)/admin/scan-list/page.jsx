@@ -8,6 +8,7 @@ import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { GetScanListService } from '@/services/scanService';
+import { GetScanBookingListService } from '@/services/scanBookingService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -28,9 +29,11 @@ function ScanPage() {
     const dispatch = useDispatch()
     const router = useRouter()
     const { scanList } = useSelector((state) => state.scanData)
+    const { scanBookingList } = useSelector((state) => state.scanBookingData)
 
     useEffect(() => {
         dispatch(GetScanListService())
+        dispatch(GetScanBookingListService())
     }, [])
 
     return (
@@ -67,7 +70,7 @@ function ScanPage() {
                                 Total Scan Bookings
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>0</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{scanBookingList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>
