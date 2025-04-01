@@ -4,6 +4,7 @@ const initialState = {
     scanList: [],
     newScan: {},
     scan: {},
+    scanUrl: {}
 }
 const scanSlice = createSlice({
     name: 'scan',
@@ -15,11 +16,14 @@ const scanSlice = createSlice({
         getScans: (state, { payload }) => {
             state.scanList = payload
         },
-        getScan: (state, { payload }) => { 
+        getScan: (state, { payload }) => {
             state.scan = payload
+        },
+        getScanUrl: (state, { payload }) => {
+            state.scanUrl = payload
         }
     }
 })
 
-export const { addScan, getScans, getScan } = scanSlice.actions
+export const { addScan, getScans, getScan, getScanUrl } = scanSlice.actions
 export default scanSlice.reducer

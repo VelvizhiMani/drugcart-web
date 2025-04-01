@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addScan, getScans, getScan } from '../reduxToolkit/slices/scanSlice'
+import { addScan, getScans, getScan, getScanUrl } from '../reduxToolkit/slices/scanSlice'
 
 const PostScanService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetScanIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetScanUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/scan/scan-view/${url}`, { headers: await Authorization() })
+        dispatch(getScanUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutScanService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/scan/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getScan(response.data))
@@ -62,4 +74,4 @@ const DeleteScanService = (id) => async (dispatch) => {
     })
 }
 
-export { PostScanService, GetScanListService, GetScanIdService, PutScanService, DeleteScanService }
+export { PostScanService, GetScanListService, GetScanIdService, GetScanUrlService, PutScanService, DeleteScanService }
