@@ -5,10 +5,12 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { GetScanListService, GetScanIdService } from '@/services/scanService';
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const Scan = () => {
-    const { scanList, scan } = useSelector((state) => state.scanData)
+    const { scanList } = useSelector((state) => state.scanData)
     const dispatch = useDispatch()
+    const router = useRouter()
 
     useEffect(() => {
         dispatch(GetScanListService())
@@ -27,9 +29,7 @@ const Scan = () => {
                     <div className="bg-white rounded-lg border-[1.5px] shadow-lg overflow-hidden" key={i}>
                         <h2 className="text-md md:text-xl font-bold py-2 text-center">{item?.scantestname}</h2>
                         <img src={item?.scanImage || IMAGES.NO_IMAGE} alt="Weight Loss Tips" className="w-full h-48 p-3 object-contain" width={200} height={200} />
-                        <Link href={`/scan/${item?.url}`}>
-                            <button className='text-center bg-green-500 p-2 w-full text-white font-bold'>View More</button>
-                        </Link>
+                        <button className='text-center bg-green-500 p-2 w-full text-white font-bold' onClick={() => router.push(`/scan/${item?.url}`)}>View More</button>
                     </div>
                 ))}
             </div>
