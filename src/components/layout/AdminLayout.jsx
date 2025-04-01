@@ -264,10 +264,15 @@ function AdminLayout(props) {
       path: "/admin/orders",
       name: "Orders",
     },
+    {
+      id: 13,
+      path: "/admin/scan-list",
+      name: "Scan List",
+    },
   ];
-  const mainMenu = userRoutes.slice(0, 12);
-  const filteredRoutes = userRoutes.slice(12, 16);
-  const filtereTwodRoutes = userRoutes.slice(12, userRoutes.length);
+  const mainMenu = userRoutes.slice(0, 13);
+  const filteredRoutes = userRoutes.slice(13, 16);
+  const filtereTwodRoutes = userRoutes.slice(13, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
