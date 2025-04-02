@@ -4,7 +4,8 @@ const initialState = {
     testPackageList: [],
     newTestPackage: {},
     testPackage: {},
-    testPackageUrl: []
+    testPackageUrl: [],
+    testUrl: {},
 }
 const testPackageSlice = createSlice({
     name: 'lab_test',
@@ -21,9 +22,12 @@ const testPackageSlice = createSlice({
         },
         getTestPackageUrl: (state, { payload }) => {
             state.testPackageUrl = payload
+        },
+        getTestUrl: (state, { payload }) => {
+            state.testUrl = payload
         }
     }
 })
 
-export const { addTestPackage, getTestPackages, getTestPackage, getTestPackageUrl } = testPackageSlice.actions
+export const { addTestPackage, getTestPackages, getTestPackage, getTestPackageUrl, getTestUrl } = testPackageSlice.actions
 export default testPackageSlice.reducer

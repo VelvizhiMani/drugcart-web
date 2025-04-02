@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addTestPackage, getTestPackages, getTestPackage, getTestPackageUrl } from '../reduxToolkit/slices/tastPackageSlice'
+import { addTestPackage, getTestPackages, getTestPackage, getTestPackageUrl, getTestUrl } from '../reduxToolkit/slices/tastPackageSlice'
 
 const PostTestPackageService = (data, resetForm) => async (dispatch) => {
     try {
@@ -55,6 +55,18 @@ const GetTestPackageUrlService = (url) => async (dispatch) => {
     }
 }
 
+const GetTestUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/test-package/test/${url}`, { headers: await Authorization() })
+        dispatch(getTestUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutTestPackageService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/test-package/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getTestPackage(response.data))
@@ -74,4 +86,4 @@ const DeleteTestPackageService = (id) => async (dispatch) => {
     })
 }
 
-export { PostTestPackageService, GetTestPackagesService, GetTestPackageIdService, GetTestPackageUrlService, PutTestPackageService, DeleteTestPackageService }
+export { PostTestPackageService, GetTestPackagesService, GetTestPackageIdService, GetTestPackageUrlService, GetTestUrlService, PutTestPackageService, DeleteTestPackageService }

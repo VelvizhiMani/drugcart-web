@@ -1,9 +1,12 @@
 "use client";
 import { IMAGES } from '@/components/common/images';
 import Image from 'next/image';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetTestUrlService } from '@/services/testPackageService';
+import { useParams } from 'next/navigation';
 
 const options = [
     { id: "fastingbloodsugar", label: "Fasting Blood Sugar(FBS) @ Rs. 149 / Person" },
@@ -55,15 +58,24 @@ const faqs = [
 ]
 
 const LabTestDetail = () => {
+    const { testUrl } = useSelector((state) => state.testPackageData)
+    const dispatch = useDispatch()
     const [isChecked, setIsChecked] = useState(false);
     const [selected, setSelected] = useState([]);
     const [openIndex, setOpenIndex] = useState(0);
+    const params = useParams()
+
+    useEffect(() => {
+        dispatch(GetTestUrlService(params.url))
+    }, [params.url])
 
     const handleCheckboxChange = (id) => {
         setSelected((prev) =>
             prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
         );
     };
+    console.log(testUrl);
+
     return (
         <section className="max-w-7xl mx-auto mt-3">
             <div className='flex flex-wrap m-2 p-2'>
@@ -71,8 +83,8 @@ const LabTestDetail = () => {
                     <div className='flex justify-between p-2'>
                         <div>
                             <div className='flex flex-wrap'>
-                                <div className='w-full md:w-[80%]'> 
-                                    <h2 className="text-md md:text-xl font-bold">Full Body Checkup (Aarogyam 1.2.Package) from Thyrocare</h2>
+                                <div className='w-full md:w-[80%]'>
+                                    <h2 className="text-md md:text-xl font-bold">{testUrl?.packageName} ({testUrl?.testname}) from {testUrl?.name}</h2>
                                     <p>The joy of healthy living comes with good health and proper care. Book your popular test package today</p>
                                 </div>
                                 <div className='w-full md:w-[20%]'>
@@ -88,54 +100,27 @@ const LabTestDetail = () => {
                             </div>
 
                             <div className="flex flex-wrap items-center mt-2 space-x-3 md:space-x-6">
-                                <p className="text-red-600 text-xl font-bold ">Price 1440</p>
-                                <p className="text-blue-400 text-sm line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
-                                <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
+                                <p className="text-red-600 text-xl font-bold ">Price {testUrl?.price}</p>
+                                <p className="text-blue-400 text-sm line-through">M.R.P <span className="text-blue-600 font-bold">{testUrl?.saleprice}</span></p>
+                                <p className="text-green-600 text-sm font-medium">You Save ${testUrl?.discount}</p>
                             </div>
                             <p className="text-blue-900 border-[1.5px] p-1 w-full md:w-[30%] text-sm my-2 font-bold ">You Save : Rs. 360</p>
-                            <p className='text-[red] font-bold'><span className='text-black'>Sample Type : </span>Blood,Urine <br /> 10- 12 hours Fasting. Water Allowed.</p>
-                            <p className='text-md my-4'>Aarogyam 1.2 package is a full-body health check-up package contains 83 tests including Cardiac risk markers, Complete hemogram, Diabetes, Iron deficiency, Lipid, Liver, Renal, Thyroid, Toxic elements. This package is suitable for people 30 years and above.</p>
+                            <p className='text-[red] font-bold'>Sample Type:</p>
+                            <div className="rich-content space-y-4" dangerouslySetInnerHTML={{ __html: testUrl?.required }} />
+                            <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.description }} />
                             <h3 className='mt-2 font-bold text-md text-blue-600'>List of Tests Included:</h3>
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Lab Description</h3>
-                            <p className='text-md my-4'>Thyrocare Technologies Limited is an Indian multinational chain of diagnostic and preventive care laboratories, headquartered in Navi Mumbai, Maharashtra. The company has a total of 1,122 outlets and collection centres across India and parts of Nepal, Bangladesh and the Middle East</p>
+                            <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.labdescription }} />
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Test Requirement</h3>
+                            <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.required }} />
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Lab Includes</h3>
-                            <p><strong>IRON DEFICIENCY - 3 Test&nbsp;</strong>
-                                <ul>
-                                    <li>% TRANSFERRIN SATURATION</li>
-                                    <li>IRON</li>
-                                    <li>TOTAL IRON BINDING CAPACITY (TIBC)</li>
-                                </ul>
-
-                                <p><strong>LIVER&nbsp; - 11 Test&nbsp;</strong></p>
-
-                                <ul>
-                                    <li>SERUM ALB/GLOBULIN RATIO</li>
-                                    <li>ALKALINE PHOSPHATASE</li>
-                                    <li>BILIRUBIN -DIRECT</li>
-                                    <li>BILIRUBIN (INDIRECT)</li>
-                                    <li>BILIRUBIN - TOTAL</li>
-                                    <li>GAMMA-GLUTAMYL TRANSFERASE (GGT)</li>
-                                    <li>PROTEIN - TOTAL</li>
-                                    <li>ALBUMIN - SERUM</li>
-                                    <li>SERUM GLOBULIN</li>
-                                    <li>ASPARTATE AMINOTRANSFERASE (SGOT )</li>
-                                    <li>ALANINE TRANSAMINASE (SGPT)</li>
-                                </ul>
-                            </p>
+                            <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.testincludes }} />
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Report Timing</h3>
+                            <p className='my-2'>{testUrl?.deliverytiming}</p>
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Booking Procedure</h3>
-                            <p><ol>
-                                <li>Fill the Booking form with your Full Name,Address,City,State,Pincode,Mobile Number and Email ID</li>
-                                <li>Thyrocare Technologies Limited agent will call you and fix the appointment for sample collection</li>
-                                <li>Sample will be collected as per the address given at the time of booking</li>
-                                <li>Pay at the time of sample collection</li>
-                                <li>Details of report will be emailed to you within 24-48hours as per the email address given while booking</li>
-                            </ol>
-                            </p>
+                            <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.procedure }} />
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Note</h3>
-                            <p>We are authorized sales partner of Thyrocare Technologies Limited.We will book the orders and send to Thyrocare for sample collection at home,Testing the samples,Report Generation and Payment collections.
-                            </p>
+                            <p>{testUrl?.note}</p>
                         </div>
                     </div>
                 </div>
@@ -229,7 +214,7 @@ const LabTestDetail = () => {
                     <h2 className='font-bold text-[14px] my-2 text-[blue]'>Test/Package Price: Rs.1440</h2>
                     <h2 className='font-bold text-md my-2 text-[green]'>Home Collection Charge: Rs. 0</h2>
                     <h2 className='font-bold text-md text-[red]'>Total Amount: Rs.: 1440</h2>
-                    <button class="px-4 py-2 my-4 flex mx-auto bg-[#B7084B] text-white rounded-lg hover:bg-blue-700">
+                    <button className="px-4 py-2 my-4 flex mx-auto bg-[#B7084B] text-white rounded-lg hover:bg-blue-700">
                         Book Now
                     </button>
                 </div>
