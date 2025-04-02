@@ -1,7 +1,7 @@
 "use client"
 import { IMAGES } from '@/components/common/images'
 import Image from 'next/image'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import CustomerSaying from '@/components/home-page/CustomerSaying';
@@ -9,6 +9,10 @@ import FeedbackCard from '@/components/home-page/FeedbackCard';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { useDispatch, useSelector } from 'react-redux';
+import { GetLabPackagesService, GetLabPackageIdService } from '@/services/labPackageService';
+import { GetTestPackageUrlService } from '@/services/testPackageService';
+import { InsertEmoticon } from '@mui/icons-material';
 
 const slides = [
     {
@@ -33,6 +37,17 @@ const slides = [
 ];
 
 const LabTest = () => {
+    const { labPackageList, labPackage } = useSelector((state) => state.labPackageData)
+    const { testPacageUrl } = useSelector((state) => state.testPackageData)
+    const dispatch = useDispatch()
+    const [choose, setChoose] = useState(labPackageList?.lab_packages?.[0]?.packageName)
+
+    useEffect(() => {
+        dispatch(GetLabPackagesService(1, 6, choose))
+    }, [choose])
+
+    console.log('testPacageUrl', testPacageUrl);
+
     return (
         <div className="max-w-7xl mx-auto">
             <div className='bg-[#F7C9B0]'>
@@ -162,124 +177,50 @@ const LabTest = () => {
                     </div>
                     <p className='text-[22px] mx-2 mt-10 mb-5 font-bold'>Popular health checkups</p>
                     <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-8 gap-4 p-1">
-                        <div className="border border-t-1 rounded-lg bg-[#FFE5EF] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#B7084B] p-2 font-bold'>Full Body Checkups</p>
-                        </div>
-                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#000] p-2 font-bold'>Fever</p>
-                        </div>
-                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#000] p-2 font-bold'>Women Health</p>
-                        </div>
-                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#000] p-2 font-bold'>Men Health</p>
-                        </div>
-                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#000] p-2 font-bold'>Vitamin Profile</p>
-                        </div>
-                        <div className="border border-t-1 rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#000] p-2 font-bold'>Food Intolerance</p>
-                        </div>
-                        <div className="rounded-lg bg-[#fff] w-40 cursor-pointer ml-1">
-                            <p className='text-[13px] text-[#B7084B] p-2 font-bold'>View All</p>
-                        </div>
+                        {labPackageList?.lab_packages?.map((packageItem, i) => (
+                            <div key={i} className={`border border-t-1 ${labPackage?.url === packageItem?.url ? "bg-[#FFE5EF]" : "bg-[#fff]"}rounded-lg w-40 cursor-pointer ml-1`}
+                                onClick={() => {
+                                    dispatch(GetLabPackageIdService(packageItem?._id))
+                                    dispatch(GetTestPackageUrlService(packageItem?.url))
+                                }}>
+                                <p className={`text-[13px] ${labPackage?.url === packageItem?.url ? "text-[#B7084B]" : "text-[#000]"} p-2 font-bold`}>{packageItem?.packageName}</p>
+                            </div>
+                        ))}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-6">
-                        <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white">
-                            <h2 className="text-lg font-semibold">
-                                Comprehensive Silver Full Body Checkup
-                            </h2>
-                            <div className="flex items-center mt-1">
-                                <span className="text-lg font-bold">4.0</span>
-                                <div className="ml-2 flex">
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-gray-300 text-lg">&#9733;</span>
+                        {testPacageUrl && testPacageUrl?.map((item, i) => (
+                            <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white" key={i}>
+                                <h2 className="text-lg font-semibold">
+                                    {item?.testname}
+                                </h2>
+                                <div className="flex items-center mt-1">
+                                    <span className="text-lg font-bold">4.0</span>
+                                    <div className="ml-2 flex">
+                                        <span className="text-yellow-500 text-lg">&#9733;</span>
+                                        <span className="text-yellow-500 text-lg">&#9733;</span>
+                                        <span className="text-yellow-500 text-lg">&#9733;</span>
+                                        <span className="text-yellow-500 text-lg">&#9733;</span>
+                                        <span className="text-gray-300 text-lg">&#9733;</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <p className="text-gray-600 font-semibold mt-2">Include 71 Tests</p>
-                            <ul className="text-gray-500 text-sm mt-1">
-                                <li>TSH (Thyroid Stimulating Hormone)</li>
-                                <li>Cholesterol - Total</li>
-                                <li>HbA1c (Hemoglobin A1c)</li>
-                            </ul>
-                            <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
-                            <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
-                            <p className="text-red-600 text-xl font-bold">Price 1440</p>
-                            <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
-                            <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
-                                50% OFF
-                            </div>
-                            <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
-                                Book Now
-                            </button>
-                        </div>
-
-                        <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white">
-                            <h2 className="text-lg font-semibold">
-                                Comprehensive Silver Full Body Checkup
-                            </h2>
-                            <div className="flex items-center mt-1">
-                                <span className="text-lg font-bold">4.0</span>
-                                <div className="ml-2 flex">
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-gray-300 text-lg">&#9733;</span>
+                                <p className="text-gray-600 font-semibold mt-2">Include  {item?.nooftest} Tests</p>
+                                <ul className="text-gray-500 text-sm mt-1">
+                                    <li>{item?.name}</li>
+                                    <li>Cholesterol - Total</li>
+                                    <li>HbA1c (Hemoglobin A1c)</li>
+                                </ul>
+                                <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
+                                <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">{item?.price}</span></p>
+                                <p className="text-red-600 text-xl font-bold">Price {item?.price}</p>
+                                <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
+                                <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
+                                    50% OFF
                                 </div>
+                                <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
+                                    Book Now
+                                </button>
                             </div>
-                            <p className="text-gray-600 font-semibold mt-2">Include 71 Tests</p>
-                            <ul className="text-gray-500 text-sm mt-1">
-                                <li>TSH (Thyroid Stimulating Hormone)</li>
-                                <li>Cholesterol - Total</li>
-                                <li>HbA1c (Hemoglobin A1c)</li>
-                            </ul>
-                            <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
-                            <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
-                            <p className="text-red-600 text-xl font-bold">Price 1440</p>
-                            <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
-                            <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
-                                50% OFF
-                            </div>
-                            <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
-                                Book Now
-                            </button>
-                        </div>
-
-                        <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white">
-                            <h2 className="text-lg font-semibold">
-                                Comprehensive Silver Full Body Checkup
-                            </h2>
-                            <div className="flex items-center mt-1">
-                                <span className="text-lg font-bold">4.0</span>
-                                <div className="ml-2 flex">
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-yellow-500 text-lg">&#9733;</span>
-                                    <span className="text-gray-300 text-lg">&#9733;</span>
-                                </div>
-                            </div>
-                            <p className="text-gray-600 font-semibold mt-2">Include 71 Tests</p>
-                            <ul className="text-gray-500 text-sm mt-1">
-                                <li>TSH (Thyroid Stimulating Hormone)</li>
-                                <li>Cholesterol - Total</li>
-                                <li>HbA1c (Hemoglobin A1c)</li>
-                            </ul>
-                            <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
-                            <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">1800.00</span></p>
-                            <p className="text-red-600 text-xl font-bold">Price 1440</p>
-                            <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
-                            <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
-                                50% OFF
-                            </div>
-                            <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
-                                Book Now
-                            </button>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -427,8 +368,8 @@ const LabTest = () => {
                     </div>
                 </div>
             </div>
-            <CustomerSaying/>
-            <FeedbackCard/>
+            <CustomerSaying />
+            <FeedbackCard />
         </div>
     )
 }
