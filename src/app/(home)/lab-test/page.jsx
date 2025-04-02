@@ -10,9 +10,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { useDispatch, useSelector } from 'react-redux';
-import { GetLabPackagesService, GetLabPackageIdService } from '@/services/labPackageService';
+import { GetLabPackagesService, GetLabPackageUrlService } from '@/services/labPackageService';
 import { GetTestPackageUrlService } from '@/services/testPackageService';
 import { InsertEmoticon } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 
 const slides = [
     {
@@ -37,16 +38,17 @@ const slides = [
 ];
 
 const LabTest = () => {
-    const { labPackageList, labPackage } = useSelector((state) => state.labPackageData)
-    const { testPacageUrl } = useSelector((state) => state.testPackageData)
+    const { labPackageList, labPackageUrl } = useSelector((state) => state.labPackageData)
+    const { testPackageUrl } = useSelector((state) => state.testPackageData)
     const dispatch = useDispatch()
-    const [choose, setChoose] = useState(labPackageList?.lab_packages?.[0]?.packageName)
+    const router = useRouter()
+    const [choose, setChoose] = useState('food-intolerance-test')
 
     useEffect(() => {
-        dispatch(GetLabPackagesService(1, 6, choose))
+        dispatch(GetLabPackagesService(1, 6))
+        dispatch(GetTestPackageUrlService(choose))
+        dispatch(GetLabPackageUrlService(choose))
     }, [choose])
-
-    console.log('testPacageUrl', testPacageUrl);
 
     return (
         <div className="max-w-7xl mx-auto">
@@ -178,17 +180,14 @@ const LabTest = () => {
                     <p className='text-[22px] mx-2 mt-10 mb-5 font-bold'>Popular health checkups</p>
                     <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-5 lg:grid-cols-8 gap-4 p-1">
                         {labPackageList?.lab_packages?.map((packageItem, i) => (
-                            <div key={i} className={`border border-t-1 ${labPackage?.url === packageItem?.url ? "bg-[#FFE5EF]" : "bg-[#fff]"}rounded-lg w-40 cursor-pointer ml-1`}
-                                onClick={() => {
-                                    dispatch(GetLabPackageIdService(packageItem?._id))
-                                    dispatch(GetTestPackageUrlService(packageItem?.url))
-                                }}>
-                                <p className={`text-[13px] ${labPackage?.url === packageItem?.url ? "text-[#B7084B]" : "text-[#000]"} p-2 font-bold`}>{packageItem?.packageName}</p>
+                            <div key={i} className={`border border-t-1 ${labPackageUrl?.url === packageItem?.url ? "bg-[#FFE5EF]" : "bg-[#fff]"}rounded-lg w-40 cursor-pointer ml-1`}
+                                onClick={() => setChoose(packageItem?.url)}>
+                                <p className={`text-[13px] ${labPackageUrl?.url === packageItem?.url ? "text-[#B7084B]" : "text-[#000]"} p-2 font-bold`}>{packageItem?.packageName}</p>
                             </div>
                         ))}
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 p-6">
-                        {testPacageUrl && testPacageUrl?.map((item, i) => (
+                        {testPackageUrl && testPackageUrl?.map((item, i) => (
                             <div className="max-w-sm border border-gray-200 rounded-lg shadow-lg p-4 bg-white" key={i}>
                                 <h2 className="text-lg font-semibold">
                                     {item?.testname}
@@ -216,7 +215,7 @@ const LabTest = () => {
                                 <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
                                     50% OFF
                                 </div>
-                                <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition">
+                                <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition" onClick={() => router.push(`/test/${item?.url}`)}>
                                     Book Now
                                 </button>
                             </div>

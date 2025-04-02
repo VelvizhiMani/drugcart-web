@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addLabPackage, getLabPackages, getLabPackage } from '../reduxToolkit/slices/labPackageSlice'
+import { addLabPackage, getLabPackages, getLabPackage, getLabPackageUrl } from '../reduxToolkit/slices/labPackageSlice'
 
 const PostLabPackageService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetLabPackageIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetLabPackageUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/lab-package/package/${url}`, { headers: await Authorization() })
+        dispatch(getLabPackageUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutLabPackageService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/lab-package/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getLabPackage(response.data))
@@ -62,4 +74,4 @@ const DeleteLabPackageService = (id) => async (dispatch) => {
     })
 }
 
-export { PostLabPackageService, GetLabPackagesService, GetLabPackageIdService, PutLabPackageService, DeleteLabPackageService }
+export { PostLabPackageService, GetLabPackagesService, GetLabPackageIdService, GetLabPackageUrlService, PutLabPackageService, DeleteLabPackageService }

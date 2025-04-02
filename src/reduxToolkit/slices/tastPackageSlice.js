@@ -4,7 +4,7 @@ const initialState = {
     testPackageList: [],
     newTestPackage: {},
     testPackage: {},
-    testPacageUrl: []
+    testPackageUrl: []
 }
 const testPackageSlice = createSlice({
     name: 'lab_test',
@@ -20,7 +20,7 @@ const testPackageSlice = createSlice({
             state.testPackage = payload
         },
         getTestPackageUrl: (state, { payload }) => {
-            state.testPacageUrl = payload
+            state.testPackageUrl = payload
         }
     }
 })
