@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addStorage, getStorages, getStorage } from '../reduxToolkit/slices/storageSlice'
+import { addStorage, getStorages, getStorage,getStorageId } from '../reduxToolkit/slices/storageSlice'
 
 const PostStorageService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,20 @@ const GetStorageIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetAddStorageIdService = (storageid) => async (dispatch) => {
+  try {
+    dispatch(IsLoading(true));
+    const getIdData = await axios.get(`/api/storage/storageid/${storageid}`, {
+      headers: await Authorization(),
+    });
+    dispatch(getStorageId(getIdData.data));
+    dispatch(IsLoading(false));
+  } catch (error) {
+    dispatch(IsLoading(false));
+    console.log("error", error.message);
+  }
+};
+
 const PutStorageService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/storage/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getStorage(response.data))
@@ -62,4 +76,4 @@ const DeleteStorageService = (id) => async (dispatch) => {
     })
 }
 
-export { PostStorageService, GetStorageService, GetStorageIdService, PutStorageService, DeleteStorageService }
+export { PostStorageService, GetStorageService, GetStorageIdService, GetAddStorageIdService, PutStorageService, DeleteStorageService }
