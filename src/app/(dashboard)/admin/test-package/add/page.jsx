@@ -93,7 +93,8 @@ function AdminLabTestAdd() {
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.testname)
-    }, [formik.values.testname])
+        formik.values.packageurl = URLText(formik.values.packageName)
+    }, [formik.values.testname, formik.values.packageName])
 
     return (
         <Box>

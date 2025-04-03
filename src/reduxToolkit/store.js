@@ -40,6 +40,8 @@ import prescriptionReducer from "@/reduxToolkit/slices/prescriptionSlice"
 import orderReducer from "@/reduxToolkit/slices/orderSlice"
 import serviceReducer from "@/reduxToolkit/slices/serviceSlice"
 import serviceenquiryReducer from "@/reduxToolkit/slices/serviceenquirySlice"
+import scanReducer from "@/reduxToolkit/slices/scanSlice"
+import scanBookingReducer from "@/reduxToolkit/slices/scanBookingSlice"
 
 export const store = configureStore({
     reducer: {
@@ -83,6 +85,8 @@ export const store = configureStore({
         orderData: orderReducer,
         serviceData: serviceReducer,
         serviceenquiryData: serviceenquiryReducer,
+        scanData: scanReducer,
+        scanBookingData: scanBookingReducer,
         adminUserData: adminUserReducer
     }
 })
