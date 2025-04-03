@@ -123,8 +123,6 @@ const LabTestDetail = () => {
         );
     };
 
-    console.log(formik.values.tests);
-
     return (
         <section className="max-w-7xl mx-auto mt-3">
             <div className='flex flex-wrap m-2 p-2'>
