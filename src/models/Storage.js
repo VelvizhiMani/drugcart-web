@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const storageSchema = new Schema(
     {
+     storageid: {
+      type: String,
+      unique: true,
+    },
         storagename: {
             type: String,
             required: true
