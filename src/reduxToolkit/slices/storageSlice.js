@@ -4,6 +4,7 @@ const initialState = {
     storageList: [],
     newStorage: {},
     storage: {},
+    storageid: {},
 }
 const storageSlice = createSlice({
     name: 'storage',
@@ -17,9 +18,12 @@ const storageSlice = createSlice({
         },
         getStorage: (state, { payload }) => { 
             state.storage = payload
-        }
+        },
+    getStorageId: (state, { payload }) => {
+      state.storageid = payload;
+    }
     }
 })
 
-export const { addStorage, getStorages, getStorage } = storageSlice.actions
+export const { addStorage, getStorages, getStorage,getStorageId } = storageSlice.actions
 export default storageSlice.reducer

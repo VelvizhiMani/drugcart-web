@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const packSchema = new Schema(
     {
+    packid: {
+      type: String,
+      unique: true,
+    },
         packagename: {
             type: String,
             required: true

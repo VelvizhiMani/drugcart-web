@@ -4,6 +4,7 @@ const initialState = {
     packageList: [],
     newPackage: {},
     pack: {},
+    packid: {},
 }
 const packageSlice = createSlice({
     name: 'package',
@@ -17,9 +18,12 @@ const packageSlice = createSlice({
         },
         getPackage: (state, { payload }) => { 
             state.pack = payload
-        }
+        },
+        getPackageId: (state, { payload }) => {
+      state.packid = payload;
+    },
     }
 })
 
-export const { addPackage, getPackages, getPackage } = packageSlice.actions
+export const { addPackage, getPackages, getPackage,getPackageId } = packageSlice.actions
 export default packageSlice.reducer

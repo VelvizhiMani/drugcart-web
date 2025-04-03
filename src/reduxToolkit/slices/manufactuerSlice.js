@@ -4,6 +4,7 @@ const initialState = {
     manufactuerList: [],
     newManufactuer: {},
     manufactuer: {},
+    manufactuerurl: {},
     firstLetter: [],
 }
 const manufactuerSlice = createSlice({
@@ -18,6 +19,9 @@ const manufactuerSlice = createSlice({
         },
         getManufactuer: (state, { payload }) => {
             state.manufactuer = payload
+        },
+        getManufactuerUrl: (state, { payload }) => {
+            state.manufactuerurl = payload
         },
         getManufactuerLetter: (state, { payload }) => {
             state.firstLetter = payload
