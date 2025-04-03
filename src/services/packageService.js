@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addPackage, getPackages, getPackage } from '../reduxToolkit/slices/packageSlice'
+import { addPackage, getPackages, getPackage,getPackageId } from '../reduxToolkit/slices/packageSlice'
 
 const PostPackageService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,20 @@ const GetPackageIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetAddPackageIdService = (packid) => async (dispatch) => {
+  try {
+    dispatch(IsLoading(true));
+    const getIdData = await axios.get(`/api/packagelist/packid/${packid}`, {
+      headers: await Authorization(),
+    });
+    dispatch(getPackageId(getIdData.data));
+    dispatch(IsLoading(false));
+  } catch (error) {
+    dispatch(IsLoading(false));
+    console.log("error", error.message);
+  }
+};
+
 const PutPackageService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/packagelist/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getPackage(response.data))
@@ -62,4 +76,4 @@ const DeletePackageService = (id) => async (dispatch) => {
     })
 }
 
-export { PostPackageService, GetPackageService, GetPackageIdService, PutPackageService, DeletePackageService }
+export { PostPackageService, GetPackageService, GetPackageIdService,GetAddPackageIdService, PutPackageService, DeletePackageService }
