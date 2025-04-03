@@ -94,6 +94,10 @@ const labBookingSchema = new Schema(
             type: [String],
             default: [""],
         },
+        hardcopy: {
+            type: Boolean,
+            default: false
+        }
     },
     { timestamps: true }
 )

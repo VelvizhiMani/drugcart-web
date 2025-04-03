@@ -97,7 +97,8 @@ const LabTestDetail = () => {
             address: "",
             appoitmentdate: "",
             timing: "",
-            tests: []
+            tests: [],
+            hardcopy: false
         },
         validationSchema: yup.object({
             noofpersons: yup.string().required("No of persons is required"),
@@ -126,6 +127,16 @@ const LabTestDetail = () => {
         );
     };
 
+    const hardCheckboxChange = () => {
+        setIsChecked(!isChecked);
+        formik.setFieldValue("hardcopy", !isChecked)
+    }
+    
+    const totalPriceExtra = Number(testUrl?.price) + 75;
+
+    const totalDiscount = Number(testUrl?.price) - (Number(testUrl?.price) * Number(testUrl?.discount)) / 100;
+    const finalPrice = Number(testUrl?.price) - totalDiscount;   
+
     return (
         <section className="max-w-7xl mx-auto mt-3">
             <div className='flex flex-wrap m-2 p-2'>
@@ -150,11 +161,11 @@ const LabTestDetail = () => {
                             </div>
 
                             <div className="flex flex-wrap items-center mt-2 space-x-3 md:space-x-6">
-                                <p className="text-red-600 text-xl font-bold ">Price {testUrl?.price}</p>
-                                <p className="text-blue-400 text-sm line-through">M.R.P <span className="text-blue-600 font-bold">{testUrl?.saleprice}</span></p>
-                                <p className="text-green-600 text-sm font-medium">You Save ${testUrl?.discount}</p>
+                                <p className="text-red-600 text-xl font-bold ">Price {totalDiscount}</p>
+                                <p className="text-blue-400 text-sm line-through">M.R.P <span className="text-blue-600 font-bold">{testUrl?.price}</span></p>
+                                <p className="text-green-600 text-sm font-medium">You Save {testUrl?.discount}%</p>
                             </div>
-                            <p className="text-blue-900 border-[1.5px] p-1 w-full md:w-[30%] text-sm my-2 font-bold ">You Save : Rs. 360</p>
+                            <p className="text-blue-900 border-[1.5px] p-1 w-full md:w-[30%] text-sm my-2 font-bold ">You Save : Rs. {finalPrice}</p>
                             <p className='text-[red] font-bold'>Sample Type:</p>
                             <div className="rich-content space-y-4" dangerouslySetInnerHTML={{ __html: testUrl?.required }} />
                             <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.description }} />
@@ -170,7 +181,7 @@ const LabTestDetail = () => {
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Booking Procedure</h3>
                             <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.procedure }} />
                             <h3 className='mt-2 font-bold text-md bg-[#35ac44] text-white p-2'>Note</h3>
-                            <p>{testUrl?.note}</p>
+                            <p className='my-2'>{testUrl?.note}</p>
                         </div>
                     </div>
                 </div>
@@ -574,7 +585,7 @@ const LabTestDetail = () => {
                             id="checkbox"
                             type="checkbox"
                             checked={isChecked}
-                            onChange={() => setIsChecked(!isChecked)}
+                            onChange={hardCheckboxChange}
                             className="w-4 h-4 ml-2 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                         />
                         <label htmlFor="checkbox" className="text-gray-800 text-xs my-2 font-bold">
@@ -583,7 +594,7 @@ const LabTestDetail = () => {
                     </div>
                     <h2 className='font-bold text-[14px] my-2 text-[blue]'>Test/Package Price: Rs.{testUrl?.price}</h2>
                     <h2 className='font-bold text-md my-2 text-[green]'>Home Collection Charge: Rs. 0</h2>
-                    <h2 className='font-bold text-md text-[red]'>Total Amount: Rs.: {testUrl?.price}</h2>
+                    <h2 className='font-bold text-md text-[red]'>Total Amount: Rs.: {formik.values.hardcopy ? totalPriceExtra : testUrl?.price}</h2>
                     <button className="px-4 py-2 my-4 flex mx-auto bg-[#B7084B] text-white rounded-lg hover:bg-blue-700" onClick={formik.handleSubmit}>
                         Book Now
                     </button>

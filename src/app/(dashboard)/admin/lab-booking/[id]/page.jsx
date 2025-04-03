@@ -123,6 +123,26 @@ function ViewLabBooking() {
                             {labBooking?.noofpersons}
                         </Typography>
                     </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                            Charges:
+                        </Typography>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                            {labBooking?.hardcopy ? "Yes" : "No"}
+                        </Typography>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                            Tests:
+                        </Typography>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14, textTransform: "capitalize" }}>
+                            {labBooking?.tests?.join(", ")}
+                        </Typography>
+                    </Grid2>
                 </Grid2>
             </Paper>
 

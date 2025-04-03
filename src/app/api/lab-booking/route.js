@@ -31,7 +31,8 @@ export async function POST(request) {
             address,
             appoitmentdate,
             timing,
-            tests
+            tests,
+            hardcopy
         } = await request.json();
         const addLabBooking = new LabBooking({
             packagename,
@@ -56,7 +57,8 @@ export async function POST(request) {
             address,
             appoitmentdate,
             timing,
-            tests
+            tests,
+            hardcopy
         });
 
         await addLabBooking.save();
