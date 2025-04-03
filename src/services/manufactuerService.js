@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addManufactuer, getManufactuers, getManufactuer, getManufactuerLetter } from '../reduxToolkit/slices/manufactuerSlice'
+import { addManufactuer, getManufactuers, getManufactuer,getManufactuerUrl, getManufactuerLetter } from '../reduxToolkit/slices/manufactuerSlice'
 
 const PostManufactuerService = (data, resetForm) => async (dispatch) => {
     try {
@@ -55,6 +55,23 @@ const GetManufactuerIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetManufactuerUrlService = (url) => async (dispatch) => {
+  try {
+    dispatch(IsLoading(true));
+    const getIdData = await axios.get(
+      `/api/manufactuerlist/manufacturl/${url}`,
+      {
+        headers: await Authorization(),
+      }
+    );
+    dispatch(getManufactuerUrl(getIdData.data));
+    dispatch(IsLoading(false));
+  } catch (error) {
+    dispatch(IsLoading(false));
+    console.log("error", error.message);
+  }
+};
+
 const PutManufactuerService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/manufactuerlist/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getManufactuer(response.data))
@@ -74,4 +91,4 @@ const DeleteManufactuerService = (id) => async (dispatch) => {
     })
 }
 
-export { PostManufactuerService, GetManufactuerService, GetLetterManufactuerService, GetManufactuerIdService, PutManufactuerService, DeleteManufactuerService }
+export { PostManufactuerService, GetManufactuerService, GetLetterManufactuerService, GetManufactuerIdService,GetManufactuerUrlService, PutManufactuerService, DeleteManufactuerService }
