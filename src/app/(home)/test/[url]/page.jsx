@@ -107,6 +107,9 @@ const LabTestDetail = () => {
             address: yup.string().required("Address is required"),
             phone: yup.string().required("Phone is required"),
             email: yup.string().email("Invalid email").required("Email is required"),
+            appoitmentdate: yup.string().required("Date is required"),
+            address: yup.string().required("Address is required"),
+            timing: yup.string().required("Timing is required")
         }),
         onSubmit: async (data, { resetForm }) => {
             await dispatch(PostLabBookingService(data, resetForm));
@@ -488,6 +491,7 @@ const LabTestDetail = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
+                    {formik.touched.email && formik.errors.email && <p className="text-red-500 text-[12px] ml-2">{formik.errors.email}</p>}
                     <input
                         name="phone"
                         type="text"
@@ -497,6 +501,7 @@ const LabTestDetail = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
+                    {formik.touched.phone && formik.errors.phone && <p className="text-red-500 text-[12px] ml-2">{formik.errors.phone}</p>}
                     <input
                         name="appoitmentdate"
                         type="date"
@@ -507,6 +512,7 @@ const LabTestDetail = () => {
                         onBlur={formik.handleBlur}
                         min={new Date().toISOString().split("T")[0]}
                     />
+                    {formik.touched.appoitmentdate && formik.errors.appoitmentdate && <p className="text-red-500 text-[12px] ml-2">{formik.errors.appoitmentdate}</p>}
                     <input
                         name="timing"
                         type="text"
@@ -516,6 +522,7 @@ const LabTestDetail = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
+                    {formik.touched.timing && formik.errors.timing && <p className="text-red-500 text-[12px] ml-2">{formik.errors.timing}</p>}
                     <textarea
                         name="address"
                         placeholder="Complete Address"
@@ -524,6 +531,7 @@ const LabTestDetail = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                     />
+                    {formik.touched.address && formik.errors.address && <p className="text-red-500 text-[12px] ml-2">{formik.errors.address}</p>}
                     <p className='font-bold text-sm my-2'>Order with incomplete/invalid address will be rejected.</p>
                     <h2 className='font-bold text-md'>Tick To Add Additional Tests(Optional)</h2>
 
