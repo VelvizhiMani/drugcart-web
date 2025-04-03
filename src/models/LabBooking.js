@@ -90,25 +90,9 @@ const labBookingSchema = new Schema(
             type: String,
             default: ""
         },
-        crp: {
-            type: String,
-            default: ""
-        },
-        covidantibody: {
-            type: String,
-            default: ""
-        },
-        electrolytes: {
-            type: String,
-            default: ""
-        },
-        t3t4: {
-            type: String,
-            default: ""
-        },
-        hard_copy: {
-            type: String,
-            default: ""
+        tests: {
+            type: [String],
+            default: [""],
         },
     },
     { timestamps: true }

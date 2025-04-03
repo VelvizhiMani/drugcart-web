@@ -6,7 +6,10 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetTestUrlService } from '@/services/testPackageService';
+import { PostLabBookingService } from '@/services/labBookingService';
 import { useParams } from 'next/navigation';
+import { useFormik } from "formik";
+import * as yup from "yup";
 
 const options = [
     { id: "fastingbloodsugar", label: "Fasting Blood Sugar(FBS) @ Rs. 149 / Person" },
@@ -69,12 +72,58 @@ const LabTestDetail = () => {
         dispatch(GetTestUrlService(params.url))
     }, [params.url])
 
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            packagename: testUrl?.packageName || "",
+            noofpersons: "",
+            name1: "",
+            age1: "",
+            gender1: "",
+            name2: "",
+            age2: "",
+            gender2: "",
+            name3: "",
+            age3: "",
+            gender3: "",
+            name4: "",
+            age4: "",
+            gender4: "",
+            name5: "",
+            age5: "",
+            gender5: "",
+            email: "",
+            phone: "",
+            address: "",
+            appoitmentdate: "",
+            timing: "",
+            tests: []
+        },
+        validationSchema: yup.object({
+            noofpersons: yup.string().required("No of persons is required"),
+            name1: yup.string().required("Name is required"),
+            age1: yup.string().required("Age is required"),
+            gender1: yup.string().required("Gender is required"),
+            address: yup.string().required("Address is required"),
+            phone: yup.string().required("Phone is required"),
+            email: yup.string().email("Invalid email").required("Email is required"),
+        }),
+        onSubmit: async (data, { resetForm }) => {
+            await dispatch(PostLabBookingService(data, resetForm));
+            resetForm();
+        },
+    });
+
     const handleCheckboxChange = (id) => {
-        setSelected((prev) =>
-            prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+        formik.setFieldValue(
+            "tests",
+            formik.values.tests.includes(id)
+                ? formik.values.tests.filter((item) => item !== id)
+                : [...formik.values.tests, id]
         );
     };
-    console.log(testUrl);
+
+    console.log(formik.values.tests);
 
     return (
         <section className="max-w-7xl mx-auto mt-3">
@@ -129,7 +178,13 @@ const LabTestDetail = () => {
                     <h4 className='font-bold my-2'>Book Now, Pay Later </h4>
                     <p>You will get a payment link at the time of sample collection. CASH payment option is NOT available at present scenario. You can also make the payment by <b>Scan QR code</b> at the time of collection.</p>
                     <label>Number of Persons</label>
-                    <select name="noofperson" className="border p-2 rounded w-full my-2">
+                    <select
+                        name="noofpersons"
+                        className="border p-2 rounded w-full my-2"
+                        value={formik.values.noofpersons}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    >
                         <option value="">--Please choose an option--</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -137,31 +192,340 @@ const LabTestDetail = () => {
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                    <input type="text" placeholder="Beneficiary Name 1" className="border p-2 rounded w-full my-2" />
-                    <div className='flex gap-1'>
-                        <select name="gender1" className="border p-2 rounded w-full my-2">
-                            <option value="">--Please Gender--</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                        <input type="text" placeholder="Age" className="border p-2 rounded w-full my-2" />
+                    {formik.touched.noofpersons && formik.errors.noofpersons && <p className="text-red-500 text-[12px] ml-2">{formik.errors.noofpersons}</p>}
+                    <div>
+                        <input
+                            name="name1"
+                            type="text"
+                            placeholder="Beneficiary Name 1"
+                            className="border p-2 rounded w-full my-2"
+                            value={formik.values.name1}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.name1 && formik.errors.name1 && <p className="text-red-500 text-[12px] ml-2">{formik.errors.name1}</p>}
+                        <div className='flex gap-3'>
+                            <div>
+                                <select
+                                    name="gender1"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.gender1}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                >
+                                    <option value="">--Please Gender--</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                {formik.touched.gender1 && formik.errors.gender1 && <p className="text-red-500 text-[12px] ml-2">{formik.errors.gender1}</p>}
+                            </div>
+                            <div>
+                                <input
+                                    name="age1"
+                                    type="number"
+                                    placeholder="Age"
+                                    className="border p-2 rounded w-full my-2 h-10"
+                                    value={formik.values.age1}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                {formik.touched.age1 && formik.errors.age1 && <p className="text-red-500 text-[12px] ml-2">{formik.errors.age1}</p>}
+                            </div>
+                        </div>
                     </div>
-                    <input type="text" placeholder="Beneficiary Name 2" className="border p-2 rounded w-full my-2" />
-                    <div className='flex gap-1'>
-                        <select name="gender2" className="border p-2 rounded w-full my-2">
-                            <option value="">--Please Gender--</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                        <input type="text" placeholder="Age" className="border p-2 rounded w-full my-2" />
+                    <div>
+                        <input
+                            name='name2'
+                            type="text"
+                            placeholder="Beneficiary Name 2"
+                            className="border p-2 rounded w-full my-2"
+                            value={formik.values.name2}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        <div className='flex gap-1'>
+                            <select
+                                name="gender2"
+                                className="border p-2 rounded w-full my-2"
+                                value={formik.values.gender2}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            >
+                                <option value="">--Please Gender--</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                            <input
+                                name="age2"
+                                type="text"
+                                placeholder="Age"
+                                className="border p-2 rounded w-full my-2"
+                                value={formik.values.age2}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                        </div>
+                        <hr />
                     </div>
-                    <input type="text" placeholder="Email" className="border p-2 rounded w-full my-2" />
-                    <input type="text" placeholder="Mobile(Indian Number Only)" className="border p-2 rounded w-full my-2" />
-                    <input type="date" placeholder="Appoinment Date" className="border p-2 rounded w-full my-2" />
-                    <input type="text" placeholder="Slot Time" className="border p-2 rounded w-full my-2" />
-                    <input type="text" placeholder="City" className="border p-2 rounded w-full my-2" />
-                    <input type="text" placeholder="State" className="border p-2 rounded w-full my-2" />
-                    <textarea placeholder="Complete Address" className="border p-2 rounded w-full md:col-span-2 h-32 my-2"></textarea>
+                    {formik.values.noofpersons === "3" && (
+                        <div>
+                            <input
+                                name='name3'
+                                type="text"
+                                placeholder="Beneficiary Name 3"
+                                className="border p-2 rounded w-full my-2"
+                                value={formik.values.name3}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                            />
+                            <div className='flex gap-1'>
+                                <select
+                                    name="gender3"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.gender3}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                >
+                                    <option value="">--Please Gender--</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <input
+                                    name="age3"
+                                    type="text"
+                                    placeholder="Age 3"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.age3}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                            </div>
+                            <hr />
+                        </div>
+                    )}
+                    {formik.values.noofpersons === "4" && (
+                        <>
+                            <div>
+                                <input
+                                    name='name3'
+                                    type="text"
+                                    placeholder="Beneficiary Name 3"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.name3}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                <div className='flex gap-1'>
+                                    <select
+                                        name="gender3"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.gender3}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    >
+                                        <option value="">--Please Gender--</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <input
+                                        name="age3"
+                                        type="text"
+                                        placeholder="Age 3"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.age3}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    />
+                                </div>
+                                <hr />
+                            </div>
+                            <div>
+                                <input
+                                    name='name4'
+                                    type="text"
+                                    placeholder="Beneficiary Name 4"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.name4}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                <div className='flex gap-1'>
+                                    <select
+                                        name="gender4"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.gender4}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    >
+                                        <option value="">--Please Gender--</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <input
+                                        name="age4"
+                                        type="text"
+                                        placeholder="Age 4"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.age4}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    />
+                                </div>
+                                <hr />
+                            </div>
+                        </>
+                    )}
+                    {formik.values.noofpersons === "5" && (
+                        <>
+                            <div>
+                                <input
+                                    name='name3'
+                                    type="text"
+                                    placeholder="Beneficiary Name 3"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.name3}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                <div className='flex gap-1'>
+                                    <select
+                                        name="gender3"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.gender3}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    >
+                                        <option value="">--Please Gender--</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <input
+                                        name="age3"
+                                        type="text"
+                                        placeholder="Age 3"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.age3}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    />
+                                </div>
+                                <hr />
+                            </div>
+                            <div>
+                                <input
+                                    name='name4'
+                                    type="text"
+                                    placeholder="Beneficiary Name 4"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.name4}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                <div className='flex gap-1'>
+                                    <select
+                                        name="gender4"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.gender4}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    >
+                                        <option value="">--Please Gender--</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <input
+                                        name="age4"
+                                        type="text"
+                                        placeholder="Age 4"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.age4}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    />
+                                </div>
+                                <hr />
+                            </div>
+                            <div>
+                                <input
+                                    name='name5'
+                                    type="text"
+                                    placeholder="Beneficiary Name 5"
+                                    className="border p-2 rounded w-full my-2"
+                                    value={formik.values.name5}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                />
+                                <div className='flex gap-1'>
+                                    <select
+                                        name="gender4"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.gender5}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    >
+                                        <option value="">--Please Gender--</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                    <input
+                                        name="age5"
+                                        type="text"
+                                        placeholder="Age 5"
+                                        className="border p-2 rounded w-full my-2"
+                                        value={formik.values.age5}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                    />
+                                </div>
+                                <hr />
+                            </div>
+                        </>
+                    )}
+                    <input
+                        name="email"
+                        type="text"
+                        placeholder="Email"
+                        className="border p-2 rounded w-full my-2"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <input
+                        name="phone"
+                        type="text"
+                        placeholder="Mobile(Indian Number Only)"
+                        className="border p-2 rounded w-full my-2"
+                        value={formik.values.phone}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <input
+                        name="appoitmentdate"
+                        type="date"
+                        placeholder="Appoinment Date"
+                        className="border p-2 rounded w-full my-2"
+                        value={formik.values.appoitmentdate}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        min={new Date().toISOString().split("T")[0]}
+                    />
+                    <input
+                        name="timing"
+                        type="text"
+                        placeholder="Slot Time Ex: (8:20pm)"
+                        className="border p-2 rounded w-full my-2"
+                        value={formik.values.timing}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
+                    <textarea
+                        name="address"
+                        placeholder="Complete Address"
+                        className="border p-2 rounded w-full md:col-span-2 h-32 my-2"
+                        value={formik.values.address}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                    />
                     <p className='font-bold text-sm my-2'>Order with incomplete/invalid address will be rejected.</p>
                     <h2 className='font-bold text-md'>Tick To Add Additional Tests(Optional)</h2>
 
@@ -171,16 +535,16 @@ const LabTestDetail = () => {
                                 <input
                                     type="checkbox"
                                     className="hidden"
-                                    checked={selected.includes(option.id)}
+                                    checked={formik.values.tests.includes(option.id)}
                                     onChange={() => handleCheckboxChange(option.id)}
                                 />
 
                                 {/* Custom Checkbox */}
                                 <div
-                                    className={`w-4 h-4 flex items-center justify-center border-2 rounded-md  my-2 transition-all ${selected.includes(option.id) ? "bg-blue-500 border-blue-500" : "border-gray-400"
+                                    className={`w-4 h-4 flex items-center justify-center border-2 rounded-md  my-2 transition-all ${formik.values.tests.includes(option.id) ? "bg-blue-500 border-blue-500" : "border-gray-400"
                                         }`}
                                 >
-                                    {selected.includes(option.id) && (
+                                    {formik.values.tests.includes(option.id) && (
                                         <svg
                                             className="w-4 h-4 text-white"
                                             fill="none"
@@ -211,10 +575,10 @@ const LabTestDetail = () => {
                             Please Tick To Receive Hard Copy Report,Courier Charges Rs. 75 Extra
                         </label>
                     </div>
-                    <h2 className='font-bold text-[14px] my-2 text-[blue]'>Test/Package Price: Rs.1440</h2>
+                    <h2 className='font-bold text-[14px] my-2 text-[blue]'>Test/Package Price: Rs.{testUrl?.price}</h2>
                     <h2 className='font-bold text-md my-2 text-[green]'>Home Collection Charge: Rs. 0</h2>
-                    <h2 className='font-bold text-md text-[red]'>Total Amount: Rs.: 1440</h2>
-                    <button className="px-4 py-2 my-4 flex mx-auto bg-[#B7084B] text-white rounded-lg hover:bg-blue-700">
+                    <h2 className='font-bold text-md text-[red]'>Total Amount: Rs.: {testUrl?.price}</h2>
+                    <button className="px-4 py-2 my-4 flex mx-auto bg-[#B7084B] text-white rounded-lg hover:bg-blue-700" onClick={formik.handleSubmit}>
                         Book Now
                     </button>
                 </div>
