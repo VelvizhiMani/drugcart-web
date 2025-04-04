@@ -1,14 +1,14 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addLabBooking, getLabBookings, getLabBooking } from '../reduxToolkit/slices/labBookingSlice'
+import { addLabBooking, getLabBookings, getLabBooking, getMyLabBooking } from '../reduxToolkit/slices/labBookingSlice'
 
 const PostLabBookingService = (data, resetForm) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/lab-booking', data, { headers: await Authorization() })
         dispatch(addLabBooking(postData.data))
-        dispatch(GetLabBookingIdService(postData.data?._id))
+        // dispatch(GetLabBookingIdService(postData.data?._id))
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
         resetForm()
@@ -43,6 +43,19 @@ const GetLabBookingIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetMyLabBookingService = (startDate = "", endDate = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/lab-booking/my-booking/?startDate=${startDate}&endDate=${endDate}`, { headers: await Authorization() })
+        dispatch(getMyLabBooking(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+
 const DeleteLabBookingService = (id) => async (dispatch) => {
     await axios.delete(`/api/lab-booking/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getLabBooking(id))
@@ -52,4 +65,4 @@ const DeleteLabBookingService = (id) => async (dispatch) => {
     })
 }
 
-export { PostLabBookingService, GetLabBookingsService, GetLabBookingIdService, DeleteLabBookingService }
+export { PostLabBookingService, GetLabBookingsService, GetLabBookingIdService, GetMyLabBookingService, DeleteLabBookingService }

@@ -106,7 +106,10 @@ const LabTestDetail = () => {
             age1: yup.string().required("Age is required"),
             gender1: yup.string().required("Gender is required"),
             address: yup.string().required("Address is required"),
-            phone: yup.string().required("Phone is required"),
+            phone: yup
+                .string()
+                .required("Phone is required")
+                .matches(/^\d{10}$/, "Phone number must be exactly 10 digits"),
             email: yup.string().email("Invalid email").required("Email is required"),
             appoitmentdate: yup.string().required("Date is required"),
             address: yup.string().required("Address is required"),
@@ -131,11 +134,11 @@ const LabTestDetail = () => {
         setIsChecked(!isChecked);
         formik.setFieldValue("hardcopy", !isChecked)
     }
-    
+
     const totalPriceExtra = Number(testUrl?.price) + 75;
 
     const totalDiscount = Number(testUrl?.price) - (Number(testUrl?.price) * Number(testUrl?.discount)) / 100;
-    const finalPrice = Number(testUrl?.price) - totalDiscount;   
+    const finalPrice = Number(testUrl?.price) - totalDiscount;
 
     return (
         <section className="max-w-7xl mx-auto mt-3">
