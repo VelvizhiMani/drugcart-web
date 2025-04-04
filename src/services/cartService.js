@@ -27,7 +27,7 @@ const PostCartService = (data) => async (dispatch) => {
         dispatch(getCartService())
         dispatch(IsLoading(false))
         if (error?.response?.data?.error !== "Unauthorized") {
-            dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+            // dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
             localStorage.removeItem("cart")
         }
         console.log("error", error.message)
