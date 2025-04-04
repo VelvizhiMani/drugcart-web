@@ -41,7 +41,6 @@ const MyLab = () => {
     useEffect(() => {
         dispatch(GetMyLabBookingService(startDate, endDate))
     }, [startDate, endDate])
-console.log(myBookings);
 
     return (
         <div className="p-2">
@@ -54,7 +53,7 @@ console.log(myBookings);
             <div className="flex justify-between gap-4 mt-2">
                 {/* Filters */}
                 <div className="flex gap-4 mt-2">
-                <h2 className="text-2xl font-bold mb-4">My Prescription</h2>
+                <h2 className="text-2xl font-bold mb-4">My Lab Tests</h2>
                 </div>
                 {/* Date Filters */}
                 <div className="flex gap-2 mt-4">
