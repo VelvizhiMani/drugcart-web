@@ -39,10 +39,10 @@ function DeleteModal({ open, setOpen, title, description, onSubmit }) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>
+                    <Button onClick={handleClose} sx={{ fontWeight: "bold", textTransform: "capitalize" }}>
                         Cancel
                     </Button>
-                    <Button onClick={handleSubmit} >
+                    <Button onClick={handleSubmit} color='error' sx={{ fontWeight: "bold", textTransform: "capitalize" }}>
                         Delete
                     </Button>
                 </DialogActions>

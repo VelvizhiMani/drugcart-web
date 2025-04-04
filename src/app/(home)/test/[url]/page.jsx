@@ -161,11 +161,11 @@ const LabTestDetail = () => {
                             </div>
 
                             <div className="flex flex-wrap items-center mt-2 space-x-3 md:space-x-6">
-                                <p className="text-red-600 text-xl font-bold ">Price {totalDiscount}</p>
+                                <p className="text-red-600 text-xl font-bold ">Price {totalDiscount.toFixed(0)}</p>
                                 <p className="text-blue-400 text-sm line-through">M.R.P <span className="text-blue-600 font-bold">{testUrl?.price}</span></p>
                                 <p className="text-green-600 text-sm font-medium">You Save {testUrl?.discount}%</p>
                             </div>
-                            <p className="text-blue-900 border-[1.5px] p-1 w-full md:w-[30%] text-sm my-2 font-bold ">You Save : Rs. {finalPrice}</p>
+                            <p className="text-blue-900 border-[1.5px] p-1 w-full md:w-[30%] text-sm my-2 font-bold ">You Save : Rs. {finalPrice.toFixed(0)}</p>
                             <p className='text-[red] font-bold'>Sample Type:</p>
                             <div className="rich-content space-y-4" dangerouslySetInnerHTML={{ __html: testUrl?.required }} />
                             <div className="rich-content space-y-4 my-3" dangerouslySetInnerHTML={{ __html: testUrl?.description }} />

@@ -21,6 +21,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MyOrders from '@/components/profile/MyOrders';
+import MyAddress from '@/components/profile/MyAddress';
 import AddressForm from "@/components/common/AddressForm";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAddressIdService } from '@/services/addressService';
@@ -223,7 +224,7 @@ export default function ProfileTab() {
                         {activeTab === 'address' && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Address</h2>
-                                <p>Address details will be displayed here.</p>
+                                <MyAddress />
                             </div>
                         )}
 

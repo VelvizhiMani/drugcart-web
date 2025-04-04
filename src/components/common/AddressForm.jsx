@@ -15,7 +15,7 @@ const AddressForm = () => {
     const formik = useFormik({
         initialValues: {
             cus_name: "",
-            type: "",
+            type: "Home",
             lastname: "",
             email: "",
             lastname: "",
