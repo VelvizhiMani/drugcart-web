@@ -257,7 +257,7 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total MRP</span>
-                  <span>₹{totalPrice.toFixed(2)}</span>
+                  <span>₹{totalPrice.toFixed(0)}</span>
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Drugcarts Discount</span>
@@ -265,14 +265,14 @@ const OrderSummary = () => {
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>₹{totalSavings.toFixed(2)}</span>
+                  <span>₹{totalAfterDiscount.toFixed(0)}</span>
                 </div>
               </div>
               <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700" onClick={() => router.push('/payment')}>
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of ₹{totalAfterDiscount.toFixed(2)} on this order
+                💰 Total Savings of ₹{totalSavings.toFixed(0)} on this order
               </div>
             </div>
           </div>

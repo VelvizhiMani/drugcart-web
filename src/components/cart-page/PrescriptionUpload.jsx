@@ -6,14 +6,17 @@ import Button from "@/components/common/button";
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { GetPrescriptionIdService, GetPrescriptionService, PostPrescriptionService } from '@/services/prescriptionService'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { DeletePrescriptionService, GetPrescriptionIdService, GetPrescriptionService, PostPrescriptionService } from '@/services/prescriptionService'
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import DeleteModal from '../admin/modal/DeleteModal';
 
 const PrescriptionUpload = () => {
   const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const { prescriptionList, prescription } = useSelector((state) => state.prescriptionData)
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const router = useRouter()
 
   useEffect(() => {
@@ -65,22 +68,35 @@ const PrescriptionUpload = () => {
         <h2 className="text-xl font-semibold mb-4 text-blue-700">You Select Prescription Below,</h2>
         <div className=" grid grid-cols-2 md:grid-cols-5 gap-5 relative w-full h-64 mb-4">
           {prescriptionList && prescriptionList?.map((item, i) => (
-            <Image
-              onClick={() => dispatch(GetPrescriptionIdService(item?._id))}
-              key={i}
-              src={item?.rximage ? item?.rximage : IMAGES.PRESCRIPTIONSAVE}
-              alt="Uploaded Image"
-              // layout="fill"
-              objectFit="cover"
-              className={`rounded-md w-24 h-24 border-2 cursor-pointer ${item?._id === prescription?._id ? "border-[#B7084B]" : null} mb-3`}
-              width={200}
-              height={200}
-            />
+            <div className='flex relative' key={i}>
+              <img
+                onClick={() => dispatch(GetPrescriptionIdService(item?._id))}
+                key={i}
+                src={item?.rximage ? item?.rximage : IMAGES.PRESCRIPTIONSAVE}
+                alt="Uploaded Image"
+                // layout="fill"
+                // objectFit="cover"
+                className={`rounded-md w-24 h-24 border-2 cursor-pointer ${item?._id === prescription?._id ? "border-[#B7084B]" : null} mb-3`}
+                width={200}
+                height={200}
+              />
+              <HighlightOffIcon className='cursor-pointer mx-1' color="action" onClick={() => setSelectedAddressId(item._id)} />
+              <DeleteModal
+                open={selectedAddressId === item?._id}
+                setOpen={() => setSelectedAddressId(null)}
+                title={"Delete Prescription"}
+                description={`Are you sure you want to delete ${i + 1} ?`}
+                onSubmit={async () => {
+                  await dispatch(DeletePrescriptionService(item?._id));
+                  setSelectedAddressId(null);
+                }}
+              />
+            </div>
           ))}
         </div>
         {prescriptionList?.length === 0 && <p className="text-gray-500">No image uploaded</p>}
         <div className="text-end">
-          <Button disabled={prescription?._id ? false : true } text="Save & Continue" onClick={() => router.push('/address')} />
+          <Button disabled={prescription?._id ? false : true} text="Save & Continue" onClick={() => router.push('/address')} />
         </div>
       </div>
       {/* Valid Prescription Section */}
