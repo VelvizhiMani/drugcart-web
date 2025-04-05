@@ -114,7 +114,7 @@ function AdminCard() {
                             color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Customers
+                            Total Users
                         </Typography>
                         <CardIcon>
                             <ShoppingCartIcon sx={{ color: "#fff" }} />
