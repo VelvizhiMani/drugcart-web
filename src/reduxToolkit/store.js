@@ -42,6 +42,7 @@ import serviceReducer from "@/reduxToolkit/slices/serviceSlice"
 import serviceenquiryReducer from "@/reduxToolkit/slices/serviceenquirySlice"
 import scanReducer from "@/reduxToolkit/slices/scanSlice"
 import scanBookingReducer from "@/reduxToolkit/slices/scanBookingSlice"
+import specialityReducer from "@/reduxToolkit/slices/specialitySlice"
 
 export const store = configureStore({
     reducer: {
@@ -87,6 +88,7 @@ export const store = configureStore({
         serviceenquiryData: serviceenquiryReducer,
         scanData: scanReducer,
         scanBookingData: scanBookingReducer,
+        specialityData: specialityReducer,
         adminUserData: adminUserReducer
     }
 })
