@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
     Box,
     Button,
@@ -17,47 +17,51 @@ import SelectInput from "@/components/admin/input/SelectInput";
 import ImageInput from "@/components/admin/input/ImageInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { PostDoctorService } from '@/services/doctorService';
+import { PutDoctorService, GetDoctorIdService } from '@/services/doctorService';
 import { GetSpecialListService } from '@/services/specialityService';
 import { useSelector, useDispatch } from "react-redux";
 
-function DoctorAdd() {
-    const { specialList } = useSelector((state) => state.specialityData)
+function EditDoctor() {
+    const { specialList, } = useSelector((state) => state.specialityData)
+    const { doctor } = useSelector((state) => state.doctorData)
     const router = useRouter();
     const dispatch = useDispatch()
+    const params = useParams()
     const genderType = ["Male", "Female", "Transgender"];
 
     useEffect(() => {
         dispatch(GetSpecialListService())
-    }, [])
+        dispatch(GetDoctorIdService(params?.id))
+    }, [params?.id])
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            specialist_name: "",
-            doctor_name: "",
-            url: "",
-            picture: "",
-            imagealt: "",
-            doctor_no: "",
-            gender: "",
-            email: "",
-            phone: "",
-            language: "",
-            experience: "",
-            qualification: "",
-            consult_fees: "",
-            pwh: "",
-            cwh_name: "",
-            ug_degree: "",
-            ug_city: "",
-            ug_certificate: "",
-            pg_degree: "",
-            pg_city: "",
-            pg_certificate: "",
-            country: "",
-            state: "",
-            city: "",
-            address: "",
+            specialist_name: doctor?.specialist_name || "",
+            doctor_name: doctor?.doctor_name || "",
+            url: doctor?.url || "",
+            picture: doctor?.picture || "",
+            imagealt: doctor?.imagealt || "",
+            doctor_no: doctor?.doctor_no || "",
+            gender: doctor?.gender || "",
+            email: doctor?.email || "",
+            phone: doctor?.phone || "",
+            language: doctor?.language || "",
+            experience: doctor?.experience || "",
+            qualification: doctor?.qualification || "",
+            consult_fees: doctor?.consult_fees || "",
+            pwh: doctor?.pwh || "",
+            cwh_name: doctor?.cwh_name || "",
+            ug_degree: doctor?.ug_degree || "",
+            ug_city: doctor?.ug_city || "",
+            ug_certificate: doctor?.ug_certificate || "",
+            pg_degree: doctor?.pg_degree || "",
+            pg_city: doctor?.pg_city || "",
+            pg_certificate: doctor?.pg_certificate || "",
+            country: doctor?.country || "",
+            state: doctor?.state || "",
+            city: doctor?.city || "",
+            address: doctor?.address || "",
         },
         validationSchema: yup.object({
             specialist_name: yup.string().required("Specialist name is required"),
@@ -83,9 +87,9 @@ function DoctorAdd() {
             // state: yup.string().required("State is required"),
             // city: yup.string().required("City is required"),
         }),
-        onSubmit: async (data, { resetForm }) => {
+        onSubmit: async (data) => {
             console.log(data);
-            await dispatch(PostDoctorService(data, resetForm))
+            await dispatch(PutDoctorService(doctor?._id, data))
         },
     });
 
@@ -123,7 +127,7 @@ function DoctorAdd() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Doctor
+                    Edit Doctor
                 </Typography>
                 <Button
                     color="success"
@@ -434,4 +438,4 @@ function DoctorAdd() {
     );
 }
 
-export default DoctorAdd;
+export default EditDoctor;

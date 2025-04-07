@@ -48,7 +48,6 @@ export async function POST(request) {
             state,
             city,
             address,
-            education,
         } = await request.json();
 
         const isDoctorList = await DoctorList.findOne({ doctor_name });
@@ -83,7 +82,6 @@ export async function POST(request) {
             state,
             city,
             address,
-            education,
         });
 
         await addDoctorList.save();

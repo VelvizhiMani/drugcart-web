@@ -132,7 +132,7 @@ function DoctorListPage() {
                                     {row?.doctor_name}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.hospital_name}
+                                    {row?.pwh}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.specialist_name}

@@ -106,10 +106,6 @@ const doctorSchema = new Schema(
             type: String,
             defalut: ""
         },
-        education: {
-            type: String,
-            defalut: ""
-        },
         status: {
             type: String,
             default: "Active",
