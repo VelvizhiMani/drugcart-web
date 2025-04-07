@@ -25,7 +25,7 @@ const GetPrescriptionService = () => async (dispatch) => {
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/prescription`, { headers: await Authorization() })
         dispatch(getPrescriptions(getData.data))
-        dispatch(getPrescription(getData.data[0]))
+        // dispatch(getPrescription(getData.data[0]))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))

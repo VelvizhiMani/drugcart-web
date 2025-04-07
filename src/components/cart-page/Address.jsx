@@ -7,9 +7,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch, useSelector } from "react-redux";
 import { PostAddressService, DeleteAddressService, GetAddressIdService, GetUserAddressIdService } from '@/services/addressService';
 import { useRouter } from "next/navigation";
+import DeleteModal from "../admin/modal/DeleteModal";
 
 const AddressUpload = () => {
   const { userAddress, addresses } = useSelector((state) => state.addressData)
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
   const [type, setType] = useState('Home');
   const [activeTab, setActiveTab] = useState("add");
   const dispatch = useDispatch();
@@ -34,7 +36,7 @@ const AddressUpload = () => {
       await dispatch(PostAddressService(data, resetForm))
     },
   });
-  
+
   useEffect(() => {
     if (addresses?._id) {
       setActiveTab("saved")
@@ -208,12 +210,20 @@ const AddressUpload = () => {
                         >
                           <div className="flex justify-between">
                             <h2 className="font-semibold">Address {i + 1}</h2>
-                            <button onClick={async () => {
-                              await dispatch(DeleteAddressService(addressItem?._id))
-                              await dispatch(GetAddressIdService(addressItem?.cus_id))
-                            }}>
+                            <button onClick={() => setSelectedAddressId(addressItem._id)}>
                               <DeleteIcon color="error" />
                             </button>
+                            <DeleteModal
+                              open={selectedAddressId === addressItem._id}
+                              setOpen={() => setSelectedAddressId(null)}
+                              title={"Delete Address"}
+                              description={`Are you sure you want to delete Address ${i + 1} ?`}
+                              onSubmit={async () => {
+                                await dispatch(DeleteAddressService(addressItem._id));
+                                await dispatch(GetAddressIdService(addressItem?.cus_id));
+                                setSelectedAddressId(null);
+                              }}
+                            />
                           </div>
                           <p>
                             {addressItem?.cus_name} {addressItem?.lastname}, <br />

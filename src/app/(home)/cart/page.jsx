@@ -20,6 +20,7 @@ import {
   selectTotalSavings,
 } from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
+import { tableText } from '@/utils/textFormat'
 
 function MyCart() {
   const { carts, items } = useSelector((state) => state.cartData);
@@ -61,7 +62,7 @@ function MyCart() {
                 <div className="flex items-center space-x-4">
                   <h3>Product Details</h3>
                 </div>
-                <div className="flex items-center space-x-10">
+                <div className="flex items-center space-x-10 ml-24">
                   <h3>Quantity</h3>
                 </div>
                 <div className="flex items-center space-x-10">
@@ -83,7 +84,7 @@ function MyCart() {
                       height={50}
                     />
                     <div>
-                      <h3 className="font-semibold">{item?.product_name}</h3>
+                      <h3 className="font-semibold">{tableText(item?.product_name, 22)}</h3>
                       <p className="text-gray-500 text-sm">{item?.cat_name}</p>
                     </div>
                   </div>
@@ -110,7 +111,7 @@ function MyCart() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-10">
-                    <p className="text-lg font-bold">₹{(item?.price * item?.quantity).toFixed(2)}</p>
+                    <p className="text-lg font-bold">₹{(item?.price * item?.quantity).toFixed(0)}</p>
                     <button
                       className="text-red-500"
                       onClick={() => dispatch(DeleteCartService(item?._id))}
@@ -123,7 +124,7 @@ function MyCart() {
             </div>
 
             <div className="mt-4 text-right text-xl font-bold text-pink-700 border-b pb-4">
-              Total Cart Value: ₹{totalPrice.toFixed(2)}
+              Total Cart Value: ₹{totalPrice.toFixed(0)}
             </div>
           </div>
 
@@ -136,7 +137,7 @@ function MyCart() {
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Total MRP</span>
-                <span>₹{totalPrice.toFixed(2)}</span>
+                <span>₹{totalPrice.toFixed(0)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Total Discount</span>
@@ -144,7 +145,7 @@ function MyCart() {
               </div>
               <div className="border-t pt-2 flex justify-between text-lg font-bold text-red-600">
                 <span>Total Amount</span>
-                <span>₹{totalSavings.toFixed(2)}</span>
+                <span>₹{totalAfterDiscount.toFixed(0)}</span>
               </div>
             </div>
 
@@ -153,7 +154,7 @@ function MyCart() {
             </button>
 
             <div className="mt-2 text-center text-sm text-gray-500 bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-              💰 Total Savings: ₹{totalAfterDiscount.toFixed(2)}
+              💰 Total Savings: ₹{totalSavings.toFixed(0)}
             </div>
           </div>
         </div>

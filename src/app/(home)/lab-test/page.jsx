@@ -23,7 +23,7 @@ const slides = [
         button: "Book Now",
         buttonLink: "#",
         discountText: "At The Lowest Prices",
-        image: "https://4kwallpapers.com/images/wallpapers/porsche-911-5k-8k-3840x2160-12576.jpeg", // Replace with your actual image path
+        image: "https://hospitalsmagazine.com/wp-content/uploads/2024/03/diabetes-.jpg",
     },
     {
         id: 2,
@@ -32,9 +32,8 @@ const slides = [
         button: "Book Now",
         buttonLink: "#",
         discountText: "At The Lowest Prices",
-        image: "https://www.motorbeam.com/wp-content/uploads/Porsche-911-Hybrid-Specs.jpg", // Replace with your actual image path
+        image: "https://www.maxlab.co.in/categoryimage/1667462132.jpg",
     },
-    // Add more slides as needed
 ];
 
 const LabTest = () => {
@@ -49,6 +48,16 @@ const LabTest = () => {
         dispatch(GetTestPackageUrlService(choose))
         dispatch(GetLabPackageUrlService(choose))
     }, [choose])
+
+    const discountCal = (price, discount) => {
+        let totalDiscount = price - price * discount / 100;
+        return totalDiscount.toFixed(0)
+    }
+
+    const savePrice = (price, totalDiscount) => {
+        const finalPrice = Number(price) - totalDiscount;
+        return finalPrice.toFixed(0)
+    }
 
     return (
         <div className="max-w-7xl mx-auto">
@@ -205,15 +214,15 @@ const LabTest = () => {
                                 <p className="text-gray-600 font-semibold mt-2">Include  {item?.nooftest} Tests</p>
                                 <ul className="text-gray-500 text-sm mt-1">
                                     <li>{item?.name}</li>
-                                    <li>Cholesterol - Total</li>
-                                    <li>HbA1c (Hemoglobin A1c)</li>
+                                    <li>{item?.tests?.[0]}</li>
+                                    <li>{item?.tests?.[1]}</li>
                                 </ul>
                                 <p className="text-black font-medium mt-1 cursor-pointer">+More</p>
                                 <p className="text-blue-400 text-sm mt-2 line-through">M.R.P <span className="text-blue-600 font-bold">{item?.price}</span></p>
-                                <p className="text-red-600 text-xl font-bold">Price {item?.price}</p>
-                                <p className="text-green-600 text-sm font-medium">You Save $360.00</p>
+                                <p className="text-red-600 text-xl font-bold">Price {discountCal(item?.price, item?.discount)}</p>
+                                <p className="text-green-600 text-sm font-medium">You Save ${savePrice(item?.price, discountCal(item?.price, item?.discount))}</p>
                                 <div className="bg-red-100 text-red-600 px-2 py-1 mt-2 rounded-md inline-block font-semibold text-sm border border-red-400">
-                                    50% OFF
+                                    {item?.discount}% OFF
                                 </div>
                                 <button className="w-full mx-auto bg-green-600 text-white font-bold py-2 rounded-lg mt-4 hover:bg-green-700 transition" onClick={() => router.push(`/test/${item?.url}`)}>
                                     Book Now

@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
@@ -11,8 +11,21 @@ import AdminCard from '@/components/admin/card/AdminCard';
 import UserTable from '@/components/admin/table/UserTable';
 import UserCard from '@/components/admin/card/UserCard';
 import ProductCalendar from '@/components/admin/Calender/ProductCalender';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetOrdersService } from '@/services/orderService';
+import { GetProductService } from '@/services/productService';
+import { GetAllUserService, GetCustomersService } from '@/services/admin/userService';
 
 function Dashboard() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(GetOrdersService())
+    dispatch(GetProductService())
+    dispatch(GetAllUserService())
+    dispatch(GetCustomersService())
+  }, [])
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       {/* <UserCard /> */}

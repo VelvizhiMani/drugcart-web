@@ -12,7 +12,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { getCartService } from "@/services/cartService";
 
 const TopHeader = () => {
-  const {items} = useSelector((state) => state.cartData);
+  const { items } = useSelector((state) => state.cartData);
   const router = useRouter();
   const { profile } = useSelector((state) => state.profileData);
   const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const TopHeader = () => {
   const loginLink = () => {
     router.push("/login");
   };
-  
+
   return (
     <>
       <section className="mt-3 px-5 md:px-16">
@@ -120,7 +120,13 @@ const TopHeader = () => {
                       {isOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-40">
                           <ul className="text-gray-700">
-                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
+                            <li
+                              className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={() => {
+                                router.push('/profile')
+                                setIsOpen(false)
+                              }}
+                            >
                               My Profile
                             </li>
                             <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">

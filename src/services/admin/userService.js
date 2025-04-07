@@ -1,4 +1,4 @@
-import { createUser, getUserId, getUsers } from '@/reduxToolkit/slices/admin/adminUserSlice';
+import { createUser, getUserId, getUsers, getCustomers } from '@/reduxToolkit/slices/admin/adminUserSlice';
 import Authorization from '@/utils/authorization';
 import axios from 'axios'
 import { IsLoading, showToast } from '../../reduxToolkit/slices/commonSlice';
@@ -71,5 +71,14 @@ const PutUserService = (userId, userData) => async (dispatch) => {
     })
 }
 
+const GetCustomersService = () => async (dispatch) => {
+    await axios.get(`/api/admin-users/customers`, { headers: await Authorization() }).then((response) => {
+        dispatch(getCustomers(response.data))
+    }).catch((error) => {
+        console.log("error", error.message)
+    })
+}
 
-export { AdminLoginService, CreateUserService, GetAllUserService, GetUserService, DeleteUserService, PutUserService }
+
+
+export { AdminLoginService, CreateUserService, GetAllUserService, GetUserService, DeleteUserService, PutUserService, GetCustomersService }

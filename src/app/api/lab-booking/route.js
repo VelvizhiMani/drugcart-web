@@ -6,7 +6,7 @@ import connnectionToDatabase from '@/lib/mongodb';
 export async function POST(request) {
     try {
         await connnectionToDatabase();
-        // const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await authenticateUser();
 
         const {
             packagename,
@@ -31,9 +31,11 @@ export async function POST(request) {
             address,
             appoitmentdate,
             timing,
-            tests
+            tests,
+            hardcopy
         } = await request.json();
         const addLabBooking = new LabBooking({
+            userId: user?._id,
             packagename,
             noofpersons,
             name1,
@@ -56,7 +58,8 @@ export async function POST(request) {
             address,
             appoitmentdate,
             timing,
-            tests
+            tests,
+            hardcopy
         });
 
         await addLabBooking.save();

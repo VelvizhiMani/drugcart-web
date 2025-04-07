@@ -2,6 +2,15 @@ import mongoose, { Schema } from "mongoose";
 
 const labBookingSchema = new Schema(
     {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: ""
+        },
+        bookingId: {
+            type: String,
+            unique: true
+        },
         packagename: {
             type: String,
             default: ""
@@ -83,7 +92,7 @@ const labBookingSchema = new Schema(
             default: ""
         },
         appoitmentdate: {
-            type: String,
+            type: Date,
             default: ""
         },
         timing: {
@@ -94,10 +103,30 @@ const labBookingSchema = new Schema(
             type: [String],
             default: [""],
         },
+        hardcopy: {
+            type: Boolean,
+            default: false
+        }
     },
     { timestamps: true }
 )
 
+labBookingSchema.pre("save", async function (next) {
+    if (!this.bookingId) {
+        try {
+            const lastScan = await mongoose.model("Labbooking").findOne({}, {}, { sort: { bookingId: -1 } });
+
+            let newBookingId = lastScan && lastScan.bookingId
+                ? parseInt(lastScan.bookingId) + 1
+                : 2501;
+
+            this.bookingId = newBookingId.toString();
+        } catch (error) {
+            return next(error);
+        }
+    }
+    next();
+});
 
 
 const Labbooking = mongoose.models.Labbooking || mongoose.model("Labbooking", labBookingSchema, "labbooking");

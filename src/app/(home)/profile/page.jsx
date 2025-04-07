@@ -21,6 +21,9 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MyOrders from '@/components/profile/MyOrders';
+import MyAddress from '@/components/profile/MyAddress';
+import MyPrescription from '@/components/profile/MyPrescription';
+import MyLab from '@/components/profile/MyLab';
 import AddressForm from "@/components/common/AddressForm";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAddressIdService } from '@/services/addressService';
@@ -62,7 +65,7 @@ export default function ProfileTab() {
 
 
     console.log("userAddress", userAddress);
-    
+
     return (
         <>
             {/* <section className="px-2 md:px-12 mt-3">
@@ -223,14 +226,19 @@ export default function ProfileTab() {
                         {activeTab === 'address' && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Address</h2>
-                                <p>Address details will be displayed here.</p>
+                                <MyAddress />
                             </div>
                         )}
 
                         {activeTab === 'prescription' && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Prescription</h2>
-                                <p>Prescription details will be displayed here.</p>
+                                <MyPrescription />
+                            </div>
+                        )}
+                        {activeTab === 'labtest' && (
+                            <div>
+                                <MyLab />
                             </div>
                         )}
                     </div>

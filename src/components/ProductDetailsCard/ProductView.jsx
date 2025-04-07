@@ -3,26 +3,78 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 import { IMAGES } from "../common/images";
 import Feedback from "@/components/home-page/feedback";
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
 import QuestionCard from "@/components/ProductDetailsCard/QuestionCard";
-import { GetProductUrlService, GetProductGeneticUrlService } from "@/services/productService";
+import {
+  GetProductUrlService,
+  GetProductGeneticUrlService,
+} from "@/services/productService";
 import { GetSubCateUrlService } from "@/services/subCategoryService";
-import { getCartService, PostCartService } from "@/services/cartService"
+import { GetAddStorageIdService } from "@/services/storageService";
+import { GetManufactuerUrlService } from "@/services/manufactuerService";
+import { GetAddPackageIdService } from "@/services/packageService";
+import { getCartService, PostCartService } from "@/services/cartService";
+import MostSearchCategory from "./leftsection/MostSearchCategory";
+import LeftService from "./leftsection/LeftService";
+import LeftScan from "./leftsection/LeftScan";
+import LeftHealthDevice from "./leftsection/LeftHealthDevice";
+import RightAyushCategory from "./rightsection/RightAyushCategory";
+import RightOurCare from "./rightsection/RightOurCare";
+import RightHealthStore from "./rightsection/RightHealthStore";
+import RightOurService from "./rightsection/RightOurService";
+import OurHomeService from "./rightsection/OurHomeService";
+import OurTreatment from "./rightsection/OurTreatment";
 
 const ProductView = ({ url }) => {
   const dispatch = useDispatch();
-  const { product, productGenericUrl } = useSelector((state) => state.productData);
+  const router = useRouter();
+  const { product, productGenericUrl } = useSelector(
+    (state) => state.productData
+  );
   const { subCateUrl } = useSelector((state) => state.subCategoryData);
+  const { storageid } = useSelector((state) => state.storageData);
+  const { manufactuerurl } = useSelector((state) => state.manufactuerData);
+  const { packid } = useSelector((state) => state.packageData);
 
   useEffect(() => {
     dispatch(GetProductUrlService(url));
     dispatch(GetSubCateUrlService(product?.subcat_name));
-    dispatch(GetProductGeneticUrlService(product?.generices))
-  }, [url, product?.generices]);
+    dispatch(GetAddStorageIdService(product?.storage));
+    dispatch(GetManufactuerUrlService(product?.manufactuer));
+    dispatch(GetAddPackageIdService(product?.packageName));
+    dispatch(GetProductGeneticUrlService(product?.generices));
+    dispatch(getCartService());
+  }, [url, product?.generices, product?.manufactuer]);
 
-  const alterBrands = productGenericUrl.filter((item) => item?.url !== url)
+  const alterBrands = productGenericUrl.filter((item) => item?.url !== url);
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const { carts, items } = useSelector((state) => state.cartData);
+  const onAuth = items.length > 0 ? items : carts?.carts || [];
+
+  const checkoutClick = async () => {
+    const token = await localStorage.getItem("token");
+    // const cartData = JSON.parse(cart)
+    // console.log(cartData);
+    if (token) {
+      router.push("/cart");
+    } else {
+      router.push("/login");
+    }
+  };
+
+  const uploadClick = async () => {
+    router.push("/prescription");
+  };
 
   return (
     <>
@@ -80,7 +132,9 @@ const ProductView = ({ url }) => {
               </div>
             </div>
             <div className="p-1">
-              <p className="text-sm text-gray-500 capitalize">{product?.cat_name}</p>
+              <p className="text-sm text-gray-500 capitalize">
+                {product?.cat_name}
+              </p>
               <h2 className="text-xl">{product?.product_name}</h2>
               <div className="flex items-center mt-3">
                 <span className="text-black font-bold mr-2">4.0</span>
@@ -208,9 +262,9 @@ const ProductView = ({ url }) => {
                     >
                       <path d="M25,2C12.318,2,2,12.317,2,25s10.318,23,23,23c12.683,0,23-10.317,23-23S37.683,2,25,2z M32,16h-3.29 C26.772,16,26,16.455,26,17.806V21h6l-1,5h-5v13h-6V26h-3v-5h3v-2.774C20,14.001,21.686,11,26.581,11C29.203,11,32,12,32,12V16z" />
                     </svg>{" "}
-                    <space className="text-[#4C4C95] text-[12px] pr-[3px]">
+                    <span className="text-[#4C4C95] text-[12px] pr-[3px]">
                       Facebook
-                    </space>
+                    </span>
                   </button>
                   <button className="flex items-center gap-1 border-2 py-1">
                     <svg
@@ -223,9 +277,9 @@ const ProductView = ({ url }) => {
                     >
                       <path d="M25,2C12.318,2,2,12.318,2,25c0,3.96,1.023,7.854,2.963,11.29L2.037,46.73c-0.096,0.343-0.003,0.711,0.245,0.966 C2.473,47.893,2.733,48,3,48c0.08,0,0.161-0.01,0.24-0.029l10.896-2.699C17.463,47.058,21.21,48,25,48c12.682,0,23-10.318,23-23 S37.682,2,25,2z M36.57,33.116c-0.492,1.362-2.852,2.605-3.986,2.772c-1.018,0.149-2.306,0.213-3.72-0.231 c-0.857-0.27-1.957-0.628-3.366-1.229c-5.923-2.526-9.791-8.415-10.087-8.804C15.116,25.235,13,22.463,13,19.594 s1.525-4.28,2.067-4.864c0.542-0.584,1.181-0.73,1.575-0.73s0.787,0.005,1.132,0.021c0.363,0.018,0.85-0.137,1.329,1.001 c0.492,1.168,1.673,4.037,1.819,4.33c0.148,0.292,0.246,0.633,0.05,1.022c-0.196,0.389-0.294,0.632-0.59,0.973 s-0.62,0.76-0.886,1.022c-0.296,0.291-0.603,0.606-0.259,1.19c0.344,0.584,1.529,2.493,3.285,4.039 c2.255,1.986,4.158,2.602,4.748,2.894c0.59,0.292,0.935,0.243,1.279-0.146c0.344-0.39,1.476-1.703,1.869-2.286 s0.787-0.487,1.329-0.292c0.542,0.194,3.445,1.604,4.035,1.896c0.59,0.292,0.984,0.438,1.132,0.681 C37.062,30.587,37.062,31.755,36.57,33.116z" />
                     </svg>
-                    <space className="text-[#4CAF50] text-[12px] pr-[3px]">
+                    <span className="text-[#4CAF50] text-[12px] pr-[3px]">
                       Whatsapp
-                    </space>
+                    </span>
                   </button>
                   <button className="flex items-center gap-1 border-2  py-1">
                     <svg
@@ -271,41 +325,55 @@ const ProductView = ({ url }) => {
                 </thead>
                 <tbody className="text-[13px]">
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Brand Name</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Brand Name
+                    </td>
                     <td className="px-2">{product?.product_name}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
                       Salt Composition
                     </td>
                     <td className="px-2">{product?.genericname}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Strength</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Strength
+                    </td>
                     <td className="px-2">{product?.strength}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Product Form</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Product Form
+                    </td>
                     <td className="px-2 capitalize">{product?.tabscount}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Pack</td>
-                    <td className="px-2">{product?.packageName}</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Pack
+                    </td>
+                    <td className="px-2">{packid?.packagename}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Storage</td>
-                    <td className="px-2">{product?.storage}</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Storage
+                    </td>
+                    <td className="px-2">{storageid.storagename}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Subcategory</td>
-                    <td className="px-2">{product?.subcat_name} / {subCateUrl?.subcat_name}</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Subcategory
+                    </td>
+                    <td className="px-2">{subCateUrl?.subcat_name}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">Manufacturer</td>
-                    <td className="px-2">{product?.manufactuer}</td>
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
+                      Manufacturer
+                    </td>
+                    <td className="px-2">{manufactuerurl?.manufactuername}</td>
                   </tr>
                   <tr className="border-[1px]">
-                    <td className="bg-pink-200 py-[15px] px-1">
+                    <td className="bg-pink-200 py-[15px] px-1 font-bold">
                       Country of Origin
                     </td>
                     <td className="px-2">{product?.orgin}</td>
@@ -320,28 +388,185 @@ const ProductView = ({ url }) => {
         <div className="grid grid-cols-6 gap-4">
           <div className="md:col-span-1 col-span-6 order-2 md:order-1">
             <h2 className="font-bold hidden md:block">Product Summary</h2>
-            <div className="bg-[#CEDEFC] text-[14px] hidden md:block">
+            <div className="bg-[#e7ecf6] text-[14px] hidden md:block">
               <ul className="list-disc pl-4 m-2 leading-10">
                 <li>Overview</li>
-                <li>Description</li>
-                <li>Uses</li>
-                <li>Benefit</li>
-                <li>Indication</li>
-                <li>Mechanism</li>
-                <li>How to Works</li>
-                <li>Contriaindication</li>
-                <li>Side Effects</li>
-                <li>General Warning</li>
-                <li>Use of Tablet in Child</li>
-                <li>Use of Tablet in Adult</li>
-                <li>Use of Tablet in Elder</li>
-                <li>General Instructions</li>
-                <li>Drug Instructions</li>
-                <li>Over Dose</li>
-                <li>Missed Dose</li>
-                <li>Doctor Consult</li>
-                <li>FAQ's</li>
-                <li>Expires on or after</li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("description")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Description
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("uses")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Uses
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("benefits")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Benefit
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("indication")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Indication
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("mechanism")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Mechanism
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("works")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    How to Works
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("contriaindication")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Contriaindication
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("sideeffect")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Side Effects
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("warning")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    General Warning
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("child")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Use of Tablet in Child
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("adult")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Use of Tablet in Adult
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("elder")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Use of Tablet in Elder
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("general")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    General Instructions
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("drug")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Drug Instructions
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("overdose")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Over Dose
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("misseddose")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Missed Dose
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("doctor")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Doctor Consult
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("faq")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    FAQ's
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("storage")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Storage
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("fasttag")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Fast Tag
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("reference")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Reference
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => scrollToSection("expires")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Expires on or after
+                  </button>
+                </li>
               </ul>
             </div>
             <h2 className="text-xl font-bold m-3">Author Details</h2>
@@ -526,191 +751,9 @@ const ProductView = ({ url }) => {
             <h2 className="text-2xl font-bold my-5 text-center">
               Most search Medicine Categories
             </h2>
-            <div className="bg-[#F3F4F5] text-sm">
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ANTICANCER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Anti Cancer</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ARTHRITIS}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Arthritis</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ANTIBIOTIC}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Anti-biotic</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ASTHMA}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Asthma</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.GASTRO}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Gastro Intestional</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.CARDIO}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Cardio Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.NEPHROLOGY}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Nephrology</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.KIDNEY}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Kidney disease/Stone</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.HYPERTENSION}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Hypertension</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.HEPATITIS}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Hepatitis</h2>
-              </div>
-            </div>
+            <MostSearchCategory />
             <h2 className="text-2xl font-bold my-5 text-center">Service</h2>
-            <div className="bg-[#F3F4F5] text-sm">
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.NURSE}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Nursing Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.PHYSIO}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Physiotherapy Service</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.DIETICIAN}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Dietician Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ELDER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Elder Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ORTHOPEDIC}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Orthopedic Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.GLUCOMETER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Diabetes Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.VACCINATION}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Vaccination Service</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.COVID}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Covid Care Service</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.CANCER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Cancer Care</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.NATURALFOOD}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md">Nutriti Care Service</h2>
-              </div>
-            </div>
+            <LeftService />
             <h2 className="text-2xl font-bold my-5 text-center">
               Online Consult
             </h2>
@@ -742,204 +785,78 @@ const ProductView = ({ url }) => {
               </div>
             </div>
             <h2 className="text-2xl font-bold my-5 text-center">Scan</h2>
-            <div className="bg-[#FFF7DB] text-sm">
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.PETCTSCAN}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Pet CT Scan</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.CTSCAN}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">CT Scan</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.MRISCAN}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">MRI Scan</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.USGSCAN}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">USG Scan</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.XRAY}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Pet CT Scan</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.STRESSTEST}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Stress Test</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2">
-                <Image
-                  src={IMAGES.ECGTEST}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">ECG Test</h2>
-              </div>
-            </div>
+            <LeftScan />
             <h2 className="text-2xl font-bold my-5 text-center">
               Health Device
             </h2>
-            <div className="bg-[#EBEBEB] text-sm">
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.BLOODPRESSURE}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Blood Pressure Monitor</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.BLOODTEST}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Blood Test Kit</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.COVIDTEST}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Covid Test Kit</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.GLUCOMETER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Diabetes Monitor</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.HIV}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">HIV Test Kit</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.PREGNANCY}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Pregnancy Test Kit</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.PULSE}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Pulse Oximeter</h2>
-              </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.NEBULIZER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Nebulier Machines</h2>
-              </div>
-            </div>
-
+            <LeftHealthDevice />
             <h2 className="text-2xl font-bold my-5 text-center">OTC Product</h2>
             <div className="bg-[#E6F5F5] text-sm">
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.HANDSANITIZER}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Hand Sanitier</h2>
+              <div className="p-2 border-b-2 border-gray-300">
+                <Link href="/sanitization" className="flex gap-2">
+                  <Image
+                    src={IMAGES.HANDSANITIZER}
+                    alt="Hand Sanitier"
+                    priority
+                    className="w-6 bg-white"
+                  />
+                  <h2 className="text-md font-bold">Hand Sanitier</h2>
+                </Link>
               </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.SKINTREATMENT}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Skin Treatment</h2>
+              <div className="p-2 border-b-2 border-gray-300">
+                <Link href="/" className="flex gap-2">
+                  <Image
+                    src={IMAGES.SKINTREATMENT}
+                    alt="Skin Treatment"
+                    priority
+                    className="w-6 bg-white"
+                  />
+                  <h2 className="text-md font-bold">Skin Treatment</h2>
+                </Link>
               </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.VITAMINS}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Vitamins & Supplements</h2>
+              <div className="p-2 border-b-2 border-gray-300">
+                <Link href="/" className="flex gap-2">
+                  <Image
+                    src={IMAGES.VITAMINS}
+                    alt="Vitamins & Supplements"
+                    priority
+                    className="w-6 bg-white"
+                  />
+                  <h2 className="text-md font-bold">Vitamins & Supplements</h2>
+                </Link>
               </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.WOMENCARE}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Women Care</h2>
+              <div className="p-2 border-b-2 border-gray-300">
+                <Link href="/" className="flex gap-2">
+                  <Image
+                    src={IMAGES.WOMENCARE}
+                    alt="Women Care"
+                    priority
+                    className="w-6 bg-white"
+                  />
+                  <h2 className="text-md font-bold">Women Care</h2>
+                </Link>
               </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.BABYCARE}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Baby Care</h2>
+              <div className="p-2 border-b-2 border-gray-300">
+                <Link href="/" className="flex gap-2">
+                  <Image
+                    src={IMAGES.BABYCARE}
+                    alt="Baby Care"
+                    priority
+                    className="w-6 bg-white"
+                  />
+                  <h2 className="text-md font-bold">Baby Care</h2>
+                </Link>
               </div>
-              <div className="flex gap-2 p-2 border-b-2 border-gray-300">
-                <Image
-                  src={IMAGES.MENCARE}
-                  alt="ANTI CANCER"
-                  priority
-                  className="w-6 bg-white"
-                />
-                <h2 className="text-md font-bold">Men Care</h2>
+              <div className="p-2 border-b-2 border-gray-300">
+                <Link href="/" className="flex gap-2">
+                  <Image
+                    src={IMAGES.MENCARE}
+                    alt="Men Care"
+                    priority
+                    className="w-6 bg-white"
+                  />
+                  <h2 className="text-md font-bold">Men Care</h2>
+                </Link>
               </div>
             </div>
 
@@ -948,7 +865,7 @@ const ProductView = ({ url }) => {
               <div className="p-2 justify-center items-center text-center">
                 <Image
                   src={IMAGES.CERTIFICATE}
-                  alt="ANTI CANCER"
+                  alt="Genuine Product"
                   priority
                   className="w-20 mx-auto"
                 />
@@ -956,7 +873,7 @@ const ProductView = ({ url }) => {
                 <div className="border-b-2"></div>
                 <Image
                   src={IMAGES.MONEY}
-                  alt="ANTI CANCER"
+                  alt="Best Offers and Discounts"
                   priority
                   className="w-20 mx-auto"
                 />
@@ -964,7 +881,7 @@ const ProductView = ({ url }) => {
                 <div className="border-b-2"></div>
                 <Image
                   src={IMAGES.DELIVERY}
-                  alt="ANTI CANCER"
+                  alt="Door Step Delivery"
                   priority
                   className="w-20 mx-auto"
                 />
@@ -999,7 +916,7 @@ const ProductView = ({ url }) => {
             </div>
           </div>
           <div className="col-span-6 md:col-span-3 order-1 md:order-2">
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="description">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.DESCICON}
@@ -1007,7 +924,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  MEDICAL DESCRIPTION OF {product?.product_name} TABLET
+                  MEDICAL DESCRIPTION OF {product?.product_name}
                 </h1>
               </div>
               <div className="text-justify px-8 py-3">
@@ -1016,7 +933,7 @@ const ProductView = ({ url }) => {
                 />
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="uses">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.USES}
@@ -1024,7 +941,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="font-bold uppercase">
-                  {product?.product_name} TABLET USES
+                  {product?.product_name} USES
                 </h1>
               </div>
               <div className="text-justify px-8 py-2">
@@ -1033,7 +950,7 @@ const ProductView = ({ url }) => {
                 />
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="benefits">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.BENEFITS}
@@ -1041,7 +958,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  {product?.product_name} TABLET BENEFITS
+                  {product?.product_name} BENEFITS
                 </h1>
               </div>
               <h3 className="text-[14px] py-2 font-bold px-8">Pain relief</h3>
@@ -1051,7 +968,7 @@ const ProductView = ({ url }) => {
                 />
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="indication">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.INDICATION}
@@ -1066,7 +983,7 @@ const ProductView = ({ url }) => {
                 <div dangerouslySetInnerHTML={{ __html: product?.indicat }} />
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="mechanism">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.MECHANISM}
@@ -1081,7 +998,7 @@ const ProductView = ({ url }) => {
                 <div dangerouslySetInnerHTML={{ __html: product?.machanism }} />
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="contraindication">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.MECHANISM}
@@ -1100,7 +1017,7 @@ const ProductView = ({ url }) => {
                 />
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="sideeffect">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.SIDEEFFECTS}
@@ -1180,7 +1097,7 @@ const ProductView = ({ url }) => {
               </div>
             </div>
 
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="faq">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.FAQS}
@@ -1188,7 +1105,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  FAQS FOR {product?.product_name} TABLET
+                  FAQS FOR {product?.product_name}
                 </h1>
               </div>
               <h3 className="text-[14px] py-2 font-bold px-8">
@@ -1219,7 +1136,7 @@ const ProductView = ({ url }) => {
               </p>
             </div>
 
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="warning">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.SIDEEFFECTS}
@@ -1228,7 +1145,6 @@ const ProductView = ({ url }) => {
                 />
                 <h1 className="text-md font-bold uppercase">
                   PRECAUTIONS AND GENERAL WARNING OF {product?.product_name}{" "}
-                  TABLET
                 </h1>
               </div>
               <div className="flex flex-wrap justify-between md:justify-start">
@@ -1354,7 +1270,7 @@ const ProductView = ({ url }) => {
               </div>
             </div>
 
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="works">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.PILL}
@@ -1362,7 +1278,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  HOW TO TAKE {product?.product_name} TABLET
+                  HOW TO TAKE {product?.product_name}
                 </h1>
               </div>
               <p className="text-justify px-8">
@@ -1377,7 +1293,7 @@ const ProductView = ({ url }) => {
               </p>
             </div>
 
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="adult">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.ADULT}
@@ -1385,7 +1301,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  USE OF {product?.product_name} TABLET IN ADULT
+                  USE OF {product?.product_name} IN ADULT
                 </h1>
               </div>
               <p className="text-justify px-8">
@@ -1394,7 +1310,7 @@ const ProductView = ({ url }) => {
                 Kindly consult with your doctor.
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="child">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.CHILD}
@@ -1402,7 +1318,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  USE OF {product?.product_name} TABLET IN CHILDREN
+                  USE OF {product?.product_name} IN CHILDREN
                 </h1>
               </div>
               <p className="text-justify px-8">
@@ -1410,7 +1326,7 @@ const ProductView = ({ url }) => {
                 years old. Kindly consult with your doctor.
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="elder">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.PATIENT}
@@ -1430,7 +1346,7 @@ const ProductView = ({ url }) => {
                 patient.
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="general">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.INSTRUCTION}
@@ -1447,7 +1363,7 @@ const ProductView = ({ url }) => {
                 for pain, fever, and allergic conditions.
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="drug">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.INTERACTION}
@@ -1455,7 +1371,7 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  DRUG INTERACTION OF {product?.product_name} TABLET
+                  DRUG INTERACTION OF {product?.product_name}
                 </h1>
               </div>
               <div className="flex gap-2 py-2">
@@ -1559,7 +1475,7 @@ const ProductView = ({ url }) => {
                 </p>
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="overdose">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.DOSE}
@@ -1574,7 +1490,7 @@ const ProductView = ({ url }) => {
                 immediately meet the doctor and rush to the nearby hospital.
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="misseddose">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.MISSEDDOSE}
@@ -1592,7 +1508,7 @@ const ProductView = ({ url }) => {
                 (Double Dose).
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="storage">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.STORAGE}
@@ -1611,7 +1527,7 @@ const ProductView = ({ url }) => {
                 <li>Disposed o properly in a suitable bag.</li>
               </ul>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="fasttag">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.FASTTAG}
@@ -1645,7 +1561,7 @@ const ProductView = ({ url }) => {
                 </li>
               </ul>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="reference">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.REFERENCE}
@@ -1659,7 +1575,7 @@ const ProductView = ({ url }) => {
                 U.S. Food and Drug Administration.
               </p>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="expires">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.EXPIRED}
@@ -1669,7 +1585,7 @@ const ProductView = ({ url }) => {
                 <h1 className="text-md font-bold">EXPIRES ON OR AFTER</h1>
               </div>
             </div>
-            <div className="border-[1px] p-3 mb-4">
+            <div className="border-[1px] p-3 mb-4" id="disclaimer">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.DISCLAIMER}
@@ -1717,14 +1633,14 @@ const ProductView = ({ url }) => {
               </h2>
               <div className="bg-[#F3F8FC] text-[14px] text-center border-[1.5px] m-2 rounded">
                 <Image
-                  src={IMAGES.ALOVERA}
-                  alt="ALOVERA"
+                  src={IMAGES.NO_IMAGE}
+                  alt={product?.genericname}
                   className="w-20 mx-auto"
                 />
-                <h2>Pantoprazole (40mg) + Levosulpiride (75mg)</h2>
+                <h2 className="font-bold">{product?.genericname}</h2>
               </div>
               <h2 className="font-bold text-center m-2 text-xl">
-                Alternate Brands 
+                Alternate Brands
               </h2>
               <div className="bg-[#F3F8FC] text-[14px] border-[1.5px] m-2 rounded">
                 {alterBrands?.map((product, i) => (
@@ -1734,20 +1650,20 @@ const ProductView = ({ url }) => {
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
                           <p>Precription</p>
-                          <p>Anti Cancer</p>
-                          <p>Rx required</p>
+                          <p>{product?.cat_name}</p>
+                          <p>{product?.rexrequired}</p>
                         </div>
                         <h3 className="text-[#B7084B] font-bold text-lg">
-                          &#8377; {product?.price}
+                          &#8377; {product?.saleprice}
                         </h3>
                         <h3 className="text-[#35A24D] font-semibold">
-                          Get this at $87.50
+                          Get this at {product?.price}
                         </h3>
                         <p className="text-xs my-1 text-gray-500">
-                          15 Tablet(s)in a strip
+                          {packid?.packagename}/{product?.packageName}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Mft : Eugenics Pharma Pvt Ltd
+                          Mft : {product?.manufactuer}
                         </p>
                       </div>
                       <div className="w-1/3">
@@ -1777,7 +1693,7 @@ const ProductView = ({ url }) => {
               <div className="border-2 my-4 m-3 rounded-md">
                 <div className="flex p-3 justify-between items-center text-lg ps-10">
                   <h3 className="font-bold">
-                    2 Items <br />{" "}
+                    {onAuth.length} Items <br />{" "}
                     <span className="text-gray-300 text-sm font-semibold">
                       in your cart
                     </span>
@@ -1788,7 +1704,10 @@ const ProductView = ({ url }) => {
                     className="w-20 h-20 mx-auto"
                   />
                 </div>
-                <button className="bg-[#B7084B] flex mx-auto p-1 m-2 text-white rounded-md px-3">
+                <button
+                  className="bg-[#B7084B] flex mx-auto p-1 m-2 text-white rounded-md px-3"
+                  onClick={checkoutClick}
+                >
                   View Cart
                 </button>
               </div>
@@ -1811,7 +1730,10 @@ const ProductView = ({ url }) => {
                     />
                   </div>
                 </div>
-                <button className="bg-[#35A24D] flex mx-auto p-1 m-2 text-white rounded-md px-12">
+                <button
+                  className="bg-[#35A24D] flex mx-auto p-1 m-2 text-white rounded-md px-12"
+                  onClick={uploadClick}
+                >
                   Upload
                 </button>
                 <ul className="list-disc text-[14px] ml-8 py-3">
@@ -2172,348 +2094,26 @@ const ProductView = ({ url }) => {
               <h2 className="font-bold text-center m-2 text-2xl">
                 Our Categories
               </h2>
-              <div className="bg-[#FFEDF2] text-sm">
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.AYUSH}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Ayush</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.SIDDHA}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Siddha</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.UNANI}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Unani</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.HOMEOPATHY}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Homeopathy</h2>
-                </div>
-              </div>
+              <RightAyushCategory />
 
               <h2 className="font-bold text-center m-2 text-2xl my-8">
                 Our Care
               </h2>
-              <div className="bg-[#CEDEFC] text-sm">
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.BABYCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Baby Care</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.FACECARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Face Care</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.FRAGRANCES}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Fragrances</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.HAIRCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Hair Care</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.HOMECARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Home Care</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.SKINCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Skin Care</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.WOMENCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Women Care</h2>
-                </div>
-              </div>
+              <RightOurCare />
 
               <h2 className="font-bold text-center m-2 text-2xl my-8">
                 Health Store Availability
               </h2>
-              <div className="bg-[#FBE8E2] text-sm">
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.PERSONALCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Personal Care</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.SUPPLEMENTS}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">
-                    Fitness Supplements
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.HEALTHCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">
-                    Health Care Products
-                  </h2>
-                </div>
-              </div>
+              <RightHealthStore />
+
+              <RightOurService />
 
               <h2 className="font-bold text-center m-2 text-2xl my-8">
                 Our Home Service
               </h2>
-              <div className="text-sm">
-                <div className="text-center bg-[#4C4C95] p-2 border-b-2 px-4">
-                  <h2 className="text-xl text-white font-bold ps-7">
-                    Our Service
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.NURSECARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Nurse Care at home</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.ELDERCARE}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Elder Care at home</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.DIAGNOSTIC}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Diagnostic at home</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.DOCTOR}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">
-                    Doctor Consultations
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.MEDICAL}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Medical Equipment</h2>
-                </div>
-              </div>
+              <OurHomeService />
 
-              <h2 className="font-bold text-center m-2 text-2xl my-8">
-                Our Home Service
-              </h2>
-              <div className="bg-[#E4EDFF] text-sm">
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.AYURVEDIC}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">
-                    Ayurvedic Supplements
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.NUTRITION}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Family Nutrition</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.HEALTHFOOD}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">
-                    Health Food and Drinks
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.ORGANIC}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Health Supplements</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.SMOKING}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Smoking Cessation</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.PROTEIN}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Sports Supplements</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.VITAMINS}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">
-                    Vitamins and Supplements
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.WEIGHT}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Weight Management</h2>
-                </div>
-              </div>
-
-              <h2 className="font-bold text-center m-2 text-2xl my-8">
-                Our Treatment
-              </h2>
-              <div className="text-sm border-2">
-                <div className="text-center bg-[#1877F2] p-2 border-b-2 px-4">
-                  <h2 className="text-xl text-white font-bold ps-7">
-                    Our Treatment
-                  </h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.SKINTREATMENT}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Skin Treatment</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.COUGHCOLD}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Cough Cold</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.GLUCOMETER}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Diabetes</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 border-b-2 px-4">
-                  <Image
-                    src={IMAGES.STOMACH}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Pain Relief</h2>
-                </div>
-                <div className="flex items-center justify-start gap-2 p-2 px-4">
-                  <Image
-                    src={IMAGES.SMOKING}
-                    alt="ANTI CANCER"
-                    priority
-                    className="w-10 bg-white"
-                  />
-                  <h2 className="text-md font-bold ps-7">Smoking Cessation</h2>
-                </div>
-              </div>
+              <OurTreatment />
 
               <h2 className="font-bold text-center m-2 text-2xl my-8">
                 Our Ayurvedic

@@ -10,6 +10,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PersonIcon from '@mui/icons-material/Person';
 import { Button, Typography } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -36,6 +37,10 @@ const CardIcon = styled(Paper)(({ theme }) => ({
 
 
 function AdminCard() {
+    const { productList } = useSelector((state) => state.productData)
+    const { orderList } = useSelector((state) => state.orderData)
+    const { adminUser, customers } = useSelector((state) => state.adminUserData)
+
     return (
         <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -55,7 +60,7 @@ function AdminCard() {
                             <WorkIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>4574</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{orderList?.all_orders?.length}</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -75,7 +80,7 @@ function AdminCard() {
                             <AccountTreeIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>6475</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{productList?.products?.length}</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -89,13 +94,13 @@ function AdminCard() {
                             color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Users
+                            Total Staff
                         </Typography>
                         <CardIcon>
                             <GroupsIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{adminUser?.users?.length}</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -109,13 +114,13 @@ function AdminCard() {
                             color='#fff'
                             sx={{ flexGrow: 1 }}
                         >
-                            Total Customers
+                            Total Users
                         </Typography>
                         <CardIcon>
                             <ShoppingCartIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>1432</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{customers?.length}</Typography>
                 </CardItem>
             </Grid>
         </Grid>

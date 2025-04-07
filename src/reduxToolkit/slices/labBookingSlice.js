@@ -4,6 +4,7 @@ const initialState = {
     labBookingList: [],
     newBooking: {},
     labBooking: {},
+    myBookings: []
 }
 const labBookingSlice = createSlice({
     name: 'lab_booking',
@@ -17,9 +18,12 @@ const labBookingSlice = createSlice({
         },
         getLabBooking: (state, { payload }) => {
             state.labBooking = payload
+        },
+        getMyLabBooking: (state, { payload }) => {
+            state.myBookings = payload
         }
     }
 })
 
-export const { addLabBooking, getLabBookings, getLabBooking } = labBookingSlice.actions
+export const { addLabBooking, getLabBookings, getLabBooking, getMyLabBooking } = labBookingSlice.actions
 export default labBookingSlice.reducer

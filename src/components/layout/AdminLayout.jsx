@@ -269,10 +269,15 @@ function AdminLayout(props) {
       path: "/admin/scan-list",
       name: "Scan List",
     },
+    {
+      id: 14,
+      path: "/admin/doctors",
+      name: "Doctors",
+    },
   ];
-  const mainMenu = userRoutes.slice(0, 13);
-  const filteredRoutes = userRoutes.slice(13, 16);
-  const filtereTwodRoutes = userRoutes.slice(13, userRoutes.length);
+  const mainMenu = userRoutes.slice(0, 14);
+  const filteredRoutes = userRoutes.slice(14, 16);
+  const filtereTwodRoutes = userRoutes.slice(14, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
