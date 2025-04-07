@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../reduxToolkit/slices/cartSlice";
 import { IMAGES } from "../common/images";
 import { GetProductCategoryService, GetProductCatsService } from "@/services/productService";
+import { PostCartService } from "@/services/cartService";
 
 const ProductCard = ({ data }) => {
   const { productCategory, categoryProducts } = useSelector((state) => state.productData);
@@ -75,7 +76,7 @@ const ProductCard = ({ data }) => {
                 <p className="text-black font-poppins font-semibold text-[14px] mt-1">
                   ${product?.price}
                 </p>
-                <button onClick={() => dispatch(addToCart(product))}>
+                <button onClick={() => dispatch(PostCartService(product))}>
                   <CartIcon />
                 </button>
               </div>

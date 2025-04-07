@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetProductService } from "@/services/productService";
 import { useParams, useRouter } from "next/navigation";
+import { PostCartService } from "@/services/cartService";
 
 const GenericProductList = () => {
   const { productList } = useSelector((state) => state.productData);
@@ -135,7 +136,7 @@ const GenericProductList = () => {
                 </div>
               </div>
             </div>
-              <FilterCompanyCard/>
+            <FilterCompanyCard />
           </div>
           <div className="w-[80%] flex-1 m-3">
             <h1 className="text-xl font-bold">Similar Product</h1>
@@ -192,7 +193,7 @@ const GenericProductList = () => {
                       <p className="text-black font-poppins font-semibold text-[14px] mt-1">
                         {product?.price}
                       </p>
-                      <button>
+                      <button onClick={() => dispatch(PostCartService(product))}>
                         <CartIcon />
                       </button>
                     </div>
