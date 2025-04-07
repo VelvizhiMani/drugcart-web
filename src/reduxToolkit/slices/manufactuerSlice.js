@@ -29,5 +29,5 @@ const manufactuerSlice = createSlice({
     }
 })
 
-export const { addManufactuer, getManufactuers, getManufactuer, getManufactuerLetter } = manufactuerSlice.actions
+export const { addManufactuer, getManufactuers, getManufactuer,getManufactuerUrl, getManufactuerLetter } = manufactuerSlice.actions
 export default manufactuerSlice.reducer
