@@ -1,8 +1,20 @@
 "use client";
 import Image from "next/image";
 import { IMAGES } from "@/components/common/images";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { GetSpecialListService } from "@/services/specialityService";
+import { useRouter } from "next/navigation";
 
 const Specialty = () => {
+    const { specialList } = useSelector((state) => state.specialityData)
+    const dispatch = useDispatch()
+    const router = useRouter()
+
+    useEffect(() => {
+        dispatch(GetSpecialListService())
+    }, [])
+
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap h-62 justify-center items-center bg-[#60D4FF]">
@@ -32,11 +44,23 @@ const Specialty = () => {
 
             <h2 className="text-md md:text-xl font-bold my-4 px-2">Most Visited Category</h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-2">
-                <div className="bg-pink-200 rounded-md border-[1.5px] shadow-lg overflow-hidden">
-                {/* <div className="bg-gradient-to-r from-indigo-200 from-10% via-sky-200 via-30% to-emerald-200 to-90% rounded-md border-[1.5px] shadow-lg overflow-hidden"> */}
-                    <Image src={IMAGES.SURGERY} alt="Surgery" className="w-full h-32 p-3 object-contain" />
-                    <h2 className="text-md md:text-xl font-bold py-2 text-center">Surgery</h2>
-                </div>
+                {specialList?.specialty_lists?.map((item, i) => (
+                    <div className="bg-pink-200 rounded-md border-[1.5px] shadow-lg overflow-hidden cursor-pointer" key={i} onClick={() => router.push(`/doctorlist/${item?.url}`)}>
+                        {/* <div className="bg-gradient-to-r from-indigo-200 from-10% via-sky-200 via-30% to-emerald-200 to-90% rounded-md border-[1.5px] shadow-lg overflow-hidden"> */}
+                        <Image
+                            className="w-full h-32 p-3 object-contain"
+                            src={
+                                item?.image
+                                    ? `https://assets2.drugcarts.com/${item?.image}`
+                                    : IMAGES.NO_IMAGE
+                            }
+                            alt={item?.specialty_name}
+                            width={250}
+                            height={250}
+                        />
+                        <h2 className="text-md md:text-xl font-bold py-2 text-center">{item?.specialty_name}</h2>
+                    </div>
+                ))}
             </div>
             <div className="bg-[#F3F8FC] p-4 mt-5">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

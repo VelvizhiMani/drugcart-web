@@ -4,6 +4,7 @@ const initialState = {
     specialList: [],
     newSpecial: {},
     special: {},
+    specialUrl: {}
 }
 const specialitySlice = createSlice({
     name: 'speciality',
@@ -17,9 +18,12 @@ const specialitySlice = createSlice({
         },
         getSpeciality: (state, { payload }) => {
             state.special = payload
+        },
+        getSpecialityUrl: (state, { payload }) => {
+            state.specialUrl = payload
         }
     }
 })
 
-export const { addSpeciality, getSpecialitys, getSpeciality } = specialitySlice.actions
+export const { addSpeciality, getSpecialitys, getSpeciality, getSpecialityUrl } = specialitySlice.actions
 export default specialitySlice.reducer

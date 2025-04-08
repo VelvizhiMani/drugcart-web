@@ -1,0 +1,104 @@
+'use client';
+import { GetSpecialUrlService } from '@/services/specialityService';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
+const DoctorPage = () => {
+    const dispatch = useDispatch()
+    const params = useParams()
+    const { specialUrl } = useSelector((state) => state.specialityData)
+
+    useEffect(() => {
+        dispatch(GetSpecialUrlService(params.url))
+    }, [params.url])
+
+    const doctors = [
+        {
+            name: 'Dr. Manish',
+            specialist: 'Surgery',
+            qualification: 'MBBS, M.S (General Surgeon)',
+            city: 'Gujarat, Udwada',
+            experience: '3 year',
+            language: 'English, Gujarati, Hindi',
+        },
+        {
+            name: 'Pwned by DarkLics',
+            specialist: 'Surgery',
+            qualification: '',
+            city: '',
+            experience: '',
+            language: '',
+        },
+    ];
+
+    return (
+        <div className="p-4">
+            <h2 className="text-xl font-semibol p-4 mb-6 shadow rounded-md">
+                {specialUrl?.specialty_name} Doctor List
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+                    {doctors.map((doctor, i) => (
+                        <div className="bg-white shadow p-4 rounded-md mb-6" key={i}>
+                            <div className="flex gap-4">
+                                <img src="https://assets3.drugcarts.com/colors/doctor-icon.png" alt="doctor" className="w-20 h-20" />
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-semibold">{doctor.name}</h3>
+                                    <p><strong>Specialist:</strong> {doctor.specialist}</p>
+                                    <p><strong>Qualification:</strong> {doctor.qualification || '-'}</p>
+                                    <p><strong>City:</strong> {doctor.city || '-'}</p>
+                                    {doctor.experience && (
+                                        <p className="flex items-center gap-1">
+                                            🎓 {doctor.experience}
+                                        </p>
+                                    )}
+                                    {doctor.language && (
+                                        <p><strong>Language:</strong> {doctor.language}</p>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                                <button className="bg-[#B7084B] text-white py-2 rounded">Call Doctor</button>
+                                <button className="bg-[#B7084B] text-white py-2 rounded">Consult Online</button>
+                                <button className="bg-[#B7084B] text-white py-2 rounded">Book Appointment</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="bg-gray-100 shadow rounded-md p-4">
+                    <h3 className="text-lg font-semibold mb-4">Have any Question?</h3>
+                    <form className="space-y-4">
+                        <input
+                            type="text"
+                            placeholder="Name"
+                            className="w-full border p-2 rounded"
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            className="w-full border p-2 rounded"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Contact No."
+                            className="w-full border p-2 rounded"
+                        />
+                        <textarea
+                            rows={4}
+                            placeholder="Question"
+                            className="w-full border p-2 rounded"
+                        />
+                        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default DoctorPage;

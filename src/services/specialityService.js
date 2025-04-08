@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addSpeciality, getSpecialitys, getSpeciality } from '../reduxToolkit/slices/specialitySlice'
+import { addSpeciality, getSpecialitys, getSpeciality, getSpecialityUrl } from '../reduxToolkit/slices/specialitySlice'
 
 const PostSpecialService = (data, resetForm) => async (dispatch) => {
     try {
@@ -19,8 +19,8 @@ const PostSpecialService = (data, resetForm) => async (dispatch) => {
 }
 
 const GetSpecialListService = (page = 1, limit, search = "") => async (dispatch) => {
+    dispatch(IsLoading(true))
     try {
-        dispatch(IsLoading(true))
         const getData = await axios.get(`/api/specialtylist?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
         dispatch(getSpecialitys(getData.data))
         dispatch(IsLoading(false))
@@ -35,6 +35,18 @@ const GetSpecialIdService = (id) => async (dispatch) => {
         dispatch(IsLoading(true))
         const getIdData = await axios.get(`/api/specialtylist/${id}`, { headers: await Authorization() })
         dispatch(getSpeciality(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetSpecialUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/specialtylist/specialist-view/${url}`, { headers: await Authorization() })
+        dispatch(getSpecialityUrl(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -61,4 +73,4 @@ const DeleteSpecialService = (id) => async (dispatch) => {
     })
 }
 
-export { PostSpecialService, GetSpecialListService, GetSpecialIdService, PutSpecialService, DeleteSpecialService }
+export { PostSpecialService, GetSpecialListService, GetSpecialIdService, GetSpecialUrlService, PutSpecialService, DeleteSpecialService }

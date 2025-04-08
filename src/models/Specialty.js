@@ -10,6 +10,10 @@ const specialtySchema = new Schema(
             type: String,
             required: true
         },
+        url: {
+            type: String,
+            default: ""
+        },
         image: {
             type: String,
             default: ""

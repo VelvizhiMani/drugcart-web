@@ -24,6 +24,12 @@ function SpecialityId() {
     const dispatch = useDispatch()
     const params = useParams()
 
+    const URLText = (text) => {
+        const splitText = text.split(" ")
+        const joinSpace = splitText.join("-").toLowerCase()
+        return joinSpace
+    }
+
     useEffect(() => {
         dispatch(GetSpecialIdService(params.id))
     }, [params.id])
@@ -32,6 +38,7 @@ function SpecialityId() {
         enableReinitialize: true,
         initialValues: {
             specialty_name: special?.specialty_name || "",
+            url: special?.url || "",
             image: special?.image || "",
             imagealt: special?.imagealt || "",
             metatitle: special?.metatitle || "",
@@ -52,6 +59,10 @@ function SpecialityId() {
         const file = event.target.files[0];
         formik.setFieldValue("image", URL.createObjectURL(file));
     };
+
+    useEffect(() => {
+        formik.values.url = URLText(formik.values.specialty_name)
+    }, [formik.values.specialty_name])
 
     return (
         <Box>
@@ -83,7 +94,7 @@ function SpecialityId() {
                 }}
             >
                 <Grid2 container spacing={2}>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"Specialty Name"}
                             value={formik.values.specialty_name}
@@ -94,7 +105,16 @@ function SpecialityId() {
                             error={formik.touched.specialty_name ? formik.errors.specialty_name : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <TextInput
+                            title={"URL"}
+                            value={URLText(formik.values.specialty_name)}
+                            onChange={formik.handleChange("url")}
+                            helperText={formik.touched.url ? formik.errors.url : null}
+                            error={formik.touched.url ? formik.errors.url : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Image"}
                             image={formik.values.image}
@@ -106,7 +126,7 @@ function SpecialityId() {
                             }
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"Image Alt Tag"}
                             value={formik.values.imagealt}
