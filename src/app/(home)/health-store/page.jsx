@@ -45,7 +45,7 @@ const HealthStore = () => {
         <div className="w-full md:w-1/2">
           <Image
             priority
-            src={IMAGES.HHEALTHSTOREBANNER}
+            src={IMAGES.HEALTHSTOREBAN}
             alt="Ayush Banner"
             className="w-[60%] h-[300px] rounded-lg mx-auto"
           />
