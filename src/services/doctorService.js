@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addDoctor, getDoctorList, getDoctor } from '../reduxToolkit/slices/doctorSlice'
+import { addDoctor, getDoctorList, getDoctor,  getDoctorUrl } from '../reduxToolkit/slices/doctorSlice'
 
 const PostDoctorService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetDoctorIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetDoctorUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/doctorlist/doctor-url/${url}`, { headers: await Authorization() })
+        dispatch(getDoctorUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutDoctorService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/doctorlist/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getDoctor(response.data))
@@ -62,4 +74,4 @@ const DeleteDoctorService = (id) => async (dispatch) => {
     })
 }
 
-export { PostDoctorService, GetDoctorService, GetDoctorIdService, PutDoctorService, DeleteDoctorService }
+export { PostDoctorService, GetDoctorService, GetDoctorIdService, GetDoctorUrlService, PutDoctorService, DeleteDoctorService }

@@ -1,5 +1,6 @@
 'use client';
 import { GetSpecialUrlService } from '@/services/specialityService';
+import { GetDoctorUrlService } from '@/services/doctorService';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -9,29 +10,12 @@ const DoctorPage = () => {
     const dispatch = useDispatch()
     const params = useParams()
     const { specialUrl } = useSelector((state) => state.specialityData)
+    const { doctorUrl } = useSelector((state) => state.doctorData)
 
     useEffect(() => {
         dispatch(GetSpecialUrlService(params.url))
+        dispatch(GetDoctorUrlService(params.url))
     }, [params.url])
-
-    const doctors = [
-        {
-            name: 'Dr. Manish',
-            specialist: 'Surgery',
-            qualification: 'MBBS, M.S (General Surgeon)',
-            city: 'Gujarat, Udwada',
-            experience: '3 year',
-            language: 'English, Gujarati, Hindi',
-        },
-        {
-            name: 'Pwned by DarkLics',
-            specialist: 'Surgery',
-            qualification: '',
-            city: '',
-            experience: '',
-            language: '',
-        },
-    ];
 
     return (
         <div className="p-4">
@@ -40,13 +24,13 @@ const DoctorPage = () => {
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
                 <div className="md:col-span-2">
-                    {doctors.map((doctor, i) => (
+                    {doctorUrl && doctorUrl.map((doctor, i) => (
                         <div className="bg-white shadow p-4 rounded-md mb-6" key={i}>
                             <div className="flex gap-4">
                                 <img src="https://assets3.drugcarts.com/colors/doctor-icon.png" alt="doctor" className="w-20 h-20" />
                                 <div className="flex-1">
-                                    <h3 className="text-xl font-semibold">{doctor.name}</h3>
-                                    <p><strong>Specialist:</strong> {doctor.specialist}</p>
+                                    <h3 className="text-xl font-semibold">{doctor.doctor_name}</h3>
+                                    <p><strong>Specialist:</strong> {doctor.specialist_name}</p>
                                     <p><strong>Qualification:</strong> {doctor.qualification || '-'}</p>
                                     <p><strong>City:</strong> {doctor.city || '-'}</p>
                                     {doctor.experience && (

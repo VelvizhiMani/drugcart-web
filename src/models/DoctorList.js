@@ -10,101 +10,105 @@ const doctorSchema = new Schema(
             type: String,
             required: true
         },
+        specialist_url: {
+            type: String,
+            default: ""
+        },
         doctor_name: {
             type: String,
-            defalut: ""
+            default: ""
         },
         url: {
             type: String,
-            defalut: ""
+            default: ""
         },
         picture: {
             type: String,
-            defalut: ""
+            default: ""
         },
         imagealt: {
             type: String,
-            defalut: ""
+            default: ""
         },
         doctor_no: {
             type: String,
-            defalut: ""
+            default: ""
         },
         gender: {
             type: String,
-            defalut: ""
+            default: ""
         },
         email: {
             type: String,
-            defalut: ""
+            default: ""
         },
         phone: {
             type: String,
-            defalut: ""
+            default: ""
         },
         language: {
             type: String,
-            defalut: ""
+            default: ""
         },
         experience: {
             type: String,
-            defalut: ""
+            default: ""
         },
         qualification: {
             type: String,
-            defalut: ""
+            default: ""
         },
         consult_fees: {
             type: String,
-            defalut: ""
+            default: ""
         },
         pwh: {
             type: String,
-            defalut: ""
+            default: ""
         },
         cwh_name: {
             type: String,
-            defalut: ""
+            default: ""
         },
         ug_degree: {
             type: String,
-            defalut: ""
+            default: ""
         },
         ug_city: {
             type: String,
-            defalut: ""
+            default: ""
         },
         ug_certificate: {
             type: String,
-            defalut: ""
+            default: ""
         },
         pg_degree: {
             type: String,
-            defalut: ""
+            default: ""
         },
         pg_city: {
             type: String,
-            defalut: ""
+            default: ""
         },
         pg_certificate: {
             type: String,
-            defalut: ""
+            default: ""
         },
         country: {
             type: String,
-            defalut: ""
+            default: ""
         },
         state: {
             type: String,
-            defalut: ""
+            default: ""
         },
         city: {
             type: String,
-            defalut: ""
+            default: ""
         },
         address: {
             type: String,
-            defalut: ""
+            default: ""
         },
         status: {
             type: String,
