@@ -2,13 +2,14 @@
 import { GetSpecialUrlService } from '@/services/specialityService';
 import { GetDoctorUrlService } from '@/services/doctorService';
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 const DoctorPage = () => {
     const dispatch = useDispatch()
     const params = useParams()
+    const router = useRouter()
     const { specialUrl } = useSelector((state) => state.specialityData)
     const { doctorUrl } = useSelector((state) => state.doctorData)
 
@@ -29,22 +30,22 @@ const DoctorPage = () => {
                             <div className="flex gap-4">
                                 <img src="https://assets3.drugcarts.com/colors/doctor-icon.png" alt="doctor" className="w-20 h-20" />
                                 <div className="flex-1">
-                                    <h3 className="text-xl font-semibold">{doctor.doctor_name}</h3>
-                                    <p><strong>Specialist:</strong> {doctor.specialist_name}</p>
-                                    <p><strong>Qualification:</strong> {doctor.qualification || '-'}</p>
-                                    <p><strong>City:</strong> {doctor.city || '-'}</p>
-                                    {doctor.experience && (
+                                    <h3 className="text-xl font-semibold">{doctor?.doctor_name}</h3>
+                                    <p><strong>Specialist:</strong> {doctor?.specialist_name}</p>
+                                    <p><strong>Qualification:</strong> {doctor?.qualification || '-'}</p>
+                                    <p><strong>City:</strong> {doctor?.city || '-'}</p>
+                                    {doctor?.experience && (
                                         <p className="flex items-center gap-1">
-                                            🎓 {doctor.experience}
+                                            🎓 {doctor?.experience}
                                         </p>
                                     )}
                                     {doctor.language && (
-                                        <p><strong>Language:</strong> {doctor.language}</p>
+                                        <p><strong>Language:</strong> {doctor?.language}</p>
                                     )}
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                                <button className="bg-[#B7084B] text-white py-2 rounded">Call Doctor</button>
+                                <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => router.push(`/call-doctor/${doctor?.url}`)}>Call Doctor</button>
                                 <button className="bg-[#B7084B] text-white py-2 rounded">Consult Online</button>
                                 <button className="bg-[#B7084B] text-white py-2 rounded">Book Appointment</button>
                             </div>
