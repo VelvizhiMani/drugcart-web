@@ -42,17 +42,26 @@ const callDoctorSchema = new Schema(
 callDoctorSchema.pre("save", async function (next) {
     if (!this.appoinment_id) {
         try {
-            const lastScan = await mongoose.model("CallDoctor").findOne({}, {}, { sort: { appoinment_id: -1 } });
+            const lastRecord = await mongoose
+                .model("CallDoctor")
+                .findOne({})
+                .sort({ createdAt: -1 });
 
-            let newBookingId = lastScan && lastScan.appoinment_id
-                ? parseInt(lastScan.appoinment_id) + 1
-                : 1;
+            let newIdNum = 1;
 
-            this.appoinment_id = `DC-appoinment${newBookingId.toString()}`;
+            if (lastRecord?.appoinment_id) {
+                const match = lastRecord.appoinment_id.match(/(\d+)$/);
+                if (match) {
+                    newIdNum = parseInt(match[1]) + 1;
+                }
+            }
+
+            this.appoinment_id = `DC-appoinment-${newIdNum}`;
         } catch (error) {
             return next(error);
         }
     }
+
     next();
 });
 
