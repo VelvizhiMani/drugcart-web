@@ -1,9 +1,50 @@
 'use client';
-import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { PostCallDoctorService, GetDoctorNameUrlService } from '@/services/doctorService';
 
 const CallDoctor = () => {
+    const { profile } = useSelector((state) => state.profileData);
+    const { doctorUrl, doctor_name_url } = useSelector((state) => state.doctorData);
     const [visitReason, setVisitReason] = useState('');
     const [paymentOption, setPaymentOption] = useState('');
+    const router = useRouter()
+    const dispatch = useDispatch()
+    const params = useParams()
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            doctor_name: doctor_name_url?.doctor_name || "",
+            customer_phone: profile?.phone,
+            consult_type: "Call Doctor",
+            reason: "",
+            payment_type: "",
+        },
+        validationSchema: yup.object({
+            reason: yup.string().required("reason type is required"),
+            payment_type: yup.string().required("payment_type is required"),
+        }),
+        onSubmit: async (data, { resetForm }) => {
+            await dispatch(PostCallDoctorService(data, resetForm));
+            resetForm();
+        },
+    });
+
+    useEffect(() => {
+        dispatch(GetDoctorNameUrlService(params?.url))
+    }, [params?.url])
+
+    // useEffect(() => {
+    //     if (Object.values(profile).length === 0) {
+    //         router.push(`/login`)
+    //     }
+    // }, [])
+
+
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">
@@ -16,10 +57,10 @@ const CallDoctor = () => {
                         <label key={option} className="flex items-center gap-2">
                             <input
                                 type="radio"
-                                name="visitReason"
+                                name="reason"
                                 value={option}
-                                checked={visitReason === option}
-                                onChange={() => setVisitReason(option)}
+                                checked={formik.values.reason === option}
+                                onChange={formik.handleChange}
                             />
                             {option}
                         </label>
@@ -40,10 +81,10 @@ const CallDoctor = () => {
                         <label key={option} className="flex items-center gap-2">
                             <input
                                 type="radio"
-                                name="visitReason"
+                                name="reason"
                                 value={option}
-                                checked={visitReason === option}
-                                onChange={() => setVisitReason(option)}
+                                checked={formik.values.reason === option}
+                                onChange={formik.handleChange}
                             />
                             {option}
                         </label>
@@ -64,10 +105,10 @@ const CallDoctor = () => {
                             <label key={option} className="flex items-center gap-2">
                                 <input
                                     type="radio"
-                                    name="paymentOption"
+                                    name="payment_type"
                                     value={option}
-                                    checked={paymentOption === option}
-                                    onChange={() => setPaymentOption(option)}
+                                    checked={formik.values.payment_type === option}
+                                    onChange={formik.handleChange}
                                 />
                                 {option}
                             </label>
@@ -77,8 +118,9 @@ const CallDoctor = () => {
 
                 <div className="text-right mt-6">
                     <button
+                        onClick={formik.handleSubmit}
                         className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
-                        disabled={!visitReason || !paymentOption}
+                        disabled={!formik.values.reason || !formik.values.payment_type}
                     >
                         Proceed to Payment
                     </button>

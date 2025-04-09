@@ -12,11 +12,20 @@ const DoctorPage = () => {
     const router = useRouter()
     const { specialUrl } = useSelector((state) => state.specialityData)
     const { doctorUrl } = useSelector((state) => state.doctorData)
+    const { profile } = useSelector((state) => state.profileData);
 
     useEffect(() => {
         dispatch(GetSpecialUrlService(params.url))
         dispatch(GetDoctorUrlService(params.url))
     }, [params.url])
+
+    const handleClick = (path) => {
+        if (Object.values(profile).length !== 0) {
+            router.push(`/call-doctor/${path}`)
+        } else {
+            router.push(`/login`)
+        }
+    }
 
     return (
         <div className="p-4">
@@ -45,7 +54,7 @@ const DoctorPage = () => {
                                 </div>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                                <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => router.push(`/call-doctor/${doctor?.url}`)}>Call Doctor</button>
+                                <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => handleClick(doctor?.url)}>Call Doctor</button>
                                 <button className="bg-[#B7084B] text-white py-2 rounded">Consult Online</button>
                                 <button className="bg-[#B7084B] text-white py-2 rounded">Book Appointment</button>
                             </div>

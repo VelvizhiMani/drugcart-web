@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addDoctor, getDoctorList, getDoctor,  getDoctorUrl } from '../reduxToolkit/slices/doctorSlice'
+import { addDoctor, getDoctorList, getDoctor,  getDoctorUrl, getDoctorNameUrl, addCallDoctor, getCallDoctorList } from '../reduxToolkit/slices/doctorSlice'
 
 const PostDoctorService = (data, resetForm) => async (dispatch) => {
     try {
@@ -46,8 +46,20 @@ const GetDoctorIdService = (id) => async (dispatch) => {
 const GetDoctorUrlService = (url) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getIdData = await axios.get(`/api/doctorlist/doctor-url/${url}`, { headers: await Authorization() })
+        const getIdData = await axios.get(`/api/doctorlist/specialist-url/${url}`, { headers: await Authorization() })
         dispatch(getDoctorUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetDoctorNameUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/doctorlist/doctor-name/${url}`, { headers: await Authorization() })
+        dispatch(getDoctorNameUrl(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -74,4 +86,32 @@ const DeleteDoctorService = (id) => async (dispatch) => {
     })
 }
 
-export { PostDoctorService, GetDoctorService, GetDoctorIdService, GetDoctorUrlService, PutDoctorService, DeleteDoctorService }
+const PostCallDoctorService = (data, resetForm) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const postData = await axios.post('/api/doctorlist/call-doctor', data, { headers: await Authorization() })
+        dispatch(addCallDoctor(postData.data))
+        // dispatch(GetDoctorIdService(postData.data?._id))
+        dispatch(IsLoading(false))
+        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
+        resetForm()
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+    }
+}
+
+const GetCallDoctorService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/doctorlist/call-doctor?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        dispatch(getCallDoctorList(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+export { PostDoctorService, GetDoctorService, GetDoctorIdService, GetDoctorUrlService, GetDoctorNameUrlService, PutDoctorService, DeleteDoctorService, PostCallDoctorService, GetCallDoctorService }
