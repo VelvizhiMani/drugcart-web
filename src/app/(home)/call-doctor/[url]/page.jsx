@@ -9,8 +9,6 @@ import { PostCallDoctorService, GetDoctorNameUrlService } from '@/services/docto
 const CallDoctor = () => {
     const { profile } = useSelector((state) => state.profileData);
     const { doctorUrl, doctor_name_url } = useSelector((state) => state.doctorData);
-    const [visitReason, setVisitReason] = useState('');
-    const [paymentOption, setPaymentOption] = useState('');
     const router = useRouter()
     const dispatch = useDispatch()
     const params = useParams()
@@ -43,8 +41,6 @@ const CallDoctor = () => {
     //         router.push(`/login`)
     //     }
     // }, [])
-
-
 
     return (
         <div className="min-h-screen bg-gray-100 p-4">

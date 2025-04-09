@@ -27,6 +27,14 @@ const DoctorPage = () => {
         }
     }
 
+    const handleOnlineClick = () => {
+        if (Object.values(profile).length !== 0) {
+            router.push(`/ask-doctor`)
+        } else {
+            router.push(`/login`)
+        }
+    }
+
     return (
         <div className="p-4">
             <h2 className="text-xl font-semibol p-4 mb-6 shadow rounded-md">
@@ -55,7 +63,7 @@ const DoctorPage = () => {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                                 <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => handleClick(doctor?.url)}>Call Doctor</button>
-                                <button className="bg-[#B7084B] text-white py-2 rounded">Consult Online</button>
+                                <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => handleOnlineClick()}>Consult Online</button>
                                 <button className="bg-[#B7084B] text-white py-2 rounded">Book Appointment</button>
                             </div>
                         </div>
