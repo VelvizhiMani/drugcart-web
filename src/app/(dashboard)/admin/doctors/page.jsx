@@ -8,7 +8,7 @@ import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { GetSpecialListService } from '@/services/specialityService';
-import { GetDoctorService } from '@/services/doctorService';
+import { GetDoctorService, GetCallDoctorListService } from '@/services/doctorService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -29,11 +29,12 @@ function DoctorPage() {
     const dispatch = useDispatch()
     const router = useRouter()
     const { specialList } = useSelector((state) => state.specialityData)
-    const { doctorList } = useSelector((state) => state.doctorData)
+    const { doctorList, callDoctorList } = useSelector((state) => state.doctorData)
 
     useEffect(() => {
         dispatch(GetSpecialListService())
         dispatch(GetDoctorService())
+        dispatch(GetCallDoctorListService())
     }, [])
 
     return (
@@ -71,6 +72,23 @@ function DoctorPage() {
                             </Typography>
                         </Box>
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{doctorList?.pagination?.totalItems}</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/calldoctor')}>
+                        <Box >
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Total Call Doctors
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{callDoctorList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>

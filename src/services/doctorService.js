@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addDoctor, getDoctorList, getDoctor,  getDoctorUrl, getDoctorNameUrl, addCallDoctor, getCallDoctorList } from '../reduxToolkit/slices/doctorSlice'
+import { addDoctor, getDoctorList, getDoctor,  getDoctorUrl, getDoctorNameUrl, addCallDoctor, getCallDoctorList, getCallDoctor } from '../reduxToolkit/slices/doctorSlice'
 
 const PostDoctorService = (data, resetForm) => async (dispatch) => {
     try {
@@ -102,7 +102,7 @@ const PostCallDoctorService = (data, resetForm) => async (dispatch) => {
     }
 }
 
-const GetCallDoctorService = (page = 1, limit, search = "") => async (dispatch) => {
+const GetCallDoctorListService = (page = 1, limit, search = "") => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/doctorlist/call-doctor?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
@@ -114,4 +114,16 @@ const GetCallDoctorService = (page = 1, limit, search = "") => async (dispatch) 
     }
 }
 
-export { PostDoctorService, GetDoctorService, GetDoctorIdService, GetDoctorUrlService, GetDoctorNameUrlService, PutDoctorService, DeleteDoctorService, PostCallDoctorService, GetCallDoctorService }
+const GetCallDoctorIdService = (id) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/doctorlist/call-doctor/${id}`, { headers: await Authorization() })
+        dispatch(getCallDoctor(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+export { PostDoctorService, GetDoctorService, GetDoctorIdService, GetDoctorUrlService, GetDoctorNameUrlService, PutDoctorService, DeleteDoctorService, PostCallDoctorService, GetCallDoctorListService, GetCallDoctorIdService }
