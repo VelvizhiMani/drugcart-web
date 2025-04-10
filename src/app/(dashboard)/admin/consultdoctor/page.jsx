@@ -54,7 +54,7 @@ function ConsultDoctorPage() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                   Consult Online Doctor Booking List
+                    Consult Online Doctor List
                 </Typography>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -80,6 +80,7 @@ function ConsultDoctorPage() {
                 >
                     <SearchInput
                         filterOption={true}
+                        placeholder="Appointment ID"
                         rowCount={8}
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
@@ -95,7 +96,7 @@ function ConsultDoctorPage() {
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Doctor Name</TableCell>
                             <TableCell style={rowText}>Customer Phone</TableCell>
-                            <TableCell style={rowText}>Appoinment ID</TableCell>
+                            <TableCell style={rowText}>Appointment ID</TableCell>
                             <TableCell style={rowText}>Consult Type</TableCell>
                             <TableCell style={rowText}>Date</TableCell>
                             <TableCell style={rowText}>Status</TableCell>

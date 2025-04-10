@@ -10,18 +10,18 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { GetAskOnlineIdService } from '@/services/doctorService';
+import { GetDoctorBookingIdService } from '@/services/doctorService';
 import { useDispatch, useSelector } from "react-redux";
 import { DateFormat } from '@/utils/dateFormat';
 
-function ViewConsultDoctor() {
-    const { askOnline } = useSelector((state) => state.doctorData);
+function ViewDoctorBooking() {
+    const { doctorBooking } = useSelector((state) => state.doctorData);
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
 
     useEffect(() => {
-        dispatch(GetAskOnlineIdService(params?.id))
+        dispatch(GetDoctorBookingIdService(params?.id))
     }, [params?.id])
 
     return (
@@ -33,15 +33,15 @@ function ViewConsultDoctor() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Consult Doctor
+                    Doctor Appointment
                 </Typography>
                 <Button
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/consultdoctor`)}
+                    onClick={() => router.push(`/admin/bookdoctor`)}
                 >
-                    Consult Doctor List
+                    Doctor Appointment List
                 </Button>
             </Box>
             <Paper
@@ -61,7 +61,7 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.doctor_name}
+                            {doctorBooking?.doctor_name}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -71,7 +71,7 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.phone}
+                            {doctorBooking?.phone}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -81,7 +81,17 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.name}
+                            {doctorBooking?.name}
+                        </Typography>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                            Customer Email:
+                        </Typography>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                            {doctorBooking?.email}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -91,7 +101,7 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.age}
+                            {doctorBooking?.age}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -101,27 +111,7 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.gender}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Weight:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.weight}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Height:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.height}
+                            {doctorBooking?.gender}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -131,57 +121,27 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.city}
+                            {doctorBooking?.city}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Consultation:
+                            Appointment Date:
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.consultation}
+                              {DateFormat(doctorBooking?.date)}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Medication:
+                            City:
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.medication}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Allergies:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.allergies}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Conditions:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.conditions}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Consult Type:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.consult_type}
+                            {doctorBooking?.time}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -191,17 +151,7 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.payment_type}
-                        </Typography>
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 4 }}>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
-                            Date:
-                        </Typography>
-                        <Typography
-                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {DateFormat(askOnline?.createdAt)}
+                            {doctorBooking?.payment_type}
                         </Typography>
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>
@@ -211,7 +161,7 @@ function ViewConsultDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                            {askOnline?.appoinment_id}
+                            {doctorBooking?.appoinment_id}
                         </Typography>
                     </Grid2>
                 </Grid2>
@@ -220,4 +170,4 @@ function ViewConsultDoctor() {
     );
 }
 
-export default ViewConsultDoctor;
+export default ViewDoctorBooking;

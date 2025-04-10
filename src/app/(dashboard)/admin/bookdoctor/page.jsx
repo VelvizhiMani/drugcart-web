@@ -15,15 +15,15 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { GetCallDoctorListService } from '@/services/doctorService';
+import { GetDoctorBookingListService } from '@/services/doctorService';
 import { DateFormat } from '@/utils/dateFormat';
 
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function CallDoctorPage() {
-    const { callDoctorList } = useSelector((state) => state.doctorData)
+function BookDoctorPage() {
+    const { doctorBookingList } = useSelector((state) => state.doctorData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
@@ -38,11 +38,11 @@ function CallDoctorPage() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetCallDoctorListService(page, showNo, search))
+        dispatch(GetDoctorBookingListService(page, showNo, search))
     }, [page, showNo, search])
 
     const searchSubmit = () => {
-        dispatch(GetCallDoctorListService(page, showNo, search))
+        dispatch(GetDoctorBookingListService(page, showNo, search))
     }
 
     return (
@@ -54,7 +54,7 @@ function CallDoctorPage() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Call Doctor List
+                    Doctor Appointemnt List
                 </Typography>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -97,8 +97,8 @@ function CallDoctorPage() {
                             <TableCell style={rowText}>Doctor Name</TableCell>
                             <TableCell style={rowText}>Customer Phone</TableCell>
                             <TableCell style={rowText}>Appointment ID</TableCell>
-                            <TableCell style={rowText}>Consult Type</TableCell>
-                            <TableCell style={rowText}>Date</TableCell>
+                            <TableCell style={rowText}>Appointment Date</TableCell>
+                            <TableCell style={rowText}>Appointment Time</TableCell>
                             <TableCell style={rowText}>Status</TableCell>
                             <TableCell align="right" style={rowText}>
                                 Action
@@ -106,7 +106,7 @@ function CallDoctorPage() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {callDoctorList && callDoctorList?.call_doctors?.map((row, i) => (
+                        {doctorBookingList && doctorBookingList?.doctor_bookings?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -122,16 +122,16 @@ function CallDoctorPage() {
                                     {row?.doctor_name}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.customer_phone}
+                                    {row?.phone}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.appoinment_id}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.consult_type}
+                                    {DateFormat(row?.createdAt)}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {DateFormat(row?.createdAt)}
+                                    {row?.time}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.status}
@@ -141,7 +141,7 @@ function CallDoctorPage() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/calldoctor/${row?._id}`)
+                                        router.push(`/admin/bookdoctor/${row?._id}`)
                                     }}>
                                         <VisibilityIcon color="primary" />
                                     </button>
@@ -159,11 +159,11 @@ function CallDoctorPage() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {callDoctorList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {doctorBookingList?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"
-                    count={callDoctorList?.pagination?.totalPages}
+                    count={doctorBookingList?.pagination?.totalPages}
                     page={page}
                     color="secondary"
                     onChange={(_, value) => setPage(value)}
@@ -173,4 +173,4 @@ function CallDoctorPage() {
     );
 }
 
-export default CallDoctorPage;
+export default BookDoctorPage;

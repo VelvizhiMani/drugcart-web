@@ -21,7 +21,7 @@ function DoctorBookingPage() {
             name: "",
             age: "",
             email: "",
-            phone: profile?.phone,
+            phone: profile?.phone || "",
             gender: "",
             city: "",
             date: "",
