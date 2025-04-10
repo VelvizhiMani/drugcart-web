@@ -54,7 +54,7 @@ function BookDoctorPage() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Doctor Appointemnt List
+                    Doctor Appointment List
                 </Typography>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
