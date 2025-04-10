@@ -27,9 +27,9 @@ const DoctorPage = () => {
         }
     }
 
-    const handleOnlineClick = () => {
+    const handleOnlineClick = (path) => {
         if (Object.values(profile).length !== 0) {
-            router.push(`/ask-doctor`)
+            router.push(`/ask-online/${path}`)
         } else {
             router.push(`/login`)
         }
@@ -63,7 +63,7 @@ const DoctorPage = () => {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                                 <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => handleClick(doctor?.url)}>Call Doctor</button>
-                                <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => handleOnlineClick()}>Consult Online</button>
+                                <button className="bg-[#B7084B] text-white py-2 rounded" onClick={() => handleOnlineClick(doctor?.url)}>Consult Online</button>
                                 <button className="bg-[#B7084B] text-white py-2 rounded">Book Appointment</button>
                             </div>
                         </div>

@@ -1,7 +1,19 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addDoctor, getDoctorList, getDoctor,  getDoctorUrl, getDoctorNameUrl, addCallDoctor, getCallDoctorList, getCallDoctor } from '../reduxToolkit/slices/doctorSlice'
+import {
+    addDoctor,
+    getDoctorList,
+    getDoctor,
+    getDoctorUrl,
+    getDoctorNameUrl,
+    addCallDoctor,
+    getCallDoctorList,
+    getCallDoctor,
+    addAskOnline,
+    getAskOnline,
+    getAskOnlineList,
+} from '../reduxToolkit/slices/doctorSlice'
 
 const PostDoctorService = (data, resetForm) => async (dispatch) => {
     try {
@@ -93,7 +105,7 @@ const PostCallDoctorService = (data, resetForm) => async (dispatch) => {
         dispatch(addCallDoctor(postData.data))
         // dispatch(GetDoctorIdService(postData.data?._id))
         dispatch(IsLoading(false))
-        dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
+        dispatch(showToast({ message: "Submit Successfully!!!", severity: "success" }))
         resetForm()
     } catch (error) {
         dispatch(IsLoading(false))
@@ -126,4 +138,58 @@ const GetCallDoctorIdService = (id) => async (dispatch) => {
     }
 }
 
-export { PostDoctorService, GetDoctorService, GetDoctorIdService, GetDoctorUrlService, GetDoctorNameUrlService, PutDoctorService, DeleteDoctorService, PostCallDoctorService, GetCallDoctorListService, GetCallDoctorIdService }
+const PostAskOnlineService = (data, resetForm) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const postData = await axios.post('/api/doctorlist/ask-online', data, { headers: await Authorization() })
+        dispatch(addAskOnline(postData.data))
+        // dispatch(GetDoctorIdService(postData.data?._id))
+        dispatch(IsLoading(false))
+        dispatch(showToast({ message: "Submit Successfully!!!", severity: "success" }))
+        resetForm()
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+    }
+}
+
+const GetAskOnlineListService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/doctorlist/ask-online?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        dispatch(getAskOnlineList(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetAskOnlineIdService = (id) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/doctorlist/ask-online/${id}`, { headers: await Authorization() })
+        dispatch(getAskOnline(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+export {
+    PostDoctorService,
+    GetDoctorService,
+    GetDoctorIdService,
+    GetDoctorUrlService,
+    GetDoctorNameUrlService,
+    PutDoctorService,
+    DeleteDoctorService,
+    PostCallDoctorService,
+    GetCallDoctorListService,
+    GetCallDoctorIdService,
+    PostAskOnlineService,
+    GetAskOnlineListService,
+    GetAskOnlineIdService
+}

@@ -6,9 +6,12 @@ const initialState = {
     doctor: {},
     doctorUrl: [],
     callDoctorList: [],
+    callDoctorId: {},
     newCallDoctor: {},
     doctor_name_url: {},
-    callDoctorId: {}
+    askOnlineList: [],
+    newAskOnline: {},
+    askOnline: {}
 }
 const doctorSlice = createSlice({
     name: 'doctor',
@@ -38,8 +41,29 @@ const doctorSlice = createSlice({
         getCallDoctor: (state, { payload }) => {
             state.callDoctorId = payload
         },
+        getAskOnlineList: (state, { payload }) => {
+            state.askOnlineList = payload
+        },
+        addAskOnline: (state, { payload }) => {
+            state.newAskOnline = payload
+        },
+        getAskOnline: (state, { payload }) => {
+            state.askOnline = payload
+        },
     }
 })
 
-export const { addDoctor, getDoctorList, getDoctor, getDoctorUrl, getDoctorNameUrl, getCallDoctorList, addCallDoctor, getCallDoctor } = doctorSlice.actions
+export const {
+    addDoctor,
+    getDoctorList,
+    getDoctor,
+    getDoctorUrl,
+    getDoctorNameUrl,
+    getCallDoctorList,
+    addCallDoctor,
+    getCallDoctor,
+    getAskOnlineList,
+    addAskOnline,
+    getAskOnline
+} = doctorSlice.actions
 export default doctorSlice.reducer
