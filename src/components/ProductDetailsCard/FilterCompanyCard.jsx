@@ -28,11 +28,11 @@ const FilterCompanyCard = () => {
       </div>
       <div className="items-center justify-start gap-2 border-[1.5px] mb-10 h-[50vh] overflow-auto">
         {companys.map((company, i) => (
-          <Link href={company?.url}>
-            <div className="py-3 border-b-[1.5px] pb-2" key={i}>
-                  <h3 className="font-bold text-sm ml-2">{company?.name}</h3>
-                </div>
-          </Link>
+          <div className="py-3 border-b-[1.5px] pb-2" key={i}>
+            <Link href={company?.url}>
+              <h3 className="font-bold text-sm ml-2">{company?.name}</h3>
+            </Link>
+          </div>
         ))}
       </div>
     </>
