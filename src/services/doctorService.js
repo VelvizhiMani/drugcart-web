@@ -13,6 +13,9 @@ import {
     addAskOnline,
     getAskOnline,
     getAskOnlineList,
+    getDoctorBooking,
+    addDoctorBooking,
+    getDoctorBookingList
 } from '../reduxToolkit/slices/doctorSlice'
 
 const PostDoctorService = (data, resetForm) => async (dispatch) => {
@@ -178,6 +181,46 @@ const GetAskOnlineIdService = (id) => async (dispatch) => {
     }
 }
 
+const PostDoctorBookingService = (data, resetForm) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const postData = await axios.post('/api/doctorlist/doctor-booking', data, { headers: await Authorization() })
+        dispatch(addDoctorBooking(postData.data))
+        // dispatch(GetDoctorIdService(postData.data?._id))
+        dispatch(IsLoading(false))
+        dispatch(showToast({ message: "Submit Successfully!!!", severity: "success" }))
+        resetForm()
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+    }
+}
+
+const GetDoctorBookingListService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/doctorlist/doctor-booking?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        dispatch(getDoctorBookingList(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetDoctorBookingIdService = (id) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/doctorlist/doctor-booking/${id}`, { headers: await Authorization() })
+        dispatch(getDoctorBooking(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 export {
     PostDoctorService,
     GetDoctorService,
@@ -191,5 +234,8 @@ export {
     GetCallDoctorIdService,
     PostAskOnlineService,
     GetAskOnlineListService,
-    GetAskOnlineIdService
+    GetAskOnlineIdService,
+    PostDoctorBookingService,
+    GetDoctorBookingListService,
+    GetDoctorBookingIdService
 }
