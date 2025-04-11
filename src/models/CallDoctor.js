@@ -14,6 +14,10 @@ const callDoctorSchema = new Schema(
             type: String,
             default: ""
         },
+        customer_name: {
+            type: String,
+            default: ""
+        },
         appoinment_id: {
             type: String,
             unique: true

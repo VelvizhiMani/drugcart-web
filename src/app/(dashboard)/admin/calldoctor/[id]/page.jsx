@@ -71,6 +71,16 @@ function ViewCallDoctor() {
                         </Typography>
                         <Typography
                             sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                            {callDoctorId?.customer_name}
+                        </Typography>
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 4 }}>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                            Customer Phone:
+                        </Typography>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
                             {callDoctorId?.customer_phone}
                         </Typography>
                     </Grid2>
