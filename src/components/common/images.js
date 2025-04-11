@@ -241,6 +241,7 @@ const IMAGES = {
   TURMERIC: require("@/assets/common/tumeric.png"),
   HEALTHTIPS: require("@/assets/common/health-tips.jpg"),
   HEALTHTIPSBANNER: require("@/assets/common/health-tips-banner.png"),
+  HEALTHSTOREBAN: require("@/assets/common/healthstoreban.png"),
   HEALTHNEWS: require("@/assets/common/health-news.jpg"),
   HEALTHNEWSBANNER: require("@/assets/common/health-news-banner.jpg"),
   HERBSBANNER: require("@/assets/common/herbs-banner.jpg"),
