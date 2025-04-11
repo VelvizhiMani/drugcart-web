@@ -25,6 +25,7 @@ export async function POST(request) {
         const {
             doctor_name,
             customer_phone,
+            customer_name,
             consult_type,
             reason,
             payment_type
@@ -34,6 +35,7 @@ export async function POST(request) {
             userId: user?._id,
             doctor_name,
             customer_phone,
+            customer_name,
             consult_type,
             reason,
             payment_type

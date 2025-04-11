@@ -18,6 +18,7 @@ const CallDoctor = () => {
         initialValues: {
             doctor_name: doctor_name_url?.doctor_name || "",
             customer_phone: profile?.phone,
+            customer_name: profile?.username || "",
             consult_type: "Call Doctor",
             reason: "",
             payment_type: "",
@@ -90,7 +91,7 @@ const CallDoctor = () => {
                 <div className="border-t pt-4 mt-6">
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-semibold">PAYMENT OPTIONS (Choose Any One)</span>
-                        <span className="text-sm">Amount Payable: <strong>₹350</strong></span>
+                        <span className="text-sm">Amount Payable: <strong>₹{doctor_name_url?.consult_fees}</strong></span>
                     </div>
 
                     <div className="space-y-2">

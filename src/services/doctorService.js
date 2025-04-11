@@ -187,7 +187,7 @@ const PostDoctorBookingService = (data, resetForm) => async (dispatch) => {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/doctorlist/doctor-booking', data, { headers: await Authorization() })
         dispatch(addDoctorBooking(postData.data))
-        // dispatch(GetDoctorIdService(postData.data?._id))
+        dispatch(GetDoctorBookingIdService(postData.data?._id))
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Submit Successfully!!!", severity: "success" }))
         resetForm()
