@@ -2,9 +2,11 @@
 import { GetSpecialUrlService } from '@/services/specialityService';
 import { GetDoctorUrlService } from '@/services/doctorService';
 import Image from 'next/image';
+import { useFormik } from "formik";
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { PostQuestionService } from '@/services/questionService';
 
 const DoctorPage = () => {
     const dispatch = useDispatch()
@@ -13,6 +15,19 @@ const DoctorPage = () => {
     const { specialUrl } = useSelector((state) => state.specialityData)
     const { doctorUrl } = useSelector((state) => state.doctorData)
     const { profile } = useSelector((state) => state.profileData);
+
+    const formik = useFormik({
+        initialValues: {
+            name: "",
+            email: "",
+            mobile: "",
+            question: "",
+        },
+        onSubmit: async (data, { resetForm }) => {
+            console.log(data);
+            await dispatch(PostQuestionService(data, resetForm))
+        },
+    });
 
     useEffect(() => {
         dispatch(GetSpecialUrlService(params.url))
@@ -78,28 +93,44 @@ const DoctorPage = () => {
                     ))}
                 </div>
 
-                <div className="bg-gray-100 shadow rounded-md p-4">
+                <div className="bg-gray-100 shadow rounded-md p-4" onSubmit={formik.handleSubmit}>
                     <h3 className="text-lg font-semibold mb-4">Have any Question?</h3>
                     <form className="space-y-4">
                         <input
                             type="text"
+                            name="name"
                             placeholder="Name"
                             className="w-full border p-2 rounded"
+                            value={formik.values.name}
+                            onChange={formik.handleChange("name")}
+                            required
                         />
                         <input
+                            name="email"
                             type="email"
                             placeholder="Email"
                             className="w-full border p-2 rounded"
+                            value={formik.values.email}
+                            onChange={formik.handleChange("email")}
+                            required
                         />
                         <input
-                            type="text"
+                            type="number"
+                            name="mobile"
                             placeholder="Contact No."
                             className="w-full border p-2 rounded"
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange("mobile")}
+                            required
                         />
                         <textarea
                             rows={4}
                             placeholder="Question"
+                            name="question"
                             className="w-full border p-2 rounded"
+                            value={formik.values.question}
+                            onChange={formik.handleChange("question")}
+                            required
                         />
                         <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
                             Submit
