@@ -10,9 +10,11 @@ import { useEffect } from "react";
 import { GetProductService } from "@/services/productService"
 import { getCartService, PostCartService } from "@/services/cartService"
 import { addToCart } from "../../reduxToolkit/slices/cartSlice";
+import { useRouter } from "next/navigation";
 
 const TrandingProduct = () => {
   const { productList } = useSelector((state) => state.productData)
+  const router = useRouter()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -144,10 +146,10 @@ const TrandingProduct = () => {
                   alt={product?.product_name}
                   className="w-48 h-48 ml-3"
                 />
-                <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1">
+                <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 cursor-pointer" onClick={() => router.push(`/product/${product?.url}`)}>
                   {product?.product_name}
                 </h3>
-                <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1">
+                <p className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer" onClick={() => router.push(`/product/${product?.url}`)}>
                   {product?.product_name}
                 </p>
                 <div className="bg-white mt-1 flex justify-items-center justify-between">

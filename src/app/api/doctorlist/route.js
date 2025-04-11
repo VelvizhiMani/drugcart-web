@@ -24,6 +24,7 @@ export async function POST(request) {
 
         const {
             specialist_name,
+            specialist_url,
             doctor_name,
             url,
             picture,
@@ -58,6 +59,7 @@ export async function POST(request) {
         const addDoctorList = new DoctorList({
             userId: user?._id,
             specialist_name,
+            specialist_url,
             doctor_name,
             url,
             picture,

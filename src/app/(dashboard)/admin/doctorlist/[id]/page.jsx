@@ -38,6 +38,7 @@ function EditDoctor() {
         enableReinitialize: true,
         initialValues: {
             specialist_name: doctor?.specialist_name || "",
+            specialist_url: doctor?.specialist_url || "",
             doctor_name: doctor?.doctor_name || "",
             url: doctor?.url || "",
             picture: doctor?.picture || "",
@@ -116,7 +117,8 @@ function EditDoctor() {
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.doctor_name)
-    }, [formik.values.doctor_name])
+        formik.values.specialist_url = URLText(formik.values.specialist_name)
+    }, [formik.values.doctor_name, formik.values.specialist_name])
 
     return (
         <Box>

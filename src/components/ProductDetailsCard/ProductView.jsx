@@ -16,7 +16,7 @@ import { GetSubCateUrlService } from "@/services/subCategoryService";
 import { GetAddStorageIdService } from "@/services/storageService";
 import { GetManufactuerUrlService } from "@/services/manufactuerService";
 import { GetAddPackageIdService } from "@/services/packageService";
-import { getCartService, PostCartService } from "@/services/cartService";
+import { CartDecrementService, CartIncrementService, getCartService, PostCartService } from "@/services/cartService";
 import MostSearchCategory from "./leftsection/MostSearchCategory";
 import LeftService from "./leftsection/LeftService";
 import LeftScan from "./leftsection/LeftScan";
@@ -76,6 +76,9 @@ const ProductView = ({ url }) => {
     router.push("/prescription");
   };
 
+
+  const cartDetails = onAuth?.filter((cartItem) => cartItem?.url === url)
+  console.log("cartDetails", cartDetails);
   return (
     <>
       <section className="px-3 mt-3">
@@ -159,41 +162,49 @@ const ProductView = ({ url }) => {
                 </h3>
                 <h3 className="text-md">(inclusive of all taxes)</h3>
               </div>
-              <div className="flex items-center mt-3 gap-3 bg-white p-3 w-76 md:w-80 rounded-lg">
-                <h3 className="font-bold text-sm md:text-md">Qty</h3>
-                <div className="flex items-center text-sm md:text-md gap-5 bg-pink-100 px-2 py-[0.5px] rounded-md">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M5 12h14"
-                    />
-                  </svg>
-                  <p>3</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
-                  </svg>
+              {cartDetails?.[0]?.quantity ? (
+                <div className="flex items-center mt-3 gap-3 bg-white p-3 w-76 md:w-80 rounded-lg">
+                  <h3 className="font-bold text-sm md:text-md">Qty</h3>
+                  <div className="flex items-center text-sm md:text-md gap-5 bg-pink-100 px-2 py-[0.5px] rounded-md">
+                    <svg
+                      onClick={() => {
+                        if (cartDetails?.[0]?.quantity > 1) {
+                          dispatch(CartDecrementService(cartDetails?.[0]?._id, { quantity: cartDetails?.[0]?.quantity - 1 }))
+                        }
+                      }}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-5 cursor-pointer"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 12h14"
+                      />
+                    </svg>
+                    <p>{cartDetails?.[0]?.quantity}</p>
+                    <svg
+                      onClick={() => dispatch(CartIncrementService(cartDetails?.[0]?._id, { quantity: cartDetails?.[0]?.quantity + 1 }))}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="size-5 cursor-pointer"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-xs md:text-md">10 Capsule(s) in Strip</p>
                 </div>
-                <p className="text-xs md:text-md">10 Capsule(s) in Strip</p>
-              </div>
+              ) : null}
               <div className="flex items-center gap-3 mt-3">
                 <button
                   className="bg-[#4CAF50] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-3 rounded shadow-md"
@@ -219,7 +230,7 @@ const ProductView = ({ url }) => {
                     <span className="text-md">Add to cart</span>
                   </div>
                 </button>
-                <button className="bg-[#B7084B] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-4 rounded shadow-md">
+                <button className="bg-[#B7084B] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-4 rounded shadow-md" onClick={() => router.push('/cart')}>
                   <div className="flex justify-center items-center gap-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

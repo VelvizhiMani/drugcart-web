@@ -24,6 +24,7 @@ export async function POST(request) {
 
         const {
             specialty_name,
+            url,
             image,
             imagealt,
             metatitle,
@@ -38,6 +39,7 @@ export async function POST(request) {
 
         const addSpecialty = new Specialty({
             userId: user?._id,
+            url,
             specialty_name,
             image,
             imagealt,

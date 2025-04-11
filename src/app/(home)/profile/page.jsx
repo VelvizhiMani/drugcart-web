@@ -25,6 +25,7 @@ import MyAddress from '@/components/profile/MyAddress';
 import MyPrescription from '@/components/profile/MyPrescription';
 import MyLab from '@/components/profile/MyLab';
 import AddressForm from "@/components/common/AddressForm";
+import MyAppointment from "@/components/profile/MyAppointment";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAddressIdService } from '@/services/addressService';
 
@@ -239,6 +240,11 @@ export default function ProfileTab() {
                         {activeTab === 'labtest' && (
                             <div>
                                 <MyLab />
+                            </div>
+                        )}
+                        {activeTab === 'appointment' && (
+                            <div>
+                                <MyAppointment />
                             </div>
                         )}
                     </div>

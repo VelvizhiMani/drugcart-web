@@ -34,6 +34,7 @@ function DoctorAdd() {
     const formik = useFormik({
         initialValues: {
             specialist_name: "",
+            specialist_url: "",
             doctor_name: "",
             url: "",
             picture: "",
@@ -112,7 +113,8 @@ function DoctorAdd() {
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.doctor_name)
-    }, [formik.values.doctor_name])
+        formik.values.specialist_url = URLText(formik.values.specialist_name)
+    }, [formik.values.doctor_name, formik.values.specialist_name])
 
     return (
         <Box>
