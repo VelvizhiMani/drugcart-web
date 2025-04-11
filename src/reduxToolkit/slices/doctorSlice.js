@@ -15,6 +15,7 @@ const initialState = {
     doctorBookingList: [],
     newDoctorBooking: {},
     doctorBooking: {},
+    myAppointments: []
 }
 const doctorSlice = createSlice({
     name: 'doctor',
@@ -62,6 +63,9 @@ const doctorSlice = createSlice({
         getDoctorBooking: (state, { payload }) => {
             state.doctorBooking = payload
         },
+        getDoctorAppointment: (state, { payload }) => {
+            state.myAppointments = payload
+        },
     }
 })
 
@@ -79,6 +83,7 @@ export const {
     getAskOnline,
     getDoctorBookingList,
     addDoctorBooking,
-    getDoctorBooking
+    getDoctorBooking,
+    getDoctorAppointment
 } = doctorSlice.actions
 export default doctorSlice.reducer

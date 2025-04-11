@@ -15,7 +15,8 @@ import {
     getAskOnlineList,
     getDoctorBooking,
     addDoctorBooking,
-    getDoctorBookingList
+    getDoctorBookingList,
+    getDoctorAppointment
 } from '../reduxToolkit/slices/doctorSlice'
 
 const PostDoctorService = (data, resetForm) => async (dispatch) => {
@@ -221,6 +222,18 @@ const GetDoctorBookingIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetMyDoctorAppointmentService = (startDate = "", endDate = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/doctorlist/doctor-booking/my-appointment/?startDate=${startDate}&endDate=${endDate}`, { headers: await Authorization() })
+        dispatch(getDoctorAppointment(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 export {
     PostDoctorService,
     GetDoctorService,
@@ -237,5 +250,6 @@ export {
     GetAskOnlineIdService,
     PostDoctorBookingService,
     GetDoctorBookingListService,
-    GetDoctorBookingIdService
+    GetDoctorBookingIdService,
+    GetMyDoctorAppointmentService
 }

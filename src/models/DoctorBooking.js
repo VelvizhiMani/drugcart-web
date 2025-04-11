@@ -35,7 +35,7 @@ const doctorBookingSchema = new Schema(
             default: ""
         },
         date: {
-            type: String,
+            type: Date,
             default: ""
         },
         time: {
