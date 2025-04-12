@@ -8,32 +8,22 @@ const Footer = () => {
     <>
       <section className="mt-3 bg-[#B7084B]">
         <div className="flex flex-wrap mx-auto p-4 justify-center items-center">
-          <div className="w-full md:w-1/3 lg:w-1/6 pb-5">
-            <div className="flex justify-center">
-              <Image
-                priority
-                src={IMAGES.LOGO}
-                alt="Logo"
-                className="w-80 object-cover justify-center"
-              />
-            </div>
-          </div>
-          <div className="w-full  md:w-2/3  lg:w-2/6 text-center pb-5">
-            <h4 className="text-white text-2xl pb-4">
+          <div className="w-full md:w-3/12 text-center pb-5">
+            <h4 className="text-white text-2xl pb-3">
               We offer 24/7 dedicated support
             </h4>
             <p className="text-white text-sm">
               If you need support send us a message
             </p>
           </div>
-          <div className="w-full md:w-1/3 lg:w-1/6 pb-5">
+          <div className="w-full md:w-3/12 mx-auto text-center pb-5">
             <div className="flex justify-center items-center">
               <input
                 type="text"
                 placeholder="Enter your Email"
                 // value={query}
                 // onChange={(e) => setQuery(e.target.value)}
-                className="w-4/6 md:w-36 px-1 py-2 h-10 border-red-100 text-gray-700 focus:outline-none rounded-l"
+                className="w-6/6 md:w-[70%] px-1 py-2 h-10 border-red-100 text-gray-700 focus:outline-none rounded-l"
               />
               <button
                 // onClick={handleSearch}
@@ -59,7 +49,7 @@ const Footer = () => {
               </button>
             </div>
           </div>
-          <div className="w-full  md:w-1/3 lg:w-1/6  pb-5">
+          <div className="w-full md:w-3/12 text-center pb-5">
             <div className="flex justify-center items-center">
               <svg
                 width="36"
@@ -84,7 +74,7 @@ const Footer = () => {
               </p>
             </div>
           </div>
-          <div className="w-full  md:w-1/3 lg:w-1/6">
+          <div className="w-full md:w-3/12 text-center pb-2">
             <h5 className="text-center justify-center font-bold pb-3 text-white">
               Our Social Media
             </h5>
