@@ -49,11 +49,11 @@ const ContactUs = () => {
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             <div className="flex flex-wrap justify-center items-center bg-[#117DA6]">
-                <div className="w-full md:w-1/2 text-center px-6">
+                <div className="w-full md:w-1/2 text-center px-6 py-4">
                     <p className="text-xl text-white">Drugcarts bringing all the service in a single digital
                         platform connecting multiple services in just
                         one touch of click</p>
-                    <button className="bg-[#51B015] py-2 px-4 text-white mt-5 rounded-lg">Contact Us</button>
+                    <button className="bg-[#51B015] py-2 px-4 text-white mt-5 rounded-lg font-bold">Contact Us</button>
                 </div>
                 <div className="w-full md:w-1/2">
                     <Image
