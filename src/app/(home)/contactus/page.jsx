@@ -9,7 +9,7 @@ import RecommendIcon from '@mui/icons-material/Recommend';
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useDispatch } from 'react-redux';
-import { PostContacUsService } from "../../../services/contactService";
+import { PostContacUsService } from "@/services/contactService";
 
 const options = [
     { id: "medicine", label: "Medicine" },
