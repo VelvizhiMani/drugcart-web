@@ -154,7 +154,7 @@ const Footer = () => {
                 <li><Link href={'/feedback'}>Feedback</Link></li>
                 <li><Link href={'/contactus'}>Contact Us</Link></li>
                 <li><Link href={'/promotion'}>Promotion</Link></li>
-                <li><Link href={'/prescription'}>Prescription</Link></li>
+                <li><Link href={'/prescription-upload'}>Prescription</Link></li>
                 <li><Link href={'/franchise'}>Franchise</Link></li>
                 <li><Link href={'/storelocator'}>Store Locator</Link></li>
               </ul>
