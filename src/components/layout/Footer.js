@@ -162,7 +162,7 @@ const Footer = () => {
                 <li><Link href={'/about-us'}>About Drugcarts</Link></li>
                 <li><Link href={'/needhelp'}>Need Help</Link></li>
                 <li><Link href={'/feedback'}>Feedback</Link></li>
-                <li><Link href={'/feedback'}>Contact Us</Link></li>
+                <li><Link href={'/contactus'}>Contact Us</Link></li>
                 <li><Link href={'/promotion'}>Promotion</Link></li>
                 <li><Link href={'/prescription'}>Prescription</Link></li>
                 <li><Link href={'/franchise'}>Franchise</Link></li>
@@ -208,25 +208,25 @@ const Footer = () => {
                 <Image
                   priority
                   src={IMAGES.GOOGLEPAY}
-                  alt="call us"
+                  alt="Google Pay"
                   className="w-12 h-12"
                 />
                 <Image
                   priority
                   src={IMAGES.MASTERCARD}
-                  alt="call us"
+                  alt="Master Card"
                   className="w-12 h-12"
                 />
                 <Image
                   priority
                   src={IMAGES.VISA}
-                  alt="call us"
+                  alt="Visa"
                   className="w-12 h-12"
                 />
                 <Image
                   priority
                   src={IMAGES.RUPAY}
-                  alt="call us"
+                  alt="Rypay"
                   className="w-12 h-12"
                 />
               </div>
@@ -235,13 +235,13 @@ const Footer = () => {
                 {/* <Image
                   priority
                   src={IMAGES.APPSTORE}
-                  alt="call us"
+                  alt="App Store"
                   className="w-26 object-cover"
                 />
                 <Image
                   priority
                   src={IMAGES.APPGOOGLEPAY}
-                  alt="call us"
+                  alt="App Google Pay"
                   className="w-26 object-cover"
                 /> */}
               </div>
