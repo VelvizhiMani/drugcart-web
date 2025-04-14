@@ -1,37 +1,15 @@
-// /pages/api/send-email.js
-import {
-  authenticateUser,
-  adminAuthorization,
-} from "../../../utils/middleware";
-import { NextResponse } from "next/server";
-import connnectionToDatabase from "@/lib/mongodb";
 import nodemailer from "nodemailer";
+import puppeteer from "puppeteer";
+import { NextResponse } from "next/server";
 
-// export default async function handler(req, res) {
-export async function POST(req, res) {
+export async function POST(req) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Only POST requests allowed" });
+    return NextResponse.json({ message: "Only POST requests allowed" }, { status: 405 });
   }
 
   const { to, subject, message } = await req.json();
 
-  // Create a transporter object using your email service (e.g., Gmail, SMTP)
-  const transporter = nodemailer.createTransport({
-    service: "Gmail", // or use your SMTP provider (e.g., SES, SendGrid, etc.)
-    auth: {
-      user: process.env.EMAIL_USER, // your email address
-      pass: process.env.EMAIL_PASSWORD, // your email password (or app password if 2FA is enabled)
-    },
-  });
-
-  // Mail options (email content, recipient, subject, etc.)
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to, // recipient email address
-    subject,
-    text: message, // plain text email content
-    html: `
-     <!DOCTYPE html>
+  const htmlContent = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -193,17 +171,49 @@ font-weight: bold;
   </table>
 </div>
   </body>
-</html>
-    `,
-  };
+</html>`;
 
   try {
-    // Send the email
-    const info = await transporter.sendMail(mailOptions);
-    // return res.status(200).json({ message: "Email sent successfully!", info });
-    return NextResponse.json({ message: "Email sent successfully!" }, info, {
-      status: 200,
+    // Step 1: Generate PDF from HTML
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+
+    const pdfBuffer = await page.pdf({
+      format: "A4",
+      printBackground: true,
     });
+
+    await browser.close();
+
+    // Step 2: Create transporter
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+
+    // Step 3: Mail options with PDF attachment
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      text: "Please find the attached invoice PDF.",
+      html: htmlContent,
+      attachments: [
+        {
+          filename: `Invoice-${subject}.pdf`,
+          content: pdfBuffer,
+          contentType: "application/pdf",
+        },
+      ],
+    };
+
+    // Step 4: Send email
+    const info = await transporter.sendMail(mailOptions);
+    return NextResponse.json({ message: "Email sent successfully!", info });
   } catch (error) {
     return NextResponse.json(
       { message: "Failed to send email", error: error.message },

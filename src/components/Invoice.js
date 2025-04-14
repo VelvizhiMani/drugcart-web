@@ -18,6 +18,9 @@ export default function Invoice() {
     html2pdf().set(options).from(element).save();
   };
 
+  console.log(invoiceRef.current);
+  
+
   return (
     <div className="p-4">
       <div
