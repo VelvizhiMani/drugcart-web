@@ -3,24 +3,44 @@ import puppeteer from "puppeteer";
 import { NextResponse } from "next/server";
 import { DateFormat } from '@/utils/dateFormat'
 
-function numberToWords(n) {
+function numberToWords(num) {
   const ones = [
-    "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
-    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-    "sixteen", "seventeen", "eighteen", "nineteen"
-  ];
-  const tens = [
-    "", "", "twenty", "thirty", "forty", "fifty",
-    "sixty", "seventy", "eighty", "ninety"
+    "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+    "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+    "Sixteen", "Seventeen", "Eighteen", "Nineteen"
   ];
 
-  if (n < 20) return ones[n];
-  if (n < 100) return `${tens[Math.floor(n / 10)]} ${ones[n % 10]}`.trim();
-  if (n < 1000) {
+  const tens = [
+    "", "", "Twenty", "Thirty", "Forty", "Fifty",
+    "Sixty", "Seventy", "Eighty", "Ninety"
+  ];
+
+  const convertTwoDigits = (n) => {
+    if (n < 20) return ones[n];
+    const t = Math.floor(n / 10);
+    const o = n % 10;
+    return tens[t] + (o ? "-" + ones[o] : "");
+  };
+
+  const convertThreeDigits = (n) => {
+    const h = Math.floor(n / 100);
     const rem = n % 100;
-    return `${ones[Math.floor(n / 100)]} hundred${rem ? " " + numberToWords(rem) : ""}`;
+    if (h === 0) return convertTwoDigits(rem);
+    return ones[h] + " Hundred" + (rem ? " and " + convertTwoDigits(rem) : "");
+  };
+
+  if (num === 0) return "Zero";
+
+  if (num < 1000) return convertThreeDigits(num);
+
+  if (num < 100000) {
+    const th = Math.floor(num / 1000);
+    const rem = num % 1000;
+    const thousandPart = convertThreeDigits(th) + " Thousand";
+    return thousandPart + (rem ? " " + convertThreeDigits(rem) : "");
   }
-  return "number too large";
+
+  return "Number too large";
 }
 
 
@@ -89,7 +109,7 @@ font-weight: bold;
     </td>
     <td colspan="2">
         <strong>Date: ${DateFormat(jsonParse.createdAt)}</strong><br/>
-        <strong>Buyers Order No:  #${jsonParse.orderId}</strong>
+        <strong>Buyers Order No: ${jsonParse.orderId}</strong>
     </td>
   </tr>
   <tr style="text-align:center;">
@@ -185,7 +205,7 @@ font-weight: bold;
      </tr>
      <tr>
       <td colspan="2"><strong>DETAILS  </strong></td>
-      <td colspan="5"><p>Purchasing Goods for the invoice number DC-INV-535 </p></td>
+      <td colspan="5"><p>Purchasing Goods for the invoice number #${jsonParse.orderId} </p></td>
      </tr>
      <tr>
       <td colspan="2"><strong>INVOICE AMOUNT </strong></td>
