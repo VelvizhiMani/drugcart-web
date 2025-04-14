@@ -1,8 +1,11 @@
 // components/Invoice.js
 "use client";
+import { PostInvoiceService } from "@/services/orderService";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 
 export default function Invoice() {
+  const dispatch = useDispatch()
   const invoiceRef = useRef();
 
   const generatePDF = async () => {
@@ -23,6 +26,7 @@ export default function Invoice() {
 
   return (
     <div className="p-4">
+      <button onClick={() => dispatch(PostInvoiceService({to: "godwinjoshwa@gmail.com", subject:"test subject", message: invoiceRef.current.innerHTML}))}>generatePDF</button>
       <div
         ref={invoiceRef}
         className="bg-white shadow-xl rounded-lg p-8 max-w-7xl mx-auto text-sm text-gray-800"

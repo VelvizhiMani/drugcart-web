@@ -1,6 +1,29 @@
 import nodemailer from "nodemailer";
 import puppeteer from "puppeteer";
 import { NextResponse } from "next/server";
+import { DateFormat } from '@/utils/dateFormat'
+
+function numberToWords(n) {
+  const ones = [
+    "", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+    "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen",
+    "sixteen", "seventeen", "eighteen", "nineteen"
+  ];
+  const tens = [
+    "", "", "twenty", "thirty", "forty", "fifty",
+    "sixty", "seventy", "eighty", "ninety"
+  ];
+
+  if (n < 20) return ones[n];
+  if (n < 100) return `${tens[Math.floor(n / 10)]} ${ones[n % 10]}`.trim();
+  if (n < 1000) {
+    const rem = n % 100;
+    return `${ones[Math.floor(n / 100)]} hundred${rem ? " " + numberToWords(rem) : ""}`;
+  }
+  return "number too large";
+}
+
+
 
 export async function POST(req) {
   if (req.method !== "POST") {
@@ -8,6 +31,9 @@ export async function POST(req) {
   }
 
   const { to, subject, message } = await req.json();
+
+  const jsonParse = JSON.parse(message)
+// console.log('jsonparse', jsonParse);
 
   const htmlContent = `<!DOCTYPE html>
 <html>
@@ -56,14 +82,14 @@ font-weight: bold;
   </tr>
   <tr style="text-align:center;">
     <td colspan="2">
-        <strong>Invoice #:DC-INV-001</strong>
+        <strong>Invoice #:${jsonParse.orderId}</strong>
     </td>
     <td colspan="4" style="text-align:center;font-size:24px;">
-        <strong>Invoice ${subject}</strong>
+        <strong>Invoice</strong>
     </td>
     <td colspan="2">
-        <strong>Date: 21-11-2017</strong><br/>
-        <strong>Buyers Order No: DC-INV-001</strong>
+        <strong>Date: ${DateFormat(jsonParse.createdAt)}</strong><br/>
+        <strong>Buyers Order No:  #${jsonParse.orderId}</strong>
     </td>
   </tr>
   <tr style="text-align:center;">
@@ -74,17 +100,19 @@ font-weight: bold;
   <tr>
     <td colspan="4">
     <strong>Bill To/Name of the Buyer:</strong>
-    <p>No. 105, Reddiyar Street,</p>
-    <p>Alagramam & post, Tindivanam(t.k)</p>
-    <p>Villupuram Dist, Tamilnadu - 604302</p>
-    <strong>Mobile: 0740501174</strong>
+    <p style="text-transform: capitalize">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname},</p>
+    <p>${jsonParse.shippingInfo.address},</p>
+    <p>${jsonParse.shippingInfo.town}</p>
+    <p>${jsonParse.shippingInfo.state}, ${jsonParse.shippingInfo.country} - ${jsonParse.shippingInfo.postcode}</p>
+    <strong>Mobile: ${jsonParse.shippingInfo.phone}</strong>
     </td>
     <td colspan="4">
     <strong>Ship To/Delivery At:</strong>
-    <p>No. 105, Reddiyar Street,</p>
-    <p>Alagramam & post, Tindivanam(t.k)</p>
-    <p>Villupuram Dist, Tamilnadu - 604302</p>
-    <strong>Mobile: 0740501174</strong>
+    <p style="text-transform: capitalize">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname},</p>
+    <p>${jsonParse.shippingInfo.address},</p>
+    <p>${jsonParse.shippingInfo.town}</p>
+    <p>${jsonParse.shippingInfo.state}, ${jsonParse.shippingInfo.country} - ${jsonParse.shippingInfo.postcode}</p>
+    <strong>Mobile: ${jsonParse.shippingInfo.phone}</strong>
     </td>
   </tr>
   </table>
@@ -97,23 +125,26 @@ font-weight: bold;
       <th>Unit</th>
       <th>Amount</th>
     </tr>
-    <tr>
-      <td>1</td>
-      <td colspan="2">Ledifos - 12 weeks</td>
-      <td>30 Tablets</td>
-      <td>1</td>
-      <td>699</td>
-      <td>Rs.699</td>
-    </tr>
+    ${jsonParse?.orderItems
+      .map((order, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td colspan="2">${order?.product_name}</td>
+          <td>${order?.packageName}</td>
+          <td>${order?.quantity}</td>
+          <td>${order?.price}</td>
+          <td>Rs.${order?.price}</td>
+        </tr>
+      `).join('')}
      <tr>
       <td colspan="4">Amount In Words: </td>
       <td colspan="2">Shiping Charges: </td>
       <td><strong>Rs. 0</strong></td>
     </tr>
     <tr>
-      <td colspan="4">Six Hundred and Ninety-Nine US Dollars Only </td>
+      <td colspan="4">${numberToWords(jsonParse.itemsPrice)} Rupees Only </td>
       <td colspan="2"><strong>TOTAL :</strong> </td>
-      <td><strong>Rs. 699</strong></td>
+      <td><strong>Rs. ${jsonParse.itemsPrice}</strong></td>
     </tr>
     <tr>
       <td colspan="4">D.L.No:2391/M Z1/20B , 2391/M Z1/21B </td>
@@ -138,8 +169,7 @@ font-weight: bold;
      <tr>
       <td colspan="2"><strong>BENEFICIAR ADDRESS </strong></td>
       <td colspan="5">
-      <p>Portion "A" First Floor,Old No. 131, New No. 50,Pedariyar Koil Street, <br/>
-         Seven Wells,Chennai - 600001. India </p></td>
+      <p>${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname}, <br/> ${jsonParse.shippingInfo.phone}, <br/> ${jsonParse.shippingInfo.email}, <br/> ${jsonParse.shippingInfo.address}, <br/> ${jsonParse.shippingInfo.town}, <br/> ${jsonParse.shippingInfo.state}, <br/> ${jsonParse.shippingInfo.country}, <br/> ${jsonParse.shippingInfo.postcode}</p></td>
      </tr>
      <tr>
       <td colspan="2"><strong>BENEFICIAR BANK ADDRESS </strong></td>
@@ -159,7 +189,7 @@ font-weight: bold;
      </tr>
      <tr>
       <td colspan="2"><strong>INVOICE AMOUNT </strong></td>
-      <td colspan="2"><p>699.00 </p></td>
+      <td colspan="2"><p> ${jsonParse.itemsPrice} </p></td>
       <td colspan="3"><p>CURRENCY : INR </p></td>
      </tr>
      <tr>
@@ -204,7 +234,7 @@ font-weight: bold;
       html: htmlContent,
       attachments: [
         {
-          filename: `Invoice-${subject}.pdf`,
+          filename: `Invoice.pdf`,
           content: pdfBuffer,
           contentType: "application/pdf",
         },
