@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteManufactuerService, GetManufactuerIdService, GetManufactuerService } from '@/services/manufactuerService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 function createData(name, url, status) {
     return { name, url, status };
@@ -35,6 +36,7 @@ function ManufactuerList() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const router = useRouter()
+    const { role } = useRole()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -152,12 +154,12 @@ function ManufactuerList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetManufactuerIdService(row?._id))
                                     }}>
                                         <DeleteIcon color="error" />
-                                    </button>
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}

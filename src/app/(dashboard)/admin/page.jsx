@@ -15,8 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetOrdersService } from '@/services/orderService';
 import { GetProductService } from '@/services/productService';
 import { GetAllUserService, GetCustomersService } from '@/services/admin/userService';
-
+import { useRole } from '@/hooks/useRole'
 function Dashboard() {
+  const { role } = useRole()
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -30,7 +31,7 @@ function Dashboard() {
     <Box sx={{ flexGrow: 1 }}>
       {/* <UserCard /> */}
       <AdminCard />
-      <UserTable />
+      {role === "admin" ? <UserTable /> : null}
       <ProductCalendar />
     </Box>
   )
