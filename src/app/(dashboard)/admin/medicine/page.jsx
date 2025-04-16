@@ -249,40 +249,44 @@ function MedicinePage() {
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countryCodeList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
-                        <Box>
-                            <Typography
-                                variant="body1"
-                                fontFamily={"Poppins"}
-                                fontWeight={500}
-                                fontSize={16}
-                                color='#fff'
-                                sx={{ flexGrow: 1 }}
-                            >
-                                Total Written by list
-                            </Typography>
-                        </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{writtenByList?.pagination?.totalItems}</Typography>
-                    </CardItem>
-                </Grid>
-                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
-                        <Box>
-                            <Typography
-                                variant="body1"
-                                fontFamily={"Poppins"}
-                                fontWeight={500}
-                                fontSize={16}
-                                color='#fff'
-                                sx={{ flexGrow: 1 }}
-                            >
-                                Total Review by list
-                            </Typography>
-                        </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{reviewByList?.pagination?.totalItems}</Typography>
-                    </CardItem>
-                </Grid>
+                {role === "admin" ? (
+                    <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                            <Box>
+                                <Typography
+                                    variant="body1"
+                                    fontFamily={"Poppins"}
+                                    fontWeight={500}
+                                    fontSize={16}
+                                    color='#fff'
+                                    sx={{ flexGrow: 1 }}
+                                >
+                                    Total Written by list
+                                </Typography>
+                            </Box>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{writtenByList?.pagination?.totalItems}</Typography>
+                        </CardItem>
+                    </Grid>
+                ) : null}
+                {role === "admin" ? (
+                    <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                            <Box>
+                                <Typography
+                                    variant="body1"
+                                    fontFamily={"Poppins"}
+                                    fontWeight={500}
+                                    fontSize={16}
+                                    color='#fff'
+                                    sx={{ flexGrow: 1 }}
+                                >
+                                    Total Review by list
+                                </Typography>
+                            </Box>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{reviewByList?.pagination?.totalItems}</Typography>
+                        </CardItem>
+                    </Grid>
+                ) : null}
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
                     <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/referlist')}>
                         <Box>
@@ -300,23 +304,25 @@ function MedicinePage() {
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{referenceList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
-                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/stocklist')}>
-                        <Box>
-                            <Typography
-                                variant="body1"
-                                fontFamily={"Poppins"}
-                                fontWeight={500}
-                                fontSize={16}
-                                color='#fff'
-                                sx={{ flexGrow: 1 }}
-                            >
-                                Total Stock list
-                            </Typography>
-                        </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{stockList?.pagination?.totalItems}</Typography>
-                    </CardItem>
-                </Grid>
+                {role === "admin" ? (
+                    <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/stocklist')}>
+                            <Box>
+                                <Typography
+                                    variant="body1"
+                                    fontFamily={"Poppins"}
+                                    fontWeight={500}
+                                    fontSize={16}
+                                    color='#fff'
+                                    sx={{ flexGrow: 1 }}
+                                >
+                                    Total Stock list
+                                </Typography>
+                            </Box>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{stockList?.pagination?.totalItems}</Typography>
+                        </CardItem>
+                    </Grid>
+                ) : null}
             </Grid>
         </Box>
     )

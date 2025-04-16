@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteReferenceService, GetReferenceIdService, GetReferenceService } from '@/services/referenceService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 const rowText = {
     color: "#fff",
@@ -30,6 +31,7 @@ function ReferenceList() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const { role } = useRole()
 
 
     const handleNoChange = (event) => {
@@ -146,12 +148,12 @@ function ReferenceList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetReferenceIdService(row?._id))
                                     }}>
-                                        <DeleteIcon color='error' />
-                                    </button>
+                                        <DeleteIcon color="error" />
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}
