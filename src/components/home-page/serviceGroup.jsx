@@ -4,7 +4,7 @@ import { IMAGES } from "@/components/common/images";
 
 const ServiceGroup = () => {
   return (
-    <section className="px-10">
+    <section className="px-5">
       <div className="p-2 font-bold mb-2 mt-2 text-center text-lg">
         <h1>Our Service and Care</h1>
       </div>
@@ -45,13 +45,13 @@ const ServiceGroup = () => {
             {/* Icon */}
             <Image
               src={IMAGES.ANTHROPOLOGY}
-              alt="Nursing Service"
+              alt="Physiotherapy"
               className="w-12 h-12"
             />
           </div>
           {/* Label */}
           <p className="mt-2 text-sm font-bold text-gray-700 text-center">
-            Nursing Service
+            Physiotherapy
           </p>
         </div>
         <div className="flex flex-col items-center">
@@ -60,13 +60,13 @@ const ServiceGroup = () => {
             {/* Icon */}
             <Image
               src={IMAGES.DRUGSTORE}
-              alt="Nursing Service"
+              alt="Clinic Service"
               className="w-12 h-12"
             />
           </div>
           {/* Label */}
           <p className="mt-2 text-sm font-bold text-gray-700 text-center">
-            Nursing Service
+            Clinic Service
           </p>
         </div>
         <div className="flex flex-col items-center">
@@ -75,13 +75,13 @@ const ServiceGroup = () => {
             {/* Icon */}
             <Image
               src={IMAGES.EMERGENCY}
-              alt="Nursing Service"
+              alt="Emergency care"
               className="w-12 h-12"
             />
           </div>
           {/* Label */}
           <p className="mt-2 text-sm font-bold text-gray-700 text-center">
-            Nursing Service
+            Emergency care
           </p>
         </div>
       </div>
