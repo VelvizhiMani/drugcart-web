@@ -34,7 +34,7 @@ function UserAdd() {
         },
     });
 
-    const UType = ["salary", "contract"]
+    const UType = ["staff"]
 
     return (
         <Box>
@@ -66,7 +66,7 @@ function UserAdd() {
                             title={"Email"}
                             value={formik.values.email}
                             onChange={formik.handleChange("email")}
-                            helperText={formik.touched.username ? formik.errors.email : null}
+                            helperText={formik.touched.email ? formik.errors.email : null}
                             error={formik.touched.email ? formik.errors.email : null}
                         />
                     </Grid2>
@@ -75,7 +75,7 @@ function UserAdd() {
                             title={"Password"}
                             value={formik.values.password}
                             onChange={formik.handleChange("password")}
-                            helperText={formik.touched.username ? formik.errors.password : null}
+                            helperText={formik.touched.password ? formik.errors.password : null}
                             error={formik.touched.password ? formik.errors.password : null}
                         />
                     </Grid2>
@@ -84,7 +84,7 @@ function UserAdd() {
                             title={"User Type"}
                             value={formik.values.role}
                             onChange={formik.handleChange("role")}
-                            helperText={formik.touched.username ? formik.errors.role : null}
+                            helperText={formik.touched.role ? formik.errors.role : null}
                             error={formik.touched.role ? formik.errors.role : null}
                             data={UType}
                         />
@@ -95,7 +95,7 @@ function UserAdd() {
                             title={"Salary"}
                             value={formik.values.salary}
                             onChange={formik.handleChange("salary")}
-                            helperText={formik.touched.username ? formik.errors.salary : null}
+                            helperText={formik.touched.salary ? formik.errors.salary : null}
                             error={formik.touched.salary ? formik.errors.salary : null}
                         />
                     </Grid2>

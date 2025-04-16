@@ -1,10 +1,62 @@
 // components/Invoice.js
 "use client";
-import { useRef } from "react";
+import { PostInvoiceService } from "@/services/orderService";
+import { useParams } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { GetOrderOneService } from "../services/orderService";
+import { DateFormat } from '@/utils/dateFormat'
 
 export default function Invoice() {
+  const { orderGetData } = useSelector((state) => state.orderData)
+  const dispatch = useDispatch()
   const invoiceRef = useRef();
+  const params = useParams()
 
+  useEffect(() => {
+    dispatch(GetOrderOneService(params.orderId))
+  }, [params.orderId])
+
+  function numberToWords(num) {
+    const ones = [
+      "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+      "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+      "Sixteen", "Seventeen", "Eighteen", "Nineteen"
+    ];
+  
+    const tens = [
+      "", "", "Twenty", "Thirty", "Forty", "Fifty",
+      "Sixty", "Seventy", "Eighty", "Ninety"
+    ];
+  
+    const convertTwoDigits = (n) => {
+      if (n < 20) return ones[n];
+      const t = Math.floor(n / 10);
+      const o = n % 10;
+      return tens[t] + (o ? "-" + ones[o] : "");
+    };
+  
+    const convertThreeDigits = (n) => {
+      const h = Math.floor(n / 100);
+      const rem = n % 100;
+      if (h === 0) return convertTwoDigits(rem);
+      return ones[h] + " Hundred" + (rem ? " and " + convertTwoDigits(rem) : "");
+    };
+  
+    if (num === 0) return "Zero";
+  
+    if (num < 1000) return convertThreeDigits(num);
+  
+    if (num < 100000) {
+      const th = Math.floor(num / 1000);
+      const rem = num % 1000;
+      const thousandPart = convertThreeDigits(th) + " Thousand";
+      return thousandPart + (rem ? " " + convertThreeDigits(rem) : "");
+    }
+  
+    return "Number too large";
+  }
+  
   const generatePDF = async () => {
     const html2pdf = (await import("html2pdf.js")).default;
     const element = invoiceRef.current;
@@ -18,6 +70,9 @@ export default function Invoice() {
     html2pdf().set(options).from(element).save();
   };
 
+  console.log(orderGetData);
+
+
   return (
     <div className="p-4">
       <div
@@ -26,7 +81,7 @@ export default function Invoice() {
       >
         <div className="text-center">
           <h1 className="text-2xl font-bold">Invoice</h1>
-          <p className="text-sm text-gray-500">#DC-INV-001</p>
+          <p className="text-sm text-gray-500">#{orderGetData?.orderId}</p>
         </div>
 
         <div className="container mx-auto p-6">
@@ -48,7 +103,7 @@ export default function Invoice() {
               <tbody>
                 <tr>
                   <td className="border px-2 py-1" colSpan="2">
-                    <p className="font-semibold"> Invoice #: DC-INV-535</p>
+                    <p className="font-semibold"> Invoice #: {orderGetData?.orderId}</p>
                   </td>
                   <td
                     className="border px-2 py-1 font-bold text-md"
@@ -59,25 +114,28 @@ export default function Invoice() {
                   <td className="border px-2 py-1" colSpan="2">
                     <p className="font-semibold">
                       {" "}
-                      Date: 21-11-2017 <br />
-                      Buyers Order No: DC-INV-535{" "}
+                      Date: {DateFormat(orderGetData?.createdAt)} <br />
+                      Buyers Order No: {orderGetData?.orderId}{" "}
                     </p>
                   </td>
                 </tr>
                 <tr>
                   <td className="border px-2 py-2" colSpan="4">
                     <p className="font-semibold">Bill To/Name of the Buyer:</p>
-                    <p>No. 105, Reddiyar Street,</p>
-                    <p>Alagramam & post, Tindivanam(t.k)</p>
-                    <p>Villupuram Dist, Tamilnadu - 604302</p>
-                    <strong>Mobile: 0740501174</strong>
+                    <p className="capitalize">{orderGetData?.shippingInfo?.cus_name} {orderGetData?.shippingInfo?.lastname},</p>
+                    <p>{orderGetData?.shippingInfo?.address},</p>
+                    <p>{orderGetData?.shippingInfo?.town}</p>
+                    <p>{orderGetData?.shippingInfo?.state}, {orderGetData?.shippingInfo?.country} - {orderGetData?.shippingInfo?.postcode}</p>
+                    <strong>Mobile: {orderGetData?.shippingInfo?.phone}</strong>
                   </td>
                   <td className="border px-2 py-2" colSpan="4">
                     <p className="font-semibold">Ship To/Delivery At:</p>
-                    <p>No. 105, Reddiyar Street,</p>
-                    <p>Alagramam & post, Tindivanam(t.k)</p>
-                    <p>Villupuram Dist, Tamilnadu - 604302</p>
-                    <strong>Mobile: 0740501174</strong>
+                    <p className="font-semibold">Bill To/Name of the Buyer:</p>
+                    <p className="capitalize">{orderGetData?.shippingInfo?.cus_name} {orderGetData?.shippingInfo?.lastname},</p>
+                    <p>{orderGetData?.shippingInfo?.address},</p>
+                    <p>{orderGetData?.shippingInfo?.town}</p>
+                    <p>{orderGetData?.shippingInfo?.state}, {orderGetData?.shippingInfo?.country} - {orderGetData?.shippingInfo?.postcode}</p>
+                    <strong>Mobile: {orderGetData?.shippingInfo?.phone}</strong>
                   </td>
                 </tr>
               </tbody>
@@ -96,16 +154,18 @@ export default function Invoice() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="border px-2 py-1">1</td>
-                  <td className="border px-2 py-1" colSpan="3">
-                    Ledifos - 12 weeks
-                  </td>
-                  <td className="border px-2 py-1">30 Tablets</td>
-                  <td className="border px-2 py-1">1</td>
-                  <td className="border px-2 py-1">699</td>
-                  <td className="border px-2 py-1">Rs. 699</td>
-                </tr>
+                {orderGetData?.orderItems?.map((order, i) => (
+                  <tr key={i}>
+                    <td className="border px-2 py-1">{i + 1}</td>
+                    <td className="border px-2 py-1" colSpan="3">
+                      {order?.product_name}
+                    </td>
+                    <td className="border px-2 py-1">{order?.packageName}</td>
+                    <td className="border px-2 py-1">{order?.quantity}</td>
+                    <td className="border px-2 py-1">{order?.price}</td>
+                    <td className="border px-2 py-1">Rs. {order?.price}</td>
+                  </tr>
+                ))}
                 <tr>
                   <td className="border px-2 py-1" colSpan="5">
                     Amount In Words:{" "}
@@ -117,13 +177,13 @@ export default function Invoice() {
                 </tr>
                 <tr>
                   <td className="border px-2 py-1" colSpan="5">
-                    Six Hundred and Ninety-Nine US Dollars Only{" "}
+                    {numberToWords(orderGetData?.itemsPrice)}{" "}
                   </td>
                   <td className="border px-2 py-1" colSpan="2">
                     <p className="font-semibold"> TOTAL :</p>
                   </td>
                   <td className="border px-2 py-1">
-                    <p className="font-semibold">Rs. 699</p>
+                    <p className="font-semibold">Rs. {orderGetData?.itemsPrice}</p>
                   </td>
                 </tr>
                 <tr>
@@ -170,11 +230,7 @@ export default function Invoice() {
                     <strong>BENEFICIAR ADDRESS </strong>
                   </td>
                   <td colSpan="5" className="border px-2 py-1">
-                    <p>
-                      Portion "A" First Floor,Old No. 131, New No. 50,Pedariyar
-                      Koil Street, <br />
-                      Seven Wells,Chennai - 600001. India{" "}
-                    </p>
+                    <p>{orderGetData?.shippingInfo?.cus_name} {orderGetData?.shippingInfo?.lastname}, <br /> {orderGetData?.shippingInfo?.phone}, <br /> {orderGetData.shippingInfo?.email}, <br /> {orderGetData?.shippingInfo?.address}, <br /> {orderGetData?.shippingInfo?.town}, <br /> {orderGetData?.shippingInfo?.state}, <br /> {orderGetData?.shippingInfo?.country}, <br /> {orderGetData?.shippingInfo?.postcode}</p>
                   </td>
                 </tr>
                 <tr>
@@ -206,7 +262,7 @@ export default function Invoice() {
                     <strong>DETAILS </strong>
                   </td>
                   <td colSpan="5" className="border px-2 py-1">
-                    <p>Purchasing Goods for the invoice number DC-INV-535 </p>
+                    <p>Purchasing Goods for the invoice number #{orderGetData?.orderId} </p>
                   </td>
                 </tr>
                 <tr>
@@ -214,7 +270,7 @@ export default function Invoice() {
                     <strong>INVOICE AMOUNT </strong>
                   </td>
                   <td colSpan="2" className="border px-2 py-1">
-                    <p>699.00 </p>
+                    <p>{orderGetData?.itemsPrice} </p>
                   </td>
                   <td colSpan="3" className="border px-2 py-1">
                     <p>CURRENCY : INR </p>

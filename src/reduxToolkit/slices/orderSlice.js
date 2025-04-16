@@ -5,7 +5,8 @@ const initialState = {
     newOrder: {},
     order: {},
     orderGetData: {},
-    myOrders: []
+    myOrders: [],
+    invoice: null
 }
 const orderSlice = createSlice({
     name: 'order',
@@ -25,9 +26,12 @@ const orderSlice = createSlice({
         },
         getMyOrderData: (state, { payload }) => {
             state.myOrders = payload
+        },
+        addInvoice: (state, { payload }) => {
+            state.invoice = payload
         }
     }
 })
 
-export const { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData } = orderSlice.actions
+export const { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData, addInvoice } = orderSlice.actions
 export default orderSlice.reducer

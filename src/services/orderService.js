@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData } from '../reduxToolkit/slices/orderSlice'
+import { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData, addInvoice } from '../reduxToolkit/slices/orderSlice'
 
 const PostOrderService = (data, router) => async (dispatch) => {
     try {
@@ -9,6 +9,9 @@ const PostOrderService = (data, router) => async (dispatch) => {
         const postData = await axios.post('/api/order', data, { headers: await Authorization() })
         dispatch(addOrder(postData.data))
         dispatch(GetOrderIdService(postData.data?._id))
+        if(postData.status === 200) {
+            dispatch(PostInvoiceService({to: data.shippingInfo.email, subject: "test", message: JSON.stringify(postData.data)}))
+        }
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Order Successfully!!!", severity: "success" }))
         router.replace('/success')
@@ -86,4 +89,17 @@ const DeleteOrderService = (id) => async (dispatch) => {
     })
 }
 
-export { PostOrderService, GetOrdersService, GetOrderIdService, GetMyOrderService, PutOrderService, DeleteOrderService, GetOrderOneService }
+const PostInvoiceService = (data) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const postData = await axios.post('/api/mail', data, { headers: await Authorization() })
+        dispatch(addInvoice(postData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+    }
+}
+
+export { PostOrderService, GetOrdersService, GetOrderIdService, GetMyOrderService, PutOrderService, DeleteOrderService, GetOrderOneService, PostInvoiceService }

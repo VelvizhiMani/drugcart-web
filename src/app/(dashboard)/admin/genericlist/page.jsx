@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { GetGeneticService, GetGeneticIdService, DeleteGeneticService } from "@/services/genericService";
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 function createData(categoryName, subCategory, generic) {
     return { categoryName, subCategory, generic };
@@ -36,6 +37,7 @@ function GenericeList() {
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
+    const { role } = useRole()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -146,12 +148,14 @@ function GenericeList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetGeneticIdService(row?._id))
                                     }}>
                                         <DeleteIcon color="error" />
-                                    </button>
+                                    </button> : null}
+
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}

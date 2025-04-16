@@ -141,12 +141,12 @@ function StockListPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  <button onClick={async () => {
+                  {role === "admin" ? <button onClick={async () => {
                     setOpenModal(true)
                     await dispatch(GetStockIdService(row?._id))
                   }}>
-                    <DeleteIcon color='error' />
-                  </button>
+                    <DeleteIcon color="error" />
+                  </button> : null}
                 </TableCell>
                 <DeleteModal
                   open={openModal}

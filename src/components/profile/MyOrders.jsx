@@ -4,11 +4,13 @@ import Brightness5Icon from '@mui/icons-material/Brightness5';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetMyOrderService } from '@/services/orderService'
 import { DateFormat } from '@/utils/dateFormat'
+import { useRouter } from 'next/navigation';
 
 
 const MyOrders = () => {
     const { myOrders } = useSelector((state) => state.orderData)
     const dispatch = useDispatch()
+    const router = useRouter()
     const [activeTab, setActiveTab] = useState("");
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
@@ -86,6 +88,7 @@ const MyOrders = () => {
                                 <th className="px-4 py-2 border">Status</th>
                                 <th className="px-4 py-2 border">Date</th>
                                 <th className="px-4 py-2 border">Amount</th>
+                                <th className="px-4 py-2 border">Invoice</th>
                             </tr>
                         </thead>
 
@@ -103,6 +106,7 @@ const MyOrders = () => {
                                     </td>
                                     <td className="px-4 py-2 border">{DateFormat(order?.createdAt)}</td>
                                     <td className="px-4 py-2 border">{order?.itemsPrice}</td>
+                                    <td className="px-4 py-2 border"><p className="text-blue-600 cursor-pointer" onClick={() => router.push(`/invoice/${order?.orderId}`)}>View</p></td>
                                 </tr>
                             ))}
                         </tbody>

@@ -18,6 +18,7 @@ import DDInput from '@/components/admin/input/DDInput';
 import { DeleteSubCategoryService, GetSubCategoryIdService, GetSubCategoryService } from '../../../../services/subCategoryService';
 import { useSelector, useDispatch } from 'react-redux';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from '@/hooks/useRole';
 
 
 function createData(categoryName, subCategory) {
@@ -45,6 +46,7 @@ function SubCategory() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const { role } = useRole()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -121,12 +123,13 @@ function SubCategory() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetSubCategoryIdService(row?._id))
                                     }}>
                                         <DeleteIcon color='error' />
-                                    </button>
+                                    </button> : null}
+
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}

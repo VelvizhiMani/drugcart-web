@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DeleteCategoryService, GetCategoryIdService, GetCategoryService } from '@/services/categoryService';
 import { GetProductCategoryService, GetProductIdService, DeleteProductService } from '@/services/productService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from '@/hooks/useRole';
 
 
 function createData(name, calories, fat, carbs, protein) {
@@ -49,6 +50,7 @@ function MedicineList() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const params = useParams()
+    const { role } = useRole()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -157,12 +159,12 @@ function MedicineList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetProductIdService(row?._id))
                                     }}>
-                                        <DeleteIcon color='error' />
-                                    </button>
+                                        <DeleteIcon color="error" />
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}

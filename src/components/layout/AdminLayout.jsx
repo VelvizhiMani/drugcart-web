@@ -35,6 +35,7 @@ import Logo from "@/assets/logo.png";
 import { Badge, Menu, MenuItem } from "@mui/material";
 import { useSelector } from "react-redux";
 import DropSpinner from "@/components/admin/spinner/DropSpinner"
+import { useRole } from "@/hooks/useRole";
 
 const drawerWidth = 220;
 
@@ -52,6 +53,7 @@ function AdminLayout(props) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const { role } = useRole()
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -275,7 +277,26 @@ function AdminLayout(props) {
       name: "Doctors",
     },
   ];
-  const mainMenu = userRoutes.slice(0, 14);
+
+  const staffRoutes = [
+    {
+      id: 1,
+      path: "/admin",
+      name: "Dashboard",
+    },
+    {
+      id: 2,
+      path: "/admin/medicine",
+      name: "Medicine",
+    },
+    {
+      id: 3,
+      path: "/admin/awareness",
+      name: "Awareness List",
+    }
+  ];
+
+  const mainMenu = role === "admin" ? userRoutes.slice(0, 14) : staffRoutes.slice(0, 3);
   const filteredRoutes = userRoutes.slice(14, 16);
   const filtereTwodRoutes = userRoutes.slice(14, userRoutes.length);
   const drawer = (

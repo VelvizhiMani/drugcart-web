@@ -26,6 +26,7 @@ export async function PUT(request, { params }) {
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
+
         const { id } = await params;
         const body = await request.json();
         const updatedCategory = await Category.findByIdAndUpdate(id, body, { new: true });
@@ -46,6 +47,10 @@ export async function DELETE(request, { params }) {
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
+        }
+
+        if (user?.role === "staff") {
+            return NextResponse.json({ error: 'Permission not found' }, { status: 404 });
         }
 
         const { id } = await params;

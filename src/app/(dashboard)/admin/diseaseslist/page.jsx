@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteDiseasesService, GetDiseasesIdService, GetDiseasesService } from '@/services/diseasesService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 const rowText = {
     color: "#fff",
@@ -30,6 +31,7 @@ function HerbsPage() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const { role } = useRole()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -141,12 +143,12 @@ function HerbsPage() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetDiseasesIdService(row?._id))
                                     }}>
-                                        <DeleteIcon color='error' />
-                                    </button>
+                                        <DeleteIcon color="error" />
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}
