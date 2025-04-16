@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteFormService, GetFormIdService, GetFormService } from '@/services/formService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 function createData(name, url, status) {
     return { name, url, status };
@@ -43,6 +44,7 @@ function FormList() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const { role } = useRole()
 
 
     const handleNoChange = (event) => {
@@ -163,12 +165,12 @@ function FormList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetFormIdService(row?._id))
                                     }}>
-                                        <DeleteIcon color='error' />
-                                    </button>
+                                        <DeleteIcon color="error" />
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}

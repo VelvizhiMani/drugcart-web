@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteStorageService, GetStorageIdService, GetStorageService } from '@/services/storageService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 function createData(name, url, status) {
     return { name, url, status };
@@ -43,6 +44,7 @@ function StorageList() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const { role } = useRole()
 
 
     const handleNoChange = (event) => {
@@ -155,12 +157,12 @@ function StorageList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
+                                    {role === "admin" ? <button onClick={async () => {
                                         setOpenModal(true)
                                         await dispatch(GetStorageIdService(row?._id))
                                     }}>
-                                        <DeleteIcon color='error' />
-                                    </button>
+                                        <DeleteIcon color="error" />
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={openModal}
