@@ -9,7 +9,7 @@ const RightAyushCategory = () => {
       <div className="bg-[#FFEDF2] text-sm">
         <div className="p-2 border-b-2 px-4">
           <Link
-            href="/ayurvedic"
+            href="/category/ayurvedic"
             className="flex items-center justify-start gap-2"
           >
             <Image
@@ -23,7 +23,7 @@ const RightAyushCategory = () => {
         </div>
         <div className="p-2 border-b-2 px-4">
           <Link
-            href="/siddha"
+            href="/category/siddha"
             className="flex items-center justify-start gap-2"
           >
             <Image
@@ -36,7 +36,7 @@ const RightAyushCategory = () => {
           </Link>
         </div>
         <div className="p-2 border-b-2 px-4">
-          <Link href="/unani" className="flex items-center justify-start gap-2">
+          <Link href="/category/unani" className="flex items-center justify-start gap-2">
             <Image
               src={IMAGES.UNANI}
               alt="Unani"
@@ -48,7 +48,7 @@ const RightAyushCategory = () => {
         </div>
         <div className="p-2 border-b-2 px-4">
           <Link
-            href="/homeopathy"
+            href="/category/homeopathy"
             className="flex items-center justify-start gap-2"
           >
             <Image
