@@ -4,10 +4,10 @@ import PersonPinIcon from "@mui/icons-material/PersonPin";
 const CustomerReviewCard = () => {
   return (
     <>
-      <h2 className="text-md md:text-xl font-bold mt-6 border-b-[1.5px] pb-2">
+      <h2 className="text-md md:text-xl font-bold mt-6 border-b-[1.5px] pb-2 m-3">
         Reviews
       </h2>
-      <div className="flex justify-center items-center mt-4 border-b-[1.5px] p-2">
+      <div className="flex justify-center items-center mt-4 border-b-[1.5px] p-2 m-3">
         <div className="w-full md:w-1/4">
           <div className="flex justify-center items-center">
             <div className="w-1/3">
