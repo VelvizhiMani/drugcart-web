@@ -64,7 +64,8 @@ const ProductCard = ({ data }) => {
                 }
                 alt={product?.product_name}
                 width={250}
-                height={250}
+height={220}
+className="p-2 w-[250px] h-[220px] my-1 mx-auto"
               />
               <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1">
                 {product?.generices || formatText(product?.cat_name)}
