@@ -164,12 +164,6 @@ const Ayush = () => {
             </button>
           </div>
           <ProductCard data={unaniFilter} />
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-4">
-            <span className="text-lg">Recommanded Product</span>
-            <button className="text-sm flex items-center hover:underline">
-              View All
-            </button>
-          </div>
         </div>
       </div>
     </section>
