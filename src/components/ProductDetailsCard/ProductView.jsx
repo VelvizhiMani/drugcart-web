@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { IMAGES } from "../common/images";
@@ -9,6 +9,7 @@ import Feedback from "@/components/home-page/feedback";
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
 import QuestionCard from "@/components/ProductDetailsCard/QuestionCard";
 import {
+  GetProductService,
   GetProductUrlService,
   GetProductGeneticUrlService,
 } from "@/services/productService";
@@ -16,7 +17,12 @@ import { GetSubCateUrlService } from "@/services/subCategoryService";
 import { GetAddStorageIdService } from "@/services/storageService";
 import { GetManufactuerUrlService } from "@/services/manufactuerService";
 import { GetAddPackageIdService } from "@/services/packageService";
-import { CartDecrementService, CartIncrementService, getCartService, PostCartService } from "@/services/cartService";
+import {
+  CartDecrementService,
+  CartIncrementService,
+  getCartService,
+  PostCartService,
+} from "@/services/cartService";
 import MostSearchCategory from "./leftsection/MostSearchCategory";
 import LeftService from "./leftsection/LeftService";
 import LeftScan from "./leftsection/LeftScan";
@@ -31,7 +37,8 @@ import OurTreatment from "./rightsection/OurTreatment";
 const ProductView = ({ url }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { product, productGenericUrl } = useSelector(
+  const [search, setSearch] = useState("");
+  const { product, productGenericUrl, productList } = useSelector(
     (state) => state.productData
   );
   const { subCateUrl } = useSelector((state) => state.subCategoryData);
@@ -47,6 +54,7 @@ const ProductView = ({ url }) => {
     dispatch(GetAddPackageIdService(product?.packageName));
     dispatch(GetProductGeneticUrlService(product?.generices));
     dispatch(getCartService());
+    dispatch(GetProductService(1, 4, search, product?.generices));
   }, [url, product?.generices, product?.manufactuer]);
 
   const alterBrands = productGenericUrl.filter((item) => item?.url !== url);
@@ -76,8 +84,7 @@ const ProductView = ({ url }) => {
     router.push("/prescription");
   };
 
-
-  const cartDetails = onAuth?.filter((cartItem) => cartItem?.url === url)
+  const cartDetails = onAuth?.filter((cartItem) => cartItem?.url === url);
   console.log("cartDetails", cartDetails);
   return (
     <>
@@ -92,45 +99,47 @@ const ProductView = ({ url }) => {
                     ? `https://assets2.drugcarts.com/${product?.product_img}`
                     : IMAGES.NO_IMAGE
                 }
-                alt="Product"
-                className="mx-auto"
+                alt={product?.product_name}
                 width={300}
-                height={300}
+                height={280}
+                className="p-2 w-[300px] h-[280px] my-1 mx-auto"
               />
               <div className="flex items-center justify-between mt-4 p-2">
                 <Image
-                  //src={IMAGES.ALOVERA}
+                  priority
                   src={
                     product?.product_img
                       ? `https://assets2.drugcarts.com/${product?.product_img}`
                       : IMAGES.NO_IMAGE
                   }
-                  alt="Product 1"
-                  className="border-2 border-gray-300"
+                  alt={product?.product_name}
                   width={120}
                   height={120}
+                  className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
                 <Image
+                  priority
                   src={
                     product?.product_img
                       ? `https://assets2.drugcarts.com/${product?.product_img}`
                       : IMAGES.NO_IMAGE
                   }
-                  alt="Product 2"
-                  className="border-2 border-gray-300"
+                  alt={product?.product_name}
                   width={120}
                   height={120}
+                  className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
                 <Image
+                  priority
                   src={
                     product?.product_img
                       ? `https://assets2.drugcarts.com/${product?.product_img}`
                       : IMAGES.NO_IMAGE
                   }
-                  alt="Product 3"
-                  className="border-2 border-gray-300"
+                  alt={product?.product_name}
                   width={120}
                   height={120}
+                  className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
               </div>
             </div>
@@ -169,7 +178,11 @@ const ProductView = ({ url }) => {
                     <svg
                       onClick={() => {
                         if (cartDetails?.[0]?.quantity > 1) {
-                          dispatch(CartDecrementService(cartDetails?.[0]?._id, { quantity: cartDetails?.[0]?.quantity - 1 }))
+                          dispatch(
+                            CartDecrementService(cartDetails?.[0]?._id, {
+                              quantity: cartDetails?.[0]?.quantity - 1,
+                            })
+                          );
                         }
                       }}
                       xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +200,13 @@ const ProductView = ({ url }) => {
                     </svg>
                     <p>{cartDetails?.[0]?.quantity}</p>
                     <svg
-                      onClick={() => dispatch(CartIncrementService(cartDetails?.[0]?._id, { quantity: cartDetails?.[0]?.quantity + 1 }))}
+                      onClick={() =>
+                        dispatch(
+                          CartIncrementService(cartDetails?.[0]?._id, {
+                            quantity: cartDetails?.[0]?.quantity + 1,
+                          })
+                        )
+                      }
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -230,7 +249,10 @@ const ProductView = ({ url }) => {
                     <span className="text-md">Add to cart</span>
                   </div>
                 </button>
-                <button className="bg-[#B7084B] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-4 rounded shadow-md" onClick={() => router.push('/cart')}>
+                <button
+                  className="bg-[#B7084B] hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-4 rounded shadow-md"
+                  onClick={() => router.push("/cart")}
+                >
                   <div className="flex justify-center items-center gap-1">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -965,7 +987,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.BENEFITS}
-                  alt="Description"
+                  alt="BENEFITS"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -983,7 +1005,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.INDICATION}
-                  alt="Description"
+                  alt="INDICATION"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -998,7 +1020,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.MECHANISM}
-                  alt="Description"
+                  alt="MECHANISM"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -1013,7 +1035,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.MECHANISM}
-                  alt="Description"
+                  alt="Contraindication"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -1032,7 +1054,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.SIDEEFFECTS}
-                  alt="Description"
+                  alt="SIDE EFFECTS"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -1070,11 +1092,11 @@ const ProductView = ({ url }) => {
                 <div className="rounded-lg py-3">
                   <Image
                     src={IMAGES.SIDEEFFECT2}
-                    alt="Description"
+                    alt="SIDE EFFECTS"
                     className="w-18 h-18 mx-auto rounded-full border-2"
                   />
                   <h3 className="text-[14px] py-2 font-bold px-5">
-                    Rare SideEffect{" "}
+                    Rare Side Effect{" "}
                   </h3>
                   <ul className="list-disc text-[14px] px-5">
                     <li>Headache</li>
@@ -1088,7 +1110,7 @@ const ProductView = ({ url }) => {
                 <div className="rounded-lg py-3">
                   <Image
                     src={IMAGES.SIDEEFFECT3}
-                    alt="Description"
+                    alt="SIDE EFFECTS"
                     className="w-18 h-18 mx-auto rounded-full border-2"
                   />
                   <div className="justify-center items-center mx-auto">
@@ -1116,42 +1138,22 @@ const ProductView = ({ url }) => {
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
-                  FAQS FOR {product?.product_name}
+                  FAQs FOR {product?.product_name}
                 </h1>
               </div>
-              <h3 className="text-[14px] py-2 font-bold px-8">
+              <div dangerouslySetInnerHTML={{ __html: product?.faqs }} />
+              {/* <h3 className="text-[14px] py-2 font-bold px-8">
                 Can the use of a Zucet Plus Tablet cause damage to the liver?
-              </h3>
-              <p className="text-justify px-8">
-                Since this medicine contains paracetamol it may cause harmful
-                effects on the liver in high doses. And also avoid consuming
-                alcohol while you are receiving this medicine because this may
-                increase the risk of developing liver damage.
-              </p>
-              <h3 className="text-[14px] py-2 font-bold px-8">
-                What if I vomit after taking a Zucet Plus Tablet?
-              </h3>
-              <p className="text-justify px-8">
-                If you have vomited less than 30 minutes after having this
-                medicine, retake the medicine with the same dosage. In case you
-                vomit after 30 minutes you need not take this medicine until the
-                next standard dose.
-              </p>
-              <h3 className="text-[14px] py-2 font-bold px-8">
-                Can I discontinue the medicine when my pain is relieved?
-              </h3>
-              <p className="text-justify px-8">
-                This medicine is usually used for the short term and it can be
-                discontinued when your pain is relieved. You can withdraw the
-                medicine as per your doctor's suggestions.
-              </p>
+              </h3> 
+              <p className="text-justify px-8"></p>
+              */}
             </div>
 
             <div className="border-[1px] p-3 mb-4" id="warning">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.SIDEEFFECTS}
-                  alt="Description"
+                  alt="PRECAUTIONS AND GENERAL WARNING"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -1162,7 +1164,7 @@ const ProductView = ({ url }) => {
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
                   <Image
                     src={IMAGES.ALCOHOL}
-                    alt="Description"
+                    alt="ALCOHOL"
                     className="w-24 h-24 mx-auto rounded-full border-2"
                   />
                   <h3 className="text-[14px] py-1 font-bold px-5 text-center">
@@ -1172,8 +1174,9 @@ const ProductView = ({ url }) => {
                     Caution
                   </button>
                   <p className="text-[14px] px-5">
-                    It is considered unsafe to consume alcohol while taking this
-                    medication. Kindly consult with your doctor
+                    <div
+                      dangerouslySetInnerHTML={{ __html: product?.alcohol }}
+                    />
                   </p>
                 </div>
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
@@ -1189,11 +1192,9 @@ const ProductView = ({ url }) => {
                     Caution
                   </button>
                   <p className="text-[14px] px-5">
-                    It is unsafe to drive the vehicles or operating machines due
-                    to drowsiness effect reduce your alertness feels sleepy and
-                    dizzy.Its is advised to avoid the driving and operating
-                    machines while taking this medicine. For more details kindly
-                    consult with your doctor.
+                    <div
+                      dangerouslySetInnerHTML={{ __html: product?.driving }}
+                    />
                   </p>
                 </div>
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
@@ -1210,10 +1211,9 @@ const ProductView = ({ url }) => {
                       Consult Your Doctor
                     </button>
                     <p className="text-[14px] px-5">
-                      It is unsafe to take the medicine during the pregnancy;
-                      Only limited information is available regarding the use of
-                      this medicine in patients during pregnancy. Kindly consult
-                      with your doctor.
+                      <div
+                        dangerouslySetInnerHTML={{ __html: product?.pregnancy }}
+                      />
                     </p>
                   </div>
                 </div>
@@ -1223,7 +1223,7 @@ const ProductView = ({ url }) => {
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
                   <Image
                     src={IMAGES.BREASTFEEDING}
-                    alt="Description"
+                    alt="BREAST FEEDING"
                     className="w-24 h-24 mx-auto rounded-full border-2"
                   />
                   <h3 className="text-[14px] py-1 font-bold px-5 text-center">
@@ -1233,14 +1233,17 @@ const ProductView = ({ url }) => {
                     Consult Your Doctor
                   </button>
                   <p className="text-[14px] px-5">
-                    It is considered unsafe to consume alcohol while taking this
-                    medication. Kindly consult with your doctor
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: product?.breastfeeding,
+                      }}
+                    />
                   </p>
                 </div>
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
                   <Image
                     src={IMAGES.KIDNEY1}
-                    alt="Description"
+                    alt="KIDNEY PROBLEM"
                     className="w-24 h-24 mx-auto rounded-full border-2"
                   />
                   <h3 className="text-[14px] py-2 font-bold px-5 text-center">
@@ -1250,11 +1253,11 @@ const ProductView = ({ url }) => {
                     Caution
                   </button>
                   <p className="text-[14px] px-5">
-                    It is unsafe to drive the vehicles or operating machines due
-                    to drowsiness effect reduce your alertness feels sleepy and
-                    dizzy.Its is advised to avoid the driving and operating
-                    machines while taking this medicine. For more details kindly
-                    consult with your doctor.
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: product?.kidneyproblem,
+                      }}
+                    />
                   </p>
                 </div>
                 <div className="rounded-lg py-3 md:w-1/3 w-full">
@@ -1271,10 +1274,11 @@ const ProductView = ({ url }) => {
                       Consult Your Doctor
                     </button>
                     <p className="text-[14px] px-5">
-                      It is unsafe to take the medicine during the pregnancy;
-                      Only limited information is available regarding the use of
-                      this medicine in patients during pregnancy. Kindly consult
-                      with your doctor.
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: product?.liverdisease,
+                        }}
+                      />
                     </p>
                   </div>
                 </div>
@@ -1285,7 +1289,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.PILL}
-                  alt="Description"
+                  alt={product?.product_name}
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -1293,14 +1297,11 @@ const ProductView = ({ url }) => {
                 </h1>
               </div>
               <p className="text-justify px-8">
-                The Tablet is taken orally with or without food but it is better
-                to take this medicine in a fixed dose. You can measure the dose
-                with the help of a measuring cup and shake well before using
-                this Tablet. Follow the direction mentioned within the label if
-                you probably did not understand the appliance kindly ask your
-                doctor or pharmacist to elucidate in detail. Do not withdraw the
-                medicine when you feel better kindly complete the course of
-                treatment to avoid reoccurrence.
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: product?.takemedicine,
+                  }}
+                />
               </p>
             </div>
 
@@ -1316,9 +1317,7 @@ const ProductView = ({ url }) => {
                 </h1>
               </div>
               <p className="text-justify px-8">
-                It is considered to be safe to use this medicine in an adult
-                patient if the medicine is prescribed by a doctor. <br />
-                Kindly consult with your doctor.
+                <div dangerouslySetInnerHTML={{ __html: product?.adult }} />
               </p>
             </div>
             <div className="border-[1px] p-3 mb-4" id="child">
@@ -1333,15 +1332,16 @@ const ProductView = ({ url }) => {
                 </h1>
               </div>
               <p className="text-justify px-8">
-                The Tablet is considered unsafe in children who are below 12
-                years old. Kindly consult with your doctor.
+                <div
+                  dangerouslySetInnerHTML={{ __html: product?.childrenmed }}
+                />
               </p>
             </div>
             <div className="border-[1px] p-3 mb-4" id="elder">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.PATIENT}
-                  alt="Description"
+                  alt={product?.product_name}
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold uppercase">
@@ -1349,29 +1349,52 @@ const ProductView = ({ url }) => {
                 </h1>
               </div>
               <p className="text-justify px-8">
-                This Tablet should be used with caution in patients in an
-                elderly age group, which leads to developing further medical
-                problems, leads to worsening the patient's health conditions.
-                Kindly consult with your doctor. Dose modification or
-                replacement is required based on the medical conditions of the
-                patient.
+                <div
+                  dangerouslySetInnerHTML={{ __html: product?.elderlymed }}
+                />
               </p>
             </div>
             <div className="border-[1px] p-3 mb-4" id="general">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.INSTRUCTION}
-                  alt="Description"
+                  alt="Other general warnings"
+                  className="w-[25px] h-[25px]"
+                />
+                <h1 className="text-md font-bold">Other general warnings </h1>
+              </div>
+              <p className="text-justify px-8">
+                <div dangerouslySetInnerHTML={{ __html: product?.warnings }} />
+              </p>
+            </div>
+            <div className="border-[1px] p-3 mb-4" id="general">
+              <div className="flex gap-2">
+                <Image
+                  src={IMAGES.INSTRUCTION}
+                  alt="Talk to your doctor if"
+                  className="w-[25px] h-[25px]"
+                />
+                <h1 className="text-md font-bold">Talk to your doctor if</h1>
+              </div>
+              <p className="text-justify px-8">
+                <div
+                  dangerouslySetInnerHTML={{ __html: product?.talkdoctor }}
+                />
+              </p>
+            </div>
+            <div className="border-[1px] p-3 mb-4" id="general">
+              <div className="flex gap-2">
+                <Image
+                  src={IMAGES.INSTRUCTION}
+                  alt="general Instructions"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold">GENERAL INSTRUCTIONS</h1>
               </div>
               <p className="text-justify px-8">
-                Paracetamol, Caffeine, Cetirizine, Phenylephrine analgesic, and
-                antiallergic medications used to treat pain, fever, and allergic
-                conditions. The combination of this medicine produces its action
-                by inhibiting certain chemical substances which are responsible
-                for pain, fever, and allergic conditions.
+                <div
+                  dangerouslySetInnerHTML={{ __html: product?.instructions }}
+                />
               </p>
             </div>
             <div className="border-[1px] p-3 mb-4" id="drug">
@@ -1388,7 +1411,7 @@ const ProductView = ({ url }) => {
               <div className="flex gap-2 py-2">
                 <Image
                   src={IMAGES.DRUGINTERACTION}
-                  alt="Description"
+                  alt="DRUG-DRUG INTERACTION"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold text-[#B7084B]">
@@ -1397,42 +1420,22 @@ const ProductView = ({ url }) => {
               </div>
 
               <div className="text-justify px-8">
-                <h3 className="font-bold text-sm pb-2">
+                <div
+                  dangerouslySetInnerHTML={{ __html: product?.druginteraction }}
+                />
+                {/* <h3 className="font-bold text-sm pb-2">
                   Apalutamide + Acetaminophen
                 </h3>
                 <p>
                   Therapy should be administered with caution because the use of
                   apalutamide will decrease the effect of acetaminophen by
                   increasing its elimination.{" "}
-                </p>
-                <h3 className="font-bold text-sm pb-2">
-                  Eltrombopog + Acetaminophen
-                </h3>
-                <p>
-                  Therapy should be administered with caution because the use of
-                  eltrombopag increases the levels of acetaminophen by
-                  decreasing its metabolism.
-                </p>
-                <h3 className="font-bold text-sm pb-2">
-                  Isoniazid + Acetaminophen
-                </h3>
-                <p>
-                  Isoniazid will increase the effect of acetaminophen by
-                  affecting its hepatic enzyme metabolism. Therapy should be
-                  administered with caution.
-                </p>
-                <h3 className="font-bold text-sm pb-2">
-                  Colestipol + Acetaminophen
-                </h3>
-                <p>
-                  Colestipol decreases the effect of acetaminophen by inhibiting
-                  GI absorption. Use alternative drugs.
-                </p>
+                </p> */}
               </div>
               <div className="flex gap-2 py-2">
                 <Image
                   src={IMAGES.DRUGFOOD}
-                  alt="Description"
+                  alt="DRUG-FOOD"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold text-[#B7084B]">
@@ -1440,51 +1443,22 @@ const ProductView = ({ url }) => {
                 </h1>
               </div>
               <p className="text-justify px-8">
-                The use of alcohol may increase the nervous system side effects
-                such as dizziness, drowsiness, and difficulty in concentrating.
-                Consuming alcohol is not recommended for the patients who are
-                receiving this medicine.
+                <div dangerouslySetInnerHTML={{ __html: product?.drugfood }} />
               </p>
 
               <div className="flex gap-2 py-2">
                 <Image
                   src={IMAGES.DRUGDISEASE}
-                  alt="Description"
+                  alt="DRUG-DISEASE"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold text-[#B7084B]">
                   DRUG-DISEASE INTERACTION
                 </h1>
               </div>
-              <div className="text-justify px-8">
-                <h3 className="font-bold text-sm pb-2">
-                  Liver diseases + Acetaminophen:
-                </h3>
-                <p>
-                  Therapy should be administered with caution in patients with
-                  hepatic insufficiency because severe liver injury including
-                  acute liver failure resulting in liver transplant and death
-                  has been reported in patients using acetaminophen. Patients
-                  with hepatic impairment may increase the risk of toxicity due
-                  to increased metabolic pathway activity. During
-                  acetaminophen-containing treatment, patients should avoid
-                  consuming alcohol.
-                </p>
-                <h3 className="font-bold text-sm pb-2">
-                  Alcoholism + Acetaminophen:
-                </h3>
-                <p>
-                  Therapy should be administered with caution in patients who
-                  are consuming alcohol because severe liver injury including
-                  acute liver failure resulting in liver transplant and death
-                  has been reported in patients using acetaminophen. During
-                  acetaminophen-containing treatment, patients should avoid
-                  consuming alcohol. The patient should immediately seek the
-                  hospital if they experience signs and symptoms of liver injury
-                  such as fever, rash, anorexia, nausea, vomiting, fatigue, dark
-                  urine, and jaundice.
-                </p>
-              </div>
+              {/* <div className="text-justify px-8"> */}
+              <div dangerouslySetInnerHTML={{ __html: product?.drugdiease }} />
+              {/* </div> */}
             </div>
             <div className="border-[1px] p-3 mb-4" id="overdose">
               <div className="flex gap-2">
@@ -1496,39 +1470,35 @@ const ProductView = ({ url }) => {
                 <h1 className="text-md font-bold">OVER DOSE</h1>
               </div>
               <p className="text-justify px-8">
-                Take the medicine as directed by the doctor don’t overdose on
-                the medicine. If you have taken an overdose on this medicine
-                immediately meet the doctor and rush to the nearby hospital.
+                <div dangerouslySetInnerHTML={{ __html: product?.overdose }} />
               </p>
             </div>
             <div className="border-[1px] p-3 mb-4" id="misseddose">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.MISSEDDOSE}
-                  alt="Description"
+                  alt="MISSED DOSE"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold">MISSED DOSE</h1>
               </div>
               <p className="text-justify px-8">
-                Take the medicine as directed by the doctor. Do not skip the
-                medicine, if you forgot to take the medicine or missed the dose.
-                It is almost time for your next dose, skip the missed dose and
-                go back to your regular schedule. Don’t take the extra dose take
-                the regular dose immediately. Don’t use the two-dose at one time
-                (Double Dose).
+                <div
+                  dangerouslySetInnerHTML={{ __html: product?.misseddose }}
+                />
               </p>
             </div>
             <div className="border-[1px] p-3 mb-4" id="storage">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.STORAGE}
-                  alt="Description"
+                  alt="STORAGE AND DISPOSAL"
                   className="w-[25px] h-[25px]"
                 />
                 <h1 className="text-md font-bold">STORAGE AND DISPOSAL</h1>
               </div>
-              <ul className="text-justify px-8 list-disc text-sm">
+              <div dangerouslySetInnerHTML={{ __html: product?.disposal }} />
+              {/* <ul className="text-justify px-8 list-disc text-sm">
                 <li>Stored at 10-30'C room temperature.</li>
                 <li>Protect from light and heat.</li>
                 <li>
@@ -1536,7 +1506,7 @@ const ProductView = ({ url }) => {
                   to them.
                 </li>
                 <li>Disposed o properly in a suitable bag.</li>
-              </ul>
+              </ul> */}
             </div>
             <div className="border-[1px] p-3 mb-4" id="fasttag">
               <div className="flex gap-2">
@@ -1547,32 +1517,15 @@ const ProductView = ({ url }) => {
                 />
                 <h1 className="text-md font-bold">FAST TAG</h1>
               </div>
+              <div dangerouslySetInnerHTML={{ __html: product?.fasttag }} />
               <ul className="text-justify px-8 list-disc text-sm">
-                <li>
-                  The Tablet contains Paracetamol, Caffeine, Cetirizine,
-                  Phenylephrine analgesic, and antiallergic medication used to
-                  treat pain, fever, and allergic conditions.
-                </li>
-                <li>
-                  The combination of this medicine produces its action by
-                  inhibiting certain chemical substances which are responsible
-                  for pain, fever, and allergic conditions.
-                </li>
-                <li>
-                  Kindly inform your doctor if you have a history of liver
-                  disease
-                </li>
-                <li>
-                  Monitor the patient's kidney functions, liver function, and
-                  levels of blood components
-                </li>
                 <li>
                   Avoid consuming alcohol because it may cause excessive
                   drowsiness and stomach problems
                 </li>
               </ul>
             </div>
-            <div className="border-[1px] p-3 mb-4" id="reference">
+            {/* <div className="border-[1px] p-3 mb-4" id="reference">
               <div className="flex gap-2">
                 <Image
                   src={IMAGES.REFERENCE}
@@ -1585,7 +1538,7 @@ const ProductView = ({ url }) => {
                 Spectrum Pharmaceuticals, Inc., US Food & Drug Administration,
                 U.S. Food and Drug Administration.
               </p>
-            </div>
+            </div> */}
             <div className="border-[1px] p-3 mb-4" id="expires">
               <div className="flex gap-2">
                 <Image
@@ -1661,7 +1614,7 @@ const ProductView = ({ url }) => {
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
                           <p>Precription</p>
-                          <p>{product?.cat_name}</p>
+                          <p className="capitalize">{product?.cat_name}</p>
                           <p>{product?.rexrequired}</p>
                         </div>
                         <h3 className="text-[#B7084B] font-bold text-lg">
@@ -1670,12 +1623,6 @@ const ProductView = ({ url }) => {
                         <h3 className="text-[#35A24D] font-semibold">
                           Get this at {product?.price}
                         </h3>
-                        <p className="text-xs my-1 text-gray-500">
-                          {packid?.packagename}/{product?.packageName}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Mft : {product?.manufactuer}
-                        </p>
                       </div>
                       <div className="w-1/3">
                         <Image
@@ -1687,19 +1634,19 @@ const ProductView = ({ url }) => {
                           alt={product?.product_name}
                           width={96}
                           height={96}
-                          className="w-24 h-24 mx-auto"
+                          className="w-[96px] h-[90px] mx-auto"
                         />
                       </div>
                     </div>
                     <div className="border-[1px] m-3"></div>
                   </div>
                 ))}
-                <Link
+                {/* <Link
                   href="#"
                   className="justify-center flex text-blue-500 font-bold py-3"
                 >
                   View All
-                </Link>
+                </Link> */}
               </div>
               <div className="border-2 my-4 m-3 rounded-md">
                 <div className="flex p-3 justify-between items-center text-lg ps-10">
@@ -2186,71 +2133,42 @@ const ProductView = ({ url }) => {
         </div>
       </section>
       <section className="bg-[#F3F4F5] mt-3 p-3">
+        <h2 className="p-4 font-bold">Durgcarts Suggestion</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          <div>
-            <h2 className="p-4 font-bold">Your Medicine</h2>
-            <div className="bg-white rounded-md p-4 px-10">
-              <div className="flex">
-                <div>
-                  <h2 className="font-bold">Pan L Capsule</h2>
-                  <div className="flex gap-2">
-                    <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                      Percription
-                    </p>
-                    <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                      Anti-cancer
-                    </p>
-                    <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                      Rx required
-                    </p>
+          {productList &&
+            productList?.products?.map((product, i) => (
+              <div className="bg-[#CEDEFC] rounded-md p-4 px-10" key={i}>
+                <div className="flex">
+                  <div className="p-1">
+                    <h2 className="font-bold">{product?.product_name}</h2>
+                    <div className="flex gap-2">
+                      <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
+                        Percription
+                      </p>
+                      <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
+                        {product?.cat_name}
+                      </p>
+                      <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
+                        {product?.rexrequired}
+                      </p>
+                    </div>
+                    <h2 className="text-[#B7084B] font-bold py-1">
+                      &#8377; {product?.saleprice}
+                    </h2>
+                    <h4 className="text-[#35A24D] font-bold">
+                      Get this at &#8377; {product?.price}
+                    </h4>
+                    <p>{product?.tabscount}</p>
+                    <p>Mft : {product?.manufactuer}</p>
                   </div>
-                  <h2 className="text-[#B7084B] font-bold py-1">Rs.87.50</h2>
-                  <h4 className="text-[#35A24D] font-bold">
-                    Get this at $87.50
-                  </h4>
-                  <p>15 Tablet(s)in a strip</p>
-                  <p>Mft : Eugenics Pharma Pvt Ltd</p>
+                  <Image
+                   src={IMAGES.EUGEBRAL}
+                    alt="Medicine"
+                    className="w-32 h-24 mt-3 mx-auto"
+                  />
                 </div>
-                <Image
-                  src={IMAGES.EUGEBRAL}
-                  alt="Medicine"
-                  className="w-32 h-24 mt-3 mx-auto"
-                />
               </div>
-            </div>
-          </div>
-          <div>
-            <h2 className="p-4 font-bold">Durgcarts Suggestion</h2>
-            <div className="bg-[#CEDEFC] rounded-md p-4 px-10">
-              <div className="flex">
-                <div>
-                  <h2 className="font-bold">Pan L Capsule</h2>
-                  <div className="flex gap-2">
-                    <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                      Percription
-                    </p>
-                    <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                      Anti-cancer
-                    </p>
-                    <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                      Rx required
-                    </p>
-                  </div>
-                  <h2 className="text-[#B7084B] font-bold py-1">Rs.87.50</h2>
-                  <h4 className="text-[#35A24D] font-bold">
-                    Get this at $87.50
-                  </h4>
-                  <p>15 Tablet(s)in a strip</p>
-                  <p>Mft : Eugenics Pharma Pvt Ltd</p>
-                </div>
-                <Image
-                  src={IMAGES.EUGEBRAL}
-                  alt="Medicine"
-                  className="w-32 h-24 mt-3 mx-auto"
-                />
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
       </section>
       <div className="text-center p-2 bg-[#4C4C95]">
