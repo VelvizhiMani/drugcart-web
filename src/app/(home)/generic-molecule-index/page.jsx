@@ -35,9 +35,9 @@ const GenericMoleculeIndex = () => {
   return (
     <>
       <section className="max-w-7xl mx-auto ">
-        <div className="py-2 text-xl font-bold">
+        <div className="py-2 text-xl font-bold m-4">
           <h2>Find Your Generic Medicines A to Z</h2>
-          <div className="flex justify-center gap-2 my-4">
+          <div className="flex flex-wrap justify-center gap-2 my-4">
             {alphabet.map((letter, i) => (
               <button
                 className={`${selectedLetter === letter ? "bg-[#B7084B]" : "bg-[#35A24D]"
@@ -59,7 +59,7 @@ const GenericMoleculeIndex = () => {
             </button>
           </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 py-4 m-4">
           {firstLetter?.generics &&
             firstLetter?.generics?.map((row, i) => (
               <div
