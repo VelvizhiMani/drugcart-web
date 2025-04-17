@@ -5,17 +5,19 @@ import { IMAGES } from "@/components/common/images";
 import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
 import ProductCard from "@/components/ProductDetailsCard/ProductCard";
-import OurCareCard from "@/components/ProductDetailsCard/OurCareCard";
 import PriceRangeCard from "@/components/ProductDetailsCard/PriceRangeCard";
 import ShareFriendsCard from "@/components/ProductDetailsCard/ShareFriendsCard";
 import DownloadAppCard from "@/components/ProductDetailsCard/DownloadAppCard";
 import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
 import FilterFormCard from "@/components/ProductDetailsCard/FilterFormCard";
-import OtcService from "@/components/ProductDetailsCard/OtcService";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import { GetProductCategoryService, GetProductCatsService } from "@/services/productService";
+import { useEffect } from "react";
+import {
+  GetProductCategoryService,
+  GetProductCatsService,
+} from "@/services/productService";
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
+import LeftHealthDevice from "@/components/ProductDetailsCard/leftsection/LeftHealthDevice";
 
 const HealthCareDevices = () => {
   const { categoryProducts } = useSelector((state) => state.productData);
@@ -24,7 +26,7 @@ const HealthCareDevices = () => {
 
   useEffect(() => {
     dispatch(GetProductCatsService(1, 4, "health-care-device"));
-    dispatch(GetProductCategoryService(1, 10, 'blood-test-kit'))
+    dispatch(GetProductCategoryService(1, 10, "blood-test-kit"));
   }, []);
 
   const categroyProductClick = (sub_url) => {
@@ -34,96 +36,30 @@ const HealthCareDevices = () => {
     <section className="max-w-7xl mx-auto mt-3">
       <div className="flex flex-wrap h-62 justify-center items-center bg-green-700">
         <div className="w-full md:w-1/2 text-white font-bold text-center">
-          <h3 className="mb-6 text-xl md:text-5xl"> Online <span className="text-yellow-400">Health CARE DEVICE</span></h3>
-          <p className="bg-white text-black p-2 text-center ml-10">Perfecxa B02 Upper Arm Blood Pressure Monitor </p>
+          <h3 className="my-6 text-2xl md:text-5xl">
+            {" "}
+            Online <span className="text-yellow-400">Health CARE DEVICE</span>
+          </h3>
+          <p className="bg-white text-black p-2 text-center md:ml-10 ml-0">
+            Perfecxa B02 Upper Arm Blood Pressure Monitor{" "}
+          </p>
         </div>
         <div className="w-full md:w-1/2">
           <Image
             priority
-            src={IMAGES.HHEALTHSTOREBANNER}
-            alt="Ayush Banner"
+            src={IMAGES.HEALTHSTOREBAN}
+            alt="Health CARE DEVICE"
             className="w-[60%] h-[300px] rounded-lg mx-auto"
           />
         </div>
       </div>
       <div className="flex py-2">
-        <div className="w-[20%] m-3 max-h-auto">
+        <div className="w-[20%] m-3 max-h-auto hidden md:block">
           <h2 className="text-lg text-center uppercase py-3 font-bold border-b-[1.5px] bg-gray-700 text-white">
             Health Health Device
           </h2>
           <div className="bg-[#EBEBEB] text-sm">
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.BLOODPRESSURE}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Blood Pressure Monitor</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.BLOODTEST}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Blood Test Kit</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.COVIDTEST}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Covid Test Kit</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.GLUCOMETER}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Diabetes Monitor</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.HIV}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">HIV Test Kit</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.PREGNANCY}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Pregnancy Test Kit</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.PULSE}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Pulse Oximeter</h2>
-            </div>
-            <div className="flex items-center gap-2 p-2 border-b-2 border-gray-300">
-              <Image
-                src={IMAGES.NEBULIZER}
-                alt="ANTI CANCER"
-                priority
-                className="w-10 bg-white"
-              />
-              <h2 className="text-md font-bold">Nebulier Machines</h2>
-            </div>
+            <LeftHealthDevice />
           </div>
           <OtcProduct />
           <PriceRangeCard />
@@ -133,10 +69,9 @@ const HealthCareDevices = () => {
           <Helpful />
           <FilterFormCard />
           <ReportErrorCard />
-          <OtcService />
         </div>
-        <div className="w-[80%]">
-          <div className="flex justify-between items-center bg-blue-600 text-white font-semibold p-3 rounded-lg my-3">
+        <div className="w-full md:w-[80%]">
+          <div className="flex justify-between items-center w-full bg-blue-600 text-white font-semibold p-3 rounded-lg my-3">
             <span className="text-lg">Best Seller Product</span>
             <button
               className="text-sm flex items-center hover:underline"
@@ -169,7 +104,7 @@ const HealthCareDevices = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HealthCareDevices
+export default HealthCareDevices;
