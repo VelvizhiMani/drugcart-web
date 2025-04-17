@@ -61,7 +61,7 @@ const AyushCard = () => {
                 alt={product?.product_name}
                 width={250}
                 height={220}
-                className="p-2 w-[250px] h-[220px] my-1"
+                className="p-2 w-[250px] h-[220px] my-1 mx-auto"
               />
               <h3 className="text-gray-500 font-poppins capitalize font-medium text-[13px] w-[60%] line-clamp-1">
                 {product?.cat_name} / {product?.subcat_name}
