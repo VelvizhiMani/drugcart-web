@@ -2,13 +2,15 @@
 import Image from "next/image";
 import { useState } from "react";
 import { IMAGES } from "@/components/common/images";
-import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
 import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetProductService } from "@/services/productService";
 import { useParams, useRouter } from "next/navigation";
 import { PostCartService } from "@/services/cartService";
+import Helpful from "@/components/ProductDetailsCard/Helpful";
+import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
+import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
 
 const GenericProductList = () => {
   const { productList } = useSelector((state) => state.productData);
@@ -23,7 +25,6 @@ const GenericProductList = () => {
   useEffect(() => {
     dispatch(GetProductService(page, showNo, search, params?.url));
   }, [page, showNo, search, params?.url]);
-
 
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(10000);
@@ -45,10 +46,10 @@ const GenericProductList = () => {
     <>
       <section className="max-w-7xl mx-auto ">
         <div className="py-2 text-xl font-bold">
-          <h2>List of Medicine in Cold and Cough</h2>
+          <h2 className="ml-2">List of Medicine</h2>
         </div>
         <div className="flex flex-wrap">
-          <div className="w-[20%] flex-none">
+          <div className="w-[20%] flex-none hidden md:block">
             <div className="border-[1.5px] m-2 rounded-md">
               <h2 className="bg-[#B7084B] p-2 mx-auto text-white font-bold">
                 Latest Product
@@ -137,9 +138,10 @@ const GenericProductList = () => {
               </div>
             </div>
             <FilterCompanyCard />
+            <Helpful />
+            <OtcProduct />
           </div>
-          <div className="w-[80%] flex-1 m-3">
-            <h1 className="text-xl font-bold">Similar Product</h1>
+          <div className="w-full md:w-[80%] flex-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:p-3 content-center place-items-center">
               {productList &&
                 productList?.products?.map((product, i) => (
@@ -176,9 +178,9 @@ const GenericProductList = () => {
                           : IMAGES.NO_IMAGE
                       }
                       alt={product?.product_name}
-                      className="sml-3"
                       width={250}
-                      height={250}
+                      height={220}
+                      className="sml-3 p-2 w-[250px] h-[220px] my-1 mx-auto"
                     />
                     <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 capitalize">
                       {product?.cat_name} / {product?.generices}
@@ -191,9 +193,11 @@ const GenericProductList = () => {
                     </h2>
                     <div className="bg-white mt-1 flex justify-items-center justify-between">
                       <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                        {product?.price}
+                        &#8377; {product?.price}
                       </p>
-                      <button onClick={() => dispatch(PostCartService(product))}>
+                      <button
+                        onClick={() => dispatch(PostCartService(product))}
+                      >
                         <CartIcon />
                       </button>
                     </div>
