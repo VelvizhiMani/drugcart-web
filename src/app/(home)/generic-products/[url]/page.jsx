@@ -6,8 +6,8 @@ import React from "react";
 const GenericProductDetail = () => {
   return (
     <section className="max-w-7xl mx-auto mt-3">
-      <div className="flex py-2">
-        <div className="w-[70%]">
+      <div className="flex flex-wrap py-2">
+        <div className="w-full md:w-[70%] m-4">
           <h2 className="text-xl uppercase py-2 font-bold">
             INFORMATION ABOUT Abacavir
           </h2>
@@ -43,47 +43,53 @@ const GenericProductDetail = () => {
             and helps to clear up your infection
           </p>
         </div>
-        <div className="w-[30%] p-2 border-[1.5px]">
-          <h2 className="text-xl text-center uppercase py-2 font-bold border-b-[1.5px]">
+        <div className="w-full md:w-[30%] p-2 border-[1.5px]">
+          <h2 className="text-xl text-center uppercase py-2 font-bold border-b-[1.5px] hidden md:block">
             AVAILABLE MEDICINE FOR Abacavir
           </h2>
-          <div className="flex p-2 border-b-[1.5px] py-2">
-            <Image
-              priority
-              src={IMAGES.ALOVERA}
-              alt="alternative"
-              className="h-20 w-20 rounded-md"
-            />
-            <div className="mx-auto ml-2 w-full p-2">
-              <h3 className="text-[16px]">A-Bec Tablet 300mg</h3>
-              <p className="text-[14px] text-[red] font-bold">Rs.1332.44</p>
+          <div className="border-b-[1.5px] py-2 hidden md:block">
+            <div className="flex p-2">
+              <Image
+                priority
+                src={IMAGES.ALOVERA}
+                alt="alternative"
+                className="h-20 w-20 rounded-md"
+              />
+              <div className="mx-auto ml-2 w-full p-2">
+                <h3 className="text-[16px]">A-Bec Tablet 300mg</h3>
+                <p className="text-[14px] text-[red] font-bold">Rs.1332.44</p>
+              </div>
             </div>
           </div>
-          <div className="flex p-2 border-b-[1.5px] py-2">
-            <Image
-              priority
-              src={IMAGES.ALOVERA}
-              alt="alternative"
-              className="h-20 w-20 rounded-md"
-            />
-            <div className="mx-auto ml-2 w-full p-2">
-              <h3 className="text-[16px]">A-Bec Tablet 300mg</h3>
-              <p className="text-[14px] text-[red] font-bold">Rs.1332.44</p>
+          <div className="border-b-[1.5px] py-2 hidden md:block">
+            <div className="flex p-2">
+              <Image
+                priority
+                src={IMAGES.ALOVERA}
+                alt="alternative"
+                className="h-20 w-20 rounded-md"
+              />
+              <div className="mx-auto ml-2 w-full p-2">
+                <h3 className="text-[16px]">A-Bec Tablet 300mg</h3>
+                <p className="text-[14px] text-[red] font-bold">Rs.1332.44</p>
+              </div>
             </div>
           </div>
-          <div className="flex p-2 border-b-[1.5px] py-2">
-            <Image
-              priority
-              src={IMAGES.ALOVERA}
-              alt="alternative"
-              className="h-20 w-20 rounded-md"
-            />
-            <div className="mx-auto ml-2 w-full p-2">
-              <h3 className="text-[16px]">A-Bec Tablet 300mg</h3>
-              <p className="text-[14px] text-[red] font-bold">Rs.1332.44</p>
+          <div className="border-b-[1.5px] py-2 hidden md:block">
+            <div className="flex p-2">
+              <Image
+                priority
+                src={IMAGES.ALOVERA}
+                alt="alternative"
+                className="h-20 w-20 rounded-md"
+              />
+              <div className="mx-auto ml-2 w-full p-2">
+                <h3 className="text-[16px]">A-Bec Tablet 300mg</h3>
+                <p className="text-[14px] text-[red] font-bold">Rs.1332.44</p>
+              </div>
             </div>
           </div>
-          <div className="flex justify-center items-center mt-5">
+          <div className="flex flex-wrap justify-center items-center mt-5">
             <div className="bg-gray-200 p-6 rounded-lg shadow-md w-full max-w-md">
               <h2 className="text-xl font-semibold text-center mb-4">
                 Have any Question?
