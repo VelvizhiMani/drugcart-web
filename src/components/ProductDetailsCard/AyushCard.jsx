@@ -4,7 +4,6 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../reduxToolkit/slices/cartSlice";
 import { IMAGES } from "../common/images";
 import { GetProductCategoryService } from "@/services/productService";
 import { PostCartService } from "@/services/cartService";
@@ -61,7 +60,8 @@ const AyushCard = () => {
                 }
                 alt={product?.product_name}
                 width={250}
-                height={250}
+                height={220}
+                className="p-2 w-[250px] h-[220px] my-1"
               />
               <h3 className="text-gray-500 font-poppins capitalize font-medium text-[13px] w-[60%] line-clamp-1">
                 {product?.cat_name} / {product?.subcat_name}
@@ -71,7 +71,7 @@ const AyushCard = () => {
               </p>
               <div className="bg-white mt-1 flex justify-items-center justify-between">
                 <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                  {product?.price}
+                  &#8377; {product?.price}
                 </p>
                 <button onClick={() => dispatch(PostCartService(product))}>
                   <CartIcon />
