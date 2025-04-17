@@ -21,11 +21,11 @@ const CategoryProduct = () => {
       <Image
         priority
         src={IMAGES.AYURVEDICBNNR}
-        alt="Ayush Banner"
+        alt="Drugcarts Banner"
         className="w-[100%] h-[450px] rounded-lg"
       />
       <div className="flex py-2">
-        <div className="w-[20%] m-3 max-h-auto">
+        <div className="w-[20%] m-3 max-h-auto hidden md:block">
           <h2 className="text-lg text-center uppercase py-3 font-bold border-b-[1.5px] bg-[#35A24D] text-white">
             Ayush
           </h2>
@@ -96,10 +96,10 @@ const CategoryProduct = () => {
           <Helpful />
           <OtcProduct />
         </div>
-        <div className="w-[80%]">
+        <div className="w-full md:w-[80%]">
           <div className="flex justify-between items-center bg-green-600 text-white font-semibold p-3 my-3">
             <span className="text-lg capitalize">
-              {pathSegments[1]} Product{" "}
+              {pathSegments[1]} Product 
             </span>
             <button className="text-sm flex items-center hover:underline">
               View All
