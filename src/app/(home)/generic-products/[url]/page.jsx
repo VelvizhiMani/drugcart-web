@@ -2,8 +2,24 @@
 import { IMAGES } from "@/components/common/images";
 import Image from "next/image";
 import React from "react";
+import { useFormik } from "formik";
+import { useDispatch } from 'react-redux';
+import { PostQuestionService } from '@/services/questionService';
 
 const GenericProductDetail = () => {
+  const dispatch = useDispatch()
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      mobile: "",
+      question: "",
+    },
+    onSubmit: async (data, { resetForm }) => {
+      console.log(data);
+      await dispatch(PostQuestionService(data, resetForm))
+    },
+  });
   return (
     <section className="max-w-7xl mx-auto mt-3">
       <div className="flex flex-wrap py-2">
@@ -90,7 +106,7 @@ const GenericProductDetail = () => {
             </div>
           </div>
           <div className="flex flex-wrap justify-center items-center mt-5">
-            <div className="bg-gray-200 p-6 rounded-lg shadow-md w-full max-w-md">
+            <div className="bg-gray-200 p-6 rounded-lg shadow-md w-full max-w-md" onSubmit={formik.handleSubmit}>
               <h2 className="text-xl font-semibold text-center mb-4">
                 Have any Question?
               </h2>
@@ -105,21 +121,33 @@ const GenericProductDetail = () => {
                   type="text"
                   placeholder="Name"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  value={formik.values.name}
+                  onChange={formik.handleChange("name")}
+                  required
                 />
                 <input
                   type="email"
                   placeholder="Email"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  value={formik.values.email}
+                  onChange={formik.handleChange("email")}
+                  required
                 />
                 <input
-                  type="text"
+                  type="number"
                   placeholder="Contact No."
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  value={formik.values.mobile}
+                  onChange={formik.handleChange("mobile")}
+                  required
                 />
                 <textarea
                   placeholder="Question"
                   className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-gray-400 h-24"
-                ></textarea>
+                  value={formik.values.question}
+                  onChange={formik.handleChange("question")}
+                  required
+                />
                 <button
                   type="submit"
                   className="w-full bg-gray-700 text-white p-2 rounded hover:bg-gray-800"
