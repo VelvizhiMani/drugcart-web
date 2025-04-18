@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { GetOrderOneService, PutOrderService } from '@/services/orderService';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Box,
@@ -26,6 +26,7 @@ function page() {
     const { orderGetData } = useSelector((state) => state.orderData)
     const params = useParams()
     const dispatch = useDispatch()
+    const router = useRouter()
 
     useEffect(() => {
         dispatch(GetOrderOneService(params?.orderId))
@@ -122,7 +123,7 @@ function page() {
                                 color="success"
                                 variant="contained"
                                 style={{ textTransform: "capitalize" }}
-                            // onClick={handleProcessOrder}
+                                onClick={() => router.push(`/admin/user-invoice/${orderGetData?.orderId}`)}
                             >
                                 Generate Invoice
                             </Button>
@@ -238,6 +239,18 @@ function page() {
                                 {orderGetData?.trackingInfo?.orderStatus}
                             </Typography>
                         </Grid2>
+                        {orderGetData?.trackingInfo?.orderStatus === "Cancelled" ?
+                            <Grid2 size={{ xs: 12, md: 4 }}>
+                                <Typography
+                                    sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                                    Cancel Reason:
+                                </Typography>
+                                <Typography
+                                    sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                                    {orderGetData?.reason}
+                                </Typography>
+                            </Grid2> : null}
+
                     </Grid2>
                 </Paper>
             </Box>
