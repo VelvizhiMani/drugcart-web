@@ -31,7 +31,7 @@ const FeaturedPackage = () => {
           className="w-96 h-full object-cover"
         />
         <Image
-          src={IMAGES.BABYCARE}
+          src={IMAGES.BABYCARE1}
           alt="Baby Care"
           className="w-96 h-full object-cover"
         />
