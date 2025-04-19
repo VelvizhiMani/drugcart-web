@@ -26,8 +26,10 @@ import MyPrescription from '@/components/profile/MyPrescription';
 import MyLab from '@/components/profile/MyLab';
 import AddressForm from "@/components/common/AddressForm";
 import MyAppointment from "@/components/profile/MyAppointment";
+import TextFeedback from "@/components/profile/TextFeedback";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAddressIdService } from '@/services/addressService';
+import TitleIcon from '@mui/icons-material/Title';
 
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
@@ -47,6 +49,7 @@ const tabssupport = [
     { id: 'contactus', label: 'Contact Us', icon: <TtyIcon /> },
     { id: 'aboutus', label: 'About Us', icon: <AnnouncementIcon /> },
     { id: 'faqs', label: 'FAQs', icon: <StickyNote2Icon /> },
+    { id: 'textfeedback', label: 'Text Feedback', icon: <TitleIcon /> },
     { id: 'feedback', label: 'Send Feedback', icon: <ThumbUpOffAltIcon /> }
 ];
 const tabslegal = [
@@ -245,6 +248,11 @@ export default function ProfileTab() {
                         {activeTab === 'appointment' && (
                             <div>
                                 <MyAppointment />
+                            </div>
+                        )}
+                        {activeTab === 'textfeedback' && (
+                            <div>
+                                <TextFeedback />
                             </div>
                         )}
                     </div>
