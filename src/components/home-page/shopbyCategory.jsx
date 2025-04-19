@@ -50,7 +50,7 @@ const ShopbyCategory = () => {
           <Image
             priority
             src={IMAGES.SKINCARE1}
-            alt="Face Care"
+            alt="Skin Care"
             className="categoryicon object-cover ml-10 mt-5"
           />
         </div>
