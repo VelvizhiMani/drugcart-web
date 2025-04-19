@@ -6,7 +6,7 @@ const initialState = {
     textFeedback: {},
 }
 const textFeedbackSlice = createSlice({
-    name: 'lab_test',
+    name: 'text_feedback',
     initialState: initialState,
     reducers: {
         addTextFeedback: (state, { payload }) => {

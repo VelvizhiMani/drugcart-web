@@ -2,7 +2,7 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Avatar, InputLabel } from '@mui/material';
+import { Avatar, FormHelperText, InputLabel } from '@mui/material';
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -16,7 +16,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
-function VideoInput({ title }) {
+function VideoInput({ title, fileName, onChange, error }) {
     return (
         <div>
             <InputLabel
@@ -24,10 +24,11 @@ function VideoInput({ title }) {
                 sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
                 {title}
             </InputLabel>
-            {/* <Avatar
-                src='https://drasite.com/content/img/icons/places/folder-red-pictures.svg'
-                sx={{ width: "100%", height: 300, mt: 1, mb: 2 }}
-                variant="square" /> */}
+            {fileName && (
+                <FormHelperText sx={{ mt: 1, color: 'text.secondary' }}>
+                    {fileName}
+                </FormHelperText>
+            )}
             <Button
                 component="label"
                 role={undefined}
@@ -41,9 +42,10 @@ function VideoInput({ title }) {
                 <VisuallyHiddenInput
                     type="file"
                     accept="video/*"
-                    onChange={(event) => console.log(event.target.files)}
+                    onChange={onChange}
                 />
             </Button>
+            <FormHelperText error>{error}</FormHelperText>
         </div>
     );
 }

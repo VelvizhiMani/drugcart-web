@@ -16,15 +16,15 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteTextFeedbackService, GetTextFeedbackIdService, GetTextFeedbackListService } from '@/services/textFeedbackService';
+import { DeleteVideoFeedbackService, GetVideoFeedbackListService } from '@/services/videoFeedbackService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function AdminLabTest() {
-    const { textFeedbackList } = useSelector((state) => state.textFeedbackData)
+function AdminVideoFeedback() {
+    const { videoeFeedbackList } = useSelector((state) => state.videoFeedbackData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
@@ -47,14 +47,12 @@ function AdminLabTest() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetTextFeedbackListService(page, showNo, search))
+        dispatch(GetVideoFeedbackListService(page, showNo, search))
     }, [page, showNo, search])
 
     const searchSubmit = () => {
-        dispatch(GetTextFeedbackListService(page, showNo, search))
+        dispatch(GetVideoFeedbackListService(page, showNo, search))
     }
-
-    console.log("textFeedbackList", textFeedbackList);
 
     return (
         <Box>
@@ -65,7 +63,7 @@ function AdminLabTest() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Text Feedback List
+                    Video Feedback List
                 </Typography>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -114,7 +112,7 @@ function AdminLabTest() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {textFeedbackList && textFeedbackList?.textFeedbacks?.map((row, i) => (
+                        {videoeFeedbackList && videoeFeedbackList?.videoFeedbacks?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -143,7 +141,7 @@ function AdminLabTest() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/text-feedback/${row?._id}`)
+                                        router.push(`/admin/video-feedback/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
@@ -157,7 +155,7 @@ function AdminLabTest() {
                                     title={"Delete Text Feedback"}
                                     description={`Are you sure you want to delete Speciality ${row?.username} ?`}
                                     onSubmit={async () => {
-                                        await dispatch(DeleteTextFeedbackService(row._id));
+                                        await dispatch(DeleteVideoFeedbackService(row._id));
                                         setSelectedId(null);
                                     }}
                                 />
@@ -174,11 +172,11 @@ function AdminLabTest() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {textFeedbackList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {videoeFeedbackList?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"
-                    count={textFeedbackList?.pagination?.totalPages}
+                    count={videoeFeedbackList?.pagination?.totalPages}
                     page={page}
                     color="secondary"
                     onChange={(_, value) => setPage(value)}
@@ -188,4 +186,4 @@ function AdminLabTest() {
     );
 }
 
-export default AdminLabTest;
+export default AdminVideoFeedback;

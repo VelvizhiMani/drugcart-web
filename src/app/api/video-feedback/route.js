@@ -1,5 +1,5 @@
 import { authenticateUser, adminAuthorization } from '../../../utils/middleware';
-import TextFeedback from '../../../models/TextFeedback';
+import VideoFeedback from '../../../models/VideoFeedback';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 
@@ -16,23 +16,23 @@ export async function POST(request) {
             username,
             phone,
             useremail,
-            address,
+            uploadvideo,
             discount,
             status
         } = await request.json();
 
-        const addTextFeedback = new TextFeedback({
+        const addVideoFeedback = new VideoFeedback({
             userId: user?._id,
             username,
             phone,
             useremail,
-            address,
+            uploadvideo,
             discount,
             status
         });
 
-        await addTextFeedback.save();
-        return NextResponse.json(addTextFeedback, { status: 200 })
+        await addVideoFeedback.save();
+        return NextResponse.json(addVideoFeedback, { status: 200 })
     } catch (error) {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
     }
@@ -56,22 +56,22 @@ export async function GET(req) {
 
         const skip = (page - 1) * limit;
 
-        const TextFeedbackItems = await TextFeedback.find(filters)
+        const VideoFeedbackItems = await VideoFeedback.find(filters)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await TextFeedback.countDocuments(filters);
+        const totalItems = await VideoFeedback.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
 
-        const TextFeedbackItemsIndex = TextFeedbackItems.map((item, index) => ({
+        const VideoFeedbackItemsIndex = VideoFeedbackItems.map((item, index) => ({
             ...item.toObject(),
             sno: skip + index + 1,
         }));
 
         return NextResponse.json(
             {
-                textFeedbacks: TextFeedbackItemsIndex,
+                videoFeedbacks: VideoFeedbackItemsIndex,
                 pagination: {
                     totalItems,
                     totalPages,
@@ -81,9 +81,9 @@ export async function GET(req) {
             { status: 200 }
         );
     } catch (error) {
-        console.error("Error fetching TextFeedback items:", error);
+        console.error("Error fetching VideoFeedback items:", error);
         return NextResponse.json(
-            { error: "Failed to fetch TextFeedback items" },
+            { error: "Failed to fetch VideoFeedback items" },
             { status: 500 }
         );
     }

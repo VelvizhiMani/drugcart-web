@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const textFeedbackSchema = new Schema(
+const videoFeedbackSchema = new Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -18,7 +18,7 @@ const textFeedbackSchema = new Schema(
       type: String,
       default: ""
     },
-    address: {
+    uploadvideo: {
       type: String,
       default: ""
     },
@@ -40,6 +40,6 @@ const textFeedbackSchema = new Schema(
   }
 );
 
-const TextFeedback = mongoose.models.TextFeedback || mongoose.model("TextFeedback", textFeedbackSchema, "text_feedback");
+const VideoFeedback = mongoose.models.VideoFeedback || mongoose.model("VideoFeedback", videoFeedbackSchema, "video_feedback");
 
-export default TextFeedback;
+export default VideoFeedback;
