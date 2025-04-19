@@ -17,7 +17,7 @@ function VideoFeedback() {
             useremail: profile?.useremail || "",
             phone: profile?.phone || "",
             uploadvideo: "",
-            discount: "5",
+            discount: "4",
         },
         validationSchema: yup.object({
             uploadvideo: yup.string().required("Video is required"),
@@ -35,7 +35,7 @@ function VideoFeedback() {
 
     return (
         <div>
-            <h3 className="text-md font-semibold mb-2">Text Feedback (Get 2% extra discount on next order)</h3>
+            <h3 className="text-md font-semibold mb-2">Text Feedback (Get 4% extra discount on next order)</h3>
             <form onSubmit={formik.handleSubmit}>
                 <VideoInput
                     title={""}
