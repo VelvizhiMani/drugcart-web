@@ -22,7 +22,7 @@ const IMAGES = {
   AYURVEDIC: require("@/assets/ayurvedic.png"),
   // Banner Group
   AROMA: require("@/assets/offers/aroma.png"),
-  LABTEST: require("@/assets/offers/labtest.png"),
+  LABTEST1: require("@/assets/offers/labtest.png"),
   HEALTHCAREBANNER: require("@/assets/offers/healthcare.png"),
   AYURVEDICBANNER: require("@/assets/offers/ayurvedic.png"),
   SPECIALCAREBANNER: require("@/assets/offers/specialcare.png"),
