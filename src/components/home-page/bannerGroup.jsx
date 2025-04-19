@@ -14,7 +14,7 @@ const BannerGroup = () => {
         />
         <Image
           priority
-          src={IMAGES.LABTEST}
+          src={IMAGES.LABTEST1}
           alt="Lab Test"
           className="mx-auto object-cover md:w-96 w-full"
         />
