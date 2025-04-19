@@ -11,6 +11,7 @@ import { PostCartService } from "@/services/cartService";
 import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
 import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
+import { tableText } from "@/utils/textFormat"
 
 const GenericProductList = () => {
   const { productList } = useSelector((state) => state.productData);
@@ -57,13 +58,19 @@ const GenericProductList = () => {
               <div className="m-2">
                 <div className="flex justify-start border-[1.5px] p-2">
                   <Image
-                    src={IMAGES.ALOVERA}
-                    alt="Health hacks"
+                    src={
+                      productList?.products?.[0]?.product_img
+                        ? `https://assets2.drugcarts.com/${productList?.products?.[0]?.product_img}`
+                        : IMAGES.NO_IMAGE
+                    }
+                    alt={productList?.products?.[0]?.product_name}
+                    width={250}
+                    height={220}
                     className="w-16 h-16 object-cover"
                   />
                   <div className="ml-2">
-                    <h3 className="font-bold text-sm">Zucet Plus Tablet</h3>
-                    <h3 className="text-gray-400 text-xs">Cold Cough</h3>
+                    <h3 className="font-bold text-sm cursor-pointer" onClick={() => ProductClick(productList?.products?.[0]?.url)}>{tableText(productList?.products?.[0]?.product_name, 30)}</h3>
+                    <h3 className="text-gray-400 text-xs">{productList?.products?.[0]?.generices}</h3>
                     <div className="flex items-center mt-2">
                       <span className="text-yellow-500 text-xs">&#9733;</span>
                       <span className="text-yellow-500 text-xs">&#9733;</span>
