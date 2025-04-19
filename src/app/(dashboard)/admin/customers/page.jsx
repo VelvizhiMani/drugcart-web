@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid2';
 import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import { GetTextFeedbackListService } from '@/services/textFeedbackService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -24,8 +25,14 @@ const CardItem = styled(Paper)(({ theme }) => ({
 }));
 
 function CustomersPage() {
+    const { textFeedbackList } = useSelector((state) => state.textFeedbackData)
     const dispatch = useDispatch()
     const router = useRouter()
+
+    useEffect(() => {
+        dispatch(GetTextFeedbackListService())
+    }, [])
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
@@ -44,6 +51,23 @@ function CustomersPage() {
                             </Typography>
                         </Box>
                         <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>0</Typography>
+                    </CardItem>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/text-feedback')}>
+                        <Box >
+                            <Typography
+                                variant="body1"
+                                fontFamily={"Poppins"}
+                                fontWeight={500}
+                                fontSize={16}
+                                color='#fff'
+                                sx={{ flexGrow: 1 }}
+                            >
+                                Text Feedbacks
+                            </Typography>
+                        </Box>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{textFeedbackList?.pagination?.totalPages}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>
