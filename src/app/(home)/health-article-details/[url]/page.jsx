@@ -19,9 +19,9 @@ const HealthArticleDetails = () => {
   
   return (
     <section className="max-w-7xl mt-3 mx-auto">
-      <h2 className="text-lg font-semibold text-gray-800 uppercase">{articleUrl?.blogname}</h2>
+      <h2 className="text-lg font-semibold text-gray-800 uppercase p-2">{articleUrl?.blogname}</h2>
       <hr className='mb-6' />
-      <div  className="space-y-4" dangerouslySetInnerHTML={{ __html: articleUrl?.description }} />
+      <div  className="space-y-4 p-4" dangerouslySetInnerHTML={{ __html: articleUrl?.description }} />
     </section>
   )
 }
