@@ -47,10 +47,10 @@ const IMAGES = {
   HACKS2: require("@/assets/hacks/hacks-2.jpg"),
   HACKS3: require("@/assets/hacks/hacks-3.jpg"),
   // Shop by Category
-  FACECARE: require("@/assets/shopbycategory/face-care.png"),
+  FACECARE1: require("@/assets/shopbycategory/face-care.png"),
   ORALCARE: require("@/assets/shopbycategory/oral-care.png"),
   NATURALCARE: require("@/assets/shopbycategory/natural-care.png"),
-  SKINCARE: require("@/assets/shopbycategory/skin-care.png"),
+  SKINCARE1: require("@/assets/shopbycategory/skin-care.png"),
   GENERIC1: require("@/assets/shopbycategory/generic-1.png"),
   GENERIC2: require("@/assets/shopbycategory/generic-2.png"),
   NEW: require("@/assets/shopbycategory/new.png"),
