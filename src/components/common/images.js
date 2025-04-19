@@ -37,7 +37,7 @@ const IMAGES = {
   SEASONAL: require("@/assets/featured/seasonal.png"),
   LABPACKAGE: require("@/assets/featured/lab-package.png"),
   CLINICCARE: require("@/assets/featured/clinic-care.png"),
-  BABYCARE: require("@/assets/featured/baby-care.png"),
+  BABYCARE1: require("@/assets/featured/baby-care.png"),
   DRUGCARTS: require("@/assets/featured/drugcarts.png"),
   SPECIALFCARE: require("@/assets/featured/special-care.png"),
   TESTKIT: require("@/assets/featured/test-kit.png"),
