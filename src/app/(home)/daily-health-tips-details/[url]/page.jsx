@@ -17,9 +17,9 @@ const HealthTipDetails = () => {
 
   return (
     <section className="max-w-7xl mt-3 mx-auto">
-      <h2 className="text-lg font-semibold text-gray-800 uppercase">{healthTipUrl?.name}</h2>
+      <h2 className="text-lg font-semibold text-gray-800 uppercase p-3">{healthTipUrl?.name}</h2>
       <hr className='mb-6' />
-      <div className="rich-content space-y-4" dangerouslySetInnerHTML={{ __html: healthTipUrl?.description }} />
+      <div className="rich-content space-y-4 p-3" dangerouslySetInnerHTML={{ __html: healthTipUrl?.description }} />
     </section>
   )
 }
