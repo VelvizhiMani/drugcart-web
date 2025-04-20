@@ -18,8 +18,8 @@ const Diseases = () => {
     return (
         <section className="max-w-7xl mt-3 mx-auto">
             {/* <Image src={IMAGES.DISEASESBANNER} alt="Herbs Details" className="w-full h-64 object-cover mx-auto" /> */}
-            <h1 className='my-4 font-bold'>{diseasesUrl?.name}</h1>
-            <div className='bg-white py-4'>
+            <h1 className='my-4 font-bold p-3'>{diseasesUrl?.name}</h1>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>{diseasesUrl?.name} overview and Definition</h2>
                 <div
                     className="rich-content-card"
@@ -29,7 +29,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Classification of {diseasesUrl?.name}</h2>
                 <div
                     className="rich-content-card"
@@ -39,7 +39,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Epidemiology</h2>
                 <div
                     className="rich-content-card"
@@ -49,7 +49,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Causative factor</h2>
                 <div
                     className="rich-content-card"
@@ -59,7 +59,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Risk Factor</h2>
                 <div
                     className="rich-content-card"
@@ -69,7 +69,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Pathophysiology</h2>
                 <div
                     className="rich-content-card"
@@ -79,7 +79,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Routes of Transmission</h2>
                 <div
                     className="rich-content-card"
@@ -89,7 +89,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Clinical signs & symptoms</h2>
                 <div
                     className="rich-content-card"
@@ -99,7 +99,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Lab Test</h2>
                 <div
                     className="rich-content-card"
@@ -109,7 +109,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Radiology</h2>
                 <div
                     className="rich-content-card"
@@ -119,7 +119,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Differential Diagnosis</h2>
                 <div
                     className="rich-content-card"
@@ -129,7 +129,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Medical</h2>
                 <div
                     className="rich-content-card"
@@ -139,7 +139,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Surgical</h2>
                 <div
                     className="rich-content-card"
@@ -149,7 +149,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Prognosis</h2>
                 <div
                     className="rich-content-card"
@@ -159,7 +159,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Complications</h2>
                 <div
                     className="rich-content-card"
@@ -169,7 +169,7 @@ const Diseases = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>Prevention</h2>
                 <div
                     className="rich-content-card"
