@@ -46,6 +46,7 @@ import specialityReducer from "@/reduxToolkit/slices/specialitySlice"
 import doctorReducer from "@/reduxToolkit/slices/doctorSlice"
 import textFeedbackReducer from "@/reduxToolkit/slices/textFeedbackSlice"
 import videoFeedbackReducer from "@/reduxToolkit/slices/videoFeedbackSlice"
+import mainSliderReducer from "@/reduxToolkit/slices/mainSliderSlice"
 
 export const store = configureStore({
     reducer: {
@@ -95,6 +96,7 @@ export const store = configureStore({
         doctorData: doctorReducer,
         textFeedbackData: textFeedbackReducer,
         videoFeedbackData: videoFeedbackReducer,
+        mainSliderData: mainSliderReducer,
         adminUserData: adminUserReducer
     }
 })
