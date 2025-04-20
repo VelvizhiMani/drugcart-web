@@ -66,7 +66,7 @@ const HealthNews = () => {
                     )}
                     <p className='p-3'>{healthNewsList?.health_news?.[0]?.title}</p>
                 </div>
-                <div className='w-full md:w-2/6'>
+                <div className='w-full md:w-2/6 p-3'>
                     <h3 className='text-sm md:text-xl font-bold mb-4'>Latest News </h3>
 
                     {healthNewsList?.health_news?.map((article, i) => i < 3 && (

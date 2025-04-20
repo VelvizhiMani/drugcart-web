@@ -17,7 +17,7 @@ const InfographicsView = () => {
 
     return (
         <section className="max-w-7xl mt-3 mx-auto">
-            <h2 className="text-lg font-semibold text-gray-800 uppercase">{infoGraphicsUrl?.title}</h2>
+            <h2 className="text-lg font-semibold text-gray-800 uppercase p-3">{infoGraphicsUrl?.title}</h2>
             <hr className='mb-6' />
             <Image
                 src={infoGraphicsUrl?.thuming ? `https://assets2.drugcarts.com/admincolor/homepage/infogra/${infoGraphicsUrl?.thuming}` : IMAGES.NO_IMAGE}
@@ -26,7 +26,7 @@ const InfographicsView = () => {
                 height={200}
                 className="w-[50%] object-cover mx-auto"
             />
-            <p className='text-sm md:text-md py-6'>{infoGraphicsUrl?.title}</p>
+            <p className='text-sm md:text-md py-6 p-3'>{infoGraphicsUrl?.title}</p>
         </section>
     )
 }

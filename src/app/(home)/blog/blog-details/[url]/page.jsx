@@ -21,11 +21,11 @@ const BlogDetail = () => {
     <>
       <div className="max-w-7xl mx-auto">
         <div className="flex">
-          <div className="w-[80%] flex-none">
-            <h1 className="font-bold text-xl md:text-2xl my-2">
+          <div className="w-full flex-none">
+            <h1 className="font-bold text-xl md:text-2xl my-2 p-3">
               {blogUrl?.blogname}
             </h1>
-            <div className="space-y-2" dangerouslySetInnerHTML={{ __html: blogUrl.description }} />
+            <div className="space-y-2 p-3" dangerouslySetInnerHTML={{ __html: blogUrl.description }} />
           </div>
           {/* <div className="w-[20%] flex-none">
             <h1 className="font-bold text-xl md:text-xl">Home Remedies</h1>

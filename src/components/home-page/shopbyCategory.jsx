@@ -13,7 +13,7 @@ const ShopbyCategory = () => {
           <h3 className="text-white text-xl text-center">Face Care</h3>
           <Image
             priority
-            src={IMAGES.FACECARE}
+            src={IMAGES.FACECARE1}
             alt="Face Care"
             className="categoryicon object-cover ml-10 "
           />
@@ -31,7 +31,7 @@ const ShopbyCategory = () => {
           <h3 className="text-white text-xl text-center">Women Care</h3>
           <Image
             priority
-            src={IMAGES.FACECARE}
+            src={IMAGES.FACECARE1}
             alt="Face Care"
             className="categoryicon object-cover ml-10 mt-5"
           />
@@ -49,8 +49,8 @@ const ShopbyCategory = () => {
           <h3 className="text-white text-xl text-center">Skin Care</h3>
           <Image
             priority
-            src={IMAGES.SKINCARE}
-            alt="Face Care"
+            src={IMAGES.SKINCARE1}
+            alt="Skin Care"
             className="categoryicon object-cover ml-10 mt-5"
           />
         </div>

@@ -56,7 +56,7 @@ const FameSection = () => {
               <div>
                 <h3 className="text-gray-800 font-semibold text-sm">{product?.product_name}</h3>
                 <p className="text-xs text-gray-500 mb-2">{product?.cat_name}</p>
-                <p className="text-md font-bold text-gray-800 mb-0">${product?.price}</p>
+                <p className="text-md font-bold text-gray-800 mb-0">&#8377; {product?.price}</p>
 
                 {/* Rating */}
                 <div className="flex justify-center mt-4">

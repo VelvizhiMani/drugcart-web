@@ -14,7 +14,7 @@ const Cancellation = () => {
                 alt="Privacy Policy"
                 className="w-[50%] mx-auto"
             />
-            <p className='my-2'>Drug Carts Private Limited, on behalf of its own and its affiliate companies/groups under the brand Drugcarts state that they are the original author and publisher of this cancellation, refund and return policy on the Website URL http://www.drugcarts.com/ and the Mobile Application “Drugcarts” together known and referred hereinafter as “Website.”</p>
+            <p className='my-2 p-2'>Drug Carts Private Limited, on behalf of its own and its affiliate companies/groups under the brand Drugcarts state that they are the original author and publisher of this cancellation, refund and return policy on the Website URL http://www.drugcarts.com/ and the Mobile Application “Drugcarts” together known and referred hereinafter as “Website.”</p>
             <div className='bg-[#A0C9FE] p-4 text-center max-w-5xl mx-auto my-4'>
                 <h2 className='text-md md:text-xl font-bold py-3'>Disclaimer</h2>
                 <p className='my-2'>Please read these terms of use carefully by accessing or using this internet based platform,

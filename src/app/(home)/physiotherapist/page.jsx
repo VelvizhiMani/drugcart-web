@@ -158,7 +158,7 @@ const Physiotherapist = () => {
                     </button>
                 </form>
             </div>
-            <div className="flex">
+            <div className="flex flex-wrap">
                 <div className="w-full md:w-[68%] p-2">
                     <h1 className="text-md md:text-xl font-bold">PHYSIOTHERAPY</h1>
                     <p className="my-2"> Physiotherapy or physical therapy, is an allied health science profession that deals with of bio – mechanics , kinesiology, manual and exercise therapy and electrotherapy, to help patients restore to the normal physical mobility how the body works, strength and function</p>
@@ -186,7 +186,7 @@ const Physiotherapist = () => {
                         <p className="my-2">Physiotherapy has a wide range of specialties and people can take prevention due to medical issues: Neurological issues, Neuromuscular, skeletal, Cardiovascular and Respiratory.</p>
                     </div>
                 </div>
-                <div className="w-full md:w-[30%] p-2 border-[1.5px]">
+                <div className="w-full md:w-[30%] p-2 border-[1.5px] hidden md:block">
                     <h3 className="text-[16px] font-bold text-center uppercase pb-6 mt-6">Physiotherapy Services</h3>
                     <div className="items-center justify-start gap-2 text-[#ff5e00]">
                         <h2 className="text-md font-bold p-3 border-b-2">

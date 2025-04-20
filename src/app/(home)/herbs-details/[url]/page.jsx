@@ -25,8 +25,8 @@ const HerbsDetails = () => {
                 It helps to improve the prebiotics and it is also good for the skin and intestines.
                 It is also called Kumari
             </p> */}
-            <h2 className="text-lg font-semibold text-gray-800 uppercase my-4">{herbsUrl?.title}</h2>
-            <div className='bg-white py-2'>
+            <h2 className="text-lg font-semibold text-gray-800 uppercase my-4 p-3">{herbsUrl?.title}</h2>
+            <div className='bg-white py-2 p-3'>
                 <h2 className='font-bold my-2 uppercase'>WHAT IS {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -36,7 +36,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>What are the other names of {herbsUrl?.title} in various languages</h2>
                 <div
                     className="rich-content-card"
@@ -46,7 +46,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>ORIGIN AND SOURCE OF {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -56,7 +56,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>COMPOSITION OF {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -66,7 +66,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>CHEMICAL COMPOUNDS IN {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -76,7 +76,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>TRADITIONAL AND MODERN VIEW OF {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -86,7 +86,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>DOSAGE OF {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -96,7 +96,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>PRECAUTIONS WHILE USING {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -106,7 +106,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>CONTRAINDICATIONS WHEN USING {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -116,7 +116,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>BENEFITS OF {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -126,7 +126,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>HOW CAN YOU ADD {herbsUrl?.title} IN YOUR DAILY LIFE?</h2>
                 <div
                     className="rich-content-card"
@@ -136,7 +136,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>SIDE EFFECTS OF {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"
@@ -146,7 +146,7 @@ const HerbsDetails = () => {
                     }}
                 />
             </div>
-            <div className='bg-white py-4'>
+            <div className='bg-white py-4 p-3'>
                 <h2 className='font-bold my-4 uppercase'>FREQUENTLY ASKED QUESTIONS ON {herbsUrl?.title}</h2>
                 <div
                     className="rich-content-card"

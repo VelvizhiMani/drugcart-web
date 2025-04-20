@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Link from "next/link";
 const ShippingPolicy = () => {
   return (
     <section className="max-w-7xl mx-auto mt-3">
       <h1 className='text-md md:text-xl font-bold text-[#4C4C95] p-2 border-t-[1.5px] border-b-[1.5px] text-center'>
         Shipping Policy
       </h1>
-      <p className='my-2'><span className="font-bold">Drugcarts private limited,</span> on behalf of its own and its affiliate companies/groups under the brand Drugcarts state that they are the original author and publisher of this shipping policy on the Website URL <span className="font-bold">https://www.drugcarts.com/</span> and the Mobile Application <span className="font-bold">“Drugcarts”</span> together known and referred hereinafter as<span className="font-bold"> “Website.”</span></p>
+      <p className='my-2 p-2'><span className="font-bold">Drugcarts private limited,</span> on behalf of its own and its affiliate companies/groups under the brand Drugcarts state that they are the original author and publisher of this shipping policy on the Website URL <span className="font-bold"><Link href="https://www.drugcarts.com/">www.drugcarts.com</Link></span> and the Mobile Application <span className="font-bold">“Drugcarts”</span> together known and referred hereinafter as<span className="font-bold"> “Website.”</span></p>
       <div className='border-[1.5px] p-4 my-4'>
         <h2 className='text-md md:text-xl font-bold py-3'>General clauses:</h2>
         <p> 1. An email confirmation will be sent to your registered email id and mobile number as soon as the order is placed. The second email confirmation will be sent when the pharmacist accepts the order after the availability check and assessment of your prescription.</p>
