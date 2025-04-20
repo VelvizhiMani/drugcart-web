@@ -100,7 +100,7 @@ const orderSchema = new Schema(
             },
             orderStatus: {
                 type: String,
-                default: "Processing",
+                default: "Pending",
                 enum: ["Processing", "Completed", "Cancelled", "Transit", "Delivered", "Pending", "Dispatched"],
             },
         },

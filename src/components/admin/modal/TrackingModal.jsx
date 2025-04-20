@@ -25,7 +25,7 @@ function TrackingModal({ open, setOpen }) {
 
     const formik = useFormik({
         initialValues: {
-            trackingno: addTrackingNo(new Date()),
+            trackingno: "",
             shippingcompany: "",
             shippingweb: "",
             tracksenddate: "",
@@ -36,6 +36,7 @@ function TrackingModal({ open, setOpen }) {
         validationSchema: yup.object({
             shippingcompany: yup.string().required("shipping company is required"),
             shippingweb: yup.string().required("shipping website is required"),
+            trackingno: yup.string().required("tracking no is required"),
             trackingimg: yup.string().required("Image is required"),
             tracksenddate: yup.date()
                 .required("Start date is required")
@@ -134,6 +135,19 @@ function TrackingModal({ open, setOpen }) {
                                 error={formik.touched.trackenddate && Boolean(formik.errors.trackenddate)}
                                 helperText={formik.touched.trackenddate ? formik.errors.trackenddate : ""}
                                 inputProps={{ min: formik.values.tracksenddate || "" }}
+                            />
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 4 }}>
+                            <TextInput
+                                title={"Tracking No"}
+                                value={formik.values.trackingno}
+                                onChange={formik.handleChange("trackingno")}
+                                helperText={
+                                    formik.touched.trackingno ? formik.errors.trackingno : null
+                                }
+                                error={
+                                    formik.touched.trackingno ? formik.errors.trackingno : null
+                                }
                             />
                         </Grid2>
                         <Grid2 xs={12} md={6}>

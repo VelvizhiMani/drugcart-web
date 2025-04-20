@@ -41,7 +41,7 @@ function page() {
             ...orderGetData,
             trackingInfo: {
                 ...orderGetData?.trackingInfo,
-                orderStatus: "Pending"
+                orderStatus: "Processing"
             }
         };
         await dispatch(PutOrderService(orderGetData?.orderId, statusChange));
@@ -85,7 +85,7 @@ function page() {
 
                 {/* Buttons Container */}
                 <Grid2 xs={12} md={6} display="flex" justifyContent="flex-end" gap={2}>
-                    {orderGetData?.trackingInfo?.orderStatus === "Processing" && (
+                    {orderGetData?.trackingInfo?.orderStatus === "Pending" && (
                         <>
                             <Button
                                 color="success"
@@ -117,7 +117,7 @@ function page() {
                             <NotesModal open={openNotes} setOpen={setNotesModal} />
                         </>
                     )}
-                    {orderGetData?.trackingInfo?.orderStatus === "Pending" && (
+                    {orderGetData?.trackingInfo?.orderStatus === "Processing" && (
                         <>
                             <Button
                                 color="success"
