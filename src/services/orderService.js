@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData, addInvoice } from '../reduxToolkit/slices/orderSlice'
+import { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData, addInvoice, getPedingOrder } from '../reduxToolkit/slices/orderSlice'
 
 const PostOrderService = (data, router) => async (dispatch) => {
     try {
@@ -27,6 +27,18 @@ const GetOrdersService = (page = 1, limit, search = "", status = "") => async (d
         dispatch(IsLoading(true))
         const getData = await axios.get(`/api/order?page=${page}&limit=${limit}&search=${search}&orderStatus=${status}`, { headers: await Authorization() })
         dispatch(getAllOrders(getData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+const GetPendingOrderService = (page = 1, limit, search = "") => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`/api/order?page=${page}&limit=${limit}&search=${search}&orderStatus=Pending`, { headers: await Authorization() })
+        dispatch(getPedingOrder(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
         dispatch(IsLoading(false))
@@ -102,4 +114,4 @@ const PostInvoiceService = (data) => async (dispatch) => {
     }
 }
 
-export { PostOrderService, GetOrdersService, GetOrderIdService, GetMyOrderService, PutOrderService, DeleteOrderService, GetOrderOneService, PostInvoiceService }
+export { PostOrderService, GetOrdersService, GetOrderIdService, GetMyOrderService, PutOrderService, DeleteOrderService, GetOrderOneService, PostInvoiceService, GetPendingOrderService }

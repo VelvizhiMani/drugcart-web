@@ -33,13 +33,15 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Logo from "@/assets/logo.png";
 import { Badge, Menu, MenuItem } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DropSpinner from "@/components/admin/spinner/DropSpinner"
 import { useRole } from "@/hooks/useRole";
+import { GetPendingOrderService } from '@/services/orderService';
 
 const drawerWidth = 220;
 
 function AdminLayout(props) {
+  const { pendingOrder } = useSelector((state) => state.orderData)
   const [open, setOpen] = React.useState(false)
   const [isAwareness, setIsAwareness] = React.useState(false)
   const { loading } = useSelector((state) => state.common)
@@ -53,6 +55,7 @@ function AdminLayout(props) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const dispatch = useDispatch()
   const { role } = useRole()
 
   const handleProfileMenuOpen = (event) => {
@@ -103,11 +106,8 @@ function AdminLayout(props) {
     router.push(`/admin/${subpath}`);
   };
 
-
   useEffect(() => {
-
-    const role = localStorage.getItem('role');
-    console.log('role: ' + role);
+    dispatch(GetPendingOrderService(1, 0))
     const token = ""
     console.log(token);
 
@@ -170,21 +170,21 @@ function AdminLayout(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem>
         <IconButton
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={pendingOrder?.pagination?.totalItems} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -522,7 +522,7 @@ function AdminLayout(props) {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
@@ -530,13 +530,14 @@ function AdminLayout(props) {
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              onClick={() => router.push('/admin/orders?status=Pending')}
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={pendingOrder?.pagination?.totalItems} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
