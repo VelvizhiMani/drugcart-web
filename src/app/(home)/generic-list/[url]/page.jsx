@@ -155,7 +155,7 @@ const GenericProductList = () => {
                 productList?.products?.map((product, i) => (
                   <div
                     key={i}
-                    className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 "
+                    className="relative border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 "
                   >
                     <div className="mb-3">
                       <div className="absolute top-2 left-1 text-white text-xs px-2 rounded-full">
