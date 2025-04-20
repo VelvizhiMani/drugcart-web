@@ -18,6 +18,7 @@ const GenericProductList = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
+  const [fav, setFav] = useState("false");
   const params = useParams();
   const dispatch = useDispatch();
 
@@ -156,6 +157,50 @@ const GenericProductList = () => {
                     key={i}
                     className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0 "
                   >
+                    <div className="mb-3">
+                      <div className="absolute top-2 left-1 text-white text-xs px-2 rounded-full">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className={`size-6 ${
+                            fav == true
+                              ? "fill-red-500 text-gray-400"
+                              : "fill-[pink] text-gray-400"
+                          }`}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                          />
+                        </svg>
+                      </div>
+                      {/* Discount Badge */}
+                      {product?.percentage ? (
+                        <div className="absolute top-2 ml-20 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                          -{product?.percentage}%
+                        </div>
+                      ) : null}
+
+                      {/* Share Icon */}
+                      <div className="absolute top-2 right-2 text-gray-500">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="size-6 text-gray-400"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M15.75 4.5a3 3 0 1 1 .825 2.066l-8.421 4.679a3.002 3.002 0 0 1 0 1.51l8.421 4.679a3 3 0 1 1-.729 1.31l-8.421-4.678a3 3 0 1 1 0-4.132l8.421-4.679a3 3 0 0 1-.096-.755Z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                     <Image
                       src={
                         product?.product_img
