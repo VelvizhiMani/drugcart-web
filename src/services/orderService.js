@@ -86,6 +86,7 @@ const PutOrderService = (orderId, userData) => async (dispatch) => {
     await axios.put(`/api/order/order-view/${orderId}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getGetOrderData(response.data))
         dispatch(GetOrderOneService(orderId))
+        dispatch(GetPendingOrderService())
         dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)
