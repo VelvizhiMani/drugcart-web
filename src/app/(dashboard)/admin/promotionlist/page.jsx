@@ -16,15 +16,15 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { DeletePageBannerService, GetPageBannerListService } from '@/services/pageBannerService';
+import { DeletePromotionService, GetPromotionListService } from '@/services/promotionService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
 
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function AdminPageBanner() {
-    const { pageBannerList } = useSelector((state) => state.pageBannerData)
+function AdminMainSlider() {
+    const { promotionList } = useSelector((state) => state.promotionData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
@@ -47,11 +47,11 @@ function AdminPageBanner() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetPageBannerListService(page, showNo, search))
+        dispatch(GetPromotionListService(page, showNo, search))
     }, [page, showNo, search])
 
     const searchSubmit = () => {
-        dispatch(GetPageBannerListService(page, showNo, search))
+        dispatch(GetPromotionListService(page, showNo, search))
     }
 
     return (
@@ -63,16 +63,16 @@ function AdminPageBanner() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Page Banner List
+                    Promotion List
                 </Typography>
                 <Button
                     color="secondary"
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/pagebannerlist/add`)}
+                    onClick={() => router.push(`/admin/promotionlist/add`)}
                 >
-                    Add Page Banner
+                    Add Promotion List
                 </Button>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
@@ -111,8 +111,9 @@ function AdminPageBanner() {
                     <TableHead sx={{ backgroundColor: "#7d5e69" }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Page Name</TableCell>
-                            <TableCell style={rowText}>Banner Image</TableCell>
+                            <TableCell style={rowText}>Title</TableCell>
+                            <TableCell style={rowText}>url</TableCell>
+                            <TableCell style={rowText}>Image</TableCell>
                             <TableCell style={rowText}>Status</TableCell>
                             <TableCell align="right" style={rowText}>
                                 Action
@@ -120,7 +121,7 @@ function AdminPageBanner() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {pageBannerList && pageBannerList?.page_bannners?.map((row, i) => (
+                        {promotionList && promotionList?.promotions?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -133,13 +134,16 @@ function AdminPageBanner() {
                                     component="th"
                                     scope="row"
                                 >
-                                    {row?.pagename}
+                                    {row?.title}
+                                </TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                    {row?.url}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.image ? (
                                         <Avatar
-                                            alt={row?.pagename}
-                                            src={`https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${row?.image}`}
+                                            alt={row?.title}
+                                            src={`https://assets1.drugcarts.com/admincolor/homepage/slider/${row?.image}`}
                                             style={{ width: 80, height: 24 }}
                                             variant="rounded"
                                         />
@@ -155,7 +159,7 @@ function AdminPageBanner() {
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/pagebannerlist/${row?._id}`)
+                                        router.push(`/admin/promotionlist/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
@@ -166,10 +170,10 @@ function AdminPageBanner() {
                                 <DeleteModal
                                     open={selectedId === row._id}
                                     setOpen={() => setSelectedId(null)}
-                                    title={"Delete Page Banner"}
-                                    description={`Are you sure you want to delete ${row?.pagename} ?`}
+                                    title={"Delete Promotion"}
+                                    description={`Are you sure you want to delete ${row?.title} ?`}
                                     onSubmit={async () => {
-                                        await dispatch(DeletePageBannerService(row._id));
+                                        await dispatch(DeletePromotionService(row._id));
                                         setSelectedId(null);
                                     }}
                                 />
@@ -186,11 +190,11 @@ function AdminPageBanner() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {pageBannerList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {promotionList?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"
-                    count={pageBannerList?.pagination?.totalPages}
+                    count={promotionList?.pagination?.totalPages}
                     page={page}
                     color="secondary"
                     onChange={(_, value) => setPage(value)}
@@ -200,4 +204,4 @@ function AdminPageBanner() {
     );
 }
 
-export default AdminPageBanner;
+export default AdminMainSlider;

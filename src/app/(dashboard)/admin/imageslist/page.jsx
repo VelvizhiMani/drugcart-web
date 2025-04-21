@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { GetMainSliderListService } from '@/services/mainSliderService';
 import { GetPageBannerListService } from '@/services/pageBannerService';
+import { GetPromotionListService } from '@/services/promotionService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -28,12 +29,14 @@ const CardItem = styled(Paper)(({ theme }) => ({
 function ImagesList() {
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const { pageBannerList } = useSelector((state) => state.pageBannerData)
+    const { promotionList } = useSelector((state) => state.promotionData)
     const dispatch = useDispatch()
     const router = useRouter()
 
     useEffect(() => {
         dispatch(GetMainSliderListService())
         dispatch(GetPageBannerListService())
+        dispatch(GetPromotionListService())
     }, [])
 
     return (
@@ -57,7 +60,7 @@ function ImagesList() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/mainslider')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/promotionlist')}>
                         <Box >
                             <Typography
                                 variant="body1"
@@ -70,7 +73,7 @@ function ImagesList() {
                                 Promotion List
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{0}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{promotionList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
