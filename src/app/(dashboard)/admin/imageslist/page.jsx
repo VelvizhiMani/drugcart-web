@@ -8,6 +8,7 @@ import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { GetMainSliderListService } from '@/services/mainSliderService';
+import { GetPageBannerListService } from '@/services/pageBannerService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -26,11 +27,13 @@ const CardItem = styled(Paper)(({ theme }) => ({
 
 function ImagesList() {
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
+    const { pageBannerList } = useSelector((state) => state.pageBannerData)
     const dispatch = useDispatch()
     const router = useRouter()
 
     useEffect(() => {
         dispatch(GetMainSliderListService())
+        dispatch(GetPageBannerListService())
     }, [])
 
     return (
@@ -71,7 +74,7 @@ function ImagesList() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/video-feedback')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/pagebannerlist')}>
                         <Box >
                             <Typography
                                 variant="body1"
@@ -84,7 +87,7 @@ function ImagesList() {
                                 Page Banner
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{0}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{pageBannerList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>
