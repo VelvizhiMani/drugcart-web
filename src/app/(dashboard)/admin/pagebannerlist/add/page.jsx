@@ -29,6 +29,8 @@ function PageBannerAdd() {
         dispatch(GetMainSliderListService())
     }, [])
 
+    const uniqueArray = mainSliderList?.main_sliders?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
+
     const URLText = (text) => {
         const splitText = text.split(" ")
         const joinSpace = splitText.join("-").toLowerCase()
@@ -91,7 +93,7 @@ function PageBannerAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <SearchField
                             title="Page Name"
-                            data={mainSliderList?.main_sliders}
+                            data={uniqueArray}
                             value={formik.values.pagename}
                             getOptionLabel={(option) => (typeof option === "string" ? option : option?.url || "")}
                             onInputChange={(event, newValue) => formik.setFieldValue("pagename", newValue)}

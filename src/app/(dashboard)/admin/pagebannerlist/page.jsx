@@ -167,7 +167,7 @@ function AdminPageBanner() {
                                     open={selectedId === row._id}
                                     setOpen={() => setSelectedId(null)}
                                     title={"Delete Main Slider"}
-                                    description={`Are you sure you want to delete ${row?.title} ?`}
+                                    description={`Are you sure you want to delete ${row?.pagename} ?`}
                                     onSubmit={async () => {
                                         await dispatch(DeletePageBannerService(row._id));
                                         setSelectedId(null);
