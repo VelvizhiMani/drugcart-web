@@ -4,6 +4,7 @@ const initialState = {
     promotionList: [],
     newPromotion: {},
     promotion: {},
+    promotionUrl: {}
 }
 
 const promotionSlice = createSlice({
@@ -19,8 +20,11 @@ const promotionSlice = createSlice({
         getPromotion: (state, { payload }) => {
             state.promotion = payload
         },
+        getPromotionUrl: (state, { payload }) => {
+            state.promotionUrl = payload
+        },
     }
 })
 
-export const { addPromotion, getPromotionList, getPromotion } = promotionSlice.actions
+export const { addPromotion, getPromotionList, getPromotion, getPromotionUrl } = promotionSlice.actions
 export default promotionSlice.reducer

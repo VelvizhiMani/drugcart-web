@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addMainSlider, getMainSliderList, getMainSlider } from '../reduxToolkit/slices/mainSliderSlice'
+import { addMainSlider, getMainSliderList, getMainSlider, getMainSliderUrl } from '../reduxToolkit/slices/mainSliderSlice'
 
 const PostMainSliderService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetMainSliderIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetMainSliderUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/mainslider/view/${url}`, { headers: await Authorization() })
+        dispatch(getMainSliderUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutMainSliderService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/mainslider/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getMainSlider(response.data))
@@ -62,4 +74,4 @@ const DeleteMainSliderService = (id) => async (dispatch) => {
     })
 }
 
-export { PostMainSliderService, GetMainSliderListService, GetMainSliderIdService, PutMainSliderService, DeleteMainSliderService }
+export { PostMainSliderService, GetMainSliderListService, GetMainSliderIdService, GetMainSliderUrlService, PutMainSliderService, DeleteMainSliderService }

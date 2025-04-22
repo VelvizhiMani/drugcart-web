@@ -4,6 +4,7 @@ const initialState = {
     mainSliderList: [],
     newMainSlider: {},
     mainSlider: {},
+    mainSliderUrl: {}
 }
 const mainSliderSlice = createSlice({
     name: 'main_slider',
@@ -18,8 +19,11 @@ const mainSliderSlice = createSlice({
         getMainSlider: (state, { payload }) => {
             state.mainSlider = payload
         },
+        getMainSliderUrl: (state, { payload }) => {
+            state.mainSliderUrl = payload
+        },
     }
 })
 
-export const { addMainSlider, getMainSliderList, getMainSlider } = mainSliderSlice.actions
+export const { addMainSlider, getMainSliderList, getMainSlider, getMainSliderUrl } = mainSliderSlice.actions
 export default mainSliderSlice.reducer

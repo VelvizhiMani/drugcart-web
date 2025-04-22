@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addPageBanner, getPageBannerList, getPageBanner } from '../reduxToolkit/slices/pageBannerSlice'
+import { addPageBanner, getPageBannerList, getPageBanner, getPageBannerUrl } from '../reduxToolkit/slices/pageBannerSlice'
 
 const PostPageBannerService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetPageBannerIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetPageBannerUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/pagebannerlist/view/${url}`, { headers: await Authorization() })
+        dispatch(getPageBannerUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutPageBannerService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/pagebannerlist/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getPageBanner(response.data))
@@ -62,4 +74,4 @@ const DeletePageBannerService = (id) => async (dispatch) => {
     })
 }
 
-export { PostPageBannerService, GetPageBannerListService, GetPageBannerIdService, PutPageBannerService, DeletePageBannerService }
+export { PostPageBannerService, GetPageBannerListService, GetPageBannerIdService, GetPageBannerUrlService, PutPageBannerService, DeletePageBannerService }

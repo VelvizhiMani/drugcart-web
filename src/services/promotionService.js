@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addPromotion, getPromotionList, getPromotion } from '../reduxToolkit/slices/promotionSlice'
+import { addPromotion, getPromotionList, getPromotion, getPromotionUrl } from '../reduxToolkit/slices/promotionSlice'
 
 const PostPromotionService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetPromotionIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetPromotionUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/promotion/view/${url}`, { headers: await Authorization() })
+        dispatch(getPromotionUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutPromotionService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/promotion/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getPromotion(response.data))
@@ -62,4 +74,4 @@ const DeletePromotionService = (id) => async (dispatch) => {
     })
 }
 
-export { PostPromotionService, GetPromotionListService, GetPromotionIdService, PutPromotionService, DeletePromotionService }
+export { PostPromotionService, GetPromotionListService, GetPromotionIdService, GetPromotionUrlService, PutPromotionService, DeletePromotionService }

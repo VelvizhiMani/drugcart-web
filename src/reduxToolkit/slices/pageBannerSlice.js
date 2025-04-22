@@ -4,6 +4,7 @@ const initialState = {
     pageBannerList: [],
     newPageBanner: {},
     pageBanner: {},
+    pageBannerUrl: {}
 }
 const pageBannerSlice = createSlice({
     name: 'page_banner',
@@ -18,8 +19,11 @@ const pageBannerSlice = createSlice({
         getPageBanner: (state, { payload }) => {
             state.pageBanner = payload
         },
+        getPageBannerUrl: (state, { payload }) => {
+            state.pageBannerUrl = payload
+        },
     }
 })
 
-export const { addPageBanner, getPageBannerList, getPageBanner } = pageBannerSlice.actions
+export const { addPageBanner, getPageBannerList, getPageBanner, getPageBannerUrl } = pageBannerSlice.actions
 export default pageBannerSlice.reducer
