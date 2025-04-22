@@ -49,6 +49,7 @@ import videoFeedbackReducer from "@/reduxToolkit/slices/videoFeedbackSlice"
 import mainSliderReducer from "@/reduxToolkit/slices/mainSliderSlice"
 import pageBannerReducer from "@/reduxToolkit/slices/pageBannerSlice"
 import promotionReducer from "@/reduxToolkit/slices/promotionSlice"
+import locationReducer from "@/reduxToolkit/slices/locationSlice"
 
 export const store = configureStore({
     reducer: {
@@ -101,6 +102,7 @@ export const store = configureStore({
         mainSliderData: mainSliderReducer,
         pageBannerData: pageBannerReducer,
         promotionData: promotionReducer,
+        locationData: locationReducer,
         adminUserData: adminUserReducer
     }
 })

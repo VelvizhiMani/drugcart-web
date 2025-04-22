@@ -281,6 +281,11 @@ function AdminLayout(props) {
       path: "/admin/imageslist",
       name: "Images List",
     },
+    {
+      id: 16,
+      path: "/admin/locationlist",
+      name: "Delivery Location",
+    },
   ];
 
   const staffRoutes = [
@@ -301,9 +306,9 @@ function AdminLayout(props) {
     }
   ];
 
-  const mainMenu = role === "admin" ? userRoutes.slice(0, 15) : staffRoutes.slice(0, 3);
-  const filteredRoutes = userRoutes.slice(15, 16);
-  const filtereTwodRoutes = userRoutes.slice(15, userRoutes.length);
+  const mainMenu = role === "admin" ? userRoutes.slice(0, 16) : staffRoutes.slice(0, 3);
+  const filteredRoutes = userRoutes.slice(16, 16);
+  const filtereTwodRoutes = userRoutes.slice(16, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
