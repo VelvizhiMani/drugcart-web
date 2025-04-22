@@ -2,7 +2,8 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { PostSendFeedbackService } from '@/services/sendFeebackService';
 
 const questions = [
     "Quality of Medicine",
@@ -37,13 +38,22 @@ const scoreToTextStatus = (avg) => {
     if (avg < 3) return "Bad";
     if (avg < 4) return "Average";
     if (avg < 4.7) return "Good";
-    return "Best";
-  };
-  
+    return "Excellent";
+};
+
+const scoreToTextColor = (avg) => {
+    if (avg < 2) return "text-red-700";
+    if (avg < 3) return "text-orange-500";
+    if (avg < 4) return "text-yellow-400";
+    if (avg < 4.7) return "text-green-400";
+    return "text-green-700";
+};
+
 
 export default function CustomerReviewForm() {
     const { profile } = useSelector((state) => state.profileData)
     const [overall, setOverall] = useState("");
+    const dispatch = useDispatch()
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -60,7 +70,7 @@ export default function CustomerReviewForm() {
                 .required("Comments are required"),
             ...Object.fromEntries(questions.map(q => [q, Yup.string().required("Required")]))
         }),
-        onSubmit: (values) => {
+        onSubmit: async (values, {resetForm}) => {
             const selectedScores = questions.map(q => ratingToScore[values[q]]);
             const avg = selectedScores.reduce((a, b) => a + b, 0) / selectedScores.length;
             setOverall(scoreToText(avg));
@@ -71,7 +81,7 @@ export default function CustomerReviewForm() {
                 username: values?.username,
                 picture: values?.picture
             }
-            console.log("Form Submitted", saveData);
+            await dispatch(PostSendFeedbackService(saveData, resetForm))
         },
     });
 
@@ -144,7 +154,7 @@ export default function CustomerReviewForm() {
             {overall && (
                 <div className="text-center mt-6">
                     <h3 className="text-xl font-semibold text-gray-700">Overall Rating</h3>
-                    <p className="text-3xl mt-2 font-bold">{scoreToTextStatus(String(overall))}</p>
+                    <p className={`text-3xl mt-2 font-bold ${scoreToTextColor(overall)}`}>{scoreToTextStatus(String(overall))}</p>
                 </div>
             )}
         </div>
