@@ -66,6 +66,10 @@ function EditPromotion() {
         formik.setFieldValue("image", URL.createObjectURL(file));
     };
 
+    useEffect(() => {
+        formik.values.url = URLText(formik.values.title)
+    }, [formik.values.title])
+
     return (
         <Box>
             <Box sx={{ display: "flex" }}>
@@ -114,7 +118,7 @@ function EditPromotion() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"URL"}
-                            value={formik.values.url}
+                            value={URLText(formik.values.url)}
                             onChange={formik.handleChange("url")}
                             helperText={
                                 formik.touched.url ? formik.errors.url : null

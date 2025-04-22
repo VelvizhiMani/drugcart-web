@@ -62,6 +62,10 @@ function PromotionAdd() {
         formik.setFieldValue("image", URL.createObjectURL(file));
     };
 
+    useEffect(() => {
+        formik.values.url = URLText(formik.values.title)
+    }, [formik.values.title])
+
     return (
         <Box>
             <Box sx={{ display: "flex" }}>
@@ -97,7 +101,7 @@ function PromotionAdd() {
                             title="Title"
                             data={uniqueArray}
                             value={formik.values.title}
-                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.url || "")}
+                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.title || "")}
                             onInputChange={(event, newValue) => formik.setFieldValue("title", newValue)}
                             helperText={
                                 formik.touched.title ? formik.errors.title : null
@@ -110,7 +114,7 @@ function PromotionAdd() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"URL"}
-                            value={formik.values.url}
+                            value={URLText(formik.values.url)}
                             onChange={formik.handleChange("url")}
                             helperText={
                                 formik.touched.url ? formik.errors.url : null
