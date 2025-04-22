@@ -32,7 +32,7 @@ function EditPromotion() {
         dispatch(GetPromotionIdService(params.id))
     }, [params.id])
 
-    const uniqueArray = mainSliderList?.main_sliders?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
+    const uniqueArray = mainSliderList?.main_sliders?.filter((v, i, a) => a.findIndex(t => (t.title === v?.title)) === i)
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -105,7 +105,7 @@ function EditPromotion() {
                             title="Title"
                             data={uniqueArray}
                             value={formik.values.title}
-                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.url || "")}
+                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.title || "")}
                             onInputChange={(event, newValue) => formik.setFieldValue("title", newValue)}
                             helperText={
                                 formik.touched.title ? formik.errors.title : null
