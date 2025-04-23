@@ -10,9 +10,9 @@ const OverallRating = ({ rating }) => {
             {Array.from({ length: totalStars }, (_, index) => {
                 const isFilled = index < rating;
                 return isFilled ? (
-                    <StarIcon key={index} className="text-yellow-500 w-5 h-5" />
+                    <StarIcon key={index} className="text-yellow-400 w-6 h-6" />
                 ) : (
-                    <StarBorderIcon key={index} className="text-gray-400 w-5 h-5" />
+                    <StarBorderIcon key={index} className="text-gray-400 w-6 h-6" />
                 );
             })}
         </div>

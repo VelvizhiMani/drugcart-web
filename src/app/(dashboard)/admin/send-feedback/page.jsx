@@ -26,7 +26,6 @@ const rowText = {
     fontFamily: "Poppins",
 };
 function AdminSendFeedback() {
-    const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const { sendFeedbackList } = useSelector((state) => state.sendFeedbackData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
