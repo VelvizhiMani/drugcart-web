@@ -69,7 +69,7 @@ export async function GET(req) {
 
         return NextResponse.json(
             {
-                scan_bookings: SendFeedbackItemsWithIndex,
+                send_feedbacks: SendFeedbackItemsWithIndex,
                 pagination: {
                     totalItems,
                     totalPages,

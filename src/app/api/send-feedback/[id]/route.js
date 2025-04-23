@@ -17,7 +17,7 @@ export async function GET(request, { params }) {
             return NextResponse.json({ error: 'SendFeedback not found' }, { status: 404 });
         }
 
-        return NextResponse.json(ScanBookingId, { status: 200 });
+        return NextResponse.json(SendFeedbackId, { status: 200 });
     } catch (error) {
         return NextResponse.json({ error: 'Error fetching SendFeedback' }, { status: 500 });
     }

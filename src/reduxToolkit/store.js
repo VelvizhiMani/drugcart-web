@@ -50,6 +50,7 @@ import mainSliderReducer from "@/reduxToolkit/slices/mainSliderSlice"
 import pageBannerReducer from "@/reduxToolkit/slices/pageBannerSlice"
 import promotionReducer from "@/reduxToolkit/slices/promotionSlice"
 import locationReducer from "@/reduxToolkit/slices/locationSlice"
+import sendFeedbackReducer from "@/reduxToolkit/slices/sendFeedbackSlice"
 
 export const store = configureStore({
     reducer: {
@@ -103,6 +104,7 @@ export const store = configureStore({
         pageBannerData: pageBannerReducer,
         promotionData: promotionReducer,
         locationData: locationReducer,
+        sendFeedbackData: sendFeedbackReducer,
         adminUserData: adminUserReducer
     }
 })
