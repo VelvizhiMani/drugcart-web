@@ -140,6 +140,19 @@ const PutProductService = (id, userData) => async (dispatch) => {
     })
 }
 
+const PutGenericProductStockService = (generices, userData) => async (dispatch) => {
+    dispatch(IsLoading(true))
+    await axios.put(`/api/product/generices/${generices}`, userData, { headers: await Authorization() }).then((response) => {
+        dispatch(getProduct(response.data?._id))
+        dispatch(GetProductIdService(response.data?._id))
+        dispatch(IsLoading(false))
+        dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
+    }).catch((error) => {
+        console.log("error", error.message)
+        dispatch(IsLoading(false))
+    })
+}
+
 const DeleteProductService = (id) => async (dispatch) => {
     await axios.delete(`/api/category/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getProduct(id))
@@ -173,4 +186,4 @@ const GetProductManufactuerUrlService = (url) => async (dispatch) => {
     }
 }
 
-export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService }
+export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService, PutGenericProductStockService }
