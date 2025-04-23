@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import PersonIcon from "@mui/icons-material/Person";
 import { getCartService } from "@/services/cartService";
 import SearchBar from "../common/SearchBar";
+import LogoutModal from '@/components/common/LogoutModal'
 
 const TopHeader = () => {
   const { items } = useSelector((state) => state.cartData);
@@ -18,6 +19,7 @@ const TopHeader = () => {
   const [pincode, setPincode] = useState("");
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   const handleSearch = () => {
     alert(`Searching for: ${query} in pincode: ${pincode}`);
@@ -111,10 +113,15 @@ const TopHeader = () => {
                             <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
                               Refer & Earn
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={() => setIsLogout(true)}>
                               Logout
                             </li>
                           </ul>
+                          <LogoutModal
+                            open={isLogout}
+                            onClose={() => setIsLogout(false)}
+                            onConfirm={logout}
+                          />
                         </div>
                       )}
                     </>
