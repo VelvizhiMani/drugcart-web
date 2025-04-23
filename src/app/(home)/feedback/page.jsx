@@ -5,13 +5,8 @@ import CustomerSaying from '@/components/home-page/CustomerSaying';
 import FeedbackCard from '@/components/home-page/FeedbackCard';
 import CustomerReviewCard from '@/components/ProductDetailsCard/CustomerReviewCard';
 import { useDispatch } from 'react-redux';
-import { GetSendFeedbackListService } from '@/services/sendFeebackService';
 
 const Feedback = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(GetSendFeedbackListService())
-  }, [])
   return (
     <section className="max-w-7xl mx-auto mt-3">
       <FeedbackRating/>

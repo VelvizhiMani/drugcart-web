@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import PersonIcon from "@mui/icons-material/Person";
 import { getCartService } from "@/services/cartService";
 import SearchBar from "../common/SearchBar";
+import { GetSendFeedbackListService } from '@/services/sendFeebackService';
 import LogoutModal from '@/components/common/LogoutModal'
 
 const TopHeader = () => {
@@ -28,6 +29,7 @@ const TopHeader = () => {
   useEffect(() => {
     dispatch(getProfileService());
     dispatch(getCartService())
+    dispatch(GetSendFeedbackListService(1, 4))
   }, []);
 
   const logout = async () => {
