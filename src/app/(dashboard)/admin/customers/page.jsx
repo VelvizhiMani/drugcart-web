@@ -73,7 +73,7 @@ function CustomersPage() {
                                 Text Feedbacks
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{textFeedbackList?.pagination?.totalPages}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{textFeedbackList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -90,7 +90,7 @@ function CustomersPage() {
                                 Video Feedbacks
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{videoeFeedbackList?.pagination?.totalPages}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{videoeFeedbackList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -107,7 +107,7 @@ function CustomersPage() {
                                 Total Reviews
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{sendFeedbackList?.pagination?.totalPages}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{sendFeedbackList?.pagination?.totalItems}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>

@@ -66,7 +66,7 @@ function AddGenericStock() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/genericnames`)}
+                    onClick={() => router.push(`/admin/genericlist`)}
                 >
                     Generic Product List
                 </Button>

@@ -17,7 +17,7 @@ const LogoutModal = ({ open, onClose, onConfirm }) => {
         <Dialog open={open} maxWidth="lg">
             <Box display="flex" flexDirection="column" alignItems="center" pt={3}>
                 <Avatar sx={{ bgcolor: '#b3004b', width: 56, height: 56 }}>
-                    <ExitToAppIcon sx={{width: 36, height:36}}/>
+                    <ExitToAppIcon sx={{ width: 36, height: 36 }} />
                 </Avatar>
                 <DialogTitle sx={{ fontWeight: 'bold', textAlign: 'center' }}>
                     Are You Leaving ?
@@ -32,20 +32,20 @@ const LogoutModal = ({ open, onClose, onConfirm }) => {
             </DialogContent>
 
             <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-                <Button
+                <button
+                    type="button"
+                    className="text-white bg-bgcolor hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
+                    onClick={onConfirm}
+                >
+                    Logout
+                </button>
+                <button
+                    type="button"
+                    className="text-black bg-gray-300 hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
                     onClick={onClose}
-                    variant="contained"
-                    sx={{ backgroundColor: '#e0e0e0', color: '#000', textTransform: 'none', px: 2 }}
                 >
                     Cancel
-                </Button>
-                <Button
-                    onClick={onConfirm}
-                    variant="contained"
-                    sx={{ backgroundColor: '#b3004b', textTransform: 'none', px: 4 }}
-                >
-                    Yes
-                </Button>
+                </button>
             </DialogActions>
         </Dialog>
     );
