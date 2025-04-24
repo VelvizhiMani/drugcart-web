@@ -25,6 +25,10 @@ function SideeffectAdd() {
     return joinSpace;
   };
 
+  useEffect(() => {
+    formik.values.generic_name = URLText(formik.values.generic_name);
+  }, [formik.values.generic_name]);
+  
   const formik = useFormik({
     initialValues: {
       generic_name: "",
@@ -41,10 +45,7 @@ function SideeffectAdd() {
     },
   });
 
-  useEffect(() => {
-    dispatch(GetGeneticService());
-    formik.values.generic_name = URLText(formik.values.generic_name);
-  }, [formik.values.generic_name]);
+
 
   return (
     <Box>
