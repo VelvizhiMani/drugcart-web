@@ -1,3 +1,4 @@
+"use client";
 import CustomerSaying from '@/components/home-page/CustomerSaying';
 import FeedbackCard from '@/components/home-page/FeedbackCard';
 import Link from 'next/link';
