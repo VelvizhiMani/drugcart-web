@@ -36,7 +36,7 @@ function GenericeAdd() {
   const [value, setValue] = useState("");
 
   const URLText = (text) => {
-    const splitText = text.split(" ")
+    const splitText = text.split(/[\s+]+/)
     const joinSpace = splitText.join("-").toLowerCase()
     return joinSpace
   }
