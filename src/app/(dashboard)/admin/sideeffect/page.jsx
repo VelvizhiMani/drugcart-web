@@ -17,10 +17,10 @@ import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  DeleteCategoryService,
-  GetCategoryIdService,
-  GetCategoryService,
-} from "@/services/categoryService";
+  DeleteSideeffectService,
+  GetSideeffectIdService,
+  GetSideeffectService,
+} from "@/services/sideeffectService";
 import DeleteModal from "@/components/admin/modal/DeleteModal";
 import { useRole } from "@/hooks/useRole";
 
@@ -42,7 +42,9 @@ const rowText = {
   fontFamily: "Poppins",
 };
 function Sideeffect() {
-  const { categories, category } = useSelector((state) => state.categoryData);
+  const { sideeffects, sideeffect } = useSelector(
+    (state) => state.sideeffectData
+  );
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
@@ -59,14 +61,12 @@ function Sideeffect() {
   const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   useEffect(() => {
-    dispatch(GetCategoryService(page, showNo, search));
+    dispatch(GetSideeffectService(page, showNo, search));
   }, [page, showNo, search]);
 
   const searchSubmit = () => {
-    dispatch(GetCategoryService(page, showNo, search));
+    dispatch(GetSideeffectService(page, showNo, search));
   };
-
-  console.log("categories", categories);
 
   return (
     <Box>
@@ -77,16 +77,16 @@ function Sideeffect() {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-          Category
+          Sideeffect
         </Typography>
         <Button
           color="secondary"
           variant="contained"
           style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
           startIcon={<AddIcon />}
-          onClick={() => router.push(`/admin/category/add`)}
+          onClick={() => router.push(`/admin/sideeffect/add`)}
         >
-          Add Category
+          Add Sideeffect
         </Button>
       </Box>
       <Grid2 container alignItems={"center"} spacing={2}>
@@ -125,7 +125,10 @@ function Sideeffect() {
           <TableHead sx={{ backgroundColor: "#7d5e69" }}>
             <TableRow>
               <TableCell style={rowText}>Sno</TableCell>
-              <TableCell style={rowText}>Category</TableCell>
+              <TableCell style={rowText}>Generic Name</TableCell>
+              <TableCell style={rowText}>SE Common</TableCell>
+              <TableCell style={rowText}>SE Rare</TableCell>
+              <TableCell style={rowText}>SE Severe</TableCell>
               <TableCell align="right" style={rowText}>
                 Status
               </TableCell>
@@ -135,8 +138,8 @@ function Sideeffect() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {categories &&
-              categories?.categories?.map((row, i) => (
+            {sideeffects &&
+              sideeffects?.sideeffects?.map((row, i) => (
                 <TableRow
                   key={row?.sno}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -149,7 +152,40 @@ function Sideeffect() {
                     component="th"
                     scope="row"
                   >
-                    {row?.category_name}
+                    {row?.generic_name}
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontFamily: rowText.fontFamily }}
+                    component="th"
+                    scope="row"
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: row?.common,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontFamily: rowText.fontFamily }}
+                    component="th"
+                    scope="row"
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: row?.rare,
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell
+                    sx={{ fontFamily: rowText.fontFamily }}
+                    component="th"
+                    scope="row"
+                  >
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: row?.severe,
+                      }}
+                    />
                   </TableCell>
                   <TableCell
                     sx={{ fontFamily: rowText.fontFamily }}
@@ -163,7 +199,7 @@ function Sideeffect() {
                   >
                     <button
                       onClick={() => {
-                        router.push(`/admin/category/${row?._id}`);
+                        router.push(`/admin/sideeffect/${row?._id}`);
                       }}
                     >
                       <CreateIcon color="primary" />
@@ -172,7 +208,7 @@ function Sideeffect() {
                       <button
                         onClick={async () => {
                           setOpenModal(true);
-                          await dispatch(GetCategoryIdService(row?._id));
+                          await dispatch(GetSideeffectIdService(row?._id));
                         }}
                       >
                         <DeleteIcon color="error" />
@@ -182,10 +218,10 @@ function Sideeffect() {
                   <DeleteModal
                     open={openModal}
                     setOpen={setOpenModal}
-                    title={"Delete Category"}
-                    description={`Are you sure you want to delete ${category?.category_name}`}
+                    title={"Delete Sideeffects"}
+                    description={`Are you sure you want to delete ${sideeffect?.generic_name}`}
                     onSubmit={() =>
-                      dispatch(DeleteCategoryService(category?._id))
+                      dispatch(DeleteSideeffectService(sideeffect?._id))
                     }
                   />
                 </TableRow>
@@ -202,12 +238,12 @@ function Sideeffect() {
         }}
       >
         <Typography fontFamily={"Poppins"}>
-          Showing 1-{showNo} of {categories?.pagination?.totalItems} entries
+          Showing 1-{showNo} of {sideeffects?.pagination?.totalItems} entries
         </Typography>
         <br />
         <Pagination
           size="large"
-          count={categories?.pagination?.totalPages}
+          count={sideeffects?.pagination?.totalPages}
           page={page}
           color="secondary"
           onChange={(_, value) => setPage(value)}
