@@ -15,14 +15,7 @@ function PincodeModal({ onClose }) {
     };
 
     const checkBtn = async () => {
-        if (Object.values(postalCode).length !== 0) {
-            await dispatch(GetPostalCodeService(query))
-            onClose()
-        } else {
-            await dispatch(GetPostalCodeService(query))
-        }
-
-
+        await dispatch(GetPostalCodeService(query, onClose))
     }
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">

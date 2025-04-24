@@ -74,11 +74,11 @@ const GetPostalCodeListService = (code) => async (dispatch) => {
     }
 }
 
-const GetPostalCodeService = (code) => async (dispatch) => {
+const GetPostalCodeService = (code, onClose) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
         const getIdData = await axios.get(`/api/location/pincode/${code}`)
-        console.log("getIdData", getIdData);
+        onClose()
         dispatch(getPostalCode(getIdData.data))
         dispatch(showToast({ message: "Your Delivery Location Available.", severity: "success" }))
         dispatch(IsLoading(false))
