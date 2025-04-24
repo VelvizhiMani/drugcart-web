@@ -1095,7 +1095,6 @@ const ProductView = ({ url }) => {
                     Rare Side Effect{" "}
                   </h3>
                  
-                  </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1108,7 +1107,6 @@ const ProductView = ({ url }) => {
                       Severe Side Effect{" "}
                     </h3>
                    
-                    </p>
                   </div>
                 </div>
               </div>
