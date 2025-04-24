@@ -17,6 +17,7 @@ import { GetSubCateUrlService } from "@/services/subCategoryService";
 import { GetAddStorageIdService } from "@/services/storageService";
 import { GetManufactuerUrlService } from "@/services/manufactuerService";
 import { GetAddPackageIdService } from "@/services/packageService";
+import { GetSideeffectGenericService } from "@/services/sideeffectService";
 import {
   CartDecrementService,
   CartIncrementService,
@@ -45,6 +46,7 @@ const ProductView = ({ url }) => {
   const { storageid } = useSelector((state) => state.storageData);
   const { manufactuerurl } = useSelector((state) => state.manufactuerData);
   const { packid } = useSelector((state) => state.packageData);
+  const { sideeffectGeneric } = useSelector((state) => state.sideeffectData);
 
   useEffect(() => {
     dispatch(GetProductUrlService(url));
@@ -55,6 +57,7 @@ const ProductView = ({ url }) => {
     dispatch(GetProductGeneticUrlService(product?.generices));
     dispatch(getCartService());
     dispatch(GetProductService(1, 4, search, product?.generices));
+    dispatch(GetSideeffectGenericService(product?.generices));
   }, [url, product?.generices, product?.manufactuer]);
 
   const alterBrands = productGenericUrl.filter((item) => item?.url !== url);
@@ -1080,14 +1083,13 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5">
                     Common Side Effect{" "}
                   </h3>
-                  <ul className="list-disc text-[14px] px-5">
-                    <li>Headache</li>
-                    <li>Fever</li>
-                    <li>Chills</li>
-                    <li>Loss of appetite</li>
-                    <li>Loss of appetite</li>
-                    <li>Loss of appetite</li>
-                  </ul>
+                   <p className="text-[14px] px-5">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sideeffectGeneric?.common,
+                      }}
+                    />
+                  </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1098,14 +1100,13 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5">
                     Rare Side Effect{" "}
                   </h3>
-                  <ul className="list-disc text-[14px] px-5">
-                    <li>Headache</li>
-                    <li>Fever</li>
-                    <li>Chills</li>
-                    <li>Loss of appetite</li>
-                    <li>Loss of appetite</li>
-                    <li>Loss of appetite</li>
-                  </ul>
+                 <p className="text-[14px] px-5">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sideeffectGeneric?.rare,
+                      }}
+                    />
+                  </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1117,14 +1118,13 @@ const ProductView = ({ url }) => {
                     <h3 className="text-[14px] py-2 font-bold px-5">
                       Severe Side Effect{" "}
                     </h3>
-                    <ul className="list-disc text-[14px] px-5">
-                      <li>Headache</li>
-                      <li>Fever</li>
-                      <li>Chills</li>
-                      <li>Loss of appetite</li>
-                      <li>Loss of appetite</li>
-                      <li>Loss of appetite</li>
-                    </ul>
+                    <p className="text-[14px] px-5">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: sideeffectGeneric?.severe,
+                        }}
+                      />
+                    </p>
                   </div>
                 </div>
               </div>
