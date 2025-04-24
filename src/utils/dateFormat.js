@@ -9,3 +9,8 @@ export const DateMonthFormat = (unixtime) => {
   const date = moment(unixtime).format('LL');
   return date;
 };
+
+export const RelativeFormat = (unixtime) => {
+  const date = moment(unixtime, "YYYYMMDD").fromNow();
+  return date;
+};

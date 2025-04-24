@@ -2,14 +2,15 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { IMAGES } from "@/components/common/images";
-import SavedSearchIcon from "@mui/icons-material/SavedSearch";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useSelector, useDispatch } from "react-redux";
 import { getProfileService } from "@/services/profileService";
 import { useRouter } from "next/navigation";
 import PersonIcon from "@mui/icons-material/Person";
 import { getCartService } from "@/services/cartService";
+import SearchBar from "../common/SearchBar";
+import { GetSendFeedbackListService } from '@/services/sendFeebackService';
+import LogoutModal from '@/components/common/LogoutModal'
 
 const TopHeader = () => {
   const { items } = useSelector((state) => state.cartData);
@@ -19,6 +20,7 @@ const TopHeader = () => {
   const [pincode, setPincode] = useState("");
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   const handleSearch = () => {
     alert(`Searching for: ${query} in pincode: ${pincode}`);
@@ -27,6 +29,7 @@ const TopHeader = () => {
   useEffect(() => {
     dispatch(getProfileService());
     dispatch(getCartService())
+    dispatch(GetSendFeedbackListService(1, 4))
   }, []);
 
   const logout = async () => {
@@ -50,36 +53,7 @@ const TopHeader = () => {
             </div>
           </div>
           <div className="w-full md:w-3/6 my-5 md:my-0">
-            <div className="flex items-center w-full rounded-full shadow-md border border-gray-300 bg-white overflow-hidden">
-              {/* Pincode Section */}
-              <div className="flex items-center bg-[#B7084B] md:px-4 px-2 py-2 text-white">
-                <AddLocationIcon className="mr-2" />
-                <input
-                  type="text"
-                  placeholder="Pincode"
-                  className="bg-transparent focus:outline-none text-sm placeholder-white w-16 md:w-full"
-                  value={pincode}
-                  onChange={(e) => setPincode(e.target.value)}
-                />
-              </div>
-
-              {/* Search Input */}
-              <input
-                type="text"
-                placeholder="Search For Your Medicine"
-                className="flex-grow px-4 py-2 focus:outline-none text-gray-700 text-sm w-72"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-
-              {/* Search Icon */}
-              <button
-                className="px-4 py-2 text-gray-500 hover:text-gray-700"
-                onClick={handleSearch}
-              >
-                <SavedSearchIcon size={20} />
-              </button>
-            </div>
+            <SearchBar />
           </div>
           <div className="w-full md:w-2/6 lg:w-3/3">
             <div className="flex justify-center items-center gap-6">
@@ -141,10 +115,15 @@ const TopHeader = () => {
                             <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
                               Refer & Earn
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                            <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={() => setIsLogout(true)}>
                               Logout
                             </li>
                           </ul>
+                          <LogoutModal
+                            open={isLogout}
+                            onClose={() => setIsLogout(false)}
+                            onConfirm={logout}
+                          />
                         </div>
                       )}
                     </>

@@ -4,8 +4,11 @@ import Store from "@/assets/customer/store.png";
 import Online from "@/assets/customer/online.png";
 import Logo from "@/assets/customer/logo.png";
 import Customer from "@/assets/customer/customer-saying-about-us.jpg";
+import { useSelector } from "react-redux";
+import OverallRating from "../common/OverallRating";
 
 const CustomerSaying = () => {
+  const { sendFeedbackList } = useSelector((state) => state.sendFeedbackData)
   return (
     <>
       <div className="container mx-auto bg-bgwhy rounded-md p-5">
@@ -44,70 +47,20 @@ const CustomerSaying = () => {
           What Customer Saying About Us
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-4 mt-8 justify-center gap-5">
-          <div className="justify-items-center bg-becustomer text-white">
-            <Image
-              src={Customer}
-              alt="Star"
-              className="w-full h-48 p-3 object-cover"
-            />
-            <h2 className="text-xl">Zara</h2>
-            <p>Business</p>
-            <div className="flex justify-center mt-1 mb-6">
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-gray-300 text-xl">&#9733;</span>
+          {sendFeedbackList && sendFeedbackList?.send_feedbacks?.map((feedback, i) => (
+            <div className="justify-items-center bg-becustomer text-white" key={i}>
+              <Image
+                src={Customer}
+                alt="Star"
+                className="w-full h-48 p-3 object-cover"
+              />
+              <h2 className="text-xl">{feedback?.username}</h2>
+              <p className="my-2">{feedback?.ratingStatus}</p>
+              <div className="flex justify-center mt-1 mb-6">
+                <OverallRating rating={feedback?.rating} />
+              </div>
             </div>
-          </div>
-          <div className="justify-items-center bg-becustomer text-white">
-            <Image
-              src={Customer}
-              alt="Star"
-              className="w-full h-48 p-3 object-cover"
-            />
-            <h2 className="text-xl">Zara</h2>
-            <p>Business</p>
-            <div className="flex justify-center mt-1 mb-6">
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-gray-300 text-xl">&#9733;</span>
-            </div>
-          </div>
-          <div className="justify-items-center bg-becustomer text-white">
-            <Image
-              src={Customer}
-              alt="Star"
-              className="w-full h-48 p-3 object-cover"
-            />
-            <h2 className="text-xl">Zara</h2>
-            <p>Business</p>
-            <div className="flex justify-center mt-1 mb-6">
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-gray-300 text-xl">&#9733;</span>
-            </div>
-          </div>
-          <div className="justify-items-center bg-becustomer text-white">
-            <Image
-              src={Customer}
-              alt="Star"
-              className="w-full h-48 p-3 object-cover"
-            />
-            <h2 className="text-xl">Zara</h2>
-            <p>Business</p>
-            <div className="flex justify-center mt-1 mb-6">
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-yellow-400 text-xl">&#9733;</span>
-              <span className="text-gray-300 text-xl">&#9733;</span>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </>

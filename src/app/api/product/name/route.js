@@ -6,12 +6,6 @@ import connnectionToDatabase from '@/lib/mongodb';
 export async function GET(req) {
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await adminAuthorization();
-        console.log(success);
-
-        if (!success) {
-            return NextResponse.json({ error: message }, { status: 401 })
-        }
 
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get("page")) || 1;

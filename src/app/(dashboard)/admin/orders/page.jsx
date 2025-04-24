@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Table from "@mui/material/Table";
@@ -31,9 +31,10 @@ function OrderListPage() {
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
-    const [orderStatus, setOrderStatus] = useState("")
+    const searchParams = useSearchParams();
+    const status = searchParams.get('status');
+    const [orderStatus, setOrderStatus] = useState(status || "")
     const dispatch = useDispatch()
-
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -52,26 +53,31 @@ function OrderListPage() {
     }
 
     const AllOrderStatus = () => {
+        router.push('/admin/orders')
         setOrderStatus("")
         setSearch("")
     }
 
     const ProcessOrderStatus = () => {
+        router.push('/admin/orders?status=Processing')
         setOrderStatus("Processing")
         setSearch("")
     }
 
     const CompletedOrderStatus = () => {
+        router.push('/admin/orders?status=Completed')
         setOrderStatus("Completed")
         setSearch("")
     }
 
     const CancelledOrderStatus = () => {
+        router.push('/admin/orders?status=Cancelled')
         setOrderStatus("Cancelled")
         setSearch("")
     }
 
     const PendingOrderStatus = () => {
+        router.push('/admin/orders?status=Pending')
         setOrderStatus("Pending")
         setSearch("")
     }

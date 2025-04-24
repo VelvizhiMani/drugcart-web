@@ -44,6 +44,13 @@ import scanReducer from "@/reduxToolkit/slices/scanSlice"
 import scanBookingReducer from "@/reduxToolkit/slices/scanBookingSlice"
 import specialityReducer from "@/reduxToolkit/slices/specialitySlice"
 import doctorReducer from "@/reduxToolkit/slices/doctorSlice"
+import textFeedbackReducer from "@/reduxToolkit/slices/textFeedbackSlice"
+import videoFeedbackReducer from "@/reduxToolkit/slices/videoFeedbackSlice"
+import mainSliderReducer from "@/reduxToolkit/slices/mainSliderSlice"
+import pageBannerReducer from "@/reduxToolkit/slices/pageBannerSlice"
+import promotionReducer from "@/reduxToolkit/slices/promotionSlice"
+import locationReducer from "@/reduxToolkit/slices/locationSlice"
+import sendFeedbackReducer from "@/reduxToolkit/slices/sendFeedbackSlice"
 
 export const store = configureStore({
     reducer: {
@@ -91,6 +98,13 @@ export const store = configureStore({
         scanBookingData: scanBookingReducer,
         specialityData: specialityReducer,
         doctorData: doctorReducer,
+        textFeedbackData: textFeedbackReducer,
+        videoFeedbackData: videoFeedbackReducer,
+        mainSliderData: mainSliderReducer,
+        pageBannerData: pageBannerReducer,
+        promotionData: promotionReducer,
+        locationData: locationReducer,
+        sendFeedbackData: sendFeedbackReducer,
         adminUserData: adminUserReducer
     }
 })

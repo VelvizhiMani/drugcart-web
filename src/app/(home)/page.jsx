@@ -11,10 +11,11 @@ import ShopbyCategory from "@/components/home-page/shopbyCategory";
 import FameSection from "@/components/home-page/fameSection";
 import BlogCard from "@/components/home-page/blogCard";
 import Feedback from "@/components/home-page/feedback";
-// import CustomerSaying from "@/components/home-page/CustomerSaying";
+import CustomerSaying from "@/components/home-page/CustomerSaying";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfileService } from "@/services/profileService";
 import { getCartService } from "@/services/cartService";
+import FeedbackCard from "@/components/home-page/FeedbackCard";
 
 const Home = () => {
   const { profile } = useSelector((state) => state.profileData);
@@ -55,8 +56,8 @@ const Home = () => {
           <BlogCard />
         </div>
       </section>
-      <Feedback />
-      {/* <CustomerSaying /> */}
+      <FeedbackCard />
+      <CustomerSaying />
     </main>
   );
 };

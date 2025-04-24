@@ -27,9 +27,12 @@ import MyLab from '@/components/profile/MyLab';
 import AddressForm from "@/components/common/AddressForm";
 import MyAppointment from "@/components/profile/MyAppointment";
 import TextFeedback from "@/components/profile/TextFeedback";
+import VideoFeedback from "@/components/profile/VideoFeedback";
+import SendFeedback from "@/components/profile/SendFeedback";
 import { useDispatch, useSelector } from 'react-redux';
 import { GetAddressIdService } from '@/services/addressService';
 import TitleIcon from '@mui/icons-material/Title';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
@@ -50,6 +53,7 @@ const tabssupport = [
     { id: 'aboutus', label: 'About Us', icon: <AnnouncementIcon /> },
     { id: 'faqs', label: 'FAQs', icon: <StickyNote2Icon /> },
     { id: 'textfeedback', label: 'Text Feedback', icon: <TitleIcon /> },
+    { id: 'videofeedback', label: 'Video Feedback', icon: <OndemandVideoIcon /> },
     { id: 'feedback', label: 'Send Feedback', icon: <ThumbUpOffAltIcon /> }
 ];
 const tabslegal = [
@@ -253,6 +257,16 @@ export default function ProfileTab() {
                         {activeTab === 'textfeedback' && (
                             <div>
                                 <TextFeedback />
+                            </div>
+                        )}
+                        {activeTab === 'videofeedback' && (
+                            <div>
+                                <VideoFeedback />
+                            </div>
+                        )}
+                        {activeTab === 'feedback' && (
+                            <div>
+                                <SendFeedback />
                             </div>
                         )}
                     </div>
