@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Table from "@mui/material/Table";
@@ -25,14 +25,14 @@ const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function OrderListPage() {
+function NewOrderListPage() {
     const { orderList, order } = useSelector((state) => state.orderData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
-    const [orderStatus, setOrderStatus] = useState("")
     const dispatch = useDispatch()
+    const params = useParams()
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -43,36 +43,11 @@ function OrderListPage() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetOrdersService(page, showNo, search, orderStatus))
-    }, [page, showNo, search, orderStatus])
+        dispatch(GetOrdersService(page, showNo, search, params?.pending))
+    }, [page, showNo, search, params?.pending])
 
     const searchSubmit = () => {
-        dispatch(GetOrdersService(page, showNo, search, orderStatus))
-    }
-
-    const AllOrderStatus = () => {
-        setOrderStatus("")
-        setSearch("")
-    }
-
-    const ProcessOrderStatus = () => {
-        setOrderStatus("Processing")
-        setSearch("")
-    }
-
-    const CompletedOrderStatus = () => {
-        setOrderStatus("Completed")
-        setSearch("")
-    }
-
-    const CancelledOrderStatus = () => {
-        setOrderStatus("Cancelled")
-        setSearch("")
-    }
-
-    const PendingOrderStatus = () => {
-        setOrderStatus("Pending")
-        setSearch("")
+        dispatch(GetOrdersService(page, showNo, search, params?.pending))
     }
 
     const colorValue = (status) => {
@@ -86,7 +61,6 @@ function OrderListPage() {
             return "green"
         }
     }
-    console.log("orderList", orderStatus);
 
     return (
         <Box>
@@ -97,80 +71,9 @@ function OrderListPage() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    All User Order Lists
+                    New Orders List
                 </Typography>
             </Box>
-            <Grid2 container spacing={3} justifyContent="space-between" alignItems="center">
-                <Grid2
-                    marginTop={2}
-                    size={{ xs: 12, sm: 5, md: 3 }}
-                >
-                    <Button
-                        fullWidth
-                        color="secondary"
-                        variant="contained"
-                        style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
-                        onClick={AllOrderStatus}
-                    >
-                        All Orders List
-                    </Button>
-                </Grid2>
-                <Grid2
-                    marginTop={2}
-                    size={{ xs: 12, sm: 5, md: 3 }}
-                >
-                    <Button
-                        fullWidth
-                        color="primary"
-                        variant="contained"
-                        style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
-                        onClick={ProcessOrderStatus}
-                    >
-                        Processing orders list
-                    </Button>
-                </Grid2>
-                <Grid2
-                    marginTop={2}
-                    size={{ xs: 12, sm: 5, md: 3 }}
-                >
-                    <Button
-                        fullWidth
-                        color="info"
-                        variant="contained"
-                        style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
-                        onClick={PendingOrderStatus}
-                    >
-                        Pending orders list
-                    </Button>
-                </Grid2>
-                <Grid2
-                    marginTop={2}
-                    size={{ xs: 12, sm: 5, md: 3 }}
-                >
-                    <Button
-                        fullWidth
-                        color="success"
-                        variant="contained"
-                        style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
-                        onClick={CompletedOrderStatus}
-                    >
-                        Completed orders list
-                    </Button>
-                </Grid2>
-                <Grid2
-                    marginTop={2}
-                    size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}
-                >
-                    <Button
-                        color="error"
-                        variant="contained"
-                        style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
-                        onClick={CancelledOrderStatus}
-                    >
-                        Cancelled orders list
-                    </Button>
-                </Grid2>
-            </Grid2>
             <Grid2 container alignItems={"center"} spacing={2}>
                 <Grid2
                     container
@@ -301,4 +204,4 @@ function OrderListPage() {
     );
 }
 
-export default OrderListPage;
+export default NewOrderListPage;

@@ -13,15 +13,15 @@ const userSchema = new Schema(
       type: String,
       default: ""
     },
-    leveltype: {
+    blood: {
       type: String,
       default: ""
     },
-    isdel: {
+    gender: {
       type: String,
       default: ""
     },
-    deluser: {
+    dob: {
       type: String,
       default: ""
     },

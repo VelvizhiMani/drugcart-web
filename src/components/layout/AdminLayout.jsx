@@ -183,6 +183,7 @@ function AdminLayout(props) {
           size="large"
           aria-label="show 17 new notifications"
           color="inherit"
+          onClick={() => router.push('/admin/orders/Pending')}
         >
           <Badge badgeContent={pendingOrder?.pagination?.totalItems} color="error">
             <NotificationsIcon />
@@ -550,7 +551,7 @@ function AdminLayout(props) {
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
-              onClick={() => router.push('/admin/orders?status=Pending')}
+              onClick={() => router.push('/admin/orders/Pending')}
             >
               <Badge badgeContent={pendingOrder?.pagination?.totalItems} color="error">
                 <NotificationsIcon />

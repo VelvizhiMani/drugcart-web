@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import PincodeModal from "@/components/common/PincodeModal"
 
 export default function SearchBar() {
+    const { postalCodes, postalCode } = useSelector((state) => state.locationData)
     const { productName } = useSelector((state) => state.productData)
     const router = useRouter();
     const [query, setQuery] = useState('');
@@ -47,7 +48,7 @@ export default function SearchBar() {
                 {/* Pincode Section */}
                 <div className="bg-[#bf0d47] text-white px-4 py-2 flex items-center gap-2 min-w-[120px] rounded-l-full cursor-pointer" onClick={() => setShowModal(true)}>
                     <AddLocationIcon size={14} />
-                    <span className="font-normal text-[14px]">Pincode</span>
+                    <span className="font-normal text-[14px]">{Object.values(postalCode).length !== 0 ? postalCode?.pincode : "Pincode"}</span>
                     {/* <input
                         type="text"
                         placeholder="Pincode"
