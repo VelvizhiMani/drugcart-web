@@ -7,6 +7,7 @@ import { GetProductNameService } from '@/services/productService';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import PincodeModal from "@/components/common/PincodeModal"
+import { IMAGES } from "../../components/common/images"
 
 export default function SearchBar() {
     const { postalCodes, postalCode } = useSelector((state) => state.locationData)
