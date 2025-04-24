@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetProductNameService } from '@/services/productService';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import PincodeModal from "@/components/common/PincodeModal"
 
 export default function SearchBar() {
     const { productName } = useSelector((state) => state.productData)
@@ -14,6 +15,7 @@ export default function SearchBar() {
     const [pincode, setPincode] = useState("");
     const [suggestions, setSuggestions] = useState([]);
     const wrapperRef = useRef(null);
+    const [showModal, setShowModal] = useState(false);
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -43,17 +45,19 @@ export default function SearchBar() {
         <div ref={wrapperRef} className="relative max-w-3xl w-full">
             <div className="flex items-center rounded-full border border-gray-300 shadow-sm overflow-hidden bg-white">
                 {/* Pincode Section */}
-                <div className="bg-[#bf0d47] text-white px-4 py-2 flex items-center gap-2 min-w-[120px] rounded-l-full">
+                <div className="bg-[#bf0d47] text-white px-4 py-2 flex items-center gap-2 min-w-[120px] rounded-l-full cursor-pointer" onClick={() => setShowModal(true)}>
                     <AddLocationIcon size={14} />
-                    <input
+                    <span className="font-normal text-[14px]">Pincode</span>
+                    {/* <input
                         type="text"
                         placeholder="Pincode"
                         className="bg-transparent focus:outline-none text-sm placeholder-white w-16 md:w-full"
                         value={pincode}
                         onChange={(e) => setPincode(e.target.value)}
-                    />
+                    /> */}
+              
                 </div>
-
+                {showModal && <PincodeModal onClose={() => setShowModal(false)} />}
                 {/* Input */}
                 <input
                     type="text"
