@@ -30,9 +30,10 @@ import TextFeedback from "@/components/profile/TextFeedback";
 import VideoFeedback from "@/components/profile/VideoFeedback";
 import SendFeedback from "@/components/profile/SendFeedback";
 import { useDispatch, useSelector } from 'react-redux';
-import { GetAddressIdService } from '@/services/addressService';
+import { PutProfileService } from '@/services/profileService';
 import TitleIcon from '@mui/icons-material/Title';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import { useFormik } from 'formik';
 
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
@@ -70,6 +71,22 @@ export default function ProfileTab() {
     const [selected, setSelected] = useState('Home');
     const [edit, setEdit] = useState(false);
     const dispatch = useDispatch();
+
+    const formik = useFormik({
+        enableReinitialize: true,
+        initialValues: {
+            username: profile?.username || "",
+            phone: profile?.phone || "",
+            useremail: profile?.useremail || "",
+            gender: profile?.gender || "",
+            dob: profile?.dob || "",
+            blood: profile?.blood || "",
+        },
+        onSubmit: async (data) => {
+            await dispatch(PutProfileService(profile?._id, data));
+            setEdit(false)
+        },
+    });
 
 
     console.log("userAddress", userAddress);
@@ -175,12 +192,34 @@ export default function ProfileTab() {
                                         </button>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <input type="text" placeholder="Full Name" value={profile?.username || ""} disabled={!edit} className="border p-2 rounded w-full" />
-                                        <input type="text" placeholder="Mobile Number" value={profile?.phone || ""} disabled={true} className="border p-2 rounded w-full" />
-                                        <input type="email" placeholder="E-Mail Address" disabled={!edit} className="border p-2 rounded w-full" />
-                                        <input type="text" placeholder="Gender" disabled={!edit} className="border p-2 rounded w-full" />
-                                        <input type="date" placeholder="Date of Birth" disabled={!edit} className="border p-2 rounded w-full" />
-                                        <input type="text" placeholder="Blood Group" disabled={!edit} className="border p-2 rounded w-full" />
+                                        <input type="text" placeholder="Full Name" value={formik.values.username} onChange={formik.handleChange("username")} disabled={!edit} className="border p-2 rounded w-full" />
+                                        <input type="text" placeholder="Mobile Number" value={formik.values.phone} disabled={true} className="border p-2 rounded w-full" />
+                                        <input type="email" placeholder="E-Mail Address" value={formik.values.useremail} onChange={formik.handleChange("useremail")} disabled={!edit} className="border p-2 rounded w-full" />
+                                        {/* <input type="text" placeholder="Gender" value={formik.values.gender} onChange={formik.handleChange("gender")} disabled={!edit} className="border p-2 rounded w-full" /> */}
+                                        <select
+                                            disabled={!edit}
+                                            name="gender"
+                                            className="border p-2 rounded w-full"
+                                            value={formik.values.gender}
+                                            onChange={formik.handleChange("gender")}
+                                            onBlur={formik.handleBlur("gender")}
+                                        >
+                                            <option value="" disabled>--Please Gender--</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                        <input type="date" placeholder="Date of Birth" value={formik.values.dob} onChange={formik.handleChange("dob")} disabled={!edit} className="border p-2 rounded w-full" />
+                                        <input type="text" placeholder="Blood Group" value={formik.values.blood} onChange={formik.handleChange("blood")} disabled={!edit} className="border p-2 rounded w-full" />
+                                    </div>
+                                    <div className="flex justify-end my-3">
+                                        <button
+                                            type="submit"
+                                            disabled={!edit}
+                                            className={`w-16 ${edit ? "bg-pink-700 text-white" : "bg-gray-400 text-white"}  py-1 rounded mr-2`}
+                                            onClick={formik.handleSubmit}
+                                        >
+                                            Save
+                                        </button>
                                     </div>
                                 </div>
                                 {/* Address Details */}
