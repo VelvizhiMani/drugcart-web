@@ -77,7 +77,7 @@ function Sideeffect() {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-          Side Effect
+          Sideeffect
         </Typography>
         <Button
           color="secondary"
