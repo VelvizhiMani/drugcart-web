@@ -1083,7 +1083,13 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5">
                     Common Side Effect{" "}
                   </h3>
-                 
+                 <p className="text-[14px] px-5">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: sideeffectGeneric?.common,
+                        }}
+                      />
+                    </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1094,7 +1100,13 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5">
                     Rare Side Effect{" "}
                   </h3>
-                 
+                 <p className="text-[14px] px-5">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: sideeffectGeneric?.rare,
+                        }}
+                      />
+                    </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1106,7 +1118,13 @@ const ProductView = ({ url }) => {
                     <h3 className="text-[14px] py-2 font-bold px-5">
                       Severe Side Effect{" "}
                     </h3>
-                   
+                   <p className="text-[14px] px-5">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: sideeffectGeneric?.severe,
+                        }}
+                      />
+                    </p>
                   </div>
                 </div>
               </div>
