@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addLocation, getLocationList, getLocation, getPostalCodes } from '../reduxToolkit/slices/locationSlice'
+import { addLocation, getLocationList, getLocation, getPostalCodes, getPostalCode } from '../reduxToolkit/slices/locationSlice'
 
 const PostLocationService = (data, resetForm) => async (dispatch) => {
     try {
@@ -74,4 +74,19 @@ const GetPostalCodeListService = (code) => async (dispatch) => {
     }
 }
 
-export { PostLocationService, GetLocationListService, GetLocationIdService, PutLocationService, DeleteLocationService, GetPostalCodeListService }
+const GetPostalCodeService = (code) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/location/pincode/${code}`)
+        console.log("getIdData", getIdData);
+        dispatch(getPostalCode(getIdData.data))
+        dispatch(showToast({ message: "Your Delivery Location Available.", severity: "success" }))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        dispatch(showToast({ message: "Your Delivery Location Unavailable.", severity: "error" }))
+        console.log("error", error.message)
+    }
+}
+
+export { PostLocationService, GetLocationListService, GetLocationIdService, PutLocationService, DeleteLocationService, GetPostalCodeListService, GetPostalCodeService }
