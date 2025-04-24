@@ -32,7 +32,7 @@ function PincodeModal({ onClose }) {
                             value={query}
                             onChange={handleInput}
                             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:ring-teal-500"
-                            placeholder="Search pincode or area"
+                            placeholder="Search your pincode"
                         />
                         <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700" onClick={checkBtn}>Check</button>
                     </div>
