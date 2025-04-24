@@ -4,6 +4,7 @@ const initialState = {
     LocationList: [],
     newLocation: {},
     location: {},
+    postalCodes: []
 }
 const locationSlice = createSlice({
     name: 'location',
@@ -18,8 +19,11 @@ const locationSlice = createSlice({
         getLocation: (state, { payload }) => {
             state.location = payload
         },
+        getPostalCodes: (state, { payload }) => {
+            state.postalCodes = payload
+        },
     }
 })
 
-export const { addLocation, getLocationList, getLocation } = locationSlice.actions
+export const { addLocation, getLocationList, getLocation, getPostalCodes } = locationSlice.actions
 export default locationSlice.reducer

@@ -1,9 +1,11 @@
 'use client';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 function PincodeModal({ onClose }) {
     const [query, setQuery] = useState('');
     const [filtered, setFiltered] = useState([]);
+    const dispatch = useDispatch()
 
     const fakeData = [
         "Alirajpur", "Alirajpur", "Annangudi", "Ayyavaripalli", "Chidamabarapuram",

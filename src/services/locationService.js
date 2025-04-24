@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addLocation, getLocationList, getLocation } from '../reduxToolkit/slices/locationSlice'
+import { addLocation, getLocationList, getLocation, getPostalCodes } from '../reduxToolkit/slices/locationSlice'
 
 const PostLocationService = (data, resetForm) => async (dispatch) => {
     try {
@@ -62,4 +62,16 @@ const DeleteLocationService = (id) => async (dispatch) => {
     })
 }
 
-export { PostLocationService, GetLocationListService, GetLocationIdService, PutLocationService, DeleteLocationService }
+const GetPostalCodeListService = (code) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getData = await axios.get(`https://api.postalpincode.in/pincode/${code}`)
+        dispatch(getPostalCodes(getData.data?.[0]))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+export { PostLocationService, GetLocationListService, GetLocationIdService, PutLocationService, DeleteLocationService, GetPostalCodeListService }
