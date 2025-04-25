@@ -19,10 +19,12 @@ import {
   GetProductPersonalCareService,
   GetProductTreatmentService,
 } from "@/services/productService";
+import { GetPageBannerUrlService } from "@/services/pageBannerService";
 import LeftHealthDevice from "@/components/ProductDetailsCard/leftsection/LeftHealthDevice";
 import RightAyushCategory from "@/components/ProductDetailsCard/rightsection/RightAyushCategory";
 
 const HealthStore = () => {
+  const { pageBannerUrl } = useSelector((state) => state.pageBannerData)
   const {
     productCategory,
     categoryProducts,
@@ -36,6 +38,7 @@ const HealthStore = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(GetPageBannerUrlService("healthstore"))
     dispatch(GetProductPersonalCareService(1, 4));
     dispatch(GetProductFitnessService(1, 8));
     dispatch(GetProductTreatmentService(1, 8));
@@ -53,25 +56,14 @@ const HealthStore = () => {
   };
   return (
     <section className="max-w-7xl mx-auto mt-3">
-      <div className="flex flex-wrap h-62 justify-center items-center bg-[#4C4C95]">
-        <div className="w-full md:w-1/2 text-white font-bold text-center">
-          <h3 className="mb-6 text-2xl md:text-5xl mt-4">
-            {" "}
-            Online <span className="text-yellow-400">Health Store</span>
-          </h3>
-          <p className="bg-white text-black p-2 text-center md:ml-10">
-            Personal Care/Fitness Supplement/Health Care{" "}
-          </p>
-        </div>
-        <div className="w-full md:w-1/2">
-          <Image
-            priority
-            src={IMAGES.HEALTHSTOREBAN}
-            alt="Health Store"
-            className="w-[60%] h-[300px] rounded-lg mx-auto"
-          />
-        </div>
-      </div>
+      <Image
+        priority
+        src={pageBannerUrl?.image ? `https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${pageBannerUrl?.image}` : IMAGES.NO_IMAGE}
+        alt="Ayush Banner"
+        className="w-[100%] h-[200px] rounded-xl"
+        width={500}
+        height={100}
+      />
       <div className="flex py-2">
         <div className="w-[20%] m-3 max-h-auto hidden md:block">
           <h2 className="text-lg text-center uppercase py-3 font-bold border-b-[1.5px] bg-[#35A24D] text-white">
