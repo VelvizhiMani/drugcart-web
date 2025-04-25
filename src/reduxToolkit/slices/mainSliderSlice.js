@@ -4,7 +4,7 @@ const initialState = {
     mainSliderList: [],
     newMainSlider: {},
     mainSlider: {},
-    mainSliderUrl: {}
+    mainSliderUrl: []
 }
 const mainSliderSlice = createSlice({
     name: 'main_slider',

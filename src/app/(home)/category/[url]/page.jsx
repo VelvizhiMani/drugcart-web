@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { IMAGES } from "@/components/common/images";
 import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
@@ -9,20 +9,32 @@ import AyushCard from "@/components/ProductDetailsCard/AyushCard";
 import RightAyushCategory from "@/components/ProductDetailsCard/rightsection/RightAyushCategory";
 import LeftHealthDevice from "@/components/ProductDetailsCard/leftsection/LeftHealthDevice";
 import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
+import { GetMainSliderUrlService } from "@/services/mainSliderService";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const CategoryProduct = () => {
+  const { mainSliderUrl } = useSelector((state) => state.mainSliderData)
+  const dispatch = useDispatch()
   const pathname = usePathname();
   // const paths = pathname.split("/").filter((path) => path);
   let pathSegments = pathname.split("/").filter(Boolean);
   pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
+  const params = useParams()
+
+  useEffect(() => {
+    dispatch(GetMainSliderUrlService(params.url))
+  }, [params.url]);
 
   return (
     <section className="max-w-7xl mx-auto mt-3">
       <Image
         priority
-        src={IMAGES.AYURVEDICBNNR}
-        alt="Drugcarts Banner"
-        className="w-[100%] h-[450px] rounded-lg"
+        src={mainSliderUrl?.[0]?.slide_image ? `https://assets1.drugcarts.com/admincolor/homepage/slider/${mainSliderUrl?.[0]?.slide_image}` : IMAGES.AYURVEDICBNNR}
+        alt="Ayush Banner"
+        className="w-[100%] h-[300px] rounded-xl"
+        width={500}
+        height={100}
       />
       <div className="flex py-2">
         <div className="w-[20%] m-3 max-h-auto hidden md:block">
@@ -99,7 +111,7 @@ const CategoryProduct = () => {
         <div className="w-full md:w-[80%]">
           <div className="flex justify-between items-center bg-green-600 text-white font-semibold p-3 my-3">
             <span className="text-lg capitalize">
-              {pathSegments[1]} Product 
+              {pathSegments[1]} Product
             </span>
             <button className="text-sm flex items-center hover:underline">
               View All

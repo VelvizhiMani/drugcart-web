@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
         await connnectionToDatabase();
 
         const { url } = await params;
-        const MainSliderId = await MainSlider.findOne({ url });
+        const MainSliderId = await MainSlider.find({ url });
         if (!MainSliderId) {
             return NextResponse.json({ error: 'MainSlider not found' }, { status: 404 });
         }
