@@ -5,6 +5,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { IMAGES } from "@/components/common/images";
+import { GetMainSliderUrlService } from "@/services/mainSliderService";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const slides = [
   {
@@ -30,6 +33,13 @@ const slides = [
 ];
 
 const SliderPage = () => {
+  const { mainSliderUrl } = useSelector((state) => state.mainSliderData)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(GetMainSliderUrlService("medicine"))
+  }, []);
+
   return (
     <>
       <section className="max-w-7xl mx-auto px-5 md:px-0">
@@ -165,12 +175,14 @@ const SliderPage = () => {
               loop={true}
               className="rounded-lg shadow-lg w-[95%] h-[220px] md:h-[350px]"
             >
-              {slides.map((slide) => (
-                <SwiperSlide key={slide.id}>
-                  <img
-                    src={slide.image}
+              {mainSliderUrl.map((slide, i) => (
+                <SwiperSlide key={i}>
+                  <Image
+                    src={slide?.slide_image ? `https://assets1.drugcarts.com/admincolor/homepage/slider/${slide?.slide_image}` : IMAGES.NO_IMAGE}
                     alt="Lab Test"
                     className="rounded-lg h-[220px] md:h-[350px] w-full"
+                    width={500}
+                    height={100}
                   />
                 </SwiperSlide>
               ))}

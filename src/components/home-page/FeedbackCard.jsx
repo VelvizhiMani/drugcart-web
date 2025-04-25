@@ -22,7 +22,7 @@ const FeedbackCard = () => {
                   <p>{feedback?.ratingStatus}</p>
                 </div>
               </div>
-              <span>{tableText(feedback?.comments, 80)}</span>
+              <span>{tableText(feedback?.comments, 100)}</span>
               <div className="flex  justify-center mt-6">
                 <h3 className='font-bold pr-1 mt-1 text-sm text-black'>{feedback?.rating}</h3>
                 <OverallRating rating={feedback?.rating} />

@@ -44,6 +44,7 @@ const LabTest = () => {
     const dispatch = useDispatch()
     const router = useRouter()
     const [choose, setChoose] = useState('food-intolerance-test')
+    const [loaded, setLoaded] = useState(false);
 
     useEffect(() => {
         dispatch(GetLabPackagesService(1, 6))
@@ -89,10 +90,12 @@ const LabTest = () => {
                     >
                         {mainSliderUrl.map((slide, i) => (
                             <SwiperSlide key={i}>
-                                <img
+                                <Image
                                     src={slide?.slide_image ? `https://assets1.drugcarts.com/admincolor/homepage/slider/${slide?.slide_image}` : IMAGES.NO_IMAGE}
                                     alt="Lab Test"
                                     className="rounded-lg h-[350px] w-full"
+                                    width={500}
+                                    height={100}
                                 />
                             </SwiperSlide>
                         ))}

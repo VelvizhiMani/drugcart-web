@@ -6,7 +6,7 @@ export async function GET(request, { params }) {
     try {
         await connnectionToDatabase();
 
-        const { url } = params;
+        const { url } = await params;
 
         const MainSliderItems = await MainSlider.find({ url });
 
