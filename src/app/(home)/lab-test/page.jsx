@@ -14,6 +14,7 @@ import { GetLabPackagesService, GetLabPackageUrlService } from '@/services/labPa
 import { GetTestPackageUrlService } from '@/services/testPackageService';
 import { InsertEmoticon } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
+import { GetMainSliderUrlService } from "@/services/mainSliderService";
 
 const slides = [
     {
@@ -39,6 +40,7 @@ const slides = [
 const LabTest = () => {
     const { labPackageList, labPackageUrl } = useSelector((state) => state.labPackageData)
     const { testPackageUrl } = useSelector((state) => state.testPackageData)
+    const { mainSliderUrl } = useSelector((state) => state.mainSliderData)
     const dispatch = useDispatch()
     const router = useRouter()
     const [choose, setChoose] = useState('food-intolerance-test')
@@ -47,6 +49,7 @@ const LabTest = () => {
         dispatch(GetLabPackagesService(1, 6))
         dispatch(GetTestPackageUrlService(choose))
         dispatch(GetLabPackageUrlService(choose))
+        dispatch(GetMainSliderUrlService('lab-test'))
     }, [choose])
 
     const discountCal = (price, discount) => {
@@ -82,14 +85,14 @@ const LabTest = () => {
                         pagination={{ clickable: true }}
                         autoplay={{ delay: 3000 }}
                         loop={true}
-                        className="rounded-lg shadow-lg w-[95%] h-[400px]"
+                        className="rounded-lg shadow-lg w-[95%] h-[350px]"
                     >
-                        {slides.map((slide) => (
-                            <SwiperSlide key={slide.id}>
+                        {mainSliderUrl.map((slide, i) => (
+                            <SwiperSlide key={i}>
                                 <img
-                                    src={slide.image}
+                                    src={slide?.slide_image ? `https://assets1.drugcarts.com/admincolor/homepage/slider/${slide?.slide_image}` : IMAGES.NO_IMAGE}
                                     alt="Lab Test"
-                                    className="rounded-lg h-[400px] w-full"
+                                    className="rounded-lg h-[350px] w-full"
                                 />
                             </SwiperSlide>
                         ))}

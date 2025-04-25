@@ -6,14 +6,20 @@ export async function GET(request, { params }) {
     try {
         await connnectionToDatabase();
 
-        const { url } = await params;
-        const MainSliderId = await MainSlider.find({ url });
-        if (!MainSliderId) {
+        const { url } = params;
+
+        const MainSliderItems = await MainSlider.find({ url });
+
+        if (!MainSliderItems || MainSliderItems.length === 0) {
             return NextResponse.json({ error: 'MainSlider not found' }, { status: 404 });
         }
 
-        return NextResponse.json(MainSliderId, { status: 200 });
+        const filterData = MainSliderItems.filter(item => item.status === "Active");
+
+        return NextResponse.json(filterData, { status: 200 });
+
     } catch (error) {
+        console.error("Error fetching MainSlider:", error);
         return NextResponse.json({ error: 'Error fetching MainSlider' }, { status: 500 });
     }
 }
