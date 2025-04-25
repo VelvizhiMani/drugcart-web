@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { IMAGES } from "@/components/common/images";
 import Helpful from "@/components/ProductDetailsCard/Helpful";
 import OtcProduct from "@/components/ProductDetailsCard/OtcProduct";
@@ -10,19 +10,23 @@ import ProductCard from "@/components/ProductDetailsCard/ProductCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { GetProductCatsService } from "@/services/productService";
+import { GetPageBannerUrlService } from "@/services/pageBannerService";
 import RightAyushCategory from "@/components/ProductDetailsCard/rightsection/RightAyushCategory";
 import LeftHealthDevice from "@/components/ProductDetailsCard/leftsection/LeftHealthDevice";
 import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
 
 const Ayush = () => {
+  const { pageBannerUrl } = useSelector((state) => state.pageBannerData)
   const { productCategory, categoryProducts } = useSelector(
     (state) => state.productData
   );
   const router = useRouter();
   const [search, setSearch] = useState("");
   const dispatch = useDispatch();
+  const params = useParams()
 
   useEffect(() => {
+    dispatch(GetPageBannerUrlService("ayush"))
     dispatch(GetProductCatsService(1, 10, "ayush", search));
   }, [search]);
 
@@ -47,9 +51,11 @@ const Ayush = () => {
     <section className="max-w-7xl mx-auto mt-3">
       <Image
         priority
-        src={IMAGES.AYUSHBANNER}
+        src={pageBannerUrl?.image ? `https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${pageBannerUrl?.image}` : IMAGES.NO_IMAGE}
         alt="Ayush Banner"
-        className="w-[100%] h-[450px] rounded-xl"
+        className="w-[100%] h-[200px] rounded-xl"
+        width={500}
+        height={100}
       />
       <div className="flex py-2">
         <div className="w-[20%] m-3 max-h-auto hidden md:block">

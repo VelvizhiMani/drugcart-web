@@ -6,8 +6,9 @@ export async function GET(request, { params }) {
     try {
         await connnectionToDatabase();
 
-        const { url } = await params;
-        const PageBannerId = await PageBanner.findOne({ url });
+        const { pagename } = await params;
+        
+        const PageBannerId = await PageBanner.findOne({ pagename });
         if (!PageBannerId) {
             return NextResponse.json({ error: 'PageBanner not found' }, { status: 404 });
         }
