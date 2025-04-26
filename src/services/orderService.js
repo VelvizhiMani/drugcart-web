@@ -11,7 +11,7 @@ const PostOrderService = (data, router) => async (dispatch) => {
         dispatch(addOrder(postData.data))
         // dispatch(GetOrderIdService(postData.data?._id))
         if (postData.status === 200) {
-            dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "test", message: JSON.stringify(postData.data) }))
+            dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "Invoice", message: JSON.stringify(postData.data) }))
             for (const item of postData.data?.orderItems || []) {
                 dispatch(DeleteCartService(item?._id));
             }
