@@ -5,43 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { GetSpecialListService } from "@/services/specialityService";
 import { useRouter } from "next/navigation";
+import { GetPageBannerUrlService } from "@/services/pageBannerService";
 
 const Specialty = () => {
+    const { pageBannerUrl } = useSelector((state) => state.pageBannerData)
     const { specialList } = useSelector((state) => state.specialityData)
     const dispatch = useDispatch()
     const router = useRouter()
 
     useEffect(() => {
+        dispatch(GetPageBannerUrlService("specialty"))
         dispatch(GetSpecialListService())
     }, [])
 
     return (
         <section className="max-w-7xl mt-3 mx-auto">
-            <div className="flex flex-wrap h-62 justify-center items-center bg-[#60D4FF]">
-                <div className="w-full md:w-1/2">
-                    <Image
-                        priority
-                        src={IMAGES.ONLINEDOCTOR}
-                        alt="Online Doctor"
-                        className="w-[60%] h-[300px] rounded-lg mx-auto"
-                    />
-                </div>
-                <div className="w-full md:w-1/2 text-blue-950 font-bold">
-                    <h3 className="mb-6 text-[#FF0076] text-xl md:text-3xl"> Doctor Consultation Available From Home</h3>
-                    <div className="flex space-x-5 justify-center items-center">
-                        <button className="bg-[#FFFFFF] text-[#1877F2] py-2 px-4 text-lg rounded-md mt-4 hover:bg-green-700 hover:text-white">
-                            Talk With Time
-                        </button>
-                        <button className=" bg-[#FFFFFF] text-[#1877F2] py-2 px-4 text-lg rounded-md mt-4 hover:bg-green-700 hover:text-white">
-                            Get a valid prescription
-                        </button>
-                    </div>
-                    <button className=" bg-green-600 flex mx-auto text-white py-2 px-4 text-lg rounded-md mt-6 hover:bg-[#ffffff]  hover:text-[#1877F2]">
-                        Consult Now
-                    </button>
-                </div>
-            </div>
-
+            <Image
+                priority
+                src={pageBannerUrl?.image ? `https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${pageBannerUrl?.image}` : IMAGES.NO_IMAGE}
+                alt="Ayush Banner"
+                className="w-[100%] h-[200px] rounded-xl"
+                width={500}
+                height={100}
+            />
             <h2 className="text-md md:text-xl font-bold my-4 px-2">Most Visited Category</h2>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-2">
                 {specialList?.specialty_lists?.map((item, i) => (

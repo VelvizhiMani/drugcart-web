@@ -12,8 +12,10 @@ import ProductCard from "@/components/ProductDetailsCard/ProductCard";
 import RightAyushCategory from "@/components/ProductDetailsCard/rightsection/RightAyushCategory";
 import LeftHealthDevice from "@/components/ProductDetailsCard/leftsection/LeftHealthDevice";
 import FilterCompanyCard from "@/components/ProductDetailsCard/FilterCompanyCard";
+import { GetMainSliderUrlService } from "@/services/mainSliderService";
 
 const HomeCategoryProduct = () => {
+  const { mainSliderUrl } = useSelector((state) => state.mainSliderData)
   const pathname = usePathname();
   const params = useParams();
   const { categoryProducts } = useSelector((state) => state.productData);
@@ -23,6 +25,7 @@ const HomeCategoryProduct = () => {
   pathSegments = pathSegments.map((segment) => segment.replace(/-/g, " "));
 
   useEffect(() => {
+    dispatch(GetMainSliderUrlService(params.url))
     dispatch(GetProductCatsService(1, 10, params.url));
   }, [params.url]);
 
@@ -30,9 +33,11 @@ const HomeCategoryProduct = () => {
     <section className="max-w-7xl mx-auto mt-3">
       <Image
         priority
-        src={IMAGES.AYURVEDICBNNR}
-        alt="Health Store"
-        className="w-[100%] h-[450px] rounded-lg"
+        src={mainSliderUrl?.[0]?.slide_image ? `https://assets1.drugcarts.com/admincolor/homepage/slider/${mainSliderUrl?.[0]?.slide_image}` : IMAGES.AYURVEDICBNNR}
+        alt="Ayush Banner"
+        className="w-[100%] h-[300px] rounded-xl"
+        width={500}
+        height={100}
       />
       <div className="flex py-2">
         <div className="w-[20%] m-3 max-h-auto">

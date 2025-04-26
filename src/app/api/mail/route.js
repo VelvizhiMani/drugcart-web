@@ -1,8 +1,10 @@
 import nodemailer from "nodemailer";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium-min";
 import { NextResponse } from "next/server";
-import { DateFormat } from '@/utils/dateFormat'
+import { DateFormat } from "@/utils/dateFormat";
 
+// your numberToWords function...
 function numberToWords(num) {
   const ones = [
     "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
@@ -43,17 +45,15 @@ function numberToWords(num) {
   return "Number too large";
 }
 
-
-
 export async function POST(req) {
   if (req.method !== "POST") {
     return NextResponse.json({ message: "Only POST requests allowed" }, { status: 405 });
   }
 
   const { to, subject, message } = await req.json();
-
-  const jsonParse = JSON.parse(message)
-// console.log('jsonparse', jsonParse);
+  const jsonParse = JSON.parse(message);
+  console.log(jsonParse);
+  
 
   const htmlContent = `<!DOCTYPE html>
 <html>
@@ -224,8 +224,16 @@ font-weight: bold;
 </html>`;
 
   try {
-    // Step 1: Generate PDF from HTML
-    const browser = await puppeteer.launch({ headless: "new" });
+    const isProd = process.env.NODE_ENV === 'production';
+    const browser = await puppeteer.launch({
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: process.env.NODE_ENV === "production"
+      ? await chromium.executablePath
+      : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // <- manually give Chrome path on your computer
+      headless: chromium.headless,
+    });
+
     const page = await browser.newPage();
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
@@ -236,7 +244,6 @@ font-weight: bold;
 
     await browser.close();
 
-    // Step 2: Create transporter
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
@@ -245,7 +252,6 @@ font-weight: bold;
       },
     });
 
-    // Step 3: Mail options with PDF attachment
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to,
@@ -261,7 +267,6 @@ font-weight: bold;
       ],
     };
 
-    // Step 4: Send email
     const info = await transporter.sendMail(mailOptions);
     return NextResponse.json({ message: "Email sent successfully!", info });
   } catch (error) {

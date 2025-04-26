@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { createUser, userRegister } from '@/reduxToolkit/slices/userSlice'
+import { createUser, GetErrorOtp, userRegister } from '@/reduxToolkit/slices/userSlice'
 import { PostCartService } from './cartService'
 import { mergeCartAfterLogin } from '@/reduxToolkit/slices/cartSlice'
-import { showToast } from '@/reduxToolkit/slices/commonSlice'
+import { IsLoading, showToast } from '@/reduxToolkit/slices/commonSlice'
 
 const registerService = () => async (dispatch) => {
     await axios.get('https://jsonplaceholder.typicode.com/posts').then((response) => {
@@ -34,15 +34,22 @@ const sendOTPService = (userData, router) => async (dispatch) => {
 }
 
 const verifyOTPService = (userData, router, items) => async (dispatch) => {
+    dispatch(IsLoading(true))
     await axios.post('/api/verify-otp', userData).then(async (response) => {
         console.log("user data", response.data);
         localStorage.setItem('token', response?.data?.token);
         items.map((item) => {
             dispatch(PostCartService(item))
         })
+        dispatch(IsLoading(false))
+        dispatch(GetErrorOtp(false))
         router.push(`/`)
     }).catch((error) => {
         console.log("error", error?.response?.data?.error)
+        dispatch(IsLoading(false))
+        if (error?.response?.data?.error === "Invalid OTP") {
+            dispatch(GetErrorOtp(true))
+        }
         dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
     })
 }

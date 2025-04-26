@@ -205,6 +205,8 @@ const AddressForm = () => {
                                                     </div>
                                                     <p>
                                                         {addressItem?.cus_name} {addressItem?.lastname}, <br />
+                                                        {addressItem?.email},
+                                                        <br />
                                                         {addressItem?.phone},
                                                         <br />
                                                         {addressItem?.address},

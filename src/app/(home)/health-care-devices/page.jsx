@@ -18,13 +18,16 @@ import {
 } from "@/services/productService";
 import ReportErrorCard from "@/components/ProductDetailsCard/ReportErrorCard";
 import LeftHealthDevice from "@/components/ProductDetailsCard/leftsection/LeftHealthDevice";
+import { GetPageBannerUrlService } from "@/services/pageBannerService";
 
 const HealthCareDevices = () => {
+  const { pageBannerUrl } = useSelector((state) => state.pageBannerData)
   const { categoryProducts } = useSelector((state) => state.productData);
   const router = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(GetPageBannerUrlService("healthcaredevices"))
     dispatch(GetProductCatsService(1, 4, "health-care-device"));
     dispatch(GetProductCategoryService(1, 10, "blood-test-kit"));
   }, []);
@@ -34,25 +37,14 @@ const HealthCareDevices = () => {
   };
   return (
     <section className="max-w-7xl mx-auto mt-3">
-      <div className="flex flex-wrap h-62 justify-center items-center bg-green-700">
-        <div className="w-full md:w-1/2 text-white font-bold text-center">
-          <h3 className="my-6 text-2xl md:text-5xl">
-            {" "}
-            Online <span className="text-yellow-400">Health CARE DEVICE</span>
-          </h3>
-          <p className="bg-white text-black p-2 text-center md:ml-10 ml-0">
-            Perfecxa B02 Upper Arm Blood Pressure Monitor{" "}
-          </p>
-        </div>
-        <div className="w-full md:w-1/2">
-          <Image
-            priority
-            src={IMAGES.HEALTHSTOREBAN}
-            alt="Health CARE DEVICE"
-            className="w-[60%] h-[300px] rounded-lg mx-auto"
-          />
-        </div>
-      </div>
+      <Image
+        priority
+        src={pageBannerUrl?.image ? `https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${pageBannerUrl?.image}` : IMAGES.NO_IMAGE}
+        alt="Ayush Banner"
+        className="w-[100%] h-[200px] rounded-xl"
+        width={500}
+        height={100}
+      />
       <div className="flex py-2">
         <div className="w-[20%] m-3 max-h-auto hidden md:block">
           <h2 className="text-lg text-center uppercase py-3 font-bold border-b-[1.5px] bg-gray-700 text-white">

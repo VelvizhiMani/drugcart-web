@@ -35,8 +35,8 @@ const TopHeader = () => {
   const logout = async () => {
     await localStorage.removeItem("token");
     await localStorage.removeItem("cart");
-    router.push("/");
-    window.location.reload();
+    // window.location.reload();
+    window.location.href = "/"
   };
 
   const loginLink = () => {

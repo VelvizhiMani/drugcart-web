@@ -6,8 +6,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { GetPageBannerUrlService } from "@/services/pageBannerService";
 
 const Medicine = () => {
+  const { pageBannerUrl } = useSelector((state) => state.pageBannerData)
   const router = useRouter();
   const { firstLetter, categories } = useSelector((state) => state.categoryData);
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const Medicine = () => {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   useEffect(() => {
+    dispatch(GetPageBannerUrlService("medicine"))
     dispatch(GetLetterCategoryService(page, 18, selectedLetter));
   }, [page, selectedLetter]);
 
@@ -26,6 +29,14 @@ const Medicine = () => {
   return (
     <>
       <section className="max-w-7xl mx-auto">
+        <Image
+          priority
+          src={pageBannerUrl?.image ? `https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${pageBannerUrl?.image}` : IMAGES.NO_IMAGE}
+          alt="Ayush Banner"
+          className="w-[100%] h-[200px] rounded-xl"
+          width={500}
+          height={100}
+        />
         <div className="py-2 text-xl font-bold px-2 md:px-0">
           <h2>A - Z Order Medicine</h2>
           <div className="flex flex-wrap justify-center gap-2 my-4">
@@ -59,7 +70,7 @@ const Medicine = () => {
                 className="bg-bgshop rounded-lg p-4 cursor-pointer"
                 key={i}
                 onClick={() => categroyClick(category?.url)}
-              >                    
+              >
                 <p className="text-center">
                   <Image
                     width={100}
