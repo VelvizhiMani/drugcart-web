@@ -166,6 +166,7 @@ const SliderPage = () => {
       <section className="max-w-7xl mx-auto px-5 md:px-0 mt-3">
         <div className="flex flex-wrap">
           <div className="w-full md:w-[70%]">
+          {mainSliderUrl.length > 0 && (
             <Swiper
               modules={[Pagination, Navigation, Autoplay]}
               spaceBetween={10}
@@ -187,6 +188,7 @@ const SliderPage = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
+            )}
           </div>
           <div className="w-full md:w-[30%]">
             <Image
