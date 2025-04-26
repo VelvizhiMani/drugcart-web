@@ -2,6 +2,7 @@ import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
 import { addOrder, getAllOrders, getOrder, getGetOrderData, getMyOrderData, addInvoice, getPedingOrder } from '../reduxToolkit/slices/orderSlice'
+import { DeleteCartService } from "./cartService"
 
 const PostOrderService = (data, router) => async (dispatch) => {
     try {
@@ -9,8 +10,11 @@ const PostOrderService = (data, router) => async (dispatch) => {
         const postData = await axios.post('/api/order', data, { headers: await Authorization() })
         dispatch(addOrder(postData.data))
         dispatch(GetOrderIdService(postData.data?._id))
-        if(postData.status === 200) {
-            dispatch(PostInvoiceService({to: data.shippingInfo.email, subject: "test", message: JSON.stringify(postData.data)}))
+        if (postData.status === 200) {
+            dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "test", message: JSON.stringify(postData.data) }))
+            for (const item of postData.data?.orderItems || []) {
+                dispatch(DeleteCartService(item?._id));
+            }
         }
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Order Successfully!!!", severity: "success" }))

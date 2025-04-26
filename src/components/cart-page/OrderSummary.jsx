@@ -165,7 +165,7 @@ const OrderSummary = () => {
                 </div>
 
                 {items?.map((item, i) => (
-                  <div className="flex flex-wrap gap-4 items-center justify-between border-b pb-4">
+                  <div className="flex flex-wrap gap-4 items-center justify-between border-b pb-4" key={i}>
                     <div className="flex items-center space-x-4">
                       <Image
                         src={IMAGES.Product_Eugebra}

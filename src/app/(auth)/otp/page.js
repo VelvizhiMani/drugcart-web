@@ -10,6 +10,7 @@ import { useTimer } from '@/hooks/useTimer';
 
 const OTP = ({searchParams}) => {
   const { carts, items } = useSelector((state) => state.cartData);
+  const { errorOtp } = useSelector((state) => state.userData);
   const { timer, startTimer, resetTimer } = useTimer({ initcounter: 300 });
   const dispatch = useDispatch()
   const router = useRouter()
@@ -62,6 +63,10 @@ const OTP = ({searchParams}) => {
       username,
       phone,
       otp: digit
+    }
+    if (errorOtp) {
+        setOtp(["", "", "", "", "", ""])
+        setDigit("")
     }
     await dispatch(verifyOTPService(userdata, router, items))
   }
