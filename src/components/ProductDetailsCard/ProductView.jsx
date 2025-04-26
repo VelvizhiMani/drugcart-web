@@ -1188,7 +1188,7 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5 text-center">
                     DRIVING{" "}
                   </h3>
-                  <button className="bg-[#E6F5F5] px-4 mx-auto flex m-1 rounded-md text-[#359494]">
+                  <button className="bg-[#FFDACF] px-4 mx-auto flex m-1 rounded-md text-[#359494]">
                     Caution
                   </button>
                   <p className="text-[14px] px-5">
@@ -1207,7 +1207,7 @@ const ProductView = ({ url }) => {
                     <h3 className="text-[14px] py-2 font-bold px-5 text-center">
                       PREGNANCY
                     </h3>
-                    <button className="bg-[#C8C8F0] px-4 mx-auto flex m-1 rounded-md text-[#444486]">
+                    <button className="bg-[#E6F5F5] px-4 mx-auto flex m-1 rounded-md text-[#444486]">
                       Consult Your Doctor
                     </button>
                     <p className="text-[14px] px-5">
@@ -1226,10 +1226,10 @@ const ProductView = ({ url }) => {
                     alt="BREAST FEEDING"
                     className="w-24 h-24 mx-auto rounded-full border-2"
                   />
-                  <h3 className="text-[14px] py-1 font-bold px-5 text-center">
+                  <h3 className="text-[14px] py-2 font-bold px-5 text-center">
                     BREAST FEEDING
                   </h3>
-                  <button className="bg-[#C8C8F0] px-4 mx-auto flex m-1 rounded-md text-[#444486]">
+                  <button className="bg-[#E6F5F5] px-4 mx-auto flex m-1 rounded-md text-[#444486]">
                     Consult Your Doctor
                   </button>
                   <p className="text-[14px] px-5">

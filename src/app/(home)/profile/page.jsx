@@ -21,6 +21,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MyOrders from '@/components/profile/MyOrders';
+import MyRefills from "@/components/profile/MyRefills";
 import MyAddress from '@/components/profile/MyAddress';
 import MyPrescription from '@/components/profile/MyPrescription';
 import MyLab from '@/components/profile/MyLab';
@@ -38,6 +39,7 @@ import { useFormik } from 'formik';
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
     { id: 'orders', label: 'My Order', icon: <ListAltIcon /> },
+    { id: "refills", label: "My Refills", icon: <ListAltIcon /> },
     { id: 'address', label: 'My Address', icon: <LocationOnIcon /> },
     { id: 'prescription', label: 'My Prescription', icon: <SummarizeIcon /> }
 ];
@@ -269,6 +271,12 @@ export default function ProfileTab() {
                                 <MyOrders />
                             </div>
                         )}
+                         {activeTab === "refills" && (
+              <div>
+                <h2 className="text-2xl font-bold mb-4">My Refills</h2>
+                <MyRefills />
+              </div>
+            )}
 
                         {activeTab === 'address' && (
                             <div>

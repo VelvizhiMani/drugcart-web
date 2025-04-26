@@ -111,6 +111,9 @@ const MyRefills = () => {
                             ))}
                         </tbody>
                     </table>
+                       {myOrders?.orderItems?.map((items, i) => (
+                <p>{items?.packageName}</p>
+              ))}
                 </div>
 
             </div>
