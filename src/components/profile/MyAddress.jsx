@@ -49,6 +49,7 @@ function MyAddress() {
               <p className="text-sm text-gray-700 leading-relaxed mt-3">
                 {addressItem?.cus_name} {addressItem?.lastname},<br />
                 {addressItem?.phone},<br />
+                {addressItem?.email},<br />
                 {addressItem?.address},<br />
                 {addressItem?.town},<br />
                 {addressItem?.postcode},<br />
