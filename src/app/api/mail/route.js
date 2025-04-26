@@ -1,10 +1,9 @@
 import nodemailer from "nodemailer";
-import puppeteer from "puppeteer-core";
-import chromium from "@sparticuz/chromium-min";
+import puppeteer from "puppeteer";
 import { NextResponse } from "next/server";
 import { DateFormat } from "@/utils/dateFormat";
 
-// your numberToWords function...
+// your numberToWords function
 function numberToWords(num) {
   const ones = [
     "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
@@ -45,6 +44,19 @@ function numberToWords(num) {
   return "Number too large";
 }
 
+// function to generate PDF Buffer from HTML
+async function generatePdfBuffer(htmlContent) {
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    headless: "new"
+  });
+  const page = await browser.newPage();
+  await page.setContent(htmlContent, { waitUntil: "networkidle0" });
+  const pdfBuffer = await page.pdf({ format: "A4" });
+  await browser.close();
+  return pdfBuffer;
+}
+
 export async function POST(req) {
   if (req.method !== "POST") {
     return NextResponse.json({ message: "Only POST requests allowed" }, { status: 405 });
@@ -52,8 +64,6 @@ export async function POST(req) {
 
   const { to, subject, message } = await req.json();
   const jsonParse = JSON.parse(message);
-  console.log(jsonParse);
-  
 
   const htmlContent = `<!DOCTYPE html>
 <html>
@@ -62,187 +72,148 @@ export async function POST(req) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invoice - Million Health Pharmaceuticals</title>
 <style>
-.container {
-width: 90%;
-margin: 0 auto;
-padding: 20px;
-}
-table {
-width: 100%;
-border-collapse: collapse;
-margin-top: 10px;
-}
-table, th, td {
-border: 1px solid #000;
-}
-th, td {
-padding: 8px;
-text-align: left;
-}
-.no-border td {
-border: none;
-}
-.center {
-text-align: center;
-}
-.bold {
-font-weight: bold;
-}
+.container { width: 90%; margin: 0 auto; padding: 20px; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+table, th, td { border: 1px solid #000; }
+th, td { padding: 8px; text-align: left; }
+.no-border td { border: none; }
+.center { text-align: center; }
+.bold { font-weight: bold; }
 </style>
 </head>
-  <body>
-    <div class="container">
+<body>
+<div class="container">
 <table class="border">
   <tr>
     <td colspan="8" style="text-align: center;">
       <strong><h1>DRUGCARTS</h1></strong>
-            <p>Portion A First Floor, No.50, Pedariyar Koil Street, Seven Wells, Chennai-600001</p>
-            <p>Email: drugcartspro@gmail.com, Website: www.drugcarts.com</p>
+      <p>Portion A First Floor, No.50, Pedariyar Koil Street, Seven Wells, Chennai-600001</p>
+      <p>Email: drugcartspro@gmail.com, Website: www.drugcarts.com</p>
     </td>
   </tr>
   <tr style="text-align:center;">
-    <td colspan="2">
-        <strong>Invoice #:${jsonParse.orderId}</strong>
-    </td>
-    <td colspan="4" style="text-align:center;font-size:24px;">
-        <strong>Invoice</strong>
-    </td>
-    <td colspan="2">
-        <strong>Date: ${DateFormat(jsonParse.createdAt)}</strong><br/>
-        <strong>Buyers Order No: ${jsonParse.orderId}</strong>
-    </td>
+    <td colspan="2"><strong>Invoice #: ${jsonParse.orderId}</strong></td>
+    <td colspan="4" style="text-align:center;font-size:24px;"><strong>Invoice</strong></td>
+    <td colspan="2"><strong>Date: ${DateFormat(jsonParse.createdAt)}</strong><br/>
+    <strong>Buyers Order No: ${jsonParse.orderId}</strong></td>
   </tr>
   <tr style="text-align:center;">
-    <td colspan="2"><strong>Courier:Air </strong></td>
-    <td colspan="4"><strong>Payment Terms: Bank Transfer  </strong></td>
-    <td colspan="2"><strong>Delivery : By Air EMS</strong></td>
+    <td colspan="2"><strong>Courier: Air</strong></td>
+    <td colspan="4"><strong>Payment Terms: Bank Transfer</strong></td>
+    <td colspan="2"><strong>Delivery: By Air EMS</strong></td>
   </tr>
   <tr>
     <td colspan="4">
-    <strong>Bill To/Name of the Buyer:</strong>
-    <p style="text-transform: capitalize">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname},</p>
-    <p>${jsonParse.shippingInfo.address},</p>
-    <p>${jsonParse.shippingInfo.town}</p>
-    <p>${jsonParse.shippingInfo.state}, ${jsonParse.shippingInfo.country} - ${jsonParse.shippingInfo.postcode}</p>
-    <strong>Mobile: ${jsonParse.shippingInfo.phone}</strong>
+      <strong>Bill To/Name of the Buyer:</strong>
+      <p style="text-transform: capitalize">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname},</p>
+      <p>${jsonParse.shippingInfo.address},</p>
+      <p>${jsonParse.shippingInfo.town}</p>
+      <p>${jsonParse.shippingInfo.state}, ${jsonParse.shippingInfo.country} - ${jsonParse.shippingInfo.postcode}</p>
+      <strong>Mobile: ${jsonParse.shippingInfo.phone}</strong>
     </td>
     <td colspan="4">
-    <strong>Ship To/Delivery At:</strong>
-    <p style="text-transform: capitalize">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname},</p>
-    <p>${jsonParse.shippingInfo.address},</p>
-    <p>${jsonParse.shippingInfo.town}</p>
-    <p>${jsonParse.shippingInfo.state}, ${jsonParse.shippingInfo.country} - ${jsonParse.shippingInfo.postcode}</p>
-    <strong>Mobile: ${jsonParse.shippingInfo.phone}</strong>
+      <strong>Ship To/Delivery At:</strong>
+      <p style="text-transform: capitalize">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname},</p>
+      <p>${jsonParse.shippingInfo.address},</p>
+      <p>${jsonParse.shippingInfo.town}</p>
+      <p>${jsonParse.shippingInfo.state}, ${jsonParse.shippingInfo.country} - ${jsonParse.shippingInfo.postcode}</p>
+      <strong>Mobile: ${jsonParse.shippingInfo.phone}</strong>
     </td>
   </tr>
-  </table>
-  <table>
+</table>
+<table>
+  <tr>
+    <th style="width:10%;">S.NO</th>
+    <th colspan="2">Product</th>
+    <th>Packing</th>
+    <th>Quantity</th>
+    <th>Unit</th>
+    <th>Amount</th>
+  </tr>
+  ${jsonParse.orderItems.map((order, i) => `
     <tr>
-      <th style="width:10%;">S.NO</th>
-      <th colspan="2">Product</th>
-      <th>Packing</th>
-      <th>Quantity</th>
-      <th>Unit</th>
-      <th>Amount</th>
+      <td>${i + 1}</td>
+      <td colspan="2">${order.product_name}</td>
+      <td>${order.packageName}</td>
+      <td>${order.quantity}</td>
+      <td>${order.price}</td>
+      <td>Rs.${order.price}</td>
     </tr>
-    ${jsonParse?.orderItems
-      .map((order, i) => `
-        <tr>
-          <td>${i + 1}</td>
-          <td colspan="2">${order?.product_name}</td>
-          <td>${order?.packageName}</td>
-          <td>${order?.quantity}</td>
-          <td>${order?.price}</td>
-          <td>Rs.${order?.price}</td>
-        </tr>
-      `).join('')}
-     <tr>
-      <td colspan="4">Amount In Words: </td>
-      <td colspan="2">Shiping Charges: </td>
-      <td><strong>Rs. 0</strong></td>
-    </tr>
-    <tr>
-      <td colspan="4">${numberToWords(jsonParse.itemsPrice)} Rupees Only </td>
-      <td colspan="2"><strong>TOTAL :</strong> </td>
-      <td><strong>Rs. ${jsonParse.itemsPrice}</strong></td>
-    </tr>
-    <tr>
-      <td colspan="4">D.L.No:2391/M Z1/20B , 2391/M Z1/21B </td>
-      <td colspan="3">IEC.No.0415026121. </td>
-    </tr>
-    <tr>
-      <td colspan="4"><strong>Declaration :</strong><br/>
-      <p>Hereby we declare that all the informations given
-       in this is correct an true to our knowledge</p></td>
-      <td colspan="3">
-      <strong>for Drugcarts</strong> </br></br></br>
-      <strong>PROP/AUTH.SIGN</strong>
-      </td>
-    </tr>
-     <tr>
-      <td colspan="7" style="text-align:center;"><strong>Bank Details</strong></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>BENEFICIAR </strong></td>
-      <td colspan="5"><p>Drugcarts </p></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>BENEFICIAR ADDRESS </strong></td>
-      <td colspan="5">
-      <p>${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname}, <br/> ${jsonParse.shippingInfo.phone}, <br/> ${jsonParse.shippingInfo.email}, <br/> ${jsonParse.shippingInfo.address}, <br/> ${jsonParse.shippingInfo.town}, <br/> ${jsonParse.shippingInfo.state}, <br/> ${jsonParse.shippingInfo.country}, <br/> ${jsonParse.shippingInfo.postcode}</p></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>BENEFICIAR BANK ADDRESS </strong></td>
-      <td colspan="5"><p>KOTAK MAHINDRA BANK </p></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>SWIFT CODE  </strong></td>
-      <td colspan="5"><p>KKBKINBBCPC </p></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>IBAN  </strong></td>
-      <td colspan="5"><p>401011023808 </p></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>DETAILS  </strong></td>
-      <td colspan="5"><p>Purchasing Goods for the invoice number #${jsonParse.orderId} </p></td>
-     </tr>
-     <tr>
-      <td colspan="2"><strong>INVOICE AMOUNT </strong></td>
-      <td colspan="2"><p> ${jsonParse.itemsPrice} </p></td>
-      <td colspan="3"><p>CURRENCY : INR </p></td>
-     </tr>
-     <tr>
-      <td colspan="7" style="text-align:center;">
+  `).join('')}
+  <tr>
+    <td colspan="4">Amount In Words:</td>
+    <td colspan="2">Shipping Charges:</td>
+    <td><strong>Rs. 0</strong></td>
+  </tr>
+  <tr>
+    <td colspan="4">${numberToWords(jsonParse.itemsPrice)} Rupees Only</td>
+    <td colspan="2"><strong>TOTAL:</strong></td>
+    <td><strong>Rs. ${jsonParse.itemsPrice}</strong></td>
+  </tr>
+  <tr>
+    <td colspan="4">D.L.No:2391/M Z1/20B, 2391/M Z1/21B</td>
+    <td colspan="3">IEC.No.0415026121.</td>
+  </tr>
+  <tr>
+    <td colspan="4"><strong>Declaration:</strong><br/>
+    <p>Hereby we declare that all the information given in this is correct and true to our knowledge.</p></td>
+    <td colspan="3">
+    <strong>for Drugcarts</strong><br/><br/><br/>
+    <strong>PROP/AUTH.SIGN</strong>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="7" class="center"><strong>Bank Details</strong></td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>BENEFICIAR</strong></td>
+    <td colspan="5">Drugcarts</td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>BENEFICIAR ADDRESS</strong></td>
+    <td colspan="5">${jsonParse.shippingInfo.cus_name} ${jsonParse.shippingInfo.lastname}, <br/>
+    ${jsonParse.shippingInfo.phone}, <br/>
+    ${jsonParse.shippingInfo.email}, <br/>
+    ${jsonParse.shippingInfo.address}, <br/>
+    ${jsonParse.shippingInfo.town}, <br/>
+    ${jsonParse.shippingInfo.state}, <br/>
+    ${jsonParse.shippingInfo.country}, <br/>
+    ${jsonParse.shippingInfo.postcode}</td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>BENEFICIAR BANK ADDRESS</strong></td>
+    <td colspan="5">KOTAK MAHINDRA BANK</td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>SWIFT CODE</strong></td>
+    <td colspan="5">KKBKINBBCPC</td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>IBAN</strong></td>
+    <td colspan="5">401011023808</td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>DETAILS</strong></td>
+    <td colspan="5">Purchasing Goods for the invoice number #${jsonParse.orderId}</td>
+  </tr>
+  <tr>
+    <td colspan="2"><strong>INVOICE AMOUNT</strong></td>
+    <td colspan="2">${jsonParse.itemsPrice}</td>
+    <td colspan="3">CURRENCY: INR</td>
+  </tr>
+  <tr>
+    <td colspan="7" class="center">
       Thank you for ordering at the Drugcarts online store.<br/>
-      If you have any questions, you can email us at the following Phone No : +91 99206 11567
-      </td>
-     </tr>
-  </table>
+      If you have any questions, you can email us or call: +91 99206 11567
+    </td>
+  </tr>
+</table>
 </div>
-  </body>
+</body>
 </html>`;
 
   try {
-    const isProd = process.env.NODE_ENV === 'production';
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: process.env.NODE_ENV === "production"
-      ? await chromium.executablePath
-      : 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', // <- manually give Chrome path on your computer
-      headless: chromium.headless,
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(htmlContent, { waitUntil: "networkidle0" });
-
-    const pdfBuffer = await page.pdf({
-      format: "A4",
-      printBackground: true,
-    });
-
-    await browser.close();
+    const pdfBuffer = await generatePdfBuffer(htmlContent);
 
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -260,7 +231,7 @@ font-weight: bold;
       html: htmlContent,
       attachments: [
         {
-          filename: `Invoice.pdf`,
+          filename: "Invoice.pdf",
           content: pdfBuffer,
           contentType: "application/pdf",
         },

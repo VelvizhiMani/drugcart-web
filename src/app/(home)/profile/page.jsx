@@ -35,6 +35,8 @@ import { PutProfileService } from '@/services/profileService';
 import TitleIcon from '@mui/icons-material/Title';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
+import LogoutModal from '@/components/common/LogoutModal';
 
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
@@ -50,21 +52,6 @@ const tabsdoctors = [
     { id: 'family', label: 'My Family', icon: <SettingsAccessibilityIcon /> },
     { id: 'healthrecords', label: 'Health Records', icon: <MonitorHeartIcon /> }
 ];
-const tabssupport = [
-    { id: 'social', label: 'Social Pages', icon: <TransgenderIcon /> },
-    { id: 'contactus', label: 'Contact Us', icon: <TtyIcon /> },
-    { id: 'aboutus', label: 'About Us', icon: <AnnouncementIcon /> },
-    { id: 'faqs', label: 'FAQs', icon: <StickyNote2Icon /> },
-    { id: 'textfeedback', label: 'Text Feedback', icon: <TitleIcon /> },
-    { id: 'videofeedback', label: 'Video Feedback', icon: <OndemandVideoIcon /> },
-    { id: 'feedback', label: 'Send Feedback', icon: <ThumbUpOffAltIcon /> }
-];
-const tabslegal = [
-    { id: 'terms', label: 'Terms and Conditon', icon: <SourceIcon /> },
-    { id: 'policy', label: 'Private Policy', icon: <AdminPanelSettingsIcon /> },
-    { id: 'refund', label: 'Refund Policy', icon: <AgricultureIcon /> },
-    { id: 'logout', label: 'Logout', icon: <LogoutIcon /> },
-];
 
 export default function ProfileTab() {
     const { profile } = useSelector((state) => state.profileData)
@@ -72,7 +59,33 @@ export default function ProfileTab() {
     const [activeTab, setActiveTab] = useState('profile');
     const [selected, setSelected] = useState('Home');
     const [edit, setEdit] = useState(false);
+    const [isLogout, setIsLogout] = useState(false);
     const dispatch = useDispatch();
+    const router = useRouter()
+
+    const logout = async () => {
+        await localStorage.removeItem("token");
+        await localStorage.removeItem("cart");
+        // window.location.reload();
+        window.location.href = "/"
+    };
+
+    const tabssupport = [
+        // { id: 'social', label: 'Social Pages', icon: <TransgenderIcon /> },
+        { id: 'contactus', label: 'Contact Us', icon: <TtyIcon />, onPress: () => router.push('/contactus') },
+        { id: 'aboutus', label: 'About Us', icon: <AnnouncementIcon />, onPress: () => router.push('/about-us') },
+        // { id: 'faqs', label: 'FAQs', icon: <StickyNote2Icon /> },
+        { id: 'textfeedback', label: 'Text Feedback', icon: <TitleIcon /> },
+        { id: 'videofeedback', label: 'Video Feedback', icon: <OndemandVideoIcon /> },
+        { id: 'feedback', label: 'Send Feedback', icon: <ThumbUpOffAltIcon /> }
+    ];
+
+    const tabslegal = [
+        { id: 'terms', label: 'Terms and Conditon', icon: <SourceIcon />, onPress: () => router.push('/terms-and-conditions') },
+        { id: 'policy', label: 'Private Policy', icon: <AdminPanelSettingsIcon />, onPress: () => router.push('/privacy-policy') },
+        { id: 'refund', label: 'Refund Policy', icon: <AgricultureIcon />, onPress: () => router.push('/cancellation-return-refund-policy') },
+        { id: 'logout', label: 'Logout', icon: <LogoutIcon />, onPress: () => setIsLogout(true) },
+    ];
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -154,7 +167,13 @@ export default function ProfileTab() {
                                 <li
                                     key={tab.id}
                                     className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
-                                    onClick={() => setActiveTab(tab.id)}
+                                    onClick={() => {
+                                        if (tab?.onPress) {
+                                            tab.onPress();
+                                        } else {
+                                            setActiveTab(tab.id);
+                                        }
+                                    }}
                                 >
                                     {tab.icon} <span className='hidden md:block'>{tab.label}</span>
                                 </li>
@@ -172,11 +191,22 @@ export default function ProfileTab() {
                                 <li
                                     key={tab.id}
                                     className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
-                                    onClick={() => setActiveTab(tab.id)}
+                                    onClick={() => {
+                                        if (tab?.onPress) {
+                                            tab.onPress();
+                                        } else {
+                                            setActiveTab(tab.id);
+                                        }
+                                    }}
                                 >
                                     {tab.icon} <span className='hidden md:block'>{tab.label}</span>
                                 </li>
                             ))}
+                            <LogoutModal
+                                open={isLogout}
+                                onClose={() => setIsLogout(false)}
+                                onConfirm={logout}
+                            />
                         </ul>
                     </div>
 
@@ -271,12 +301,12 @@ export default function ProfileTab() {
                                 <MyOrders />
                             </div>
                         )}
-                         {activeTab === "refills" && (
-              <div>
-                <h2 className="text-2xl font-bold mb-4">My Refills</h2>
-                <MyRefills />
-              </div>
-            )}
+                        {activeTab === "refills" && (
+                            <div>
+                                <h2 className="text-2xl font-bold mb-4">My Refills</h2>
+                                <MyRefills />
+                            </div>
+                        )}
 
                         {activeTab === 'address' && (
                             <div>
