@@ -1226,7 +1226,7 @@ const ProductView = ({ url }) => {
                     alt="BREAST FEEDING"
                     className="w-24 h-24 mx-auto rounded-full border-2"
                   />
-                  <h3 className="text-[14px] py-1 font-bold px-5 text-center">
+                  <h3 className="text-[14px] py-2 font-bold px-5 text-center">
                     BREAST FEEDING
                   </h3>
                   <button className="bg-[#E6F5F5] px-4 mx-auto flex m-1 rounded-md text-[#444486]">
