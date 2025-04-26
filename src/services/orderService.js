@@ -9,7 +9,7 @@ const PostOrderService = (data, router) => async (dispatch) => {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/order', data, { headers: await Authorization() })
         dispatch(addOrder(postData.data))
-        dispatch(GetOrderIdService(postData.data?._id))
+        // dispatch(GetOrderIdService(postData.data?._id))
         if (postData.status === 200) {
             dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "test", message: JSON.stringify(postData.data) }))
             for (const item of postData.data?.orderItems || []) {
