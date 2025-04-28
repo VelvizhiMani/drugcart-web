@@ -1,8 +1,7 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { NextResponse } from "next/server";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
-
-const s3 = new S3Client({
+const s3Client = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -10,22 +9,71 @@ const s3 = new S3Client({
   },
 });
 
-export async function GET(req) {
-  const { searchParams } = new URL(req.url);
-  const fileType = searchParams.get("fileType"); // Get file type from request
+function imageFileName(name) {
+  return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
-  const fileName = `category/${Date.now()}.${fileType.split("/")[1]}`;
-  const bucketName = process.env.AWS_BUCKET_NAME;
+async function uploadFileToS3(file, fileName) {
+  const fileBuffer = file;
+  console.log(fileName);
+  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + '-' + fileName
 
-  const command = new PutObjectCommand({
-    Bucket: bucketName,
-    Key: fileName,
-    ContentType: fileType,
-  });
-   
-  // const signedUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
-  const signedUrl = await getSignedUrl(s3, command)
-  console.log("signedUrl", signedUrl)
-  console.log("fileName", fileName)
-  return Response.json({ url: signedUrl, fileName });
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `category/${imageFileName(uniqueSuffix)}`,
+    Body: fileBuffer,
+    ContentType: "image/jpg",
+    ACL: "public-read", // Make the file public-read
+  };
+
+  const command = new PutObjectCommand(params);
+  await s3Client.send(command);
+  const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/category/${imageFileName(uniqueSuffix)}`;
+  return url;
+}
+
+export async function POST(request) {
+  try {
+    const formData = await request.formData();
+    const file = formData.get("file");
+
+    if (!file) {
+      return NextResponse.json({ error: "File is required." }, { status: 400 });
+    }
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const url = await uploadFileToS3(buffer, file.name);
+    console.log(url);
+
+    return NextResponse.json({ success: true, url });
+  } catch (error) {
+    return NextResponse.json({ error });
+  }
+}
+
+
+export async function DELETE(request) {
+  try {
+    const { fileName } = await request.json();
+
+    if (!fileName) {
+      return NextResponse.json({ error: "fileName is required" }, { status: 400 });
+    }
+
+    // Format the file path as it was saved
+    const formattedFileName = `category/${imageFileName(fileName)}`;
+
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: formattedFileName,
+    };
+
+    const command = new DeleteObjectCommand(params);
+    await s3Client.send(command);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("[DELETE_ERROR]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 }
