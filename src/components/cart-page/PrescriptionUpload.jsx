@@ -11,6 +11,8 @@ import { DeletePrescriptionService, GetPrescriptionIdService, GetPrescriptionSer
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import DeleteModal from '../admin/modal/DeleteModal';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import axios from 'axios';
 
 const PrescriptionUpload = () => {
   const dispatch = useDispatch();
@@ -18,31 +20,49 @@ const PrescriptionUpload = () => {
   const { prescriptionList, prescription } = useSelector((state) => state.prescriptionData)
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const router = useRouter()
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!selectedFile) {
+      alert("Please select a file");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("folder", "prescriptions");
+
+    try {
+      const response = await axios.post("/api/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.success) {
+        setSelectedFile(null);
+        await dispatch(PostPrescriptionService({ rximage: response.data.url }))
+      } else {
+        alert("Upload failed");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Error uploading file");
+    }
+  };
 
   useEffect(() => {
     dispatch(GetPrescriptionService())
   }, [])
-
-  const formik = useFormik({
-    initialValues: {
-      rximage: "",
-    },
-    onSubmit: async (data, { resetForm }) => {
-      console.log(data);
-      await dispatch(PostPrescriptionService(data, resetForm))
-      // router.push('/address')
-    },
-  });
-
-  const handleImage = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      formik.setFieldValue("rximage", URL.createObjectURL(file));
-      formik.handleSubmit()
-    }
-    setImage(URL.createObjectURL(file));
-  };
-
 
   return (
 
@@ -53,39 +73,54 @@ const PrescriptionUpload = () => {
         <p className="text-gray-500">Please attach a prescription to proceed</p>
         <PrescriptionCard
           className="p-10 shadow-lg rounded-2xl"
-          image={IMAGES.PRESCRIPTIONICON || image}
+          image={IMAGES.PRESCRIPTIONSAVE}
+          file={selectedFile}
           title={"Browse files to upload your prescription"}
           imageformat={"(JPG, JPEG, PNG, PDF)"}
-          btntext={"Upload"}
-          onChange={handleImage}
+          onChange={handleFileChange}
+          onSubmit={handleSubmit}
         />
-        <PrescriptionCard
+        {/* <PrescriptionCard
           className="p-10 shadow-lg rounded-2xl"
           image={IMAGES.PRESCRIPTIONSAVE}
           title={"Select from saved prescription"}
           btntext={"Select"}
-        />
+        /> */}
         <h2 className="text-xl font-semibold mb-4 text-blue-700">You Select Prescription Below,</h2>
         <div className=" grid grid-cols-2 md:grid-cols-5 gap-5 relative w-full h-64 mb-4">
           {prescriptionList && prescriptionList?.map((item, i) => (
-            <div className='flex relative' key={i}>
-              <img
-                onClick={() => dispatch(GetPrescriptionIdService(item?._id))}
+            <div className="flex flex-col items-center relative" key={i}>
+              <Image
+                onClick={() => {
+                  dispatch(GetPrescriptionIdService(item?._id));
+                }}
                 key={i}
-                src={item?.rximage ? item?.rximage : IMAGES.PRESCRIPTIONSAVE}
+                src={IMAGES.PRESCRIPTIONICON}
                 alt="Uploaded Image"
-                // layout="fill"
-                // objectFit="cover"
-                className={`rounded-md w-24 h-24 border-2 cursor-pointer ${item?._id === prescription?._id ? "border-[#B7084B]" : null} mb-3`}
+                className={`rounded-md w-24 h-24 border-2 cursor-pointer ${item?._id === prescription?._id ? 'border-[#B7084B]' : ''
+                  } mb-1`}
                 width={200}
                 height={200}
               />
-              <HighlightOffIcon className='cursor-pointer mx-1' color="action" onClick={() => setSelectedAddressId(item._id)} />
+              <p className="text-xs text-center my-2">{item?.rximage?.split('/')?.pop()}</p>
+              <div className="flex items-center space-x-2">
+                <FileDownloadOutlinedIcon
+                  className="cursor-pointer text-blue-500"
+                  color="action"
+                  onClick={() => window.open(item?.rximage, '_blank')}
+                />
+                <HighlightOffIcon
+                  className="cursor-pointer text-red-500"
+                  color="action"
+                  onClick={() => setSelectedAddressId(item._id)}
+                />
+              </div>
+
               <DeleteModal
                 open={selectedAddressId === item?._id}
                 setOpen={() => setSelectedAddressId(null)}
-                title={"Delete Prescription"}
-                description={`Are you sure you want to delete ${i + 1} ?`}
+                title="Delete Prescription"
+                description={`${item?.rximage?.split('/')?.pop()} ?`}
                 onSubmit={async () => {
                   await dispatch(DeletePrescriptionService(item?._id));
                   setSelectedAddressId(null);
