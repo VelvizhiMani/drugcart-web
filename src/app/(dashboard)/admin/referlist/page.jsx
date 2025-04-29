@@ -32,7 +32,7 @@ function ReferenceList() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const { role } = useRole()
-
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -148,19 +148,19 @@ function ReferenceList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    {role === "admin" ? <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetReferenceIdService(row?._id))
-                                    }}>
-                                        <DeleteIcon color="error" />
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                        <DeleteIcon color='error' />
                                     </button> : null}
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Orgin"}
-                                    description={`Are you sure you want to delete ${reference?.websitename}`}
-                                    onSubmit={() => dispatch(DeleteReferenceService(reference?._id))} />
+                                    description={`Are you sure you want to delete ${row?.websitename}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteReferenceService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

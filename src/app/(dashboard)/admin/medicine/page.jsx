@@ -251,7 +251,7 @@ function MedicinePage() {
                 </Grid>
                 {role === "admin" ? (
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/writtenbylist')}>
                             <Box>
                                 <Typography
                                     variant="body1"
@@ -270,7 +270,7 @@ function MedicinePage() {
                 ) : null}
                 {role === "admin" ? (
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/reviewbylist')}>
                             <Box>
                                 <Typography
                                     variant="body1"

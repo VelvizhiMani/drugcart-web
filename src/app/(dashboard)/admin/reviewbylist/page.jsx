@@ -30,6 +30,7 @@ function ReviewByListPage() {
   const [showNo, setShowNo] = useState(10)
   const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch()
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -149,19 +150,19 @@ function ReviewByListPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetReviewByIdService(row?._id))
-                  }}>
+                  <button onClick={() => setSelectedId(row._id)}>
                     <DeleteIcon color='error' />
                   </button>
                 </TableCell>
                 <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={selectedId === row._id}
+                  setOpen={() => setSelectedId(null)}
                   title={"Delete Orgin"}
-                  description={`Are you sure you want to delete ${reviewBy?.name}`}
-                  onSubmit={() => dispatch(DeleteReviewByService(reviewBy?._id))} />
+                  description={`Are you sure you want to delete ${row?.name}`}
+                  onSubmit={async () => {
+                    await dispatch(DeleteReviewByService(row._id));
+                    setSelectedId(null);
+                  }} />
               </TableRow>
             ))}
           </TableBody>

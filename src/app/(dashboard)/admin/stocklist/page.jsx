@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteStockService, GetStockIdService, GetStockService } from '@/services/stockService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
 
 const rowText = {
   color: "#fff",
@@ -30,6 +31,8 @@ function StockListPage() {
   const [showNo, setShowNo] = useState(10)
   const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch()
+  const role = useRole()
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -141,19 +144,19 @@ function StockListPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  {role === "admin" ? <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetStockIdService(row?._id))
-                  }}>
-                    <DeleteIcon color="error" />
+                  {role !== "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                    <DeleteIcon color='error' />
                   </button> : null}
                 </TableCell>
                 <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={selectedId === row._id}
+                  setOpen={() => setSelectedId(null)}
                   title={"Delete Stock"}
-                  description={`Are you sure you want to delete ${stock?.name}`}
-                  onSubmit={() => dispatch(DeleteStockService(stock?._id))} />
+                  description={`Are you sure you want to delete ${row?.name}`}
+                  onSubmit={async () => {
+                    await dispatch(DeleteStockService(row._id));
+                    setSelectedId(null);
+                }} />
               </TableRow>
             ))}
           </TableBody>

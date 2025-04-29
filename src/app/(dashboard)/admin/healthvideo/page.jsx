@@ -32,6 +32,7 @@ function HealthVideoPage() {
   const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch()
   const { role } = useRole()
+  const [selectedId, setSelectedId] = useState(null);
 
   const URLText = (text) => {
     const splitText = text.split(" ")
@@ -149,19 +150,19 @@ function HealthVideoPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  {role === "admin" ? <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetHealthVideoIdService(row?._id))
-                  }}>
-                    <DeleteIcon color="error" />
+                  {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                    <DeleteIcon color='error' />
                   </button> : null}
                 </TableCell>
                 <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={selectedId === row._id}
+                  setOpen={() => setSelectedId(null)}
                   title={"Delete Video"}
-                  description={`Are you sure you want to delete ${healthVideo?.title}`}
-                  onSubmit={() => dispatch(DeleteHealthVideoService(healthVideo?._id))} />
+                  description={`Are you sure you want to delete ${row?.title}`}
+                  onSubmit={async () => {
+                    await dispatch(DeleteHealthVideoService(row._id));
+                    setSelectedId(null);
+                  }} />
               </TableRow>
             ))}
           </TableBody>

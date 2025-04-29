@@ -37,11 +37,12 @@ function ManufactuerList() {
     const dispatch = useDispatch()
     const router = useRouter()
     const { role } = useRole()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };
- 
+
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     useEffect(() => {
@@ -154,19 +155,19 @@ function ManufactuerList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    {role === "admin" ? <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetManufactuerIdService(row?._id))
-                                    }}>
-                                        <DeleteIcon color="error" />
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                        <DeleteIcon color='error' />
                                     </button> : null}
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Category"}
-                                    description={`Are you sure you want to delete ${manufactuer?.manufactuername}`}
-                                    onSubmit={() => dispatch(DeleteManufactuerService(manufactuer?._id))} />
+                                    description={`Are you sure you want to delete ${row?.manufactuername}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteManufactuerService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

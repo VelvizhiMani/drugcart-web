@@ -30,12 +30,13 @@ function KnowBodyPage() {
   const [showNo, setShowNo] = useState(10)
   const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch()
-  
+  const [selectedId, setSelectedId] = useState(null);
+
   const URLText = (text) => {
     const splitText = text.split(" ")
     const joinSpace = splitText.join("-").toLowerCase()
     return joinSpace
-}
+  }
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -64,7 +65,7 @@ function KnowBodyPage() {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-         Know Your Body
+          Know Your Body
         </Typography>
         <Button
           color="secondary"
@@ -151,19 +152,19 @@ function KnowBodyPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetKnowBodyIdService(row?._id))
-                  }}>
+                  <button onClick={() => setSelectedId(row._id)}>
                     <DeleteIcon color='error' />
                   </button>
                 </TableCell>
                 <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={selectedId === row._id}
+                  setOpen={() => setSelectedId(null)}
                   title={"Delete Orgin"}
-                  description={`Are you sure you want to delete ${knowbody?.name}`}
-                  onSubmit={() => dispatch(DeleteKnowBodyService(knowbody?._id))} />
+                  description={`Are you sure you want to delete ${row?.name}`}
+                  onSubmit={async () => {
+                    await dispatch(DeleteKnowBodyService(row._id));
+                    setSelectedId(null);
+                  }} />
               </TableRow>
             ))}
           </TableBody>

@@ -30,6 +30,7 @@ function WrittenByListPage() {
   const [showNo, setShowNo] = useState(10)
   const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch()
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -149,19 +150,19 @@ function WrittenByListPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetWrittenByIdService(row?._id))
-                  }}>
+                  <button onClick={() => setSelectedId(row._id)}>
                     <DeleteIcon color='error' />
                   </button>
                 </TableCell>
                 <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={selectedId === row._id}
+                  setOpen={() => setSelectedId(null)}
                   title={"Delete Orgin"}
-                  description={`Are you sure you want to delete ${writtenBy?.name}`}
-                  onSubmit={() => dispatch(DeleteWrittenByService(writtenBy?._id))} />
+                  description={`Are you sure you want to delete ${row?.name}`}
+                  onSubmit={async () => {
+                    await dispatch(DeleteWrittenByService(row._id));
+                    setSelectedId(null);
+                  }} />
               </TableRow>
             ))}
           </TableBody>

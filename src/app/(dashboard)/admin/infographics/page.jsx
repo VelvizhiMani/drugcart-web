@@ -30,6 +30,7 @@ function InfoGraphicsPage() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -152,19 +153,19 @@ function InfoGraphicsPage() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetInfoGraphicsIdService(row?._id))
-                                    }}>
+                                    <button onClick={() => setSelectedId(row._id)}>
                                         <DeleteIcon color='error' />
                                     </button>
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete infoGraphics"}
-                                    description={`Are you sure you want to delete ${infoGraphics?.title}`}
-                                    onSubmit={() => dispatch(DeleteInfoGraphicsService(infoGraphics?._id))} />
+                                    description={`Are you sure you want to delete ${row?.title}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteInfoGraphicsService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

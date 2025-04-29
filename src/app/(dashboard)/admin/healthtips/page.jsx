@@ -30,12 +30,13 @@ function HealthTipsPage() {
   const [showNo, setShowNo] = useState(10)
   const [openModal, setOpenModal] = useState(false)
   const dispatch = useDispatch()
-  
+  const [selectedId, setSelectedId] = useState(null);
+
   const URLText = (text) => {
     const splitText = text.split(" ")
     const joinSpace = splitText.join("-").toLowerCase()
     return joinSpace
-}
+  }
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -64,7 +65,7 @@ function HealthTipsPage() {
           fontWeight="bold"
           sx={{ flexGrow: 1 }}
         >
-         Daily Health Tips
+          Daily Health Tips
         </Typography>
         <Button
           color="secondary"
@@ -147,19 +148,19 @@ function HealthTipsPage() {
                   }}>
                     <CreateIcon color="primary" />
                   </button>
-                  <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetHealthTipIdService(row?._id))
-                  }}>
+                  <button onClick={() => setSelectedId(row._id)}>
                     <DeleteIcon color='error' />
                   </button>
                 </TableCell>
                 <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
+                  open={selectedId === row._id}
+                  setOpen={() => setSelectedId(null)}
                   title={"Delete Tip"}
-                  description={`Are you sure you want to delete ${healthTip?.name}`}
-                  onSubmit={() => dispatch(DeleteHealthTipService(healthTip?._id))} />
+                  description={`Are you sure you want to delete ${row?.name}`}
+                  onSubmit={async () => {
+                    await dispatch(DeleteHealthTipService(row._id));
+                    setSelectedId(null);
+                  }} />
               </TableRow>
             ))}
           </TableBody>
