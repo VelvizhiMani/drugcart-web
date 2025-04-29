@@ -302,7 +302,7 @@ const ProductView = ({ url }) => {
                     </h3>
                     <h3
                       className="bg-blue-600 font-semibold text-sm py-1 px-1 rounded-lg text-white cursor-pointer"
-                      onClick={() => router.push(`/notify/${product?._id}`)}
+                      onClick={() => router.push(`/notify/${product?.url}`)}
                     >
                       Get Notify
                     </h3>
