@@ -1,26 +1,27 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCartService } from "@/services/cartService";
-import { IMAGES } from "@/components/common/images";
-import Link from 'next/link';
-import Image from "next/image";
-import { selectCartTotal, selectTotalAfterDiscount, selectTotalDiscountPercentage, selectTotalSavings } from "@/reduxToolkit/slices/cartSlice";
+import {
+  selectCartTotal,
+  selectTotalAfterDiscount,
+  selectTotalDiscountPercentage,
+  selectTotalSavings,
+} from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { PostOrderService } from "@/services/orderService";
 
 const PaymentDetail = () => {
   const { carts, items } = useSelector((state) => state.cartData);
-  const { prescription } = useSelector((state) => state.prescriptionData)
-  const { userAddress, addresses } = useSelector((state) => state.addressData)
+  const { prescription } = useSelector((state) => state.prescriptionData);
+  const { userAddress, addresses } = useSelector((state) => state.addressData);
   const totalPrice = useSelector(selectCartTotal);
   const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
   const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
   const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
-  const orderConfirm = async() => {
+  const orderConfirm = async () => {
     const orderData = {
       shippingInfo: addresses,
       orderItems: items,
@@ -30,12 +31,11 @@ const PaymentDetail = () => {
       },
       itemsPrice: totalPrice,
       shippingPrice: totalPrice,
-      totalPrice: totalSavings
-    }
+      totalPrice: totalSavings,
+    };
     console.log("orderData", orderData);
-    await dispatch(PostOrderService(orderData, router))
-  }
-
+    await dispatch(PostOrderService(orderData, router));
+  };
 
   return (
     <>
@@ -217,18 +217,23 @@ const PaymentDetail = () => {
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">-{totalDiscountPercentage.toFixed(0)}%</span>
+                  <span className="text-green-600">
+                    -{totalDiscountPercentage.toFixed(0)}%
+                  </span>
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>₹{totalSavings.toFixed(2)}</span>
+                  <span>₹{totalAfterDiscount.toFixed(2)} </span>
                 </div>
               </div>
-              <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700" onClick={orderConfirm}>
+              <button
+                className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700"
+                onClick={orderConfirm}
+              >
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of ₹{totalAfterDiscount.toFixed(2)} on this order
+                💰 Total Savings of ₹ {totalSavings.toFixed(2)} on this order
               </div>
             </div>
           </div>
