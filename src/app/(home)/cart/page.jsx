@@ -57,7 +57,7 @@ function MyCart() {
         <div className="flex flex-col md:flex-row gap-4">
           <div className="border rounded-lg p-4 bg-white w-full md:w-3/4">
             <div className="space-y-4">
-              <div class="flex flex-wrap items-center justify-between border-b pb-4 font-bold ">
+              <div className="flex flex-wrap items-center justify-between border-b pb-4 font-bold ">
                 <div className="w-[50%] flex items-center">
                   <h3>Product Details</h3>
                 </div>
@@ -70,7 +70,7 @@ function MyCart() {
                 </div>
               </div>
               {items.map((item, i) => (
-                <div class="flex flex-wrap items-center justify-between border-b pb-4 font-bold ">
+                <div className="flex flex-wrap items-center justify-between border-b pb-4 font-bold ">
                   <div className="w-full md:w-[50%] flex items-center space-x-4">
                     <Image
                       src={
