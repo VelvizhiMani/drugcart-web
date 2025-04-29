@@ -10,6 +10,8 @@ import {
   selectTotalAfterDiscount,
   selectTotalDiscountPercentage,
   selectTotalSavings,
+  selectMRPCartTotal,
+  selectDrugcartDiscountTotal,
 } from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
 
@@ -17,7 +19,9 @@ const OrderSummary = () => {
   const { carts, items } = useSelector((state) => state.cartData);
   const { userAddress, addresses } = useSelector((state) => state.addressData);
   const totalPrice = useSelector(selectCartTotal);
+  const totalMRPPrice = useSelector(selectMRPCartTotal);
   const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
+  const totalDrugcartDiscount = useSelector(selectDrugcartDiscountTotal);
   const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
   const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
@@ -270,7 +274,7 @@ const OrderSummary = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-[#E6FCD7] rounded-lg shadow-md md:w-1/4 w-full h-[400px]">
+            <div className="p-4 bg-[#E6FCD7] rounded-lg shadow-md md:w-1/4 w-full">
               <h3 className="text-lg font-semibold mb-2">Order Summary</h3>
               <div className="space-y-6">
                 <div className="flex justify-between text-black">
@@ -279,17 +283,19 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total MRP</span>
-                  <span>₹{totalPrice.toFixed(0)}</span>
+                  <span>₹{totalMRPPrice.toFixed(0)}</span>
                 </div>
                 <div className="flex justify-between text-black">
-                  <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">
-                    -{totalDiscountPercentage.toFixed(0)}%
-                  </span>
+                  <span>Total Drugcart Discount</span>
+                  <span>₹{totalDrugcartDiscount.toFixed(0)}</span>
+                </div>
+                <div className="flex justify-between text-black">
+                  <span>Total Cart Value</span>
+                  <span>₹{totalPrice.toFixed(0)}</span>
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>₹{totalAfterDiscount.toFixed(0)}</span>
+                  <span>₹{totalPrice.toFixed(0)}</span>
                 </div>
               </div>
               <button
@@ -299,7 +305,8 @@ const OrderSummary = () => {
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of ₹{totalSavings.toFixed(0)} on this order
+                💰 Total Savings of ₹{totalDrugcartDiscount.toFixed(0)} on this
+                order
               </div>
             </div>
           </div>
