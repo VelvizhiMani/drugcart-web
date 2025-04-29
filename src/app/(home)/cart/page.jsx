@@ -70,7 +70,7 @@ function MyCart() {
                 </div>
               </div>
               {items.map((item, i) => (
-                <div className="flex flex-wrap items-center justify-between border-b pb-4 font-bold ">
+                <div className="flex flex-wrap items-center justify-between border-b pb-4 font-bold " key={i}>
                   <div className="w-full md:w-[50%] flex items-center space-x-4">
                     <Image
                       src={

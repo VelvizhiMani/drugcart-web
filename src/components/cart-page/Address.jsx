@@ -239,7 +239,7 @@ const AddressUpload = () => {
                             <br />
                             {addressItem?.country}.
                             <br />
-                            ({addressItem?.type})
+                            {addressItem?.type ? `(${addressItem?.type})` : null}
                           </p>
                         </div>
                       ))}
