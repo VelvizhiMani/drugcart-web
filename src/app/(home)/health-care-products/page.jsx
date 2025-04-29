@@ -23,7 +23,7 @@ const HealthCareProducts = () => {
 
   useEffect(() => {
     // dispatch(GetProductCatsService(page, showNo, params?.url, search));
-    dispatch(GetProductCatsService(1, 10, "health-care-products", search));
+    dispatch(GetProductCatsService(1, 10, "treatments", search));
   }, [page, showNo, search]);
 
   console.log(categoryProducts, "URL");
