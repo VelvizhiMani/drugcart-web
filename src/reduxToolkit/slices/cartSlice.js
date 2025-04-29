@@ -77,11 +77,11 @@ const cartSlice = createSlice({
 })
 
 export const selectCartTotal = (state) =>
-    state.cartData.items.reduce((total, item) => total + item.price * item.quantity, 0);
+    state.cartData.items.reduce((total, item) => total + item.saleprice * item.quantity, 0);
 
 export const selectTotalDiscount = (state) =>
     state.cartData.items.reduce((totalDiscount, item) => {
-        const discountAmount = (item.price * item.quantity * (item.percentage || 0)) / 100;
+        const discountAmount = (item.saleprice * item.quantity * (item.percentage || 0)) / 100;
         return totalDiscount + discountAmount;
     }, 0);
 

@@ -3,20 +3,25 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCartService } from "@/services/cartService";
 import { IMAGES } from "@/components/common/images";
-import Link from 'next/link';
+import Link from "next/link";
 import Image from "next/image";
-import { selectCartTotal, selectTotalAfterDiscount, selectTotalDiscountPercentage, selectTotalSavings } from "@/reduxToolkit/slices/cartSlice";
+import {
+  selectCartTotal,
+  selectTotalAfterDiscount,
+  selectTotalDiscountPercentage,
+  selectTotalSavings,
+} from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
 
 const OrderSummary = () => {
   const { carts, items } = useSelector((state) => state.cartData);
-  const { userAddress, addresses } = useSelector((state) => state.addressData)
+  const { userAddress, addresses } = useSelector((state) => state.addressData);
   const totalPrice = useSelector(selectCartTotal);
   const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
   const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
   const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(getCartService());
@@ -165,10 +170,19 @@ const OrderSummary = () => {
                 </div>
 
                 {items?.map((item, i) => (
-                  <div className="flex flex-wrap gap-4 items-center justify-between border-b pb-4" key={i}>
+                  <div
+                    className="flex flex-wrap gap-4 items-center justify-between border-b pb-4"
+                    key={i}
+                  >
                     <div className="flex items-center space-x-4">
                       <Image
-                        src={IMAGES.Product_Eugebra}
+                        src={
+                          item?.product_img
+                            ? `https://assets1.drugcarts.com/${item?.product_img}`
+                            : IMAGES.NO_IMAGE
+                        }
+                        width={50}
+                        height={50}
                         alt="Product"
                         className="w-16 h-16"
                       />
@@ -176,7 +190,9 @@ const OrderSummary = () => {
                         <h3 className="font-semibold">
                           {item?.product_name?.slice(0, 20) + "..."}
                         </h3>
-                        <p className="text-gray-500 text-sm">{item?.cat_name}</p>
+                        <p className="text-gray-500 text-sm">
+                          {item?.cat_name}
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-10">
@@ -193,11 +209,15 @@ const OrderSummary = () => {
                         <p className="line-through text-gray-400 text-sm">
                           MRP ₹{item?.price}
                         </p>
-                        <p className="text-green-600 text-sm">You Save 50%</p>
+                        <p className="text-green-600 text-sm">
+                          You Save {item?.percentage} %
+                        </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-10">
-                      <p className="text-lg font-bold">₹{(item?.price * item?.quantity).toFixed(2)}</p>
+                      <p className="text-lg font-bold">
+                        ₹{(item?.saleprice * item?.quantity).toFixed(2)}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -210,7 +230,9 @@ const OrderSummary = () => {
                 <h2 className="font-bold text-xl mb-2">Shipping Info</h2>
                 <div className="flex space-x-8">
                   <p className="font-bold">Name</p>
-                  <p>: {addresses?.cus_name} {addresses?.lastname}</p>
+                  <p>
+                    : {addresses?.cus_name} {addresses?.lastname}
+                  </p>
                 </div>
 
                 <div className="flex space-x-7">
@@ -248,7 +270,7 @@ const OrderSummary = () => {
               </div>
             </div>
 
-            <div className="p-4 bg-[#E6FCD7] rounded-lg shadow-md md:w-1/4 w-full">
+            <div className="p-4 bg-[#E6FCD7] rounded-lg shadow-md md:w-1/4 w-full h-[400px]">
               <h3 className="text-lg font-semibold mb-2">Order Summary</h3>
               <div className="space-y-6">
                 <div className="flex justify-between text-black">
@@ -261,14 +283,19 @@ const OrderSummary = () => {
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">-{totalDiscountPercentage.toFixed(0)}%</span>
+                  <span className="text-green-600">
+                    -{totalDiscountPercentage.toFixed(0)}%
+                  </span>
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
                   <span>₹{totalAfterDiscount.toFixed(0)}</span>
                 </div>
               </div>
-              <button className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700" onClick={() => router.push('/payment')}>
+              <button
+                className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700"
+                onClick={() => router.push("/payment")}
+              >
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
