@@ -32,6 +32,7 @@ const UploadForm = () => {
     onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
       formData.append("file", values.image);
+      formData.append("folder", "category");
 
       try {
         const res = await axios.post("/api/upload", formData, {

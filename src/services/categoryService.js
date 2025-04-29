@@ -12,10 +12,12 @@ const PostCategoryService = (data, resetForm) => async (dispatch) => {
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Created Successfully!!!", severity: "success" }))
         resetForm()
+        return { success: true, data: postData.data };
     } catch (error) {
         dispatch(IsLoading(false))
         console.log("error", error.message)
         dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+        return { success: false, error: error?.response?.data?.error };
     }
 }
 
