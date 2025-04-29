@@ -13,22 +13,22 @@ function imageFileName(name) {
   return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
 }
 
-async function uploadFileToS3(file, fileName) {
+async function uploadFileToS3(file, folder, fileName, fileType) {
   const fileBuffer = file;
-  console.log(fileName);
   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + '-' + fileName
 
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
-    Key: `category/${imageFileName(uniqueSuffix)}`,
+    Key: `${folder}/${imageFileName(uniqueSuffix)}`,
     Body: fileBuffer,
-    ContentType: "image/jpg",
+    ContentType: fileType?.type,
+    ContentDisposition: "inline",
     ACL: "public-read", // Make the file public-read
   };
 
   const command = new PutObjectCommand(params);
   await s3Client.send(command);
-  const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/category/${imageFileName(uniqueSuffix)}`;
+  const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${folder}/${imageFileName(uniqueSuffix)}`;
   return url;
 }
 
@@ -36,14 +36,14 @@ export async function POST(request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
+    const folder = formData.get("folder");
 
     if (!file) {
       return NextResponse.json({ error: "File is required." }, { status: 400 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const url = await uploadFileToS3(buffer, file.name);
-    console.log(url);
+    const url = await uploadFileToS3(buffer, folder, file.name, file);
 
     return NextResponse.json({ success: true, url });
   } catch (error) {
@@ -62,6 +62,7 @@ export async function DELETE(request) {
 
     // Format the file path as it was saved
     const formattedFileName = `category/${imageFileName(fileName)}`;
+console.log(formattedFileName);
 
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
