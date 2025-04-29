@@ -216,7 +216,7 @@ const GenericProductList = () => {
                       {product?.cat_name} / {product?.generices}
                     </h3>
                     <h2
-                      className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
+                      className="text-black font-poppins font-bold text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
                       onClick={() => ProductClick(product?.url)}
                     >
                       {product?.product_name}
