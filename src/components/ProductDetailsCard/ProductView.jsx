@@ -162,7 +162,7 @@ const ProductView = ({ url }) => {
               </div>
               <div className="flex items-center mt-3 gap-5">
                 <h3 className="text-[#1877F2] font-bold text-lg line-through">
-                  M.R.P : {product?.saleprice}
+                  M.R.P : {product?.price}
                 </h3>
                 <h3 className="text-[#4CAF50] font-bold text-lg">
                   You save : &#8377; 7.50
@@ -170,7 +170,7 @@ const ProductView = ({ url }) => {
               </div>
               <div className="flex items-center mt-3 gap-3">
                 <h3 className="text-[#B7084B] font-bold text-lg md:text-2xl">
-                  &#8377; {product?.price}
+                  &#8377; {product?.saleprice}
                 </h3>
                 <h3 className="text-md">(inclusive of all taxes)</h3>
               </div>
