@@ -122,12 +122,14 @@ function MyCart() {
                     </div>
                   </div>
                   <div className="w-[50%] md:w-[25%] items-center md:justify-center my-5">
-                    <div className="flex items-center md:justify-center text-green-500 text-sm">
-                      <p className="line-through text-center">
+                    <div className="flex items-center md:justify-center text-sm pb-2">
+                      <p className="line-through text-gray-400 text-center">
                         ₹ {item?.price}
                       </p>
                       <p className="px-2"> / </p>
-                      <p>{item?.percentage} %</p>
+                      <p className="text-[green]">
+                        Saved :{item?.percentage} %
+                      </p>
                     </div>
                     <div className="flex space-x-7 items-center justify-center">
                       <p className="text-lg font-bold text-[red]">
