@@ -5,7 +5,7 @@ const initialState = {
     toatOpen: false,
     message: "",
     severity: "info",
-
+    menuTab: "profile"
 }
 const commonSlice = createSlice({
     name: 'common',
@@ -23,8 +23,11 @@ const commonSlice = createSlice({
             state.open = false;
             state.message = "";
         },
+        setMenuTab: (state, {payload}) => {
+            state.menuTab = payload
+        }
     }
 })
 
-export const { IsLoading, showToast, hideToast } = commonSlice.actions
+export const { IsLoading, showToast, hideToast, setMenuTab } = commonSlice.actions
 export default commonSlice.reducer
