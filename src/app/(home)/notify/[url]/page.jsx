@@ -2,13 +2,19 @@
 import React from 'react'
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useParams, useRouter } from 'next/navigation';
+import { PostNotifyService } from '@/services/notifyService'
+import { useDispatch } from 'react-redux';
 
 function NotifyPage() {
+    const dispatch = useDispatch()
+    const params = useParams()
     const formik = useFormik({
         initialValues: {
             notname: "",
             notemail: "",
             notphone: "",
+            notproname: params.url
         },
         validationSchema: yup.object({
             notname: yup.string().required("Name is Required"),
@@ -17,11 +23,12 @@ function NotifyPage() {
                 .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
                 .required("Mobile number is required"),
         }),
-        onSubmit: (data) => {
+        onSubmit: (data, {resetForm}) => {
             console.log(data);
-            // dispatch(sendOTPService(data, router))
+            dispatch(PostNotifyService(data, resetForm))
         },
     });
+
     return (
         <section className="px-auto md:px-12 mt-3">
             <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg">

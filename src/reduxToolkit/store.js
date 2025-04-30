@@ -52,6 +52,7 @@ import promotionReducer from "@/reduxToolkit/slices/promotionSlice"
 import locationReducer from "@/reduxToolkit/slices/locationSlice"
 import sendFeedbackReducer from "@/reduxToolkit/slices/sendFeedbackSlice"
 import sideeffectReducer from "@/reduxToolkit/slices/sideeffectSlice";
+import notifyReducer from "@/reduxToolkit/slices/notifySlice";
 
 export const store = configureStore({
     reducer: {
@@ -107,6 +108,7 @@ export const store = configureStore({
         locationData: locationReducer,
         sendFeedbackData: sendFeedbackReducer,
         sideeffectData: sideeffectReducer,
+        notifyData: notifyReducer,
         adminUserData: adminUserReducer
     }
 })
