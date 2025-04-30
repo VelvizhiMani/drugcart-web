@@ -59,6 +59,7 @@ const TopHeader = () => {
             <div className="flex justify-center items-center gap-6">
               <div className="flex">
                 <button
+                  onClick={() => router.push("/prescription-upload")}
                   type="button"
                   className="text-white bg-bgcolor hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-sm px-5 py-1.5 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55"
                 >
