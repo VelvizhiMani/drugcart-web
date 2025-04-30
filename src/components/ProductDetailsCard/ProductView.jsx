@@ -88,7 +88,6 @@ const ProductView = ({ url }) => {
   };
 
   const cartDetails = onAuth?.filter((cartItem) => cartItem?.url === url);
-  console.log("cartDetails", cartDetails);
   return (
     <>
       <section className="px-3 mt-3">
@@ -145,13 +144,22 @@ const ProductView = ({ url }) => {
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
               </div>
+              {product?.cat_name === "ayush" ||
+              product?.cat_name === "Health-Care-Device" ||
+              product?.cat_name === "treatments" ||
+              product?.cat_name === "fitness-supplements" ||
+              product?.cat_name === "personal-care" ? null : (
+                <p className="bg-[cornflowerblue] py-1 px-1 rounded-lg text-center mx-auto text-white">
+                  Prescription Required
+                </p>
+              )}
             </div>
             <div className="p-1">
               <p className="text-sm text-gray-500 capitalize">
-                {product?.cat_name}
+                {product?.cat_name}{" "}
               </p>
               <h2 className="text-xl">{product?.product_name}</h2>
-              <div className="flex items-center mt-3">
+              <div className="flex items-center mt-2">
                 <span className="text-black font-bold mr-2">4.0</span>
                 <span className="text-yellow-500">&#9733;</span>
                 <span className="text-yellow-500">&#9733;</span>
@@ -160,19 +168,24 @@ const ProductView = ({ url }) => {
                 <span className="text-gray-500">&#9733;</span>
                 <span className="text-black text-xs ml-1">(+2k reviews)</span>
               </div>
-              <div className="flex items-center mt-3 gap-5">
+              <div className="flex items-center mt-2 gap-5">
                 <h3 className="text-[#1877F2] font-bold text-lg line-through">
-                  M.R.P : {product?.saleprice}
+                  M.R.P :&#8377;{product?.price}
                 </h3>
                 <h3 className="text-[#4CAF50] font-bold text-lg">
-                  You save : &#8377; 7.50
+                  &#8377;{product?.percentage} %
                 </h3>
               </div>
-              <div className="flex items-center mt-3 gap-3">
+              <div className="flex items-center mt-2 gap-3">
                 <h3 className="text-[#B7084B] font-bold text-lg md:text-2xl">
-                  &#8377; {product?.price}
+                  &#8377;{product?.saleprice}
                 </h3>
                 <h3 className="text-md">(inclusive of all taxes)</h3>
+              </div>
+              <div className="items-center mt-2 gap-3">
+                <h3 className="text-[#4CAF50] font-bold text-md md:text-lg">
+                  Your saved : &#8377;{(product?.price - product?.saleprice).toFixed(2)}
+                </h3>
               </div>
               {cartDetails?.[0]?.quantity ? (
                 <div className="flex items-center mt-3 gap-3 bg-white p-3 w-76 md:w-80 rounded-lg">
@@ -224,7 +237,7 @@ const ProductView = ({ url }) => {
                       />
                     </svg>
                   </div>
-                  <p className="text-xs md:text-md">10 Capsule(s) in Strip</p>
+                  <p className="text-xs md:text-md">{packid?.packagename}</p>
                 </div>
               ) : null}
               <div className="flex items-center gap-3 mt-3">
@@ -275,16 +288,44 @@ const ProductView = ({ url }) => {
                   </div>
                 </button>
               </div>
-              <div className="mt-5">
-                <h3 className="font-bold text-md">
-                  Availability :{" "}
-                  <span className="text-[#B7084B]">{product?.stock}</span>
-                </h3>
-                <h3 className="text-md py-3">Online Payment Only</h3>
-                <h3>
-                  No Returnable{" "}
-                  <span className="text-[10px] text-gray-300">Read more</span>
-                </h3>
+              <div className="mt-3">
+                {product?.stock === "In Stock" ? (
+                  <h3 className="font-bold text-md">
+                    Availability :{" "}
+                    <span className="text-[#B7084B]">{product?.stock}</span>
+                  </h3>
+                ) : (
+                  <div className="flex items-center gap-5">
+                    <h3 className="font-bold text-md">
+                      Availability :{" "}
+                      <span className="text-[#B7084B]">{product?.stock}</span>
+                    </h3>
+                    <h3
+                      className="bg-blue-600 font-semibold text-sm py-1 px-1 rounded-lg text-white cursor-pointer"
+                      onClick={() => router.push(`/notify/${product?.url}`)}
+                    >
+                      Get Notify
+                    </h3>
+                  </div>
+                )}
+                {product?.paymenttype !== "" ? (
+                  <h3 className="text-[14px] py-1">{product?.paymenttype}</h3>
+                ) : null}
+
+                {product?.retunpolicy !== "" ? (
+                  <h3 className="text-[14px]">
+                    {product?.retunpolicy}{" "}
+                    <span
+                      className="text-[10px] text-gray-500 cursor-pointer"
+                      onClick={() =>
+                        router.push("/cancellation-return-refund-policy")
+                      }
+                    >
+                      Read more
+                    </span>
+                  </h3>
+                ) : null}
+
                 <h3 className="font-bold mt-2 text-xl">Share</h3>
                 <div className="flex flex-col md:flex-row gap-3 mt-2">
                   <button className="flex items-center gap-1 border-2  py-1">
@@ -1083,13 +1124,13 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5">
                     Common Side Effect{" "}
                   </h3>
-                 <p className="text-[14px] px-5">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: sideeffectGeneric?.common,
-                        }}
-                      />
-                    </p>
+                  <p className="text-[14px] px-5">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sideeffectGeneric?.common,
+                      }}
+                    />
+                  </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1100,13 +1141,13 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px] py-2 font-bold px-5">
                     Rare Side Effect{" "}
                   </h3>
-                 <p className="text-[14px] px-5">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: sideeffectGeneric?.rare,
-                        }}
-                      />
-                    </p>
+                  <p className="text-[14px] px-5">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sideeffectGeneric?.rare,
+                      }}
+                    />
+                  </p>
                 </div>
                 <div className="rounded-lg py-3">
                   <Image
@@ -1118,7 +1159,7 @@ const ProductView = ({ url }) => {
                     <h3 className="text-[14px] py-2 font-bold px-5">
                       Severe Side Effect{" "}
                     </h3>
-                   <p className="text-[14px] px-5">
+                    <p className="text-[14px] px-5">
                       <div
                         dangerouslySetInnerHTML={{
                           __html: sideeffectGeneric?.severe,
@@ -1613,7 +1654,6 @@ const ProductView = ({ url }) => {
                       <div className="w-2/3">
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
-                          <p>Precription</p>
                           <p className="capitalize">{product?.cat_name}</p>
                           <p>{product?.rexrequired}</p>
                         </div>
@@ -1621,7 +1661,7 @@ const ProductView = ({ url }) => {
                           &#8377; {product?.saleprice}
                         </h3>
                         <h3 className="text-[#35A24D] font-semibold">
-                          Get this at {product?.price}
+                          Get this at &#8377; {product?.price}
                         </h3>
                       </div>
                       <div className="w-1/3">
@@ -2162,7 +2202,7 @@ const ProductView = ({ url }) => {
                     <p>Mft : {product?.manufactuer}</p>
                   </div>
                   <Image
-                   src={IMAGES.EUGEBRAL}
+                    src={IMAGES.EUGEBRAL}
                     alt="Medicine"
                     className="w-32 h-24 mt-3 mx-auto"
                   />

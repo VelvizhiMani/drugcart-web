@@ -216,14 +216,22 @@ const GenericProductList = () => {
                       {product?.cat_name} / {product?.generices}
                     </h3>
                     <h2
-                      className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
+                      className="text-black font-poppins font-bold text-[13px] mt-1 w-[80%] line-clamp-1 cursor-pointer"
                       onClick={() => ProductClick(product?.url)}
                     >
                       {product?.product_name}
                     </h2>
+                     <div className="flex items-center space-x-4 mt-1">
+                <h3 className="line-through text-gray-500 text-sm">
+                  MRP :₹{product?.price}
+                </h3>
+                <h3 className="text-green-600 text-sm font-semibold">
+                  {product?.percentage} %
+                </h3>
+              </div>
                     <div className="bg-white mt-1 flex justify-items-center justify-between">
                       <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                        &#8377; {product?.price}
+                        &#8377; {product?.saleprice}
                       </p>
                       <button
                         onClick={() => dispatch(PostCartService(product))}

@@ -15,7 +15,9 @@ import {
   incrementQuantity,
   removeFromCart,
   selectCartTotal,
+  selectMRPCartTotal,
   selectTotalAfterDiscount,
+  selectDrugcartDiscountTotal,
   selectTotalDiscountPercentage,
   selectTotalSavings,
 } from "@/reduxToolkit/slices/cartSlice";
@@ -26,21 +28,17 @@ function MyCart() {
   const { carts, items } = useSelector((state) => state.cartData);
   const router = useRouter();
   const totalPrice = useSelector(selectCartTotal);
+  const totalMRPPrice = useSelector(selectMRPCartTotal);
   const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
+  const totalDrugcartDiscount = useSelector(selectDrugcartDiscountTotal);
   const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
   const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(getCartService());
-  // }, []);
 
   const onAuth = items.length > 0 ? items : carts?.carts || [];
 
   const checkoutClick = async () => {
     const token = await localStorage.getItem("token");
-    // const cartData = JSON.parse(cart)
-    // console.log(cartData);
     if (token) {
       router.push("/prescription");
     } else {
@@ -70,7 +68,10 @@ function MyCart() {
                 </div>
               </div>
               {items.map((item, i) => (
-                <div className="flex flex-wrap items-center justify-between border-b pb-4 font-bold " key={i}>
+                <div
+                  key={i}
+                  className="flex flex-wrap items-center justify-between border-b pb-4 font-bold "
+                >
                   <div className="w-full md:w-[50%] flex items-center space-x-4">
                     <Image
                       src={
@@ -160,17 +161,19 @@ function MyCart() {
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Total MRP</span>
-                <span>₹{totalPrice.toFixed(0)}</span>
+                <span>₹{totalMRPPrice.toFixed(0)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Total Discount</span>
-                <span className="text-green-600">
-                  -{totalDiscountPercentage.toFixed(0)}%
-                </span>
+                <span>Total Drugcart Discount</span>
+                <span>₹{totalDrugcartDiscount.toFixed(0)}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
+                <span>Total Cart Value</span>
+                <span>₹{totalPrice.toFixed(0)}</span>
               </div>
               <div className="border-t pt-2 flex justify-between text-lg font-bold text-red-600">
                 <span>Total Amount</span>
-                <span>₹{totalAfterDiscount.toFixed(0)}</span>
+                <span>₹{totalPrice.toFixed(0)}</span>
               </div>
             </div>
 
@@ -182,7 +185,7 @@ function MyCart() {
             </button>
 
             <div className="mt-2 text-center text-sm text-gray-500 bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-              💰 Total Savings: ₹{totalSavings.toFixed(0)}
+              💰 Total Savings: ₹{totalDrugcartDiscount.toFixed(0)}
             </div>
           </div>
         </div>
