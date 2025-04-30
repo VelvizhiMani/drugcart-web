@@ -1,26 +1,61 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { useFormik } from "formik";
 import { IMAGES } from "@/components/common/images";
-import PrescriptionUpload from "@/components/cart-page/PrescriptionUpload";
-import Button from "@/components/common/button";
+import PrescriptionCard from "@/components/common/PrescriptionCard";
 
 const PrescripUpload = () => {
+  const [image, setImage] = useState(null);
+  const [type, setType] = useState("Home");
   const [selectedOption, setSelectedOption] = useState("option1");
 
   const handleChange = () => {
     setSelectedOption(event.target.value);
   };
 
+  const handleImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      formik.setFieldValue("rximage", URL.createObjectURL(file));
+      formik.handleSubmit();
+    }
+    setImage(URL.createObjectURL(file));
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      rximage: "",
+      cus_name: "",
+      type: "",
+      lastname: "",
+      email: "",
+      lastname: "",
+      phone: "",
+      address: "",
+      postcode: "",
+      state: "",
+      country: "",
+      town: "",
+    },
+    onSubmit: async (data, { resetForm }) => {
+      console.log(data);
+      // await dispatch(PostAddressService(data, resetForm))
+    },
+  });
+
   return (
     <>
       <section className="max-w-7xl mx-auto mt-3">
         <div className="flex flex-wrap h-62 px-10 justify-center items-center bg-[#ADC79B]">
           <div className="w-full md:w-1/2 py-6">
-            <h3 className="mb-6 text-xl md:text-3xl text-white font-bold">Order Prescriptions Without the Hassle</h3>
-            <p className="text-[#B7084B] text-[14px] md:text-xl">DrugCarts make a wide range of prescription
-              medicines and other health products conveniently
-              available all across India.</p>
+            <h3 className="mb-6 text-xl md:text-3xl text-white font-bold">
+              Order Prescriptions Without the Hassle
+            </h3>
+            <p className="text-[#B7084B] text-[14px] md:text-xl">
+              DrugCarts make a wide range of prescription medicines and other
+              health products conveniently available all across India.
+            </p>
           </div>
           <div className="w-full md:w-1/2">
             <Image
@@ -33,51 +68,79 @@ const PrescripUpload = () => {
         </div>
 
         <div className="py-4 my-5 rounded-md">
-          <p className="text-center py-6 w-full mx-auto text-xl md:text-2xl font-bold">ORDER MEDICINES IN 3 STEPS </p>
+          <p className="text-center py-6 w-full mx-auto text-xl md:text-2xl font-bold">
+            ORDER MEDICINES IN 3 STEPS{" "}
+          </p>
           <div className="flex flex-wrap h-62 justify-center items-center">
             <div className="w-full md:w-1/3 justify-center items-center">
-              <Image src={IMAGES.UPLOADICONS} alt="Drugcarts Vission" className="w-12 mx-auto" />
-              <h2 className="text-md md:text-xl text-center py-4 font-bold text-[#4C4C95] ">Upload a valid prescription</h2>
-              <p className="text-md text-center px-6">A valid prescription is an order for
-                drugs or medical supplies, written and
-                signed and then</p>
-            </div>
-            <div className="w-full md:w-1/3 justify-center items-center">
-              <Image src={IMAGES.CALLICONS} alt="Drugcarts Vission" className="w-12 mx-auto" />
-              <h2 className="text-xl text-center py-4 font-bold text-[#4C4C95] ">Receive a confirmation call</h2>
-              <p className="text-md text-center px-6">Will you be able to make your appointment?
-                If you need to reschedule, please let me know
-                at your earliest convenience.
+              <Image
+                src={IMAGES.UPLOADICONS}
+                alt="Drugcarts Vission"
+                className="w-12 mx-auto"
+              />
+              <h2 className="text-md md:text-xl text-center py-4 font-bold text-[#4C4C95] ">
+                Upload a valid prescription
+              </h2>
+              <p className="text-md text-center px-6">
+                A valid prescription is an order for drugs or medical supplies,
+                written and signed and then
               </p>
             </div>
             <div className="w-full md:w-1/3 justify-center items-center">
-              <Image src={IMAGES.DELIVERYICONS} alt="Drugcarts Vission" className="w-12 mx-auto" />
-              <h2 className="text-xl text-center py-4 font-bold text-[#4C4C95] ">Delivery at your door step</h2>
-              <p className="text-md text-center px-6">Door Step Delivery – This delivery method
-                involves getting the product delivered
-                to your front door step.</p>
+              <Image
+                src={IMAGES.CALLICONS}
+                alt="Drugcarts Vission"
+                className="w-12 mx-auto"
+              />
+              <h2 className="text-xl text-center py-4 font-bold text-[#4C4C95] ">
+                Receive a confirmation call
+              </h2>
+              <p className="text-md text-center px-6">
+                Will you be able to make your appointment? If you need to
+                reschedule, please let me know at your earliest convenience.
+              </p>
+            </div>
+            <div className="w-full md:w-1/3 justify-center items-center">
+              <Image
+                src={IMAGES.DELIVERYICONS}
+                alt="Drugcarts Vission"
+                className="w-12 mx-auto"
+              />
+              <h2 className="text-xl text-center py-4 font-bold text-[#4C4C95] ">
+                Delivery at your door step
+              </h2>
+              <p className="text-md text-center px-6">
+                Door Step Delivery – This delivery method involves getting the
+                product delivered to your front door step.
+              </p>
             </div>
             <div className="w-full md:w-1/3"></div>
           </div>
         </div>
 
         <div className="bg-[#EBEBFF] border p-4 rounded-lg shadow-sm">
-          <h2 className="text-xl md:text-2xl font-bold text-center">How its Work</h2>
-          <p className="text-center">A valid prescription is an order for drugs or medical supplies, written and
-            signed and then</p>
+          <h2 className="text-xl md:text-2xl font-bold text-center">
+            How its Work
+          </h2>
+          <p className="text-center">
+            A valid prescription is an order for drugs or medical supplies,
+            written and signed and then
+          </p>
           <div className="flex flex-wrap h-62 justify-center items-center mt-10">
             <div className="w-full md:w-3/5 justify-center items-center bg-white p-4 rounded-lg">
               <div className="flex flex-wrap justify-center items-center">
-                <div className="w-full md:w-1/3 mx-auto">
-                  <h3 className="text-md font-bold text-center py-4">Upload photo of your prescription</h3>
-                  <Image
-                    src={IMAGES.RXPRESCRIPTION}
-                    alt="prescription format"
-                    className="w-24 mx-auto border-2 rounded p-2 overflow-hidden"
+                <div className="w-full md:w-3/3 text-center text-[14px] rounded">
+                  <h3 className="text-lg md:text-2xl font-bold text-center">
+                    Upload photo of your prescription
+                  </h3>
+                  <PrescriptionCard
+                    className="shadow-lg rounded-2xl items-center justify-center w-24 mx-auto rounded overflow-hidden"
+                    image={IMAGES.PRESCRIPTIONICON || image}
+                    title={"Browse files to upload your prescription"}
+                    imageformat={"(JPG, JPEG, PNG, PDF)"}
+                    btntext={"Upload"}
+                    onChange={handleImage}
                   />
-                  <input type="file" name="prescription" className="py-4 text-center px-4" />
-                </div>
-                <div className="w-full md:w-2/3 text-center border-2 text-[14px]">
                   <div className="p-4">
                     <label className="flex items-center space-x-2">
                       <input
@@ -100,8 +163,10 @@ const PrescripUpload = () => {
                         className="cursor-pointer"
                       />
                       <div className="flex">
-                        <span className="w-[45%]">Ask Drugcarts to Call  </span>
-                        <span className="w-[55%] text-[8px]">Within 30 mins to Confirm Your Order Medicines.</span>
+                        <span className="w-[45%]">Ask Drugcarts to Call </span>
+                        <span className="w-[55%] text-[8px]">
+                          Within 30 mins to Confirm Your Order Medicines.
+                        </span>
                       </div>
                     </label>
                     <label className="flex items-center space-x-2 mt-2">
@@ -117,20 +182,154 @@ const PrescripUpload = () => {
                     </label>
                     {/* <p className="mt-4">Selected Option: <strong>{selectedOption}</strong></p> */}
                   </div>
-                  <button className="px-4 py-2 my-4 bg-[#51B015] text-white rounded hover:bg-blue-600">
-                    Proceed
-                  </button>
+                  <form className="space-y-4" onSubmit={formik.handleSubmit}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="First Name"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.cus_name}
+                        onChange={formik.handleChange("cus_name")}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Last Name"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.lastname}
+                        onChange={formik.handleChange("lastname")}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="email"
+                        placeholder="E-Mail Address"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.email}
+                        onChange={formik.handleChange("email")}
+                        required
+                      />
+                      <input
+                        type="number"
+                        placeholder="Phone Number"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.phone}
+                        onChange={formik.handleChange("phone")}
+                        required
+                      />
+                    </div>
+                    <textarea
+                      placeholder="Door no/Apart no/Street name"
+                      className="border p-2 rounded w-full"
+                      value={formik.values.address}
+                      onChange={formik.handleChange("address")}
+                      required
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="number"
+                        placeholder="Postal Code"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.postcode}
+                        onChange={formik.handleChange("postcode")}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Town"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.town}
+                        onChange={formik.handleChange("town")}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <input
+                        type="text"
+                        placeholder="State"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.state}
+                        onChange={formik.handleChange("state")}
+                        required
+                      />
+                      <input
+                        type="text"
+                        placeholder="Country"
+                        className="border p-2 rounded w-full"
+                        value={formik.values.country}
+                        onChange={formik.handleChange("country")}
+                        required
+                      />
+                    </div>
+                    <h3 className="block text-gray-700 mb-1 text-left font-bold">
+                      Type of Place
+                    </h3>
+                    <div className="flex flex-wrap gap-4 mx-4">
+                      <button
+                        type="button"
+                        className={`px-4 py-2 ${
+                          type === "Home"
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-300 text-black"
+                        } rounded mr-2`}
+                        onClick={() => {
+                          setType("Home");
+                          formik.setFieldValue("type", "Home");
+                        }}
+                      >
+                        Home
+                      </button>
+                      <button
+                        type="button"
+                        className={`px-4 py-2 ${
+                          type === "Office"
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-300 text-black"
+                        } rounded mr-2`}
+                        onClick={() => {
+                          setType("Office");
+                          formik.setFieldValue("type", "Office");
+                        }}
+                      >
+                        Office
+                      </button>
+                      <button
+                        type="button"
+                        className={`px-4 py-2 ${
+                          type === "Others"
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-300 text-black"
+                        } rounded mr-2`}
+                        onClick={() => {
+                          setType("Others");
+                          formik.setFieldValue("type", "Others");
+                        }}
+                      >
+                        Others
+                      </button>
+                    </div>
+                    <div className="flex justify-end my-3">
+                      <button
+                        type="submit"
+                        className="w-40 bg-pink-700 text-white py-2 rounded mr-2"
+                      >
+                        Proceed
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
             <div className="w-full md:w-2/5 justify-center items-center">
-              <h2 className="text-xl font-semibold mb-4 text-center">Valid Prescription</h2>
+              <h2 className="text-xl font-semibold mb-4 text-center">
+                Valid Prescription
+              </h2>
               <Image
                 src={IMAGES.PRESCRIPTIONFORMAT}
                 alt="prescription format"
-                className="w-[70%] mx-auto"
+                className="w-[80%] mx-auto"
               />
-
             </div>
           </div>
         </div>
