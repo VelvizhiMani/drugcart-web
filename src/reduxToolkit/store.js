@@ -53,6 +53,7 @@ import locationReducer from "@/reduxToolkit/slices/locationSlice"
 import sendFeedbackReducer from "@/reduxToolkit/slices/sendFeedbackSlice"
 import sideeffectReducer from "@/reduxToolkit/slices/sideeffectSlice";
 import notifyReducer from "@/reduxToolkit/slices/notifySlice";
+import orderPrescriptionReducer from "@/reduxToolkit/slices/orderPrescriptionSlice";
 
 export const store = configureStore({
     reducer: {
@@ -109,6 +110,7 @@ export const store = configureStore({
         sendFeedbackData: sendFeedbackReducer,
         sideeffectData: sideeffectReducer,
         notifyData: notifyReducer,
+        orderPrescriptionData: orderPrescriptionReducer,
         adminUserData: adminUserReducer
     }
 })
