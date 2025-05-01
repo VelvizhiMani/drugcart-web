@@ -43,6 +43,8 @@ function MedicineCat() {
 
   console.log('search', search);
 
+  const uniqueArray = genericList?.generics?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
+
   const handleValueSelect = (event, newValue) => {
     if (newValue) {
       router.push(`/admin/genericproducts/${newValue?.url}`);
@@ -62,7 +64,7 @@ function MedicineCat() {
             {/* <SearchField title="Generic Name Search" /> */}
             <SearchField
               title="Generic Name Search"
-              data={genericList?.generics}
+              data={uniqueArray}
               value={search}
               getOptionLabel={(option) => (typeof option === "string" ? option : option?.generices || "")}
               onChange={handleValueSelect}

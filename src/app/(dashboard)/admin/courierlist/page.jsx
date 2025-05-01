@@ -43,6 +43,7 @@ function CourierList() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const [selectedId, setSelectedId] = useState(null);
 
 
     const handleNoChange = (event) => {
@@ -163,19 +164,19 @@ function CourierList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetCourierIdService(row?._id))
-                                    }}>
+                                    <button onClick={() => setSelectedId(row._id)}>
                                         <DeleteIcon color='error' />
                                     </button>
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Courier"}
-                                    description={`Are you sure you want to delete ${courier?.couriername}`}
-                                    onSubmit={() => dispatch(DeleteCourierService(courier?._id))} />
+                                    description={`Are you sure you want to delete ${row?.couriername}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteCourierService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

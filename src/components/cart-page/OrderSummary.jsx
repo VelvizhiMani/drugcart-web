@@ -267,10 +267,12 @@ const OrderSummary = () => {
                   <p className="font-bold">Country</p>
                   <p>: {addresses?.country}</p>
                 </div>
-                <div className="flex space-x-7">
-                  <p className="font-bold">Type</p>
-                  <p>: {addresses?.type}</p>
-                </div>
+                {addresses.type ? (
+                  <div className="flex space-x-7">
+                    <p className="font-bold">Type</p>
+                    <p>: {addresses?.type}</p>
+                  </div>
+                ) : null}
               </div>
             </div>
 

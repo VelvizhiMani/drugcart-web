@@ -292,6 +292,16 @@ function AdminLayout(props) {
       path: "/admin/addgenericstock",
       name: "Add avail stock all generic",
     },
+    {
+      id: 18,
+      path: "/admin/notify",
+      name: "Notify",
+    },
+    {
+      id: 19,
+      path: "/admin/orderprescription",
+      name: "Order Prescription",
+    },
   ];
 
   const staffRoutes = [
@@ -312,9 +322,9 @@ function AdminLayout(props) {
     }
   ];
 
-  const mainMenu = role === "admin" ? userRoutes.slice(0, 17) : staffRoutes.slice(0, 3);
-  const filteredRoutes = userRoutes.slice(17, 17);
-  const filtereTwodRoutes = userRoutes.slice(17, userRoutes.length);
+  const mainMenu = role === "admin" ? userRoutes.slice(0, 19) : staffRoutes.slice(0, 3);
+  const filteredRoutes = userRoutes.slice(19, 19);
+  const filtereTwodRoutes = userRoutes.slice(19, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}

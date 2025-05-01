@@ -11,6 +11,7 @@ import { getCartService } from "@/services/cartService";
 import SearchBar from "../common/SearchBar";
 import { GetSendFeedbackListService } from '@/services/sendFeebackService';
 import LogoutModal from '@/components/common/LogoutModal'
+import { setMenuTab } from "@/reduxToolkit/slices/commonSlice";
 
 const TopHeader = () => {
   const { items } = useSelector((state) => state.cartData);
@@ -97,24 +98,53 @@ const TopHeader = () => {
                           <ul className="text-gray-700">
                             <li
                               className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
-                              onClick={() => {
-                                router.push('/profile')
-                                setIsOpen(false)
+                              onClick={async () => {
+                                await router.push('/profile');
+                                dispatch(setMenuTab('profile'));
+                                setIsOpen(false);
                               }}
                             >
-                              My Profile
+                              Profile
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                              My Orders
+                            <li
+                              className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={async () => {
+                                await router.push('/profile');
+                                dispatch(setMenuTab('orders'));
+                                setIsOpen(false);
+                              }}
+                            >
+                              Orders
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                              My Prescription
+                            <li
+                              className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={async () => {
+                                await router.push('/profile');
+                                dispatch(setMenuTab('prescription'));
+                                setIsOpen(false);
+                              }}
+                            >
+                              Prescription
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                              My Wallet
+                            <li
+                              className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={async () => {
+                                await router.push('/profile');
+                                dispatch(setMenuTab('refills'));
+                                setIsOpen(false);
+                              }}
+                            >
+                              Refills
                             </li>
-                            <li className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer">
-                              Refer & Earn
+                            <li
+                              className="px-4 py-2 flex items-center gap-2 hover:bg-gray-100 cursor-pointer"
+                              onClick={async () => {
+                                await router.push('/profile');
+                                dispatch(setMenuTab('appointment'));
+                                setIsOpen(false);
+                              }}
+                            >
+                              Appointments
                             </li>
                             <li className="px-4 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-100 cursor-pointer" onClick={() => setIsLogout(true)}>
                               Logout

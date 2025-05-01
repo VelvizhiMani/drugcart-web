@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Avatar, Box, Button, FormHelperText, Grid2, IconButton, Typography } from "@mui/material";
+import { Box, Button, Grid2, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,41 +16,44 @@ import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
-import { DeleteInfoGraphicsService, GetInfoGraphicsIdService, GetInfoGraphicsService } from '@/services/infoGraphicsService';
+import { DeleteNotifyService, GetNotifyListService } from '@/services/notifyService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { useRole } from "@/hooks/useRole";
+
+function createData(name, url, status) {
+    return { name, url, status };
+}
 
 const rowText = {
     color: "#fff",
     fontFamily: "Poppins",
 };
-function InfoGraphicsPage() {
-    const { infoGraphicsList, infoGraphics } = useSelector((state) => state.infoGraphicssData)
+function NotifyList() {
+    const { notifyList, notify } = useSelector((state) => state.notifyData)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
+    const router = useRouter()
+    const { role } = useRole()
     const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };
 
-    const router = useRouter();
-
-    const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     useEffect(() => {
-        dispatch(GetInfoGraphicsService(page, showNo, search))
+        dispatch(GetNotifyListService(page, showNo, search))
     }, [page, showNo, search])
 
     const searchSubmit = () => {
-        dispatch(GetInfoGraphicsService(page, showNo, search))
+        dispatch(GetNotifyListService(page, showNo, search))
     }
 
-
-
-    console.log("infoGraphicsList", infoGraphicsList);
+    // console.log("manufactuerList", manufactuerList);
 
     return (
         <Box>
@@ -61,17 +64,8 @@ function InfoGraphicsPage() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Infographics List
+                    Notify List
                 </Typography>
-                <Button
-                    color="secondary"
-                    variant="contained"
-                    style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
-                    startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/infographics/add`)}
-                >
-                    Add Infographics
-                </Button>
             </Box>
             <Grid2 container alignItems={"center"} spacing={2}>
                 <Grid2
@@ -109,15 +103,16 @@ function InfoGraphicsPage() {
                     <TableHead sx={{ backgroundColor: "#7d5e69" }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
-                            <TableCell style={rowText}>Title</TableCell>
-                            <TableCell style={rowText}>Images</TableCell>
+                            <TableCell style={rowText}>Notify ID</TableCell>
+                            <TableCell style={rowText}>Name</TableCell>
+                            <TableCell style={rowText}>Product Name</TableCell>
                             <TableCell align="right" style={rowText}>
                                 Action
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {infoGraphicsList && infoGraphicsList?.infoGraphics_list?.map((row, i) => (
+                        {notifyList?.notify_data?.map((row, i) => (
                             <TableRow
                                 key={i}
                                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -125,45 +120,43 @@ function InfoGraphicsPage() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {row?.sno}
                                 </TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                    {row?.notid}
+                                </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily }}
                                     component="th"
                                     scope="row"
                                 >
-                                    {row?.title}
+                                    {row.notname}
                                 </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.picture ? (
-                                        <Avatar
-                                            alt="Remy Sharp"
-                                            src={`https://assets2.drugcarts.com/admincolor/homepage/infogra/${row?.picture}`}
-                                            style={{ width: 30, height: 30 }}
-                                            variant="rounded"
-                                        />
-                                    ) : (
-                                        <FormHelperText error>No Image</FormHelperText>
-                                    )}
+                                <TableCell
+                                    sx={{ fontFamily: rowText.fontFamily }}
+                                    component="th"
+                                    scope="row"
+                                >
+                                    {row.notproname}
                                 </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily }}
                                     align="right"
                                 >
                                     <button onClick={() => {
-                                        router.push(`/admin/infographics/${row?._id}`)
+                                        router.push(`/admin/notify/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={() => setSelectedId(row._id)}>
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
                                         <DeleteIcon color='error' />
-                                    </button>
+                                    </button> : null}
                                 </TableCell>
                                 <DeleteModal
                                     open={selectedId === row._id}
                                     setOpen={() => setSelectedId(null)}
-                                    title={"Delete infoGraphics"}
-                                    description={`Are you sure you want to delete ${row?.title}`}
+                                    title={"Delete Category"}
+                                    description={`Are you sure you want to delete ${row?.notid}`}
                                     onSubmit={async () => {
-                                        await dispatch(DeleteInfoGraphicsService(row._id));
+                                        await dispatch(DeleteNotifyService(row._id));
                                         setSelectedId(null);
                                     }} />
                             </TableRow>
@@ -179,11 +172,11 @@ function InfoGraphicsPage() {
                     alignItems: "center",
                 }}
             >
-                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {infoGraphicsList?.pagination?.totalItems} entries</Typography>
+                <Typography fontFamily={"Poppins"}>Showing 1-{showNo} of {notifyList?.pagination?.totalItems} entries</Typography>
                 <br />
                 <Pagination
                     size="large"
-                    count={infoGraphicsList?.pagination?.totalPages}
+                    count={notifyList?.pagination?.totalPages}
                     page={page}
                     color="secondary"
                     onChange={(_, value) => setPage(value)}
@@ -193,4 +186,4 @@ function InfoGraphicsPage() {
     );
 }
 
-export default InfoGraphicsPage;
+export default NotifyList;

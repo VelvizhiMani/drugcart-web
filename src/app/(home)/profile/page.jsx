@@ -37,6 +37,7 @@ import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import LogoutModal from '@/components/common/LogoutModal';
+import { setMenuTab } from '@/reduxToolkit/slices/commonSlice';
 
 const tabs = [
     { id: 'profile', label: 'My Profile', icon: <PersonIcon /> },
@@ -54,10 +55,10 @@ const tabsdoctors = [
 ];
 
 export default function ProfileTab() {
+    const { menuTab } = useSelector((state) => state.common)
     const { profile } = useSelector((state) => state.profileData)
     const { userAddress } = useSelector((state) => state.addressData)
     const [activeTab, setActiveTab] = useState('profile');
-    const [selected, setSelected] = useState('Home');
     const [edit, setEdit] = useState(false);
     const [isLogout, setIsLogout] = useState(false);
     const dispatch = useDispatch();
@@ -103,9 +104,6 @@ export default function ProfileTab() {
         },
     });
 
-
-    console.log("userAddress", userAddress);
-
     return (
         <>
             {/* <section className="px-2 md:px-12 mt-3">
@@ -130,8 +128,8 @@ export default function ProfileTab() {
                             {tabs.map(tab => (
                                 <li
                                     key={tab.id}
-                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
-                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${menuTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
+                                    onClick={() => dispatch(setMenuTab(tab.id))}
                                 >
                                     {tab.icon} <span className='hidden md:block'>{tab.label}</span>
                                 </li>
@@ -148,8 +146,8 @@ export default function ProfileTab() {
                             {tabsdoctors.map(tab => (
                                 <li
                                     key={tab.id}
-                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
-                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${menuTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
+                                    onClick={() => dispatch(setMenuTab(tab.id))}
                                 >
                                     {tab.icon} <span className='hidden md:block'>{tab.label}</span>
                                 </li>
@@ -166,12 +164,12 @@ export default function ProfileTab() {
                             {tabssupport.map(tab => (
                                 <li
                                     key={tab.id}
-                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
+                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${menuTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
                                     onClick={() => {
                                         if (tab?.onPress) {
                                             tab.onPress();
                                         } else {
-                                            setActiveTab(tab.id);
+                                            dispatch(setMenuTab(tab.id));
                                         }
                                     }}
                                 >
@@ -190,7 +188,7 @@ export default function ProfileTab() {
                             {tabslegal.map(tab => (
                                 <li
                                     key={tab.id}
-                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${activeTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
+                                    className={`p-2 border-b-2 flex items-center gap-2 cursor-pointer ${menuTab === tab.id ? 'bg-pink-600 text-white' : ''}`}
                                     onClick={() => {
                                         if (tab?.onPress) {
                                             tab.onPress();
@@ -212,7 +210,7 @@ export default function ProfileTab() {
 
                     {/* Main Content */}
                     <div className="flex-1 p-3 md:p-8">
-                        {activeTab === 'profile' && (
+                        {menuTab === 'profile' && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Account Information</h2>
                                 {/* Personal Information */}
@@ -294,54 +292,54 @@ export default function ProfileTab() {
                             </div>
                         )}
 
-                        {activeTab === 'orders' && (
+                        {menuTab === "orders" && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Orders</h2>
                                 <p>Order details will be displayed here.</p>
                                 <MyOrders />
                             </div>
                         )}
-                        {activeTab === "refills" && (
+                        {menuTab === "refills" && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Refills</h2>
                                 <MyRefills />
                             </div>
                         )}
 
-                        {activeTab === 'address' && (
+                        {menuTab === 'address' && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Address</h2>
                                 <MyAddress />
                             </div>
                         )}
 
-                        {activeTab === 'prescription' && (
+                        {menuTab === 'prescription' && (
                             <div>
                                 <h2 className="text-2xl font-bold mb-4">My Prescription</h2>
                                 <MyPrescription />
                             </div>
                         )}
-                        {activeTab === 'labtest' && (
+                        {menuTab === 'labtest' && (
                             <div>
                                 <MyLab />
                             </div>
                         )}
-                        {activeTab === 'appointment' && (
+                        {menuTab === 'appointment' && (
                             <div>
                                 <MyAppointment />
                             </div>
                         )}
-                        {activeTab === 'textfeedback' && (
+                        {menuTab === 'textfeedback' && (
                             <div>
                                 <TextFeedback />
                             </div>
                         )}
-                        {activeTab === 'videofeedback' && (
+                        {menuTab === 'videofeedback' && (
                             <div>
                                 <VideoFeedback />
                             </div>
                         )}
-                        {activeTab === 'feedback' && (
+                        {menuTab === 'feedback' && (
                             <div>
                                 <SendFeedback />
                             </div>

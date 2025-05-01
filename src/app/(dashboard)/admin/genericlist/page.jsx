@@ -38,6 +38,7 @@ function GenericeList() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const { role } = useRole()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -149,20 +150,20 @@ function GenericeList() {
                                         <CreateIcon color="primary" />
                                     </button>
 
-                                    {role === "admin" ? <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetGeneticIdService(row?._id))
-                                    }}>
-                                        <DeleteIcon color="error" />
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                        <DeleteIcon color='error' />
                                     </button> : null}
 
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Generic"}
-                                    description={`Are you sure you want to delete ${generic?.generices}`}
-                                    onSubmit={() => dispatch(DeleteGeneticService(generic?._id))} />
+                                    description={`Are you sure you want to delete ${row?.generices}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteGeneticService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

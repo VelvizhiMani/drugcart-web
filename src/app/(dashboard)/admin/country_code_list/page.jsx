@@ -32,7 +32,7 @@ function CountryCodeList() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const { role } = useRole()
-
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -161,19 +161,19 @@ function CountryCodeList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    {role === "admin" ? <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetCountryCodeIdService(row?._id))
-                                    }}>
-                                        <DeleteIcon color="error" />
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                        <DeleteIcon color='error' />
                                     </button> : null}
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Country"}
-                                    description={`Are you sure you want to delete ${countryCode?.country}`}
-                                    onSubmit={() => dispatch(DeleteCountryCodeService(countryCode?._id))} />
+                                    description={`Are you sure you want to delete ${row?.country}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteCountryCodeService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

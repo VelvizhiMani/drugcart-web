@@ -4,30 +4,29 @@ import Image from "next/image";
 import { useFormik } from "formik";
 import { IMAGES } from "@/components/common/images";
 import PrescriptionCard from "@/components/common/PrescriptionCard";
+import { PostOrderprescriptionService } from "@/services/orderPrescriptionService"
+import axios from "axios";
+import { useDispatch } from "react-redux";
 
 const PrescripUpload = () => {
   const [image, setImage] = useState(null);
   const [type, setType] = useState("Home");
-  const [selectedOption, setSelectedOption] = useState("option1");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const dispatch = useDispatch()
 
-  const handleChange = () => {
-    setSelectedOption(event.target.value);
-  };
-
-  const handleImage = (event) => {
+  const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      formik.setFieldValue("rximage", URL.createObjectURL(file));
-      formik.handleSubmit();
+      setSelectedFile(file);
     }
-    setImage(URL.createObjectURL(file));
   };
 
   const formik = useFormik({
     initialValues: {
+      enquirytype: "",
       rximage: "",
       cus_name: "",
-      type: "",
+      type: "Home",
       lastname: "",
       email: "",
       lastname: "",
@@ -40,7 +39,33 @@ const PrescripUpload = () => {
     },
     onSubmit: async (data, { resetForm }) => {
       console.log(data);
-      // await dispatch(PostAddressService(data, resetForm))
+      // await dispatch(PostOrderprescriptionService(data, resetForm))
+      if (!selectedFile) {
+        alert("Please select a file");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("folder", "prescriptions");
+
+      try {
+        const response = await axios.post("/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (response.data.success) {
+          setSelectedFile(null);
+          await dispatch(PostOrderprescriptionService({ ...data, rximage: response.data.url }, resetForm))
+        } else {
+          alert("Upload failed");
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Error uploading file");
+      }
     },
   });
 
@@ -135,20 +160,22 @@ const PrescripUpload = () => {
                   </h3>
                   <PrescriptionCard
                     className="shadow-lg rounded-2xl items-center justify-center w-24 mx-auto rounded overflow-hidden"
-                    image={IMAGES.PRESCRIPTIONICON || image}
+                    image={IMAGES.PRESCRIPTIONICON}
+                    file={selectedFile}
                     title={"Browse files to upload your prescription"}
                     imageformat={"(JPG, JPEG, PNG, PDF)"}
                     btntext={"Upload"}
-                    onChange={handleImage}
+                    onChange={handleFileChange}
+                    disabled={true}
                   />
                   <div className="p-4">
                     <label className="flex items-center space-x-2">
                       <input
                         type="radio"
-                        name="options"
-                        value="option1"
-                        checked={selectedOption === "option1"}
-                        onChange={handleChange}
+                        name="enquirytype"
+                        value="Search and add Medicines"
+                        checked={formik.values.enquirytype === "Search and add Medicines"}
+                        onChange={formik.handleChange}
                         className="cursor-pointer"
                       />
                       <span>Search and add Medicines</span>
@@ -156,10 +183,10 @@ const PrescripUpload = () => {
                     <label className="flex items-center space-x-2 mt-2 py-6">
                       <input
                         type="radio"
-                        name="options"
-                        value="option2"
-                        checked={selectedOption === "option2"}
-                        onChange={handleChange}
+                        name="enquirytype"
+                        value="Ask Drugcarts to Call"
+                        checked={formik.values.enquirytype === "Ask Drugcarts to Call"}
+                        onChange={formik.handleChange}
                         className="cursor-pointer"
                       />
                       <div className="flex">
@@ -172,10 +199,10 @@ const PrescripUpload = () => {
                     <label className="flex items-center space-x-2 mt-2">
                       <input
                         type="radio"
-                        name="options"
-                        value="option3"
-                        checked={selectedOption === "option3"}
-                        onChange={handleChange}
+                        name="enquirytype"
+                        value="I want all the Medicines in Prescription"
+                        checked={formik.values.enquirytype === "I want all the Medicines in Prescription"}
+                        onChange={formik.handleChange}
                         className="cursor-pointer"
                       />
                       <span> I want all the Medicines in Prescription</span>
@@ -268,11 +295,10 @@ const PrescripUpload = () => {
                     <div className="flex flex-wrap gap-4 mx-4">
                       <button
                         type="button"
-                        className={`px-4 py-2 ${
-                          type === "Home"
+                        className={`px-4 py-2 ${type === "Home"
                             ? "bg-green-600 text-white"
                             : "bg-gray-300 text-black"
-                        } rounded mr-2`}
+                          } rounded mr-2`}
                         onClick={() => {
                           setType("Home");
                           formik.setFieldValue("type", "Home");
@@ -282,11 +308,10 @@ const PrescripUpload = () => {
                       </button>
                       <button
                         type="button"
-                        className={`px-4 py-2 ${
-                          type === "Office"
+                        className={`px-4 py-2 ${type === "Office"
                             ? "bg-green-600 text-white"
                             : "bg-gray-300 text-black"
-                        } rounded mr-2`}
+                          } rounded mr-2`}
                         onClick={() => {
                           setType("Office");
                           formik.setFieldValue("type", "Office");
@@ -296,11 +321,10 @@ const PrescripUpload = () => {
                       </button>
                       <button
                         type="button"
-                        className={`px-4 py-2 ${
-                          type === "Others"
+                        className={`px-4 py-2 ${type === "Others"
                             ? "bg-green-600 text-white"
                             : "bg-gray-300 text-black"
-                        } rounded mr-2`}
+                          } rounded mr-2`}
                         onClick={() => {
                           setType("Others");
                           formik.setFieldValue("type", "Others");

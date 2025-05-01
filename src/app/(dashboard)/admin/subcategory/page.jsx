@@ -47,6 +47,7 @@ function SubCategory() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const { role } = useRole()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -123,20 +124,20 @@ function SubCategory() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    {role === "admin" ? <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetSubCategoryIdService(row?._id))
-                                    }}>
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
                                         <DeleteIcon color='error' />
                                     </button> : null}
 
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Category"}
-                                    description={`Are you sure you want to delete ${subCategory?.subcat_name}`}
-                                    onSubmit={() => dispatch(DeleteSubCategoryService(subCategory?._id))} />
+                                    description={`Are you sure you want to delete ${row?.subcat_name}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteSubCategoryService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

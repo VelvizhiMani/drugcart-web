@@ -45,7 +45,7 @@ function PackageList() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const { role } = useRole()
-
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -157,19 +157,19 @@ function PackageList() {
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    {role === "admin" ? <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetPackageIdService(row?._id))
-                                    }}>
-                                        <DeleteIcon color="error" />
+                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                        <DeleteIcon color='error' />
                                     </button> : null}
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Form"}
-                                    description={`Are you sure you want to delete ${pack?.packagename}`}
-                                    onSubmit={() => dispatch(DeletePackageService(pack?._id))} />
+                                    description={`Are you sure you want to delete ${row?.packagename}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeletePackageService(row._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>
