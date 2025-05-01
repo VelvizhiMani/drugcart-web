@@ -41,7 +41,7 @@ const rowText = {
   fontFamily: "Poppins",
 };
 function OrderPrescriptionPage() {
-  const { orderprescriptions, orderprescription } = useSelector(
+  const { orderprescriptionList } = useSelector(
     (state) => state.orderPrescriptionData
   );
   const [page, setPage] = useState(1);
@@ -67,7 +67,7 @@ function OrderPrescriptionPage() {
     dispatch(GetOrderprescriptionService(page, showNo, search));
   };
 
-  console.log(orderprescriptions, "orderprescriptions");
+  console.log(orderprescriptionList, "orderprescriptionList");
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
@@ -79,7 +79,7 @@ function OrderPrescriptionPage() {
         >
           Order Prescription
         </Typography>
-        <Button
+        {/* <Button
           color="secondary"
           variant="contained"
           style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
@@ -87,7 +87,7 @@ function OrderPrescriptionPage() {
           onClick={() => router.push(`/admin/orderprescription/add`)}
         >
           Add Order Prescription
-        </Button>
+        </Button> */}
       </Box>
       <Grid2 container alignItems={"center"} spacing={2}>
         <Grid2
@@ -126,7 +126,7 @@ function OrderPrescriptionPage() {
             <TableRow>
               <TableCell style={rowText}>Sno</TableCell>
               <TableCell style={rowText}>Enquiry type</TableCell>
-              <TableCell style={rowText}>Rx Image</TableCell>
+              <TableCell style={rowText}>Prescription</TableCell>
               <TableCell style={rowText}>Customer Address</TableCell>
               <TableCell align="right" style={rowText}>
                 Status
@@ -137,8 +137,8 @@ function OrderPrescriptionPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {orderprescriptions &&
-              orderprescriptions?.all_orderprescription?.map((row, i) => (
+            {orderprescriptionList &&
+              orderprescriptionList?.order_prescriptions?.map((row, i) => (
                 <TableRow
                   key={row?.sno}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -158,7 +158,7 @@ function OrderPrescriptionPage() {
                     component="th"
                     scope="row"
                   >
-                    {row?.rximage}
+                       <a href={row?.rximage} target="_blank" className={"text-blue-700  font-medium"}>{"View File"}</a>
                   </TableCell>
                   <TableCell
                     sx={{ fontFamily: rowText.fontFamily }}
@@ -207,13 +207,13 @@ function OrderPrescriptionPage() {
         }}
       >
         <Typography fontFamily={"Poppins"}>
-          Showing 1-{showNo} of {orderprescriptions?.pagination?.totalItems}{" "}
+          Showing 1-{showNo} of {orderprescriptionList?.pagination?.totalItems}{" "}
           entries
         </Typography>
         <br />
         <Pagination
           size="large"
-          count={orderprescriptions?.pagination?.totalPages}
+          count={orderprescriptionList?.pagination?.totalPages}
           page={page}
           color="secondary"
           onChange={(_, value) => setPage(value)}

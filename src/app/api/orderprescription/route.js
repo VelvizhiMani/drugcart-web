@@ -61,7 +61,7 @@ export async function GET(req) {
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
 
-    const filters = search ? { notproname: { $regex: search, $options: "i" } } : {};
+    const filters = search ? { phone: { $regex: search, $options: "i" } } : {};
 
     try {
         await connnectionToDatabase();
