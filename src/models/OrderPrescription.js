@@ -1,6 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
 const orderprescriptionSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: ""
+},
   enquirytype: {
     type: String,
     default: "",

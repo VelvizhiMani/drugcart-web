@@ -3,7 +3,7 @@ import { IsLoading, showToast } from "../reduxToolkit/slices/commonSlice";
 import Authorization from "../utils/authorization";
 import {
   addOrderprescription,
-  getOrderprescriptions,
+  getOrderprescriptionList,
   getOrderprescription,
 } from "../reduxToolkit/slices/orderPrescriptionSlice";
 
@@ -14,10 +14,10 @@ const PostOrderprescriptionService = (data, resetForm) => async (dispatch) => {
       headers: await Authorization(),
     });
     dispatch(addOrderprescription(postData.data));
-    dispatch(getOrderprescriptions(postData.data));
+    dispatch(getOrderprescription(postData.data));
     dispatch(IsLoading(false));
     dispatch(
-      showToast({ message: "Created Successfully!!!", severity: "success" })
+      showToast({ message: "Submitted Successfully!!!", severity: "success" })
     );
     resetForm();
   } catch (error) {
@@ -38,7 +38,7 @@ const GetOrderprescriptionService =
         `/api/orderprescription?page=${page}&limit=${limit}&search=${search}`,
         { headers: await Authorization() }
       );
-      dispatch(getOrderprescriptions(getData.data));
+      dispatch(getOrderprescriptionList(getData.data));
       dispatch(IsLoading(false));
     } catch (error) {
       dispatch(IsLoading(false));
