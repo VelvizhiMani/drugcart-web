@@ -22,6 +22,10 @@ const notifySchema = new Schema(
             type: String,
             default: ""
         },
+        notprourl: {
+            type: String,
+            default: ""
+        },
         status: {
             type: String,
             default: "InActive",

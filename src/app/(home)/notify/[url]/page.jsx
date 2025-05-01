@@ -1,20 +1,28 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { useParams, useRouter } from 'next/navigation';
 import { PostNotifyService } from '@/services/notifyService'
-import { useDispatch } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { GetProductUrlService } from "@/services/productService"
 function NotifyPage() {
+    const { product } = useSelector((state) => state.productData);
     const dispatch = useDispatch()
     const params = useParams()
+
+    useEffect(() => {
+        dispatch(GetProductUrlService(params.url))
+    }, [params.url])
+
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
             notname: "",
             notemail: "",
             notphone: "",
-            notproname: params.url
+            notproname: product?.product_name,
+            notprourl: params.url
         },
         validationSchema: yup.object({
             notname: yup.string().required("Name is Required"),
@@ -23,7 +31,7 @@ function NotifyPage() {
                 .matches(/^[0-9]{10}$/, "Mobile number must be exactly 10 digits")
                 .required("Mobile number is required"),
         }),
-        onSubmit: (data, {resetForm}) => {
+        onSubmit: (data, { resetForm }) => {
             console.log(data);
             dispatch(PostNotifyService(data, resetForm))
         },

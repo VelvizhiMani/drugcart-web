@@ -22,6 +22,7 @@ export async function POST(request) {
             notemail,
             notphone,
             notproname,
+            notprourl,
         } = await request.json();
 
         const addNotify = new Notify({
@@ -29,6 +30,7 @@ export async function POST(request) {
             notemail,
             notphone,
             notproname,
+            notprourl
         });
 
         await addNotify.save();
