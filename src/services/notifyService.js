@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addNotify, getNotifyList, getNotify } from '../reduxToolkit/slices/notifySlice'
+import { addNotify, getNotifyList, getNotify, SendEmailNotify } from '../reduxToolkit/slices/notifySlice'
 
 const PostNotifyService = (data, resetForm) => async (dispatch) => {
     try {
@@ -44,9 +44,12 @@ const GetNotifyIdService = (id) => async (dispatch) => {
 }
 
 const PutNotifyService = (id, userData) => async (dispatch) => {
-    await axios.put(`/api/mainslider/${id}`, userData, { headers: await Authorization() }).then((response) => {
-        dispatch(getMainSlider(response.data))
-        dispatch(GetMainSliderIdService(id))
+    await axios.put(`/api/notify/${id}`, userData, { headers: await Authorization() }).then((response) => {
+        dispatch(getNotify(response.data))
+        dispatch(GetNotifyIdService(id))
+        if (response.status === 200) {
+            dispatch(EmailNotifyService({ to: response.data.notemail, subject: "DrugCart Notify", message: JSON.stringify(response.data) }))
+        }
         dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)
@@ -55,11 +58,24 @@ const PutNotifyService = (id, userData) => async (dispatch) => {
 
 const DeleteNotifyService = (id) => async (dispatch) => {
     await axios.delete(`/api/notify/${id}`, { headers: await Authorization() }).then(() => {
-        dispatch(getMainSlider(id))
-        dispatch(GetMainSliderListService())
+        dispatch(getNotify(id))
+        dispatch(GetNotifyListService())
     }).catch((error) => {
         console.log("error", error.message)
     })
+}
+
+const EmailNotifyService = (data) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const postData = await axios.post('/api/notify/send-mail', data, { headers: await Authorization() })
+        dispatch(SendEmailNotify(postData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+    }
 }
 
 export { PostNotifyService, GetNotifyListService, GetNotifyIdService, PutNotifyService, DeleteNotifyService }

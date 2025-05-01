@@ -10,7 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { GetNotifyIdService } from "@/services/notifyService";
+import { GetNotifyIdService, PutNotifyService } from "@/services/notifyService";
 import { useDispatch, useSelector } from "react-redux";
 
 function ViewNotify() {
@@ -22,6 +22,10 @@ function ViewNotify() {
     useEffect(() => {
         dispatch(GetNotifyIdService(params?.id))
     }, [params?.id])
+
+    const updateNotify = async () => {
+        await dispatch(PutNotifyService(notify?._id, {status: "Active" }))
+    }
 
     return (
         <Box>
@@ -113,7 +117,7 @@ function ViewNotify() {
                                 color="secondary"
                                 variant="contained"
                                 style={{ textTransform: "capitalize" }}
-                            // onClick={() => router.push(`/admin/notify`)}
+                                onClick={updateNotify}
                             >
                                 Update
                             </Button>

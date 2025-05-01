@@ -4,6 +4,7 @@ const initialState = {
     notifyList: [],
     newNotify: {},
     notify: {},
+    sendNotify: {}
 }
 const notifySlice = createSlice({
     name: 'notify',
@@ -18,8 +19,11 @@ const notifySlice = createSlice({
         getNotify: (state, { payload }) => {
             state.notify = payload
         },
+        SendEmailNotify: (state, { payload }) => {
+            state.sendNotify = payload
+        },
     }
 })
 
-export const { addNotify, getNotifyList, getNotify } = notifySlice.actions
+export const { addNotify, getNotifyList, getNotify, SendEmailNotify } = notifySlice.actions
 export default notifySlice.reducer
