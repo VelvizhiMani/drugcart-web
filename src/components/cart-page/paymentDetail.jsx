@@ -255,7 +255,12 @@ const PaymentDetail = () => {
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
                   <span>
-                    ₹ {selected == "cod" ? <>{codExtra}</> : <>{totalPrice}</>}{" "}
+                    ₹{" "}
+                    {selected == "cod" ? (
+                      <>{codExtra}</>
+                    ) : (
+                      <>{totalPrice.toFixed(2)}</>
+                    )}{" "}
                   </span>
                 </div>
               </div>
