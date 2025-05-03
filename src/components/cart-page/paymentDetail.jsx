@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, {useState} from "react";
+import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCartTotal,
@@ -11,6 +12,8 @@ import { useRouter } from "next/navigation";
 import { PostOrderService } from "@/services/orderService";
 
 const PaymentDetail = () => {
+  const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState('')
   const { carts, items } = useSelector((state) => state.cartData);
   const { prescription } = useSelector((state) => state.prescriptionData);
   const { userAddress, addresses } = useSelector((state) => state.addressData);
@@ -21,13 +24,66 @@ const PaymentDetail = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const handlePayU = async () => {
+    setLoading(true);
+    console.log('pay online');
+    
+    const txnid = 'Txn' + Date.now();
+    const onlineOrderData = {
+      shippingInfo: addresses,
+      orderItems: items,
+      rximage: prescription?.rximage,
+      paymentInfo: {
+        paymentmode: mode,
+        paymentstatus: "Success"
+      },
+      itemsPrice: totalPrice,
+      shippingPrice: totalPrice,
+      totalPrice: totalSavings,
+    };
+    console.log('pay online', onlineOrderData);
+    // try {
+    //   const { data } = await axios.post('/api/payment/payu', {
+    //     txnid,
+    //     amount: '1.00',
+    //     firstname: addresses?.cus_name + " " + addresses?.lastname,
+    //     email: addresses?.email,
+    //     phone: addresses?.phone,
+    //     productinfo: 'Test Product',
+    //   });
+
+    //   const form = document.createElement('form');
+    //   form.method = 'POST';
+    //   form.action = data.action;
+
+    //   Object.entries(data).forEach(([key, value]) => {
+    //     if (key === 'action') return;
+    //     const input = document.createElement('input');
+    //     input.type = 'hidden';
+    //     input.name = key;
+    //     input.value = value;
+    //     form.appendChild(input);
+    //   });
+
+    //   document.body.appendChild(form);
+    //   await dispatch(PostOrderService(onlineOrderData, router));
+    //   form.submit();
+    // } catch (error) {
+    //   console.error('Payment setup failed:', error);
+    //   alert('Failed to initiate payment.');
+    // } finally {
+    //   setLoading(false);
+    // }
+  };
+
   const orderConfirm = async () => {
     const orderData = {
       shippingInfo: addresses,
       orderItems: items,
       rximage: prescription?.rximage,
       paymentInfo: {
-        id: Date.now(),
+        paymentmode: mode,
+        paymentstatus: "Success"
       },
       itemsPrice: totalPrice,
       shippingPrice: totalPrice,
@@ -36,6 +92,7 @@ const PaymentDetail = () => {
     console.log("orderData", orderData);
     await dispatch(PostOrderService(orderData, router));
   };
+console.log(addresses);
 
   return (
     <>
@@ -167,7 +224,7 @@ const PaymentDetail = () => {
             <div className="border rounded-lg p-4 bg-white w-full md:w-3/5 w-full">
               <p className="font-bold">Select Payment Method</p>
               <div className="space-y-4 pt-20">
-                <button className="border-2 px-5 py-2 flex gap-2 font-bold text-sm mx-auto">
+                <button className={`${mode === "Online" ? "border-pink-400" : ""} border-2 px-5 py-2 flex gap-2 font-bold text-sm mx-auto`} onClick={() => setMode("Online")}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -184,7 +241,7 @@ const PaymentDetail = () => {
                   </svg>
                   Cash On Online
                 </button>
-                <button className="border-2 px-4 py-2 flex gap-2 font-bold text-sm mx-auto">
+                <button className={`${mode === "Cash" ? "border-pink-400" : ""} border-2 px-5 py-2 flex gap-2 font-bold text-sm mx-auto`} onClick={() => setMode("Cash")}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -227,8 +284,9 @@ const PaymentDetail = () => {
                 </div>
               </div>
               <button
-                className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700"
-                onClick={orderConfirm}
+              disabled={mode ? false : true}
+                className={`w-full mt-6 ${mode ? "bg-green-600": "bg-gray-300"} text-white py-2 rounded-lg font-semibold ${mode ? "hover:bg-green-700": "hover:bg-gray-300"}`}
+                onClick={mode === "Cash" ? orderConfirm : handlePayU}
               >
                 Proceed to Payment
               </button>

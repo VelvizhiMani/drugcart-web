@@ -47,35 +47,25 @@ const orderSchema = new Schema(
         },
         rximage: {
             type: String,
+            default: ""
         },
         orderItems: [Object],
         paymentInfo: {
-            transaction_id: {
+            paymentmode: {
                 type: String,
                 default: "",
+                enum: ["Online", "Cash"],
             },
-            pg_transaction_id: {
+            paymentstatus: {
                 type: String,
                 default: "",
-            },
-            pg_mode: {
-                type: String,
-                default: "",
-            },
-            payment_status: {
-                type: String,
-                default: "Active",
-                enum: ["Active", "InActive"],
-            },
-            bank_ref_id: {
-                type: String,
-                default: "",
+                enum: ["Success", "Failed"],
             },
         },
         trackingInfo: {
             trackingno: {
                 type: String,
-                unique: true,
+                // unique: true,
                 default: "",
             },
             shippingcompany: {
@@ -161,22 +151,22 @@ orderSchema.pre("save", async function (next) {
     next();
 });
 
-orderSchema.pre("save", async function (next) {
-    if (!this.trackingInfo) {
-        this.trackingInfo = {};
-    }
+// orderSchema.pre("save", async function (next) {
+//     if (!this.trackingInfo) {
+//         this.trackingInfo = {};
+//     }
 
-    if (!this.trackingInfo.trackingno) {
-        const now = new Date();
-        const year = now.getFullYear().toString().slice(-2);
-        const hours = now.getHours().toString().padStart(2, "0");
-        const minutes = now.getMinutes().toString().padStart(2, "0");
-        const seconds = now.getSeconds().toString().padStart(2, "0");
+//     if (!this.trackingInfo.trackingno) {
+//         const now = new Date();
+//         const year = now.getFullYear().toString().slice(-2);
+//         const hours = now.getHours().toString().padStart(2, "0");
+//         const minutes = now.getMinutes().toString().padStart(2, "0");
+//         const seconds = now.getSeconds().toString().padStart(2, "0");
 
-        this.trackingInfo.trackingno = `M4${year}${hours}${minutes}${seconds}`;
-    }
-    next();
-});
+//         this.trackingInfo.trackingno = `M4${year}${hours}${minutes}${seconds}`;
+//     }
+//     next();
+// });
 
 
 const Order =
