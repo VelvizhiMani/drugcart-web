@@ -37,6 +37,11 @@ const MyOrders = () => {
             name: "Completed",
             status: "Completed"
         },
+        {
+            id: 4,
+            name: "Cancelled",
+            status: "Cancelled"
+        },
     ]
 
     useEffect(() => {
@@ -105,7 +110,7 @@ const MyOrders = () => {
                                         {order?.trackingInfo?.orderStatus}
                                     </td>
                                     <td className="px-4 py-2 border">{DateFormat(order?.createdAt)}</td>
-                                    <td className="px-4 py-2 border">{order?.itemsPrice}</td>
+                                    <td className="px-4 py-2 border">{order?.totalPrice}</td>
                                     <td className="px-4 py-2 border"><p className="text-blue-600 cursor-pointer" onClick={() => router.push(`/invoice/${order?.orderId}`)}>View</p></td>
                                 </tr>
                             ))}

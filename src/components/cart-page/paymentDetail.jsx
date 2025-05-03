@@ -11,9 +11,11 @@ import {
 } from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { PostOrderService } from "@/services/orderService";
+import axios from "axios";
 
 const PaymentDetail = () => {
-  const [selected, setSelected] = useState("online");
+  const [selected, setSelected] = useState("");
+  const [loading, setLoading] = useState(false);
   const { carts, items } = useSelector((state) => state.cartData);
   const { prescription } = useSelector((state) => state.prescriptionData);
   const { userAddress, addresses } = useSelector((state) => state.addressData);
@@ -30,20 +32,56 @@ const PaymentDetail = () => {
     { label: "Cash on Delivery", value: "cod" },
   ];
 
-  const orderConfirm = async () => {
-    const orderData = {
+  const handlePayU = async () => {
+    setLoading(true);
+    console.log('pay online');
+
+    const txnid = 'Txn' + Date.now();
+    const onlineOrderData = {
       shippingInfo: addresses,
       orderItems: items,
       rximage: prescription?.rximage,
       paymentInfo: {
-        id: Date.now(),
+        paymentmode: selected,
+        paymentstatus: "Success"
       },
       itemsPrice: totalPrice,
-      shippingPrice: totalPrice,
-      totalPrice: totalSavings,
+      shippingPrice: 0,
+      totalPrice: totalPrice,
     };
-    console.log("orderData", orderData);
-    await dispatch(PostOrderService(orderData, router));
+    console.log('pay online', onlineOrderData);
+    try {
+      const { data } = await axios.post('/api/payment/payu', {
+        txnid,
+        amount: '1.00',
+        firstname: addresses?.cus_name + " " + addresses?.lastname,
+        email: addresses?.email,
+        phone: addresses?.phone,
+        productinfo: 'DRUGSCARTS',
+      });
+
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = data.action;
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (key === 'action') return;
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+//  await dispatch(PostOrderService(onlineOrderData, router));
+      document.body.appendChild(form);
+     
+      form.submit();
+    } catch (error) {
+      console.error('Payment setup failed:', error);
+      alert('Failed to initiate payment.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   let COD = 0;
@@ -70,6 +108,25 @@ const PaymentDetail = () => {
     amountTotal = Number(totalPrice);
     codExtra = (amountTotal + COD).toFixed(2);
   }
+
+  const orderConfirm = async () => {
+    const orderData = {
+      shippingInfo: addresses,
+      orderItems: items,
+      rximage: prescription?.rximage,
+      paymentInfo: {
+        paymentmode: selected,
+        paymentstatus: "Success"
+      },
+      itemsPrice: totalPrice,
+      shippingPrice: COD,
+      totalPrice: codExtra,
+    };
+    console.log("orderData", orderData);
+    await dispatch(PostOrderService(orderData, router));
+  };
+
+  console.log(totalSavings);
 
   return (
     <>
@@ -207,11 +264,10 @@ const PaymentDetail = () => {
                   {options.map((option) => (
                     <label
                       key={option.value}
-                      className={`flex items-center border rounded-xl p-4 mb-3 cursor-pointer transition-colors ${
-                        selected === option.value
+                      className={`flex items-center border rounded-xl p-4 mb-3 cursor-pointer transition-colors ${selected === option.value
                           ? "border-blue-500 bg-blue-50"
                           : "border-gray-300 hover:border-blue-400"
-                      }`}
+                        }`}
                     >
                       <input
                         type="radio"
@@ -265,8 +321,9 @@ const PaymentDetail = () => {
                 </div>
               </div>
               <button
-                className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700"
-                onClick={orderConfirm}
+                disabled={selected ? false : true}
+                className={`w-full mt-6 ${selected ? "bg-green-600" : "bg-gray-300"} text-white py-2 rounded-lg font-semibold ${selected ? "hover:bg-green-700" : "hover:bg-gray-300"}`}
+                onClick={selected === "cod" ? orderConfirm : handlePayU}
               >
                 Proceed to Payment
               </button>
