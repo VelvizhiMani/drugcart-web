@@ -1,80 +1,34 @@
 "use client";
-import React, {useState} from "react";
-import axios from 'axios';
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCartTotal,
   selectTotalAfterDiscount,
   selectTotalDiscountPercentage,
   selectTotalSavings,
+  selectMRPCartTotal,
+  selectDrugcartDiscountTotal,
 } from "@/reduxToolkit/slices/cartSlice";
 import { useRouter } from "next/navigation";
 import { PostOrderService } from "@/services/orderService";
 
 const PaymentDetail = () => {
-  const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState('')
+  const [selected, setSelected] = useState("online");
   const { carts, items } = useSelector((state) => state.cartData);
   const { prescription } = useSelector((state) => state.prescriptionData);
   const { userAddress, addresses } = useSelector((state) => state.addressData);
   const totalPrice = useSelector(selectCartTotal);
-  const totalAfterDiscount = useSelector(selectTotalAfterDiscount);
   const totalDiscountPercentage = useSelector(selectTotalDiscountPercentage);
+  const totalMRPPrice = useSelector(selectMRPCartTotal);
+  const totalDrugcartDiscount = useSelector(selectDrugcartDiscountTotal);
   const totalSavings = useSelector(selectTotalSavings);
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const handlePayU = async () => {
-    setLoading(true);
-    console.log('pay online');
-    
-    const txnid = 'Txn' + Date.now();
-    const onlineOrderData = {
-      shippingInfo: addresses,
-      orderItems: items,
-      rximage: prescription?.rximage,
-      paymentInfo: {
-        paymentmode: mode,
-        paymentstatus: "Success"
-      },
-      itemsPrice: totalPrice,
-      shippingPrice: totalPrice,
-      totalPrice: totalSavings,
-    };
-    console.log('pay online', onlineOrderData);
-    // try {
-    //   const { data } = await axios.post('/api/payment/payu', {
-    //     txnid,
-    //     amount: '1.00',
-    //     firstname: addresses?.cus_name + " " + addresses?.lastname,
-    //     email: addresses?.email,
-    //     phone: addresses?.phone,
-    //     productinfo: 'Test Product',
-    //   });
-
-    //   const form = document.createElement('form');
-    //   form.method = 'POST';
-    //   form.action = data.action;
-
-    //   Object.entries(data).forEach(([key, value]) => {
-    //     if (key === 'action') return;
-    //     const input = document.createElement('input');
-    //     input.type = 'hidden';
-    //     input.name = key;
-    //     input.value = value;
-    //     form.appendChild(input);
-    //   });
-
-    //   document.body.appendChild(form);
-    //   await dispatch(PostOrderService(onlineOrderData, router));
-    //   form.submit();
-    // } catch (error) {
-    //   console.error('Payment setup failed:', error);
-    //   alert('Failed to initiate payment.');
-    // } finally {
-    //   setLoading(false);
-    // }
-  };
+  const options = [
+    { label: "Online Payment", value: "online" },
+    { label: "Cash on Delivery", value: "cod" },
+  ];
 
   const orderConfirm = async () => {
     const orderData = {
@@ -82,8 +36,7 @@ const PaymentDetail = () => {
       orderItems: items,
       rximage: prescription?.rximage,
       paymentInfo: {
-        paymentmode: mode,
-        paymentstatus: "Success"
+        id: Date.now(),
       },
       itemsPrice: totalPrice,
       shippingPrice: totalPrice,
@@ -92,7 +45,31 @@ const PaymentDetail = () => {
     console.log("orderData", orderData);
     await dispatch(PostOrderService(orderData, router));
   };
-console.log(addresses);
+
+  let COD = 0;
+  let codExtra = 0;
+  let amountTotal;
+  if (totalPrice <= 1000) {
+    COD = 100;
+    amountTotal = Number(totalPrice);
+    codExtra = (amountTotal + COD).toFixed(2);
+  } else if (totalPrice <= 2000) {
+    COD = 200;
+    amountTotal = Number(totalPrice);
+    codExtra = (amountTotal + COD).toFixed(2);
+  } else if (totalPrice <= 3000) {
+    COD = 300;
+    amountTotal = Number(totalPrice);
+    codExtra = (amountTotal + COD).toFixed(2);
+  } else if (totalPrice <= 4000) {
+    COD = 400;
+    amountTotal = Number(totalPrice);
+    codExtra = (amountTotal + COD).toFixed(2);
+  } else if (totalPrice <= 5000) {
+    COD = 500;
+    amountTotal = Number(totalPrice);
+    codExtra = (amountTotal + COD).toFixed(2);
+  }
 
   return (
     <>
@@ -222,42 +199,37 @@ console.log(addresses);
         <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="border rounded-lg p-4 bg-white w-full md:w-3/5 w-full">
-              <p className="font-bold">Select Payment Method</p>
-              <div className="space-y-4 pt-20">
-                <button className={`${mode === "Online" ? "border-pink-400" : ""} border-2 px-5 py-2 flex gap-2 font-bold text-sm mx-auto`} onClick={() => setMode("Online")}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6 text-green-500"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"
-                    />
-                  </svg>
-                  Cash On Online
-                </button>
-                <button className={`${mode === "Cash" ? "border-pink-400" : ""} border-2 px-5 py-2 flex gap-2 font-bold text-sm mx-auto`} onClick={() => setMode("Cash")}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="size-6 text-purple-500"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z"
-                    />
-                  </svg>
-                  Cash On Delivery
-                </button>
+              <div className="max-w-md mx-auto p-4">
+                <h2 className="text-xl font-semibold mb-4">
+                  Select Payment Method
+                </h2>
+                <div className="flex flex-col gap-4">
+                  {options.map((option) => (
+                    <label
+                      key={option.value}
+                      className={`flex items-center border rounded-xl p-4 mb-3 cursor-pointer transition-colors ${
+                        selected === option.value
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-300 hover:border-blue-400"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="payment"
+                        value={option.value}
+                        checked={selected === option.value}
+                        onChange={() => setSelected(option.value)}
+                        className="form-radio text-blue-600 w-5 h-5 mr-4"
+                      />
+                      <span className="text-lg ml-2"> {option.label}</span>
+                    </label>
+                  ))}
+                  {selected == "cod" ? (
+                    <p className="text-[red] font-bold">
+                      Additional COD Fee Applicable &#8377; {COD}
+                    </p>
+                  ) : null}
+                </div>
               </div>
             </div>
 
@@ -270,28 +242,37 @@ console.log(addresses);
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total MRP</span>
-                  <span>₹{totalPrice.toFixed(2)}</span>
+                  <span>₹{totalMRPPrice.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-black">
                   <span>Total Drugcarts Discount</span>
-                  <span className="text-green-600">
-                    -{totalDiscountPercentage.toFixed(0)}%
-                  </span>
+                  <span>₹{totalDrugcartDiscount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-black">
+                  <span>Total Cart Value</span>
+                  <span>₹{totalPrice.toFixed(0)}</span>
                 </div>
                 <div className="border-t pt-2 mt-6 flex justify-between text-lg font-bold text-red-600">
                   <span>Total Amount</span>
-                  <span>₹{totalAfterDiscount.toFixed(2)} </span>
+                  <span>
+                    ₹{" "}
+                    {selected == "cod" ? (
+                      <>{codExtra}</>
+                    ) : (
+                      <>{totalPrice.toFixed(2)}</>
+                    )}{" "}
+                  </span>
                 </div>
               </div>
               <button
-              disabled={mode ? false : true}
-                className={`w-full mt-6 ${mode ? "bg-green-600": "bg-gray-300"} text-white py-2 rounded-lg font-semibold ${mode ? "hover:bg-green-700": "hover:bg-gray-300"}`}
-                onClick={mode === "Cash" ? orderConfirm : handlePayU}
+                className="w-full mt-6 bg-green-600 text-white py-2 rounded-lg font-semibold hover:bg-green-700"
+                onClick={orderConfirm}
               >
                 Proceed to Payment
               </button>
               <div className="mt-4 text-center text-sm text-black font-bold bg-[#EEFEE3] p-[1px] border-2 border-dotted">
-                💰 Total Savings of ₹ {totalSavings.toFixed(2)} on this order
+                💰 Total Savings of ₹ {totalDrugcartDiscount.toFixed(2)} on this
+                order
               </div>
             </div>
           </div>
