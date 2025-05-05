@@ -4,43 +4,40 @@ import crypto from 'crypto';
 export async function POST(req) {
   try {
     const body = await req.json();
-    const {
-      txnid,
-      amount,
-      productinfo,
-      firstname,
-      email,
-      phone,
-    } = body;
+    const { txnid, amount, firstname, email, phone, productinfo } = body;
 
     const key = process.env.PAYU_KEY;
     const salt = process.env.PAYU_SALT;
+    const action = process.env.PAYU_BASE_URL;
 
-    if (!key || !salt) {
-      console.error('Missing PAYU_KEY or PAYU_SALT');
-      return NextResponse.json({ error: 'Missing PAYU credentials' }, { status: 500 });
+    if (!key || !salt || !action) {
+      return NextResponse.json({ error: 'Missing PayU credentials' }, { status: 500 });
     }
 
+    // ✅ Dynamic success and failure URLs with params
+    const surl = `http://localhost:3000/api/payu/success`;
+    const furl = `http://localhost:3000/api/payu/failure`;
+
+    // ✅ Hash required by PayU
     const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
     const hash = crypto.createHash('sha512').update(hashString).digest('hex');
 
-    const payload = {
+    return NextResponse.json({
       key,
       txnid,
       amount,
-      productinfo,
       firstname,
       email,
       phone,
-      surl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success`,
-      furl: `${process.env.NEXT_PUBLIC_BASE_URL}/failure`,
+      productinfo,
+      surl,
+      furl,
       hash,
+      action,
       service_provider: 'payu_paisa',
-    };
-
-    return NextResponse.json(payload);
-  } catch (err) {
-    console.error('Server error:', err);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    }, { status: 200 });
+  } catch (error) {
+    console.error('PayU POST error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
