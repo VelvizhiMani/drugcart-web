@@ -31,7 +31,7 @@ export async function POST(req) {
     const surl = "https://main.diinz06zqqfgz.amplifyapp.com/api/payu/success";
     const furl = "https://main.diinz06zqqfgz.amplifyapp.com/api/payu/failure";
 
-    const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
+    const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${salt}`;
     const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
     const payuUrl = "https://secure.payu.in/_payment";
