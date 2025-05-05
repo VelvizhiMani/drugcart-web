@@ -16,7 +16,10 @@ export async function POST(req) {
   const status = formData.get("status");
   const receivedHash = formData.get("hash");
 
-  const hashString = `${salt}|${status}|${email}|${firstname}|${productinfo}|${amount}|${txnid}|${key}`;
+  // const hashString = `${salt}|${status}|${email}|${firstname}|${productinfo}|${amount}|${txnid}|${key}`;
+  // const calcHash = crypto.createHash("sha512").update(hashString).digest("hex");
+
+    const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
   const calcHash = crypto.createHash("sha512").update(hashString).digest("hex");
 
   if (calcHash === receivedHash) {
