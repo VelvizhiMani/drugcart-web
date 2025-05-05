@@ -15,7 +15,7 @@ import {
   selectDrugcartDiscountTotal,
 } from "@/reduxToolkit/slices/cartSlice";
 
-export default function SuccessPage() {
+export default function FailurePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const dispatch = useDispatch();
@@ -36,19 +36,19 @@ export default function SuccessPage() {
     const amount = searchParams.get('amount');
     const status = searchParams.get('status');
 
-    if (status === 'success' && txnid && amount) {
-      // const onlineOrderData = {
-      //   shippingInfo: addresses,
-      //   orderItems: items,
-      //   rximage: prescription?.rximage,
-      //   paymentInfo: {
-      //     paymentmode: "online",
-      //     paymentstatus: "Success"
-      //   },
-      //   itemsPrice: totalPrice,
-      //   shippingPrice: 0,
-      //   totalPrice: totalPrice,
-      // };
+    if (status === 'failure' && txnid && amount) {
+      const onlineOrderData = {
+        shippingInfo: addresses,
+        orderItems: items,
+        rximage: prescription?.rximage,
+        paymentInfo: {
+          paymentmode: "online",
+          paymentstatus: "Failure"
+        },
+        itemsPrice: totalPrice,
+        shippingPrice: 0,
+        totalPrice: totalPrice,
+      };
 
       // Dispatch your action
       // dispatch(PutOrderService(orderGetData?.orderId, onlineOrderData));
@@ -60,7 +60,7 @@ export default function SuccessPage() {
       rximage: prescription?.rximage,
       paymentInfo: {
         paymentmode: "online",
-        paymentstatus: "Success"
+        paymentstatus: "Failure"
       },
       itemsPrice: totalPrice,
       shippingPrice: 0,
@@ -80,13 +80,13 @@ export default function SuccessPage() {
             alt="Success"
             className="mx-auto w-[20%]"
           />
-          <h2 className="text-green-600 text-2xl font-bold mt-4">
+          <h2 className="text-red-600 text-2xl font-bold mt-4">
             Woohoo, Success !
           </h2>
           <p className="text-gray-600 mt-2">
-            Your order has successfully been submitted
+            Your order has been failure
           </p>
-          <button className="mt-4 px-6 py-2 bg-pink-700 text-white rounded flex items-center justify-center gap-2 mx-auto" onClick={() => router.replace('/')}>
+          {/* <button className="mt-4 px-6 py-2 bg-pink-700 text-white rounded flex items-center justify-center gap-2 mx-auto" onClick={() => router.replace('/')}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -102,7 +102,7 @@ export default function SuccessPage() {
               />
             </svg>
             Continue Shopping
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
