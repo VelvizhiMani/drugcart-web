@@ -2,28 +2,37 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 export async function POST(req) {
-  const body = await req.json();
-  const { txnid, amount, firstname, email, phone, productinfo } = body;
+  try {
+    const body = await req.json();
+    const { txnid, amount, firstname, email, phone, productinfo } = body;
 
-  const key = process.env.PAYU_KEY
-  const salt = process.env.PAYU_SALT;
-  const action = process.env.PAYU_BASE_URL;
+    const key = process.env.PAYU_KEY;
+    const salt = process.env.PAYU_SALT;
+    const action = process.env.PAYU_BASE_URL;
 
-  const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
-  const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+    if (!key || !salt || !action) {
+      return NextResponse.json({ error: 'Missing PayU credentials' }, { status: 500 });
+    }
 
-  return NextResponse.json({
-    key,
-    txnid,
-    amount,
-    firstname,
-    email,
-    phone,
-    productinfo,
-    surl: 'https://example.com/payment-success',
-    furl: 'https://example.com/payment-failure',
-    hash,
-    action,
-    service_provider: 'payu_paisa',
-  });
+    const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
+    const hash = crypto.createHash('sha512').update(hashString).digest('hex');
+
+    return NextResponse.json({
+      key,
+      txnid,
+      amount,
+      firstname,
+      email,
+      phone,
+      productinfo,
+      surl: 'https://main.diinz06zqqfgz.amplifyapp.com/success',
+      furl: 'https://main.diinz06zqqfgz.amplifyapp.com/failure',
+      hash,
+      action,
+      service_provider: 'payu_paisa',
+    });
+  } catch (error) {
+    console.error('PayU POST error:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
 }

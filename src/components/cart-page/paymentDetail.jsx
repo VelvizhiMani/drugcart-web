@@ -43,13 +43,14 @@ const PaymentDetail = () => {
       rximage: prescription?.rximage,
       paymentInfo: {
         paymentmode: selected,
-        paymentstatus: "Success"
+        paymentstatus: "Pending"
       },
       itemsPrice: totalPrice,
       shippingPrice: 0,
       totalPrice: totalPrice,
     };
     console.log('pay online', onlineOrderData);
+    // await dispatch(PostOrderService(onlineOrderData, router));
     try {
       const { data } = await axios.post('/api/payment/payu', {
         txnid,
@@ -72,7 +73,7 @@ const PaymentDetail = () => {
         input.value = value;
         form.appendChild(input);
       });
-//  await dispatch(PostOrderService(onlineOrderData, router));
+      await dispatch(PostOrderService(onlineOrderData));
       document.body.appendChild(form);
      
       form.submit();

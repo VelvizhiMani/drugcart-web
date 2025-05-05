@@ -94,6 +94,7 @@ const MyOrders = () => {
                                 <th className="px-4 py-2 border">Date</th>
                                 <th className="px-4 py-2 border">Amount</th>
                                 <th className="px-4 py-2 border">Invoice</th>
+                                <th className="px-4 py-2 border">Details</th>
                             </tr>
                         </thead>
 
@@ -112,6 +113,7 @@ const MyOrders = () => {
                                     <td className="px-4 py-2 border">{DateFormat(order?.createdAt)}</td>
                                     <td className="px-4 py-2 border">{order?.totalPrice}</td>
                                     <td className="px-4 py-2 border"><p className="text-blue-600 cursor-pointer" onClick={() => router.push(`/invoice/${order?.orderId}`)}>View</p></td>
+                                    <td className="px-4 py-2 border"><p className="text-blue-600 cursor-pointer" onClick={() => router.push(`/myorder/${order?.orderId}`)}>View</p></td>
                                 </tr>
                             ))}
                         </tbody>
