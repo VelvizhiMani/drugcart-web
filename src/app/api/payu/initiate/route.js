@@ -3,7 +3,13 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 
 export async function POST(req) {
-  const { amount } = await req.json();
+  // const { amount } = await req.json();
+   const body = await req.json(); // ✅ Parse JSON body
+    const { amount } = body;
+
+    if (!amount) {
+      return NextResponse.json({ error: "Amount is required" }, { status: 400 });
+    }
 
   const key = process.env.PAYU_KEY;
   const salt = process.env.PAYU_SALT;
@@ -18,8 +24,8 @@ export async function POST(req) {
   const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|${salt}`;
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
-  const payuUrl = PAYU_BASE_URL;
-  //   const payuUrl = "https://secure.payu.in/_payment";
+  // const payuUrl = PAYU_BASE_URL;
+    const payuUrl = "https://secure.payu.in/_payment?amount=${amount}";
 
   const formParams = new URLSearchParams({
     key,
