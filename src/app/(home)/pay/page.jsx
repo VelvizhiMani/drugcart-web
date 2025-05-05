@@ -10,7 +10,7 @@ export default function PayPage() {
     const txnid = 'Txn' + Date.now();
 
     try {
-      const { data } = await axios.post('/api/payment/payu', {
+      const { data } = await axios.post('/api/payu/initiate', {
         txnid,
         amount: '1.00',
         firstname: 'John',
