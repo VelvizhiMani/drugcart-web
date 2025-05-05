@@ -25,7 +25,7 @@ export async function POST(req) {
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
   // const payuUrl = PAYU_BASE_URL;
-    const payuUrl = "https://secure.payu.in/_payment?amount=${amount}";
+    const payuUrl = "https://secure.payu.in/_payment";
 
   const formParams = new URLSearchParams({
     key,
