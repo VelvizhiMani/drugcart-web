@@ -12,8 +12,8 @@ export default function PaymentPage() {
       body: JSON.stringify({ amount }),
     });
     const data = await res.json();
-    if (data.redirectUrl) {
-      window.location.href = data.redirectUrl;
+    if (data) {
+      window.location.href = data;
     }
   };
 
