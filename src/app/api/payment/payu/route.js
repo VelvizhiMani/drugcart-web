@@ -14,6 +14,11 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing PayU credentials' }, { status: 500 });
     }
 
+    // ✅ Dynamic success and failure URLs with params
+    const surl = `https://main.diinz06zqqfgz.amplifyapp.com/success?txnid=${txnid}&amount=${amount}&status=success`;
+    const furl = `https://main.diinz06zqqfgz.amplifyapp.com/failure?txnid=${txnid}&amount=${amount}&status=failure`;
+
+    // ✅ Hash required by PayU
     const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;
     const hash = crypto.createHash('sha512').update(hashString).digest('hex');
 
@@ -25,12 +30,12 @@ export async function POST(req) {
       email,
       phone,
       productinfo,
-      surl: 'https://main.diinz06zqqfgz.amplifyapp.com/success',
-      furl: 'https://main.diinz06zqqfgz.amplifyapp.com/failure',
+      surl,
+      furl,
       hash,
       action,
       service_provider: 'payu_paisa',
-    });
+    }, { status: 200 });
   } catch (error) {
     console.error('PayU POST error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
