@@ -1,6 +1,4 @@
-// app/pay/page.tsx
-"use client";
-import { useState } from "react";
+'use client';
 
 export default function PaymentPage() {
   const [amount, setAmount] = useState("1");

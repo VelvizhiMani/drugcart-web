@@ -12,7 +12,8 @@ const PostOrderService = (data, router) => async (dispatch) => {
         // dispatch(GetOrderIdService(postData.data?._id))
         dispatch(getGetOrderData(postData.data))
         if (postData.status === 200) {
-            dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "Invoice", message: JSON.stringify(postData.data) }))
+            sessionStorage.setItem('orderId', postData.data?.orderId)
+            // dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "Invoice", message: JSON.stringify(postData.data) }))
             for (const item of postData.data?.orderItems || []) {
                 dispatch(DeleteCartService(item?._id));
             }
@@ -92,7 +93,10 @@ const PutOrderService = (orderId, userData) => async (dispatch) => {
         dispatch(getGetOrderData(response.data))
         dispatch(GetOrderOneService(orderId))
         dispatch(GetPendingOrderService())
-        dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
+        if (response.status === 200) {
+            sessionStorage.clear()
+        }
+        // dispatch(showToast({ message: "Updated Successfully!!!", severity: "success" }))
     }).catch((error) => {
         console.log("error", error.message)
     })

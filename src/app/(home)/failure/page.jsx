@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import { IMAGES } from "@/components/common/images";
 import { useDispatch, useSelector } from 'react-redux'; // Make sure to import dispatch
-import { PostOrderService, PutOrderService } from '../../../services/orderService'; // Import your action
+import { GetOrderOneService, PutOrderService } from '../../../services/orderService'; // Import your action
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   selectCartTotal,
@@ -35,6 +35,8 @@ export default function FailurePage() {
     const txnid = searchParams.get('txnid');
     const amount = searchParams.get('amount');
     const status = searchParams.get('status');
+    const orderID = typeof window !== 'undefined' ? sessionStorage.getItem('orderId') : null;
+    dispatch(GetOrderOneService(orderID))
 
     if (status === 'failure' && txnid && amount) {
       const onlineOrderData = {
@@ -55,16 +57,10 @@ export default function FailurePage() {
       // alert('Payment Successful!');
     }
     const onlineOrderData = {
-      shippingInfo: addresses,
-      orderItems: items,
-      rximage: prescription?.rximage,
       paymentInfo: {
         paymentmode: "online",
         paymentstatus: "Failure"
       },
-      itemsPrice: totalPrice,
-      shippingPrice: 0,
-      totalPrice: totalPrice,
     };
     dispatch(PutOrderService(orderGetData?.orderId, onlineOrderData));
   }, [searchParams, dispatch, orderGetData?.orderId]);
@@ -81,7 +77,7 @@ export default function FailurePage() {
             className="mx-auto w-[20%]"
           />
           <h2 className="text-red-600 text-2xl font-bold mt-4">
-            Woohoo, Success !
+            Payment Failure !
           </h2>
           <p className="text-gray-600 mt-2">
             Your order has been failure
