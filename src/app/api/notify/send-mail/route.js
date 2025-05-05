@@ -51,7 +51,7 @@ export async function POST(req) {
     <div class="">
             <strong><h1>Hi ${jsonParse.notname}</h1></strong>
             <h4>${jsonParse.notproname} is Available </h4>
-            <a href="http://localhost:3000/product/${jsonParse.notprourl}" target="_blank">View Product</a>
+            <a href="https://main.diinz06zqqfgz.amplifyapp.com/product/${jsonParse.notprourl}" target="_blank">View Product</a>
     </div>
   </body>
   </html>`;
