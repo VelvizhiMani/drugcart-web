@@ -15,8 +15,8 @@ export async function POST(req) {
     }
 
     // ✅ Dynamic success and failure URLs with params
-    const surl = `https://main.diinz06zqqfgz.amplifyapp.com/success?txnid=${txnid}&amount=${amount}&status=success`;
-    const furl = `https://main.diinz06zqqfgz.amplifyapp.com/failure?txnid=${txnid}&amount=${amount}&status=failure`;
+    const surl = `http://localhost:3000/api/payu/success`;
+    const furl = `http://localhost:3000/api/payu/failure`;
 
     // ✅ Hash required by PayU
     const hashString = `${key}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${salt}`;

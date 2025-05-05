@@ -34,6 +34,7 @@ export default function PayPage() {
 
       document.body.appendChild(form);
       form.submit();
+      await sessionStorage.setItem("orderId", "25080401")
     } catch (error) {
       console.error('Payment setup failed:', error);
       alert('Failed to initiate payment.');

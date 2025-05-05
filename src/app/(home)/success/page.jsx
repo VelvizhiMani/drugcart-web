@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from 'next/link';
 import { IMAGES } from "@/components/common/images";
 import { useDispatch, useSelector } from 'react-redux'; // Make sure to import dispatch
-import { PostOrderService, PutOrderService } from '../../../services/orderService'; // Import your action
+import { GetOrderOneService, PostOrderService, PutOrderService } from '../../../services/orderService'; // Import your action
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   selectCartTotal,
@@ -30,12 +30,15 @@ export default function SuccessPage() {
   const totalDrugcartDiscount = useSelector(selectDrugcartDiscountTotal);
   const totalSavings = useSelector(selectTotalSavings);
   const { orderGetData } = useSelector((state) => state.orderData)
-
+useEffect(() => {
+  window.location.href = "/success"
+},[])
   useEffect(() => {
     const txnid = searchParams.get('txnid');
     const amount = searchParams.get('amount');
     const status = searchParams.get('status');
-
+    const orderID = typeof window !== 'undefined' ? sessionStorage.getItem('orderId') : null;
+    dispatch(GetOrderOneService(orderID))
     if (status === 'success' && txnid && amount) {
       // const onlineOrderData = {
       //   shippingInfo: addresses,
@@ -54,19 +57,17 @@ export default function SuccessPage() {
       // dispatch(PutOrderService(orderGetData?.orderId, onlineOrderData));
       // alert('Payment Successful!');
     }
-    const onlineOrderData = {
-      shippingInfo: addresses,
-      orderItems: items,
-      rximage: prescription?.rximage,
-      paymentInfo: {
-        paymentmode: "online",
-        paymentstatus: "Success"
-      },
-      itemsPrice: totalPrice,
-      shippingPrice: 0,
-      totalPrice: totalPrice,
-    };
-    dispatch(PutOrderService(orderGetData?.orderId, onlineOrderData));
+    try {
+      const onlineOrderData = {
+        paymentInfo: {
+          paymentmode: "online",
+          paymentstatus: "Success"
+        },
+      };
+      dispatch(PutOrderService(orderID, onlineOrderData));
+    } catch (err) {
+      console.error('Order dispatch failed:', err);
+    }
   }, [searchParams, dispatch, orderGetData?.orderId]);
 
   console.log('orderGetData', orderGetData);
