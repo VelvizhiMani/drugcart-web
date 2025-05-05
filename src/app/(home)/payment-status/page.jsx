@@ -1,9 +1,17 @@
 "use client";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function PaymentStatusPage() {
   const searchParams = useSearchParams();
-  const status = searchParams.get("status");
+  const [status, setStatus] = useState(null);
+
+  useEffect(() => {
+    // Run only on client
+    setStatus(searchParams.get("status"));
+  }, [searchParams]);
+
+  if (!status) return <p>Loading payment status...</p>;
 
   return (
     <div style={{ padding: "2rem" }}>
