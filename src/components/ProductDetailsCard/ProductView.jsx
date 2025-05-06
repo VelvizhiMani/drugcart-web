@@ -307,7 +307,7 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px]">
                     {product?.retunpolicy}{" "}
                     <span
-                      className="text-[10px] text-gray-500 cursor-pointer"
+                      className="text-[10px] text-gray-600 cursor-pointer"
                       onClick={() =>
                         router.push("/cancellation-return-refund-policy")
                       }
