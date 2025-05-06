@@ -53,7 +53,7 @@ const ProductView = ({ url }) => {
     dispatch(GetSubCateUrlService(product?.subcat_name));
     dispatch(GetAddStorageIdService(product?.storage));
     dispatch(GetManufactuerUrlService(product?.manufactuer));
-    dispatch(GetAddPackageIdService(product?.packageName));
+    dispatch(GetAddPackageIdService(product?.package));
     dispatch(GetProductGeneticUrlService(product?.generices));
     dispatch(getCartService());
     dispatch(GetProductService(1, 4, search, product?.generices));
@@ -144,15 +144,6 @@ const ProductView = ({ url }) => {
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
               </div>
-              {product?.cat_name === "ayush" ||
-              product?.cat_name === "Health-Care-Device" ||
-              product?.cat_name === "treatments" ||
-              product?.cat_name === "fitness-supplements" ||
-              product?.cat_name === "personal-care" ? null : (
-                <p className="bg-[cornflowerblue] py-1 px-1 rounded-lg text-center mx-auto text-white">
-                  Prescription Required
-                </p>
-              )}
             </div>
             <div className="p-1">
               <p className="text-sm text-gray-500 capitalize">
@@ -326,6 +317,16 @@ const ProductView = ({ url }) => {
                   </h3>
                 ) : null}
 
+                {product?.cat_name === "ayush" ||
+                product?.cat_name === "Health-Care-Device" ||
+                product?.cat_name === "treatments" ||
+                product?.cat_name === "fitness-supplements" ||
+                product?.cat_name === "personal-care" ? null : (
+                  <p className="bg-[#ff5c02] py-1 px-1 text-center rounded-lg text-white mt-2 w-48">
+                    Prescription Required
+                  </p>
+                )}
+                
                 <h3 className="font-bold mt-2 text-xl">Share</h3>
                 <div className="flex flex-col md:flex-row gap-3 mt-2">
                   <button className="flex items-center gap-1 border-2  py-1">
