@@ -322,7 +322,7 @@ const PaymentDetail = () => {
                 </div>
               </div>
               <button
-                disabled={selected ? false : true}
+                disabled={loading || !selected}
                 className={`w-full mt-6 ${selected ? "bg-green-600" : "bg-gray-300"} text-white py-2 rounded-lg font-semibold ${selected ? "hover:bg-green-700" : "hover:bg-gray-300"}`}
                 onClick={selected === "cod" ? orderConfirm : handlePayU}
               >
