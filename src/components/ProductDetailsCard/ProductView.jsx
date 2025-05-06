@@ -2207,9 +2207,16 @@ const ProductView = ({ url }) => {
                     <p>Mft : {product?.manufactuer}</p>
                   </div>
                   <Image
-                    src={IMAGES.EUGEBRAL}
-                    alt="Medicine"
-                    className="w-32 h-24 mt-3 mx-auto"
+                    priority
+                    src={
+                      product?.product_img
+                        ? `https://assets2.drugcarts.com/${product?.product_img}`
+                        : IMAGES.NO_IMAGE
+                    }
+                    alt={product?.product_name}
+                    width={200}
+                    height={100}
+                    className="mt-3 mx-auto rounded-lg"
                   />
                 </div>
               </div>
