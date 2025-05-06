@@ -1656,7 +1656,9 @@ const ProductView = ({ url }) => {
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
                           <p className="capitalize">{product?.cat_name}</p>
-                          <p>{product?.rexrequired}</p>
+                          {product?.rexrequired > 0 ? (
+    <p>{product?.rexrequired}</p>
+                      ) : null}
                         </div>
                         <h3 className="text-[#B7084B] font-bold text-lg">
                           &#8377; {product?.saleprice}
@@ -2189,9 +2191,11 @@ const ProductView = ({ url }) => {
                       <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
                         {product?.cat_name}
                       </p>
-                      <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                        {product?.rexrequired}
-                      </p>
+                      {product?.rexrequired > 0 ? (
+                        <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
+                          {product?.rexrequired}
+                        </p>
+                      ) : null}
                     </div>
                     <h2 className="text-[#B7084B] font-bold py-1">
                       &#8377; {product?.saleprice}
