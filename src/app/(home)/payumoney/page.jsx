@@ -1,4 +1,5 @@
 'use client';
+import { useState } from "react";
 
 export default function PaymentPage() {
   const [amount, setAmount] = useState("1");
