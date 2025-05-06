@@ -185,19 +185,9 @@ const Menu = () => {
             <Link href="/specialty" className="px-3 py-2 rounded-md hover:bg-gray-100">
               Doctor
             </Link>
-            <div className="relative group">
-              <button className="px-3 py-2 rounded-md hover:bg-gray-100" onClick={() => router.push('/scan')}>
-                Scan
-              </button>
-              <div className="absolute left-0 mt-0 hidden group-hover:block bg-white text-gray-800 rounded-md shadow-lg w-40">
-                <Link href="/" className="block px-4 py-2 hover:bg-gray-100">
-                  Scan 1
-                </Link>
-                <Link href="/" className="block px-4 py-2 hover:bg-gray-100">
-                  Scan 2
-                </Link>
-              </div>
-            </div>
+                <Link href="/scan" className="px-3 py-2 rounded-md hover:bg-gray-100">
+              Scan
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
