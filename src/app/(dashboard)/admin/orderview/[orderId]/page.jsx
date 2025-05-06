@@ -433,7 +433,7 @@ function page() {
                             </Typography>
                             <Typography
                                 sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
-                                {orderGetData?.shippingInfo?.Email}
+                                {orderGetData?.shippingInfo?.email}
                             </Typography>
                         </Grid2>
                         <Grid2 size={{ xs: 12, md: 4 }}>
