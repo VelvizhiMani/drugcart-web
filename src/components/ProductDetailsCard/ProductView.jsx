@@ -2113,64 +2113,7 @@ const ProductView = ({ url }) => {
                 Our Home Service
               </h2>
               <OurHomeService />
-
               <OurTreatment />
-
-              <h2 className="font-bold text-center m-2 text-2xl my-8">
-                Our Ayurvedic
-              </h2>
-              <div className="text-sm border-2 bg-[#D8EECA]">
-                <div className="bg-[#D8EECA] p-2 border-b-2 px-4 border-gray-300">
-                  <h2 className="text-xl text-[#B7084B] font-bold ps-7">
-                    Ayurvedic Product
-                  </h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Popular Categories</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Ayurvedic Personal Care</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Best Selling Product</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Top Health Product</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Top Selling Product</h2>
-                </div>
-              </div>
-
-              <h2 className="font-bold text-center m-2 text-2xl my-8">
-                Our Homeopathy
-              </h2>
-              <div className="text-sm border-2 bg-[#FFF6D5]">
-                <div className="p-2 border-b-2 px-4 border-gray-300">
-                  <h2 className="text-xl text-[#B7084B] font-bold ps-7">
-                    Homeopathy Product
-                  </h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Homeopathy Top Brands</h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Homeopathy Wellness Combo</h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">
-                    * Homeopathy Popular Categories
-                  </h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Homeopathy Medicine</h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">
-                    * Homeopathy Top Selling Product
-                  </h2>
-                </div>
-              </div>
             </div>
           </div>
         </div>
