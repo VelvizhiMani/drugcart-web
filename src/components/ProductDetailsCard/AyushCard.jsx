@@ -55,7 +55,7 @@ const AyushCard = () => {
               <h3 className="text-gray-500 font-poppins capitalize font-medium text-[13px] w-[60%] line-clamp-1">
                 {product?.cat_name} / {product?.subcat_name}
               </h3>
-              <h2 className="text-black font-poppins font-bold text-[14px] mt-1 w-[80%] line-clamp-1" 
+              <h2 className="text-black font-poppins font-bold text-[14px] mt-1 w-[80%] line-clamp-1 cursor-pointer" 
                 onClick={() => ProductClick(product?.url)} >
                 {product?.product_name}
               </h2>
