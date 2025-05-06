@@ -19,7 +19,11 @@ const AyushCard = () => {
   useEffect(() => {
     dispatch(GetProductCategoryService(page, 4, params?.url, search));
   }, [page, 4, search]);
-
+  
+ const ProductClick = (url) => {
+    router.push(`/product/${url}`);
+  };
+  
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:p-3 content-center place-items-center">
@@ -51,7 +55,8 @@ const AyushCard = () => {
               <h3 className="text-gray-500 font-poppins capitalize font-medium text-[13px] w-[60%] line-clamp-1">
                 {product?.cat_name} / {product?.subcat_name}
               </h3>
-              <h2 className="text-black font-poppins font-bold text-[14px] mt-1 w-[80%] line-clamp-1">
+              <h2 className="text-black font-poppins font-bold text-[14px] mt-1 w-[80%] line-clamp-1" 
+                onClick={() => ProductClick(product?.url)} >
                 {product?.product_name}
               </h2>
               <div className="flex items-center space-x-4 mt-1">
