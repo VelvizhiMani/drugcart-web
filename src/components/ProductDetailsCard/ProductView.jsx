@@ -2203,8 +2203,7 @@ const ProductView = ({ url }) => {
                     <h4 className="text-[#35A24D] font-bold">
                       Get this at &#8377; {product?.price}
                     </h4>
-                    <p>{product?.tabscount}</p>
-                    <p>Mft : {product?.manufactuer}</p>
+                    <p>You Saved : {product?.percentage} %</p>
                   </div>
                   <Image
                     priority
