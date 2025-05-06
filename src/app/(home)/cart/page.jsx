@@ -52,6 +52,7 @@ function MyCart() {
         <h2 className="text-2xl font-bold text-secondary mb-4">
           Your Cart: {onAuth.length} Items
         </h2>
+        {onAuth.length > 0 ? (
         <div className="flex flex-col md:flex-row gap-4">
           <div className="border rounded-lg p-4 bg-white w-full md:w-3/4">
             <div className="space-y-4">
@@ -189,6 +190,11 @@ function MyCart() {
             </div>
           </div>
         </div>
+      ) : (
+          <p className="text-center text-[red] font-bold mx-auto text-xl md:text-3xl">
+            Your Cart is Empty....
+          </p>
+        )}
       </div>
     </section>
   );
