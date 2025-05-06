@@ -344,6 +344,10 @@ const productSchema = new Schema(
             type: String,
             default: "",
         },
+        productstatus: {
+      type: String,
+      default: "",
+    },
     },
     { timestamps: true }
 )
