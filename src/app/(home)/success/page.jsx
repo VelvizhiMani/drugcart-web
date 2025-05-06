@@ -30,9 +30,7 @@ export default function SuccessPage() {
   const totalDrugcartDiscount = useSelector(selectDrugcartDiscountTotal);
   const totalSavings = useSelector(selectTotalSavings);
   const { orderGetData } = useSelector((state) => state.orderData)
-useEffect(() => {
-  window.location.href = "/success"
-},[])
+
   useEffect(() => {
     const txnid = searchParams.get('txnid');
     const amount = searchParams.get('amount');
