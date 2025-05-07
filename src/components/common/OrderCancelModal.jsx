@@ -24,13 +24,16 @@ function OrderCancelModal({ open, setOpen }) {
   const [showOther, setShowOther] = useState(false);
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      reason: '',
-      cancelItem: 'Active',
-      cancelUser: "Customer",
-      trackingInfo: {
-        orderStatus: 'Cancelled',
-      },
+        ...orderGetData,
+        reason: "",
+        cancelItem: "Active",
+        cancelUser: "Customer",
+        trackingInfo: {
+            ...orderGetData?.trackingInfo,
+            orderStatus: "Cancelled"
+        }
     },
     validationSchema: yup.object({
       reason: yup.string().required('Reason is required'),

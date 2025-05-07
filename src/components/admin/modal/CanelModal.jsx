@@ -20,20 +20,23 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { useRole } from '@/hooks/useRole';
 
 function CancelModal({ open, setOpen }) {
     const { orderGetData } = useSelector((state) => state.orderData)
+    const { role } = useRole()
     const dispatch = useDispatch()
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
+            ...orderGetData,
             reason: "",
             cancelItem: "Active",
-            ...orderGetData,
+            cancelUser: role || "",
             trackingInfo: {
                 ...orderGetData?.trackingInfo,
                 orderStatus: "Cancelled"
             }
-
         },
         validationSchema: yup.object({
             reason: yup.string().required("Reason is required"),

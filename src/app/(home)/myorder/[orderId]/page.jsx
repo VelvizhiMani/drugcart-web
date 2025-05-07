@@ -95,10 +95,21 @@ export default function OrderViewPage() {
                     <p className="font-medium">
                         <span className="font-bold">Order Status :</span> {orderGetData?.trackingInfo?.orderStatus}
                     </p>
+                    <p className="font-medium">
+                        <span className="font-bold">Payment Mode :</span> {orderGetData?.paymentInfo?.paymentmode === "cod" ? "Cash on Delivery" : "Online Pay"}
+                    </p>
+                    <p className="font-medium">
+                        <span className="font-bold">Payment Status :</span> {orderGetData?.paymentInfo?.paymentstatus}
+                    </p>
+                    {orderGetData?.cancelItem === "Active" ? (
+                        <p className="font-medium">
+                            <span className="font-bold">Canelled By :</span> {orderGetData?.cancelUser}
+                        </p>
+                    ): null}
                     <div className="font-medium flex">
                         <span className="font-bold">Invoice :</span> <p className="text-blue-600 cursor-pointer ml-1 font-medium" onClick={() => router.push(`/invoice/${orderGetData?.orderId}`)}>View more</p>
                     </div>
-                    {orderGetData?.paymentInfo?.paymentstatus === "Failure" || "Pending" &&  orderGetData?.trackingInfo?.orderStatus !== "Cancelled" ? (
+                    {orderGetData?.paymentInfo?.paymentstatus !== "Success" && orderGetData?.trackingInfo?.orderStatus !== "Cancelled" ? (
                         <button className="bg-blue-500 text-white font-semibold py-2 mt-3 px-4 rounded hover:bg-blue-600 shadow" onClick={handlePayU}>
                             {loading ? "Payment Loading..." : "Online Payment"}
                         </button>

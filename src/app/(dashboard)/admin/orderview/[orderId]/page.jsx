@@ -18,6 +18,7 @@ import NotesModal from '@/components/admin/modal/NotesModal';
 import TrackingModal from '@/components/admin/modal/TrackingModal';
 import CanelModal from '@/components/admin/modal/CanelModal';
 import { GetCourierService } from '@/services/courierService';
+import { DateFormat, TimeFormat } from '@/utils/dateFormat';
 
 function page() {
     const [openNotes, setNotesModal] = useState(false)
@@ -190,12 +191,32 @@ function page() {
                         <Grid2 size={{ xs: 12, md: 4 }}>
                             <Typography
                                 sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                                Date:
+                            </Typography>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                                {DateFormat(orderGetData?.createdAt)}
+                            </Typography>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 4 }}>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                                Time:
+                            </Typography>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                                {TimeFormat(orderGetData?.createdAt)}
+                            </Typography>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 4 }}>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
                                 Prescription:
                             </Typography>
                             <Typography
                                 sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "blue", fontSize: 14 }}>
                                 <a href={orderGetData?.rximage} target="_blank">
-                                    {orderGetData?.rximage}
+                                    {orderGetData?.rximage ? "View File" : "-"}
                                 </a>
                             </Typography>
                         </Grid2>
@@ -239,7 +260,27 @@ function page() {
                                 {orderGetData?.trackingInfo?.orderStatus}
                             </Typography>
                         </Grid2>
-                        {orderGetData?.trackingInfo?.orderStatus === "Cancelled" ?
+                        <Grid2 size={{ xs: 12, md: 4 }}>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                                Payment Type:
+                            </Typography>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                                {orderGetData?.paymentInfo?.paymentmode === "cod" ? "Cash on Delivery" : "Online Pay"}
+                            </Typography>
+                        </Grid2>
+                        <Grid2 size={{ xs: 12, md: 4 }}>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                                Payment Status:
+                            </Typography>
+                            <Typography
+                                sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                                {orderGetData?.paymentInfo?.paymentstatus}
+                            </Typography>
+                        </Grid2>
+                        {orderGetData?.cancelItem === "Active" ?
                             <Grid2 size={{ xs: 12, md: 4 }}>
                                 <Typography
                                     sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
@@ -250,7 +291,17 @@ function page() {
                                     {orderGetData?.reason}
                                 </Typography>
                             </Grid2> : null}
-
+                        {orderGetData?.cancelItem === "Active" ?
+                            <Grid2 size={{ xs: 12, md: 4 }}>
+                                <Typography
+                                    sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                                    Cancel By:
+                                </Typography>
+                                <Typography
+                                    sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14, textTransform: "capitalize" }}>
+                                    {orderGetData?.cancelUser}
+                                </Typography>
+                            </Grid2> : null}
                     </Grid2>
                 </Paper>
             </Box>
