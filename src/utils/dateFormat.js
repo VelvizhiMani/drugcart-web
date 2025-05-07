@@ -14,3 +14,8 @@ export const RelativeFormat = (unixtime) => {
   const date = moment(unixtime, "YYYYMMDD").fromNow();
   return date;
 };
+
+export const TimeFormat = (unixtime) => {
+  const date = moment(unixtime).format("LT");
+  return date;
+};
