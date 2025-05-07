@@ -32,6 +32,7 @@ function OrderListPage() {
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const [orderStatus, setOrderStatus] = useState("")
+    const [selectedId, setSelectedId] = useState(null);
     const dispatch = useDispatch()
 
     const handleNoChange = (event) => {
@@ -277,6 +278,18 @@ function OrderListPage() {
                                     }}>
                                         <VisibilityIcon color="primary" />
                                     </button>
+                                    <button onClick={() => setSelectedId(row._id)}>
+                                        <DeleteIcon color='error' />
+                                    </button>
+                                    <DeleteModal
+                                        open={selectedId === row._id}
+                                        setOpen={() => setSelectedId(null)}
+                                        title={"Delete Order"}
+                                        description={`Are you sure you want to delete #${row?.orderId}`}
+                                        onSubmit={async () => {
+                                            await dispatch(DeleteOrderService(row?.orderId));
+                                            setSelectedId(null);
+                                        }} />
                                 </TableCell>
                             </TableRow>
                         ))}

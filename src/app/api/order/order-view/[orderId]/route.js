@@ -61,3 +61,34 @@ export async function PUT(request, { params }) {
         return NextResponse.json({ error: 'Error updating order' }, { status: 500 });
     }
 }
+
+export async function DELETE(request, { params }) {
+    try {
+        const adminAuth = await adminAuthorization();
+        const userAuth = await authenticateUser();
+
+        const { success, user, message } = adminAuth.success ? adminAuth : userAuth;
+
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 });
+        }
+
+        const { orderId } = params;
+
+        if (!orderId) {
+            return NextResponse.json({ error: 'Missing orderId' }, { status: 400 });
+        }
+
+        const deletedOrder = await Order.findOneAndDelete({ orderId });
+
+        if (!deletedOrder) {
+            return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+        }
+
+        return NextResponse.json({ message: 'Order deleted successfully', order: deletedOrder }, { status: 200 });
+
+    } catch (error) {
+        console.error('Delete Error:', error);
+        return NextResponse.json({ error: 'Error deleting order' }, { status: 500 });
+    }
+}
