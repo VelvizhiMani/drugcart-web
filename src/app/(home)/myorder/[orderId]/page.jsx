@@ -61,8 +61,7 @@ export default function OrderViewPage() {
     return (
         <div className="max-w-5xl mx-auto pb-6 space-y-6">
             <div className="flex justify-end gap-4">
-                {orderGetData?.trackingInfo?.orderStatus !== "Cancelled" &&
-                    orderGetData?.trackingInfo?.orderStatus !== "Delivered" ? (
+                {orderGetData?.cancelItem !== "Active" ? (
                     <button
                         className="bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700 shadow"
                         onClick={() => setCancelModal(true)}
