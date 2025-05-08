@@ -62,6 +62,9 @@ const EditProduct = () => {
   const paymentTypes = ["Online Payment Only", "Cash on Delivery"];
   const returnPolicy = ["Non Returnable", "Return within 7 days"];
   const gst = ["5%", "12%", "18%"];
+  const trends = ["Frequently", "Tranding", "Top Brands", "Top Health", "Best Selling", "Popular"];
+
+  const uniqueGenericArray = genericList?.generics?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
 
   const URLText = (text) => {
     const splitText = text.split(" ");
@@ -85,7 +88,7 @@ const EditProduct = () => {
       tabscount: product?.tabscount || "",
       orgin: product?.orgin || "",
       strength: product?.strength || "",
-      package: product?.package || "",
+      packageName: product?.packageName || "",
       price: product?.price || "",
       packing: product?.packing || "",
       product_img: product?.product_img || "",
@@ -97,6 +100,7 @@ const EditProduct = () => {
       rexrequired: product?.rexrequired || "",
       storage: product?.storage || "",
       temperature: product?.temperature || "",
+      product_type: product?.product_type || "",
       // timestamp: "",
       writebyid: product?.writebyid || "",
       reviewbyid: product?.reviewbyid || "",
@@ -165,7 +169,14 @@ const EditProduct = () => {
       manufactuer: yup.string().required("Manufactuer is required"),
     }),
     onSubmit: async (data) => {
-      await dispatch(PutProductService(product?._id, data));
+      const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
+      await dispatch(
+        PutProductService(product?._id, {
+          ...data,
+          manufactuer: URLText(data.manufactuer),
+          packageName: packGetID?.packagename,
+        })
+      );
     },
   });
 
@@ -266,7 +277,7 @@ const EditProduct = () => {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <SearchField
               title="Generic Name"
-              data={genericList?.generics}
+              data={uniqueGenericArray}
               value={formik.values.generices}
               getOptionLabel={(option) =>
                 typeof option === "string" ? option : option?.generices || ""
@@ -401,7 +412,7 @@ const EditProduct = () => {
             <SearchField
               title="Pack"
               data={packageList?.packages}
-              value={formik.values.package}
+              value={formik.values.packageName}
               getOptionLabel={(option) =>
                 typeof option === "string" ? option : option?.packagename || ""
               }
@@ -409,7 +420,7 @@ const EditProduct = () => {
                 formik.setFieldValue("packageName", newValue);
               }}
               helperText={
-                formik.touched.packagename ? formik.errors.packagename : null
+                formik.touched.packageName ? formik.errors.packageName : null
               }
               error={
                 formik.touched.packageName ? formik.errors.packageName : null
@@ -495,7 +506,7 @@ const EditProduct = () => {
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <SelectInput
-              title={"Product Status"}
+              title={"Status"}
               value={formik.values.prostatus}
               onChange={formik.handleChange("prostatus")}
               data={productStatus}
@@ -578,6 +589,14 @@ const EditProduct = () => {
               }
             />
           </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <SelectInput
+              title={"Product Type"}
+              value={formik.values.product_type}
+              onChange={formik.handleChange("product_type")}
+              data={trends}
+            />
+          </Grid2>
         </Grid2>
       </Paper>
 
@@ -630,13 +649,13 @@ const EditProduct = () => {
               value={formik.values.reviewbyid}
               onChange={formik.handleChange("reviewbyid")}
               data={gst}
-              // data={reviewByList?.review_by_lists}
-              // getOptionLabel={(option) =>
-              //   typeof option === "string" ? option : option?.name || ""
-              // }
-              // onInputChange={(event, newValue) => {
-              //   formik.setFieldValue("reviewbyid", newValue);
-              // }}
+            // data={reviewByList?.review_by_lists}
+            // getOptionLabel={(option) =>
+            //   typeof option === "string" ? option : option?.name || ""
+            // }
+            // onInputChange={(event, newValue) => {
+            //   formik.setFieldValue("reviewbyid", newValue);
+            // }}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
@@ -645,13 +664,13 @@ const EditProduct = () => {
               value={formik.values.writebyid}
               onChange={formik.handleChange("writebyid")}
               data={gst}
-              // data={writtenByList?.written_by_lists}
-              // getOptionLabel={(option) =>
-              //   typeof option === "string" ? option : option?.name || ""
-              // }
-              // onInputChange={(event, newValue) => {
-              //   formik.setFieldValue("writebyid", newValue);
-              // }}
+            // data={writtenByList?.written_by_lists}
+            // getOptionLabel={(option) =>
+            //   typeof option === "string" ? option : option?.name || ""
+            // }
+            // onInputChange={(event, newValue) => {
+            //   formik.setFieldValue("writebyid", newValue);
+            // }}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>

@@ -154,9 +154,9 @@ const PutGenericProductStockService = (generices, userData) => async (dispatch) 
 }
 
 const DeleteProductService = (id) => async (dispatch) => {
-    await axios.delete(`/api/category/${id}`, { headers: await Authorization() }).then(() => {
+    await axios.delete(`/api/product/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getProduct(id))
-        dispatch(GetProductService())
+        // dispatch(GetProductService())
     }).catch((error) => {
         console.log("error", error.message)
     })

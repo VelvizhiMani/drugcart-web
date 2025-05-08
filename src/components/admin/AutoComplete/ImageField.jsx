@@ -58,18 +58,21 @@ function ImageField({ title, size = "small", data, getOptionLabel, value, helper
         value={value}
         onInputChange={onInputChange}
         onChange={onChange}
-        renderOption={(props, option) => (
-          <li {...props} className="flex items-center space-x-2 p-2 cursor-pointer">
-            <img
-              src={"https://www.mannafoods.in/cdn/shop/products/2_93661738-cc28-4602-a979-202238ab5aa9.jpg?v=1675151098&width=480"}
-              alt={option?.product_name}
-              width={40}
-              height={40}
-              className="rounded"
-            />
-            <span className="font-semibold">{option?.product_name}</span>
-          </li>
-        )}
+        renderOption={(props, option) => {
+          const { key, ...rest } = props;
+          return (
+            <li {...rest} key={key} className="flex items-center space-x-2 p-2 cursor-pointer">
+              <img
+                src={`https://assets2.drugcarts.com/${option?.product_img}`}
+                alt={option?.product_name}
+                width={40}
+                height={40}
+                className="rounded"
+              />
+              <span className="font-semibold">{option?.product_name}</span>
+            </li>
+          )
+        }}
         renderInput={(params) => (
           <TextField
             {...params}

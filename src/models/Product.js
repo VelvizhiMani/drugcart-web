@@ -61,7 +61,7 @@ const productSchema = new Schema(
             default: "",
         },
         form: {
-            type:String,
+            type: String,
             default: "",
         },
         product_img: {
@@ -344,10 +344,10 @@ const productSchema = new Schema(
             type: String,
             default: "",
         },
-        productstatus: {
-      type: String,
-      default: "",
-    },
+        product_type: {
+            type: String,
+            default: "",
+        },
     },
     { timestamps: true }
 )
