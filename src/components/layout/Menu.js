@@ -52,25 +52,25 @@ const Menu = () => {
               </button>
               <div className="absolute left-0 mt-0 hidden group-hover:block bg-white text-gray-800 rounded-md shadow-lg w-40">
                 <Link
-                  href={`/category/ayurvedic`}
+                  href="/category/ayurvedic"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Ayurvedic
                 </Link>
                 <Link
-                  href={`/category/homeopathy`}
+                  href="/category/homeopathy"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Homeopathy
                 </Link>
                 <Link
-                  href={`/category/siddha`}
+                  href="/category/siddha"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Siddha
                 </Link>
                 <Link
-                  href={`/category/unani`}
+                  href="/category/unani"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Unani
@@ -145,31 +145,31 @@ const Menu = () => {
               </button>
               <div className="absolute left-0 mt-0 hidden group-hover:block bg-white text-gray-800 rounded-md shadow-lg w-40">
                 <Link
-                  href="/category/ayurvedic"
+                  href="/medicine"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Order Medicines
                 </Link>
                 <Link
-                  href="/category/homeopathy"
+                  href="/nursing"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Nursing Attendances
                 </Link>
                 <Link
-                  href="/category/siddha"
+                  href="/physiotherapist"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Physiotherapy
                 </Link>
                 <Link
-                  href="/category/siddha"
+                  href="/covid-care"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Covid Care & Covid Protection
                 </Link>
                 <Link
-                  href="/category/siddha"
+                  href="/elder-care"
                   className="block px-4 py-2 hover:bg-gray-100"
                 >
                   Elder Care
@@ -185,19 +185,9 @@ const Menu = () => {
             <Link href="/specialty" className="px-3 py-2 rounded-md hover:bg-gray-100">
               Doctor
             </Link>
-            <div className="relative group">
-              <button className="px-3 py-2 rounded-md hover:bg-gray-100" onClick={() => router.push('/scan')}>
-                Scan
-              </button>
-              <div className="absolute left-0 mt-0 hidden group-hover:block bg-white text-gray-800 rounded-md shadow-lg w-40">
-                <Link href="/" className="block px-4 py-2 hover:bg-gray-100">
-                  Scan 1
-                </Link>
-                <Link href="/" className="block px-4 py-2 hover:bg-gray-100">
-                  Scan 2
-                </Link>
-              </div>
-            </div>
+                <Link href="/scan" className="px-3 py-2 rounded-md hover:bg-gray-100">
+              Scan
+            </Link>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -356,10 +346,10 @@ const Menu = () => {
               Fitness Supplements
             </Link>
             <Link
-              href="/"
+              href="/health-care-products"
               className="block px-4 py-2 text-black hover:bg-gray-100"
             >
-              health-care-products
+              Health Care Products
             </Link>
           </div>
         )}
@@ -376,31 +366,31 @@ const Menu = () => {
         {submenuOpen === "services" && (
           <div className="m-2 space-y-1 bg-white">
             <Link
-              href="/"
+              href="/medicine"
               className="block px-4 py-2 text-black hover:bg-gray-100"
             >
               Order Medicines
             </Link>
             <Link
-              href="/"
+              href="/nursing"
               className="block px-4 py-2 text-black hover:bg-gray-100"
             >
               Nursing Attendances
             </Link>
             <Link
-              href="/"
+              href="/physiotherapist"
               className="block px-4 py-2 text-black hover:bg-gray-100"
             >
               Physiotherapy
             </Link>
             <Link
-              href="/"
+              href="/covid-care"
               className="block px-4 py-2 text-black hover:bg-gray-100"
             >
               Covid Care & Covid Protection
             </Link>
             <Link
-              href="/"
+              href="/elder-care"
               className="block px-4 py-2 text-black hover:bg-gray-100"
             >
               Elder Care
@@ -408,13 +398,13 @@ const Menu = () => {
           </div>
         )}
 
-        <Link href="/" className="block px-4 py-2 hover:bg-white">
+        <Link href="/lab-test" className="block px-4 py-2 hover:bg-white">
           Lab
         </Link>
-        <Link href="/" className="block px-4 py-2 hover:bg-white">
+        <Link href="/specialty" className="block px-4 py-2 hover:bg-white">
           Doctor
         </Link>
-        <Link href="/" className="block px-4 py-2 hover:bg-white">
+        <Link href="/scan" className="block px-4 py-2 hover:bg-white">
           Scan
         </Link>
       </div>

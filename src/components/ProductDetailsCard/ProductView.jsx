@@ -53,7 +53,7 @@ const ProductView = ({ url }) => {
     dispatch(GetSubCateUrlService(product?.subcat_name));
     dispatch(GetAddStorageIdService(product?.storage));
     dispatch(GetManufactuerUrlService(product?.manufactuer));
-    dispatch(GetAddPackageIdService(product?.packageName));
+    dispatch(GetAddPackageIdService(product?.package));
     dispatch(GetProductGeneticUrlService(product?.generices));
     dispatch(getCartService());
     dispatch(GetProductService(1, 4, search, product?.generices));
@@ -144,15 +144,6 @@ const ProductView = ({ url }) => {
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
               </div>
-              {product?.cat_name === "ayush" ||
-              product?.cat_name === "Health-Care-Device" ||
-              product?.cat_name === "treatments" ||
-              product?.cat_name === "fitness-supplements" ||
-              product?.cat_name === "personal-care" ? null : (
-                <p className="bg-[cornflowerblue] py-1 px-1 rounded-lg text-center mx-auto text-white">
-                  Prescription Required
-                </p>
-              )}
             </div>
             <div className="p-1">
               <p className="text-sm text-gray-500 capitalize">
@@ -316,7 +307,7 @@ const ProductView = ({ url }) => {
                   <h3 className="text-[14px]">
                     {product?.retunpolicy}{" "}
                     <span
-                      className="text-[10px] text-gray-500 cursor-pointer"
+                      className="text-[10px] text-gray-600 cursor-pointer"
                       onClick={() =>
                         router.push("/cancellation-return-refund-policy")
                       }
@@ -326,6 +317,16 @@ const ProductView = ({ url }) => {
                   </h3>
                 ) : null}
 
+                {product?.cat_name === "ayush" ||
+                product?.cat_name === "Health-Care-Device" ||
+                product?.cat_name === "treatments" ||
+                product?.cat_name === "fitness-supplements" ||
+                product?.cat_name === "personal-care" ? null : (
+                  <p className="bg-[#ff5c02] py-1 px-1 text-center rounded-lg text-white mt-2 w-48">
+                    Prescription Required
+                  </p>
+                )}
+                
                 <h3 className="font-bold mt-2 text-xl">Share</h3>
                 <div className="flex flex-col md:flex-row gap-3 mt-2">
                   <button className="flex items-center gap-1 border-2  py-1">
@@ -1655,7 +1656,9 @@ const ProductView = ({ url }) => {
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
                           <p className="capitalize">{product?.cat_name}</p>
-                          <p>{product?.rexrequired}</p>
+                          {product?.rexrequired > 0 ? (
+    <p>{product?.rexrequired}</p>
+                      ) : null}
                         </div>
                         <h3 className="text-[#B7084B] font-bold text-lg">
                           &#8377; {product?.saleprice}
@@ -2110,64 +2113,7 @@ const ProductView = ({ url }) => {
                 Our Home Service
               </h2>
               <OurHomeService />
-
               <OurTreatment />
-
-              <h2 className="font-bold text-center m-2 text-2xl my-8">
-                Our Ayurvedic
-              </h2>
-              <div className="text-sm border-2 bg-[#D8EECA]">
-                <div className="bg-[#D8EECA] p-2 border-b-2 px-4 border-gray-300">
-                  <h2 className="text-xl text-[#B7084B] font-bold ps-7">
-                    Ayurvedic Product
-                  </h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Popular Categories</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Ayurvedic Personal Care</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Best Selling Product</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Top Health Product</h2>
-                </div>
-                <div className="bg-[#D8EECA] p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Top Selling Product</h2>
-                </div>
-              </div>
-
-              <h2 className="font-bold text-center m-2 text-2xl my-8">
-                Our Homeopathy
-              </h2>
-              <div className="text-sm border-2 bg-[#FFF6D5]">
-                <div className="p-2 border-b-2 px-4 border-gray-300">
-                  <h2 className="text-xl text-[#B7084B] font-bold ps-7">
-                    Homeopathy Product
-                  </h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Homeopathy Top Brands</h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Homeopathy Wellness Combo</h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">
-                    * Homeopathy Popular Categories
-                  </h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">* Homeopathy Medicine</h2>
-                </div>
-                <div className="p-2 border-b-2 border-gray-300 px-4">
-                  <h2 className="text-md ps-7">
-                    * Homeopathy Top Selling Product
-                  </h2>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -2188,9 +2134,11 @@ const ProductView = ({ url }) => {
                       <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
                         {product?.cat_name}
                       </p>
-                      <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
-                        {product?.rexrequired}
-                      </p>
+                      {product?.rexrequired > 0 ? (
+                        <p className="text-[10px] bg-[#F0F5FF] px-4 rounded-md">
+                          {product?.rexrequired}
+                        </p>
+                      ) : null}
                     </div>
                     <h2 className="text-[#B7084B] font-bold py-1">
                       &#8377; {product?.saleprice}
@@ -2198,13 +2146,19 @@ const ProductView = ({ url }) => {
                     <h4 className="text-[#35A24D] font-bold">
                       Get this at &#8377; {product?.price}
                     </h4>
-                    <p>{product?.tabscount}</p>
-                    <p>Mft : {product?.manufactuer}</p>
+                    <p>You Saved : {product?.percentage} %</p>
                   </div>
                   <Image
-                    src={IMAGES.EUGEBRAL}
-                    alt="Medicine"
-                    className="w-32 h-24 mt-3 mx-auto"
+                    priority
+                    src={
+                      product?.product_img
+                        ? `https://assets2.drugcarts.com/${product?.product_img}`
+                        : IMAGES.NO_IMAGE
+                    }
+                    alt={product?.product_name}
+                    width={200}
+                    height={100}
+                    className="mt-3 mx-auto rounded-lg"
                   />
                 </div>
               </div>
