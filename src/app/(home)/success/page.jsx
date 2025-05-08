@@ -54,17 +54,17 @@ export default function SuccessPage() {
       // Dispatch your action
       // dispatch(PutOrderService(orderGetData?.orderId, onlineOrderData));
       // alert('Payment Successful!');
-    }
-    try {
-      const onlineOrderData = {
-        paymentInfo: {
-          paymentmode: "online",
-          paymentstatus: "Success"
-        },
-      };
-      dispatch(PutOrderService(orderID, onlineOrderData));
-    } catch (err) {
-      console.error('Order dispatch failed:', err);
+      try {
+        const onlineOrderData = {
+          paymentInfo: {
+            paymentmode: "online",
+            paymentstatus: "Success"
+          },
+        };
+        dispatch(PutOrderService(orderID, onlineOrderData));
+      } catch (err) {
+        console.error('Order dispatch failed:', err);
+      }
     }
   }, [searchParams, dispatch, orderGetData?.orderId]);
 

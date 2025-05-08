@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetMyOrderService } from '@/services/orderService'
 import { DateFormat } from '@/utils/dateFormat'
 import { useRouter } from 'next/navigation';
-
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import { IMAGES } from '../common/images';
 
 const MyOrders = () => {
     const { myOrders } = useSelector((state) => state.orderData)
@@ -89,11 +91,11 @@ const MyOrders = () => {
                         <thead className="bg-gray-100">
                             <tr className="text-left">
                                 <th className="px-4 py-2 border">Order ID</th>
+                                <th className="px-4 py-2 border">Image</th>
                                 <th className="px-4 py-2 border">Customer</th>
                                 <th className="px-4 py-2 border">Status</th>
                                 <th className="px-4 py-2 border">Date</th>
                                 <th className="px-4 py-2 border">Amount</th>
-                                <th className="px-4 py-2 border">Invoice</th>
                                 <th className="px-4 py-2 border">Details</th>
                             </tr>
                         </thead>
@@ -103,6 +105,16 @@ const MyOrders = () => {
                             {myOrders.map((order, i) => (
                                 <tr key={i} className="border">
                                     <td className="px-4 py-2 border"><strong>#</strong> {order?.orderId}</td>
+                                    <td className="px-5 border">
+                                        <AvatarGroup max={2}>
+                                            {order?.orderItems?.map((item, index) => <Avatar key={index} alt={item?.product_name} src={
+                                                item?.product_img
+                                                    ? `https://assets2.drugcarts.com/${item?.product_img}`
+                                                    : IMAGES.NO_IMAGE
+                                            } />)}
+
+                                        </AvatarGroup>
+                                    </td>
                                     <td className="px-4 py-2 border">{order.shippingInfo?.cus_name}</td>
                                     <td
                                         className={`px-4 py-2 border font-medium ${order.status === "Completed" ? "text-green-600" : "text-orange-500"
@@ -112,7 +124,6 @@ const MyOrders = () => {
                                     </td>
                                     <td className="px-4 py-2 border">{DateFormat(order?.createdAt)}</td>
                                     <td className="px-4 py-2 border">{order?.totalPrice}</td>
-                                    <td className="px-4 py-2 border"><p className="text-blue-600 cursor-pointer" onClick={() => router.push(`/invoice/${order?.orderId}`)}>View</p></td>
                                     <td className="px-4 py-2 border"><p className="text-blue-600 cursor-pointer" onClick={() => router.push(`/myorder/${order?.orderId}`)}>View</p></td>
                                 </tr>
                             ))}

@@ -102,9 +102,9 @@ const PutOrderService = (orderId, userData) => async (dispatch) => {
     })
 }
 
-const DeleteOrderService = (id) => async (dispatch) => {
-    await axios.delete(`/api/order/${id}`, { headers: await Authorization() }).then(() => {
-        dispatch(getOrder(id))
+const DeleteOrderService = (orderId) => async (dispatch) => {
+    await axios.delete(`/api/order/order-view/${orderId}`, { headers: await Authorization() }).then(() => {
+        // dispatch(GetOrderOneService(orderId))
         dispatch(GetOrdersService())
     }).catch((error) => {
         console.log("error", error.message)

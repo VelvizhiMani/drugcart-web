@@ -114,6 +114,10 @@ const orderSchema = new Schema(
             type: String,
             default: "",
         },
+        cancelUser: {
+            type: String,
+            default: "",
+        },
         cancelItem: {
             type: String,
             default: "InActive",

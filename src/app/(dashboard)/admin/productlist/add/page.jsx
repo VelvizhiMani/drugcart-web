@@ -59,6 +59,9 @@ const ProductAdd = () => {
   const paymentTypes = ["Online Payment Only", "Cash on Delivery"];
   const returnPolicy = ["Non Returnable", "Return within 7 days"];
   const gst = ["5%", "12%", "18%"];
+  const trends = ["Frequently", "Tranding", "Top Brands", "Top Health", "Best Selling", "Popular"];
+
+  const uniqueGenericArray = genericList?.generics?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
 
   const URLText = (text) => {
     const splitText = text.split(" ");
@@ -94,6 +97,7 @@ const ProductAdd = () => {
       rexrequired: "",
       storage: "",
       temperature: "",
+      product_type: "",
       // timestamp: "",
       writebyid: "",
       reviewbyid: "",
@@ -149,7 +153,7 @@ const ProductAdd = () => {
       direction: "",
       dosages: "",
       precaution: "",
-      prostatus: "",
+      prostatus: "Active",
       paymenttype: "",
       retunpolicy: "",
       gst: "",
@@ -164,9 +168,9 @@ const ProductAdd = () => {
     }),
     onSubmit: async (data, { resetForm }) => {
       const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
-      console.log("packGetID", packGetID.id);
+      console.log("packGetID", packGetID.packagename);
 
-      await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.id }, resetForm));
+      await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.packagename }, resetForm));
     },
   });
   // const salePriceDetails = () => {
@@ -203,6 +207,7 @@ const ProductAdd = () => {
   // const filterOthervarient = productList?.productItems?.filter(
   //   (item) => item?.subcat_name === formik.values.subcaturl
   // );
+console.log('sale', formik.values.saleprice);
 
   return (
     <Box>
@@ -276,7 +281,7 @@ const ProductAdd = () => {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <SearchField
               title="Generic Name"
-              data={genericList?.generics}
+              data={uniqueGenericArray}
               value={formik.values.generices}
               getOptionLabel={(option) =>
                 typeof option === "string" ? option : option?.generices || ""
@@ -581,6 +586,14 @@ const ProductAdd = () => {
               error={
                 formik.touched.temperature ? formik.errors.temperature : null
               }
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <SelectInput
+              title={"Product Type"}
+              value={formik.values.product_type}
+              onChange={formik.handleChange("product_type")}
+              data={trends}
             />
           </Grid2>
         </Grid2>

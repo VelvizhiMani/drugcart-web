@@ -19,7 +19,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteOrderService, GetOrderIdService, GetOrdersService } from '@/services/orderService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
-import { DateMonthFormat } from "@/utils/dateFormat"
+import { DateMonthFormat, TimeFormat } from "@/utils/dateFormat"
 
 const rowText = {
     color: "#fff",
@@ -113,6 +113,7 @@ function NewOrderListPage() {
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Order Id</TableCell>
                             <TableCell style={rowText}>Date</TableCell>
+                            <TableCell style={rowText}>Time</TableCell>
                             <TableCell style={rowText}>Status</TableCell>
                             <TableCell style={rowText}>Customer Name</TableCell>
                             <TableCell style={rowText}>Country</TableCell>
@@ -141,6 +142,9 @@ function NewOrderListPage() {
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                                     {DateMonthFormat(row?.createdAt)}
+                                </TableCell>
+                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                    {TimeFormat(row?.createdAt)}
                                 </TableCell>
                                 <TableCell
                                     sx={{ fontFamily: rowText.fontFamily, fontWeight: "bold", color: colorValue(row?.trackingInfo?.orderStatus) }}
