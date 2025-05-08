@@ -28,8 +28,8 @@ const TopHeader = () => {
   };
 
   useEffect(() => {
-    dispatch(getProfileService());
-    dispatch(getCartService())
+    // dispatch(getProfileService());
+    // dispatch(getCartService())
     dispatch(GetSendFeedbackListService(1, 4))
   }, []);
 

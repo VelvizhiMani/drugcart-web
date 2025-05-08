@@ -26,10 +26,10 @@ const Home = () => {
   //   }, 2000);
   // })
 
-  useEffect(() => {
-    dispatch(getProfileService());
-     dispatch(getCartService())
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getProfileService());
+  //    dispatch(getCartService())
+  // }, []);
   console.log(profile);
 
   return (
