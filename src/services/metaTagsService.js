@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addMetaTags, getMetaTagsList, getMetaTags } from '../reduxToolkit/slices/metaTagsSlice'
+import { addMetaTags, getMetaTagsList, getMetaTags, getMetaTagsUrl } from '../reduxToolkit/slices/metaTagsSlice'
 
 const PostMetaTagsService = (data, resetForm) => async (dispatch) => {
     try {
@@ -43,6 +43,18 @@ const GetMetaTagsIdService = (id) => async (dispatch) => {
     }
 }
 
+const GetMetaTagsUrlService = (url) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/metatags/metatags-view/${url}`, { headers: await Authorization() })
+        dispatch(getMetaTagsUrl(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
 const PutMetaTagsService = (id, userData) => async (dispatch) => {
     await axios.put(`/api/metatags/${id}`, userData, { headers: await Authorization() }).then((response) => {
         dispatch(getMetaTags(response.data))
@@ -62,4 +74,4 @@ const DeleteMetaTagsService = (id) => async (dispatch) => {
     })
 }
 
-export { PostMetaTagsService, GetMetaTagsListService, GetMetaTagsIdService, PutMetaTagsService, DeleteMetaTagsService }
+export { PostMetaTagsService, GetMetaTagsListService, GetMetaTagsIdService, PutMetaTagsService, DeleteMetaTagsService, GetMetaTagsUrlService }
