@@ -3,10 +3,12 @@ import Image from "next/image";
 import { useSelector, useDispatch } from "react-redux";
 import { GetCategoryService } from "@/services/categoryService";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const TopCategory = () => {
   const { categories } = useSelector((state) => state.categoryData);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(GetCategoryService(1, 8));
@@ -18,7 +20,7 @@ const TopCategory = () => {
     <>
       {categories &&
         categories?.categories?.map((category, i) => (
-          <div className="bg-bgshop rounded-lg p-4" key={i}>
+          <div className="bg-bgshop rounded-lg p-4 cursor-pointer" key={i} onClick={() => router.push(`/catalog/${category?.url}`)}>
             <p className="text-center">
               <Image
                 width={100}

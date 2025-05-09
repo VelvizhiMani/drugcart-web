@@ -54,6 +54,7 @@ import sendFeedbackReducer from "@/reduxToolkit/slices/sendFeedbackSlice"
 import sideeffectReducer from "@/reduxToolkit/slices/sideeffectSlice";
 import notifyReducer from "@/reduxToolkit/slices/notifySlice";
 import orderPrescriptionReducer from "@/reduxToolkit/slices/orderPrescriptionSlice";
+import metaTagsReducer from "@/reduxToolkit/slices/metaTagsSlice";
 
 export const store = configureStore({
     reducer: {
@@ -111,6 +112,7 @@ export const store = configureStore({
         sideeffectData: sideeffectReducer,
         notifyData: notifyReducer,
         orderPrescriptionData: orderPrescriptionReducer,
+        metaTagsData: metaTagsReducer,
         adminUserData: adminUserReducer
     }
 })
