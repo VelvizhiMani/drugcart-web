@@ -302,6 +302,11 @@ function AdminLayout(props) {
       path: "/admin/orderprescription",
       name: "Order Prescription",
     },
+        {
+      id: 20,
+      path: "/admin/pagemetalist",
+      name: "Page Meta Tag",
+    },
   ];
 
   const staffRoutes = [
