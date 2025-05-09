@@ -8,19 +8,20 @@ import CartIcon from "@/assets/Icons/CartIcon";
 import discountImg from "@/assets/trendingimg/dealofday.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { GetProductService } from "@/services/productService";
+import { GetProductTypeService } from "@/services/productService";
 import { PostCartService } from "@/services/cartService";
 import { useRouter } from "next/navigation";
+import { IMAGES } from "../common/images";
 
 const TrandingProduct = () => {
-  const { productList } = useSelector((state) => state.productData);
+  const { productTypeList } = useSelector((state) => state.productData);
   const router = useRouter();
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState("topitems");
+  const [activeTab, setActiveTab] = useState("Popular");
 
   useEffect(() => {
-    dispatch(GetProductService(1, 8));
-  }, []);
+    dispatch(GetProductTypeService(1, 8, activeTab));
+  }, [activeTab]);
 
   const productsData = [
     {
@@ -119,242 +120,101 @@ const TrandingProduct = () => {
             </div>
             <div className="flex space-x-4">
               <button
-                className={`px-4 py-2 rounded-lg ${
-                  activeTab === "toprate" ? "bg-pink-500 text-white" : ""
-                }`}
-                onClick={() => setActiveTab("toprate")}
+                className={`px-4 py-2 border rounded-lg ${activeTab === "Popular" ? "bg-pink-500 text-white" : ""
+                  }`}
+                onClick={() => setActiveTab("Popular")}
               >
-                Top Rate
+                Popular
               </button>
               <button
-                className={`px-4 py-2 border rounded-lg ${
-                  activeTab === "topitems" ? "bg-pink-500 text-white" : ""
-                }`}
-                onClick={() => setActiveTab("topitems")}
+                className={`px-4 py-2 border rounded-lg ${activeTab === "Top Brands" ? "bg-pink-500 text-white" : ""
+                  }`}
+                onClick={() => setActiveTab("Top Brands")}
               >
-                Top Items
+                Top Brands
               </button>
               <button
-                className={`px-4 py-2 border rounded-lg ${
-                  activeTab === "newarrivals" ? "bg-pink-500 text-white" : ""
-                }`}
-                onClick={() => setActiveTab("newarrivals")}
+                className={`px-4 py-2 border rounded-lg ${activeTab === "newarrivals" ? "bg-pink-500 text-white" : ""
+                  }`}
+                onClick={() => setActiveTab("Frequently")}
               >
-                New Arrivals
+                Frequently
               </button>
             </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:p-3 content-center place-items-center border border-t-0">
-            {activeTab === "toprate" ? (
-              <>
-                {productList &&
-                  productList?.products?.map((product, i) => (
-                    <div
-                      key={i}
-                      className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
+            {productTypeList &&
+              productTypeList?.products?.map((product, i) => (
+                <div
+                  key={i}
+                  className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
+                >
+                  <div className="grid justify-end">
+                    <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className={
+                          product?.fav == true
+                            ? "text-red-500 size-4"
+                            : "size-4 text-white"
+                        }
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <Image
+                    src={
+                      product?.product_img
+                        ? `https://assets2.drugcarts.com/${product?.product_img}`
+                        : IMAGES.NO_IMAGE
+                    }
+                    alt={product?.product_name}
+                    className="w-48 h-48 ml-3"
+                    width={200}
+                    height={200}
+                  />
+                  <h3
+                    className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 cursor-pointer"
+                    onClick={() => router.push(`/product/${product?.url}`)}
+                  >
+                    {product?.product_name}
+                  </h3>
+                  <p
+                    className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
+                    onClick={() => router.push(`/product/${product?.url}`)}
+                  >
+                    {product?.product_name}
+                  </p>
+                  <div className="bg-white mt-1 flex justify-items-center justify-between">
+                    <p className="text-black font-poppins font-semibold text-[14px] mt-1">
+                      &#8377; {product?.price}
+                    </p>
+                    <button
+                      onClick={() => {
+                        dispatch(PostCartService(product));
+                      }}
                     >
-                      <div className="grid justify-end">
-                        <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className={
-                              product?.fav == true
-                                ? "text-red-500 size-4"
-                                : "size-4 text-white"
-                            }
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <Image
-                        src={productsData[i]?.image}
-                        alt={product?.product_name}
-                        className="w-48 h-48 ml-3"
-                      />
-                      <h3
-                        className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 cursor-pointer"
-                        onClick={() => router.push(`/product/${product?.url}`)}
-                      >
-                        {product?.product_name}
-                      </h3>
-                      <p
-                        className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
-                        onClick={() => router.push(`/product/${product?.url}`)}
-                      >
-                        {product?.product_name}
-                      </p>
-                      <div className="bg-white mt-1 flex justify-items-center justify-between">
-                        <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                          &#8377; {product?.price}
-                        </p>
-                        <button
-                          onClick={() => {
-                            dispatch(PostCartService(product));
-                          }}
-                        >
-                          <CartIcon />
-                        </button>
-                      </div>
-                      <div className="flex items-center mt-2">
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-gray-500">&#9733;</span>
-                      </div>
-                    </div>
-                  ))}
-              </>
-            ) : null}
-            {activeTab === "topitems" ? (
-              <>
-                {productList &&
-                  productList?.products?.map((product, i) => (
-                    <div
-                      key={i}
-                      className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
-                    >
-                      <div className="grid justify-end">
-                        <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className={
-                              product?.fav == true
-                                ? "text-red-500 size-4"
-                                : "size-4 text-white"
-                            }
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <Image
-                        src={productsData[i]?.image}
-                        alt={product?.product_name}
-                        className="w-48 h-48 ml-3"
-                      />
-                      <h3
-                        className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 cursor-pointer"
-                        onClick={() => router.push(`/product/${product?.url}`)}
-                      >
-                        {product?.product_name}
-                      </h3>
-                      <p
-                        className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
-                        onClick={() => router.push(`/product/${product?.url}`)}
-                      >
-                        {product?.product_name}
-                      </p>
-                      <div className="bg-white mt-1 flex justify-items-center justify-between">
-                        <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                          &#8377; {product?.price} --
-                        </p>
-                        <button
-                          onClick={() => {
-                            dispatch(PostCartService(product));
-                          }}
-                        >
-                          <CartIcon />
-                        </button>
-                      </div>
-                      <div className="flex items-center mt-2">
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-gray-500">&#9733;</span>
-                      </div>
-                    </div>
-                  ))}
-              </>
-            ) : null}
-            {activeTab === "newarrivals" ? (
-              <>
-                {productList &&
-                  productList?.products?.map((product, i) => (
-                    <div
-                      key={i}
-                      className="border rounded-lg p-2 bg-white shadow hover:shadow-lg w-5/6 md:w-full mt-2 md:mt-0"
-                    >
-                      <div className="grid justify-end">
-                        <button className="bg-[#FFE5EF] p-1 rounded-full shadow hover:bg-gray-200">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className={
-                              product?.fav == true
-                                ? "text-red-500 size-4"
-                                : "size-4 text-white"
-                            }
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <Image
-                        src={productsData[i]?.image}
-                        alt={product?.product_name}
-                        className="w-48 h-48 ml-3"
-                      />
-                      <h3
-                        className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 cursor-pointer"
-                        onClick={() => router.push(`/product/${product?.url}`)}
-                      >
-                        {product?.product_name}
-                      </h3>
-                      <p
-                        className="text-black font-poppins font-medium text-[13px] mt-1 w-[60%] line-clamp-1 cursor-pointer"
-                        onClick={() => router.push(`/product/${product?.url}`)}
-                      >
-                        {product?.product_name}
-                      </p>
-                      <div className="bg-white mt-1 flex justify-items-center justify-between">
-                        <p className="text-black font-poppins font-semibold text-[14px] mt-1">
-                          &#8377; {product?.price} **
-                        </p>
-                        <button
-                          onClick={() => {
-                            dispatch(PostCartService(product));
-                          }}
-                        >
-                          <CartIcon />
-                        </button>
-                      </div>
-                      <div className="flex items-center mt-2">
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-yellow-500">&#9733;</span>
-                        <span className="text-gray-500">&#9733;</span>
-                      </div>
-                    </div>
-                  ))}
-              </>
-            ) : null}
+                      <CartIcon />
+                    </button>
+                  </div>
+                  <div className="flex items-center mt-2">
+                    <span className="text-yellow-500">&#9733;</span>
+                    <span className="text-yellow-500">&#9733;</span>
+                    <span className="text-yellow-500">&#9733;</span>
+                    <span className="text-yellow-500">&#9733;</span>
+                    <span className="text-gray-500">&#9733;</span>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
         <div className="bg-[#FFEFF5] rounded-md shadow-md">

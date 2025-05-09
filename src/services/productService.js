@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addProduct, getProducts, getProduct, getGenericProductUrl,getManufactuerProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct } from '../reduxToolkit/slices/productSlice'
+import { addProduct, getProducts, getProduct, getGenericProductUrl,getManufactuerProductUrl, getProductCategory, getProductName, GetProductCats, GetPersonalCareProduct, GetFitnessProduct, GetTreatmentProduct, GetProductTypes } from '../reduxToolkit/slices/productSlice'
 
 const PostProductService = (data, resetForm) => async (dispatch) => {
     try {
@@ -186,4 +186,16 @@ const GetProductManufactuerUrlService = (url) => async (dispatch) => {
     }
 }
 
-export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService, PutGenericProductStockService }
+const GetProductTypeService = (page = 1, limit = 10, type = "", search = "" ) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const getIdData = await axios.get(`/api/product/type?page=${page}&limit=${limit}&type=${type}&search=${search}`, { headers: await Authorization() })
+        dispatch(GetProductTypes(getIdData.data))
+        dispatch(IsLoading(false))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+    }
+}
+
+export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService, PutGenericProductStockService, GetProductTypeService }
