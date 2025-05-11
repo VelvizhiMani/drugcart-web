@@ -22,7 +22,7 @@ import axios from "axios";
 
 function extractS3Path(url) {
   try {
-    const baseURL = "https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/";
+    const baseURL = "https://drugcarts-assets.s3.ap-south-1.amazonaws.com/";
     if (url.startsWith(baseURL)) {
       return url.substring(baseURL.length);
     }
@@ -82,7 +82,7 @@ function CategoryAdd() {
         // 1. Upload the image first
         const formData = new FormData();
         formData.append("file", data.cat_img); // file object
-        formData.append("folder", "category");
+        formData.append("folder", "maycategory");
 
         const res = await axios.post("/api/upload", formData, {
           headers: {
@@ -104,7 +104,7 @@ function CategoryAdd() {
           const result = await dispatch(PostCategoryService(updatedData, resetForm));
           if (result) {
             console.log('Category added successfully');
-            router.push("/admin/category"); // Optional: redirect after success
+            // router.push("/admin/category");
           }
         } else {
           alert("Image upload failed");

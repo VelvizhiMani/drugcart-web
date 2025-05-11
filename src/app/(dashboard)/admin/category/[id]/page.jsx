@@ -24,7 +24,6 @@ function EditCategory() {
     const { category } = useSelector((state) => state.categoryData)
     const dispatch = useDispatch()
     const router = useRouter();
-    const [imagePreview, setImagePreview] = useState(null);
     const params = useParams()
 
     const URLText = (text) => {
@@ -41,7 +40,6 @@ function EditCategory() {
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
         formik.setFieldValue("cat_img", URL.createObjectURL(file));
-        setImagePreview(URL.createObjectURL(file));
     };
 
 
@@ -51,7 +49,7 @@ function EditCategory() {
             category_name: category?.category_name || "",
             cat_type: category?.cat_type || "",
             url: category?.url || "",
-            cat_img: category?.cat_img || "",
+            cat_img: `https://assets1.drugcarts.com/category/thumb/${category?.cat_img}` || "",
             imagealt: category?.imagealt || "",
             metatitle: category?.metatitle || "",
             metadesc: category?.metadesc || "",
@@ -73,7 +71,7 @@ function EditCategory() {
     }, [formik.values.category_name])
 
     const catType = ["prescriptions", "non-prescriptions", "Others"];
-    console.log(imagePreview);
+    console.log(formik.values.cat_img);
 
     return (
         <Box>

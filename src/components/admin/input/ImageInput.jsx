@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import PhotoIcon from "@mui/icons-material/Photo";
@@ -16,7 +16,16 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function ImageInput({ title, image, onChange, error }) {
+function ImageInput({ title, image, onChange, error,onError }) {
+  const [preview, setPreview] = useState(image);
+  const [imgError, setImgError] = useState(false);
+    const fallbackImage = `https://assets1.drugcarts.com/category/thumb/${"category16232530961536.webp"}`;
+
+  useEffect(() => {
+    setPreview(image);
+    setImgError(false); // reset error when image changes
+  }, [image]);
+
   return (
     <div>
       <InputLabel
@@ -34,9 +43,13 @@ function ImageInput({ title, image, onChange, error }) {
       </InputLabel>
       {image ? (
         <Avatar
-          src={image}
-          sx={{ width: "100%", height: 300, mt: 1, mb: 2 }}
+          src={imgError ? fallbackImage : preview}
+          sx={{ width: 160, height: 160, mt: 1, mb: 2 }}
           variant="square"
+          onError={() => {
+            setImgError(true);
+            onError && onError();
+          }}
         />
       ) : null}
 
@@ -53,7 +66,15 @@ function ImageInput({ title, image, onChange, error }) {
         <VisuallyHiddenInput
           type="file"
           accept="image/png, image/gif, image/jpeg"
-          onChange={onChange}
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              const url = URL.createObjectURL(file);
+              setPreview(url);
+              setImgError(false);
+            }
+            onChange && onChange(e);
+          }}
         />
       </Button>
       <FormHelperText error>{error}</FormHelperText>
