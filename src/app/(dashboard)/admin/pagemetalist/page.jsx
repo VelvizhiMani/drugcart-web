@@ -32,13 +32,14 @@ function MetaTagsPage() {
     const dispatch = useDispatch()
     const [selectedId, setSelectedId] = useState(null);
 
-    const handleNoChange = (event) => {
-        setShowNo(event.target.value);
-    };
-
+const handleNoChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+    setShowNo(value);
+    setPage(1);
+};
     const router = useRouter();
 
-    const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const userEntries = [25, 50, 100];
 
     useEffect(() => {
         dispatch(GetMetaTagsListService(page, showNo, search))

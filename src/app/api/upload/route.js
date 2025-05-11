@@ -23,7 +23,7 @@ async function uploadFileToS3(file, folder, fileName, fileType) {
     Body: fileBuffer,
     ContentType: fileType?.type,
     ContentDisposition: "inline",
-    ACL: "public-read", // Make the file public-read
+    // ACL: "public-read",
   };
 
   const command = new PutObjectCommand(params);
