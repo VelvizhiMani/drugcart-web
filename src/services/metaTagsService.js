@@ -46,7 +46,8 @@ const GetMetaTagsIdService = (id) => async (dispatch) => {
 const GetMetaTagsUrlService = (url) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getIdData = await axios.get(`/api/metatags/metatags-view/${url}`, { headers: await Authorization() })
+        const getIdData = await axios.get(`/api/metatags/metatags-view/${url}`, { headers: await Authorization(),
+      next: { revalidate: 60 }, })
         dispatch(getMetaTagsUrl(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
