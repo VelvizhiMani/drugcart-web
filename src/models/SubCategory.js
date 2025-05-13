@@ -13,7 +13,7 @@ const subcategorySchema = new Schema(
         url: {
             type: String,
         },
-        sub_cat_img: {
+        cat_img: {
             type: String
         },
         imagealt: {

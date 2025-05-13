@@ -21,13 +21,19 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { GetSubCategoryIdService, PostSubCategoryService, PutSubCategoryService } from '../../../../../services/subCategoryService'
 import { GetCategoryService } from "@/services/categoryService";
+import axios from "axios";
 
 function EditSubCategory() {
-    const params = useParams()
+    const [imagePreview, setImagePreview] = useState('')
     const { categories } = useSelector((state) => state.categoryData)
     const { subCategory } = useSelector((state) => state.subCategoryData)
     const dispatch = useDispatch()
     const router = useRouter();
+    const params = useParams()
+
+    function getFileNameFromUrl(url) {
+        return url?.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetCategoryService())
@@ -42,7 +48,10 @@ function EditSubCategory() {
 
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("sub_cat_img", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("cat_img", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     const formik = useFormik({
@@ -51,7 +60,7 @@ function EditSubCategory() {
             cat_name: subCategory?.cat_name || "",
             subcat_name: subCategory?.subcat_name || "",
             url: subCategory?.url || "",
-            sub_cat_img: subCategory?.sub_cat_img || "",
+            cat_img: subCategory?.cat_img || "",
             imagealt: subCategory?.imagealt || "",
             metatitle: subCategory?.metatitle || "",
             metadesc: subCategory?.metadesc || "",
@@ -61,10 +70,47 @@ function EditSubCategory() {
             cat_name: yup.string().required("Category type is required"),
             subcat_name: yup.string().required("Sub Category Name is required"),
             url: yup.string().required("URL is required"),
-            sub_cat_img: yup.string().required("Sub Category Image is required"),
+            cat_img: yup.string().required("Sub Category Image is required"),
         }),
         onSubmit: async (data) => {
-            await dispatch(PutSubCategoryService(subCategory?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutSubCategoryService(subCategory?._id, data))
+            } else {
+                try {
+                    // 1. Upload the image first
+                    const formData = new FormData();
+                    formData.append("file", data.cat_img); // file object
+                    formData.append("folder", "category/thumb");
+                    formData.append("path", "sub");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+
+                        const updatedData = {
+                            ...data,
+                            cat_img: getFileNameFromUrl(uploadedImageUrl),
+                            url: URLText(data.subcat_name),
+                        };
+
+                        const result = await dispatch(PutSubCategoryService(subCategory?._id, updatedData))
+                        if (result) {
+                            console.log('Category added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
+
         },
     });
 
@@ -140,11 +186,12 @@ function EditSubCategory() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Category Image"}
-                            image={formik.values.sub_cat_img}
+                            image={`https://assets1.drugcarts.com/category/thumb/${subCategory?.cat_img}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/category/thumb/${subCategory?.cat_img}`}
                             onChange={handleCategoryImage}
                             error={
-                                formik.touched.sub_cat_img
-                                    ? formik.errors.sub_cat_img
+                                formik.touched.cat_img
+                                    ? formik.errors.cat_img
                                     : null
                             }
                         />

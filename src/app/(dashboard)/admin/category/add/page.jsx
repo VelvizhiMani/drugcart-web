@@ -20,22 +20,9 @@ import { useDispatch } from "react-redux";
 import { PostCategoryService } from "../../../../../services/categoryService";
 import axios from "axios";
 
-function extractS3Path(url) {
-  try {
-    const baseURL = "https://drugcarts-assets.s3.ap-south-1.amazonaws.com/";
-    if (url.startsWith(baseURL)) {
-      return url.substring(baseURL.length);
-    }
-    return url; // if already short or invalid
-  } catch (error) {
-    console.error("Invalid URL", error);
-    return "";
-  }
-}
 function getFileNameFromUrl(url) {
   return url.split("/").pop();
 }
-
 
 function CategoryAdd() {
   const dispatch = useDispatch();
