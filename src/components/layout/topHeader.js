@@ -84,18 +84,9 @@ const TopHeader = () => {
                     <>
                       <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="flex items-center space-x-2 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+                        className="flex items-center bg-bgcolor py-1 px-2 rounded-lg text-white hover:text-white hover:bg-green-600 transition"
                       >
-                        <span className="bg-blue-500 text-white rounded-full p-2 text-xs">
-                          <PersonIcon className="w-2 h-2" />
-                        </span>
-                        <span className="font-medium">{profile?.username}</span>
-                      </button>
-                        <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="flex items-center bg-bgcolor py-1 px-2 rounded-lg text-white hover:text-blue-600 transition font-bold"
-                      >
-                        <PersonIcon className="text-white font-bold" />
+                        <AccountCircleIcon className="text-white" />
                         &nbsp; {profile?.username}
                       </button>
                       {/* Dropdown Menu */}
