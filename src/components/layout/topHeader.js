@@ -91,7 +91,13 @@ const TopHeader = () => {
                         </span>
                         <span className="font-medium">{profile?.username}</span>
                       </button>
-
+                        <button
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="flex items-center bg-bgcolor py-1 px-2 rounded-lg text-white hover:text-blue-600 transition font-bold"
+                      >
+                        <PersonIcon className="text-white font-bold" />
+                        &nbsp; {profile?.username}
+                      </button>
                       {/* Dropdown Menu */}
                       {isOpen && (
                         <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-40">
