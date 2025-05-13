@@ -91,7 +91,7 @@ function GenericeAdd() {
       subname: yup.string().required("Sub Category is required"),
       url: yup.string().required("URL is required"),
       generices: yup.string().required("Generices is required"),
-      gen_img: yup.string().required("URL is required")
+      // gen_img: yup.string().required("URL is required")
     }),
     onSubmit: async (data, { resetForm }) => {
       // await console.log(data);
@@ -236,6 +236,7 @@ function GenericeAdd() {
                   ? formik.errors.gen_img
                   : null
               }
+              disabled={true}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
