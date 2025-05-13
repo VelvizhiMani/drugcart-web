@@ -19,8 +19,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { GetCategoryIdService, PutCategoryService } from '../../../../../services/categoryService'
+import axios from "axios";
 
 function EditCategory() {
+    const [imagePreview, setImagePreview] = useState('')
     const { category } = useSelector((state) => state.categoryData)
     const dispatch = useDispatch()
     const router = useRouter();
@@ -32,6 +34,11 @@ function EditCategory() {
         return joinSpace
     }
 
+    function getFileNameFromUrl(url) {
+        return url?.split("/").pop();
+    }
+
+
     useEffect(() => {
         dispatch(GetCategoryIdService(params?.id))
     }, [params?.id])
@@ -39,9 +46,11 @@ function EditCategory() {
 
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("cat_img", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("cat_img", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
-
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -49,7 +58,7 @@ function EditCategory() {
             category_name: category?.category_name || "",
             cat_type: category?.cat_type || "",
             url: category?.url || "",
-            cat_img: `https://assets1.drugcarts.com/category/thumb/${category?.cat_img}` || "",
+            cat_img: category?.cat_img || "",
             imagealt: category?.imagealt || "",
             metatitle: category?.metatitle || "",
             metadesc: category?.metadesc || "",
@@ -59,10 +68,50 @@ function EditCategory() {
             cat_type: yup.string().required("Category type is required"),
             category_name: yup.string().required("Category Name is required"),
             url: yup.string().required("URL is required"),
-            cat_img: yup.string().required("Category Image is required"),
+            // cat_img: yup.string().required("Category Image is required"),
         }),
         onSubmit: async (data) => {
-            await dispatch(PutCategoryService(category?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutCategoryService(category?._id, data))
+            } else {
+                try {
+                // 1. Upload the image first
+                const formData = new FormData();
+                formData.append("file", data.cat_img); // file object
+                formData.append("folder", "category/thumb");
+
+                const res = await axios.post("/api/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (res.status === 200) {
+                    const uploadedImageUrl = res.data.url || res.data.fileName;
+                    console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                    // 2. After upload, now dispatch PostCategoryService
+                    const updatedData = {
+                        ...data,
+                        cat_img: getFileNameFromUrl(uploadedImageUrl), // update with uploaded URL
+                        url: URLText(data.category_name), // in case user didn't edit url manually
+                    };
+
+                    const result = await dispatch(PutCategoryService(category?._id, updatedData))
+                    if (result) {
+                        console.log('Category added successfully');
+                        setImagePreview("")
+                        // router.push("/admin/category");
+                    }
+                } else {
+                    alert("Image upload failed");
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                // alert("Image Upload error");
+            }
+            }
+            
         },
     });
 
@@ -142,7 +191,8 @@ function EditCategory() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Category Image"}
-                            image={formik.values.cat_img}
+                            image={`https://assets1.drugcarts.com/category/thumb/${category?.cat_img}`}
+                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/category/thumb/${category?.cat_img}`}
                             onChange={handleCategoryImage}
                             error={
                                 formik.touched.cat_img

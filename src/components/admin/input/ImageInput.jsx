@@ -16,10 +16,10 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function ImageInput({ title, image, onChange, error,onError }) {
+function ImageInput({ title, image, onChange, error,onError, fallbackImage }) {
   const [preview, setPreview] = useState(image);
   const [imgError, setImgError] = useState(false);
-    const fallbackImage = `https://assets1.drugcarts.com/category/thumb/${"category16232530961536.webp"}`;
+    // const fallbackImage = `https://assets1.drugcarts.com/category/thumb/${"category16232530961536.webp"}`;
 
   useEffect(() => {
     setPreview(image);

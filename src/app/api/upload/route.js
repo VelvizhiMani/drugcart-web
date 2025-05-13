@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
 
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
@@ -15,15 +16,16 @@ function imageFileName(name) {
 
 async function uploadFileToS3(file, folder, fileName, fileType) {
   const fileBuffer = file;
-  const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9) + '-' + fileName
-
+  const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + fileName
+// const folder = "mycategory";
+  // const fileName = ${folder}/${uuidv4()}.${fileExt};
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: `${folder}/${imageFileName(uniqueSuffix)}`,
     Body: fileBuffer,
     ContentType: fileType?.type,
     ContentDisposition: "inline",
-    // ACL: "public-read",
+    ACL: "public-read",
   };
 
   const command = new PutObjectCommand(params);
@@ -61,7 +63,7 @@ export async function DELETE(request) {
     }
 
     // Format the file path as it was saved
-    const formattedFileName = `category/${imageFileName(fileName)}`;
+    const formattedFileName = `mycategory/${imageFileName(fileName)}`;
 console.log(formattedFileName);
 
     const params = {

@@ -32,6 +32,10 @@ function extractS3Path(url) {
     return "";
   }
 }
+function getFileNameFromUrl(url) {
+  return url.split("/").pop();
+}
+
 
 function CategoryAdd() {
   const dispatch = useDispatch();
@@ -82,7 +86,7 @@ function CategoryAdd() {
         // 1. Upload the image first
         const formData = new FormData();
         formData.append("file", data.cat_img); // file object
-        formData.append("folder", "maycategory");
+        formData.append("folder", "category/thumb");
 
         const res = await axios.post("/api/upload", formData, {
           headers: {
@@ -97,13 +101,14 @@ function CategoryAdd() {
           // 2. After upload, now dispatch PostCategoryService
           const updatedData = {
             ...data,
-            cat_img: extractS3Path(uploadedImageUrl), // update with uploaded URL
+            cat_img: getFileNameFromUrl(uploadedImageUrl), // update with uploaded URL
             url: URLText(data.category_name), // in case user didn't edit url manually
           };
 
           const result = await dispatch(PostCategoryService(updatedData, resetForm));
           if (result) {
             console.log('Category added successfully');
+            setImagePreview("")
             // router.push("/admin/category");
           }
         } else {
