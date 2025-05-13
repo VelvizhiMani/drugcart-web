@@ -33,9 +33,14 @@ function CountryCodeList() {
     const dispatch = useDispatch()
     const { role } = useRole()
     const [selectedId, setSelectedId] = useState(null);
+    const [fallbackMap, setFallbackMap] = useState({});
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
+    };
+
+    const handleImageError = (id) => {
+        setFallbackMap((prev) => ({ ...prev, [id]: true }));
     };
 
     const router = useRouter();
@@ -119,63 +124,72 @@ function CountryCodeList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {countryCodeList && countryCodeList?.country_code_lists?.map((row, i) => (
-                            <TableRow
-                                key={i}
-                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                            >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.sno}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
+                        {countryCodeList && countryCodeList?.country_code_lists?.map((row, i) => {
+                            const id = row?._id || row?.country; // Unique identifier
+                            const fallback = fallbackMap[id];
+                            const imageUrl = fallback
+                                ? `https://assets1.drugcarts.com/admincolor/countryflag/${row?.flag}`
+                                : `${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/countryflag/${row?.flag}`;
+
+                            return (
+                                <TableRow
+                                    key={i}
+                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                 >
-                                    {row?.country}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                >
-                                    {row?.code}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.flag ? (
-                                        <Avatar
-                                            alt="Remy Sharp"
-                                            src={`https://assets1.drugcarts.com/admincolor/countryflag/${row?.flag}`}
-                                            style={{ width: 24, height: 24 }}
-                                            variant="rounded"
-                                        />
-                                    ) : (
-                                        <FormHelperText error>No Image</FormHelperText>
-                                    )}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.status}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    align="right"
-                                >
-                                    <button onClick={() => {
-                                        router.push(`/admin/country_code_list/${row?._id}`)
-                                    }}>
-                                        <CreateIcon color="primary" />
-                                    </button>
-                                    {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
-                                        <DeleteIcon color='error' />
-                                    </button> : null}
-                                </TableCell>
-                                <DeleteModal
-                                    open={selectedId === row._id}
-                                    setOpen={() => setSelectedId(null)}
-                                    title={"Delete Country"}
-                                    description={`Are you sure you want to delete ${row?.country}`}
-                                    onSubmit={async () => {
-                                        await dispatch(DeleteCountryCodeService(row._id));
-                                        setSelectedId(null);
-                                    }} />
-                            </TableRow>
-                        ))}
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.sno}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                    >
+                                        {row?.country}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                    >
+                                        {row?.code}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.flag ? (
+                                            <Avatar
+                                                alt={row?.country}
+                                                src={imageUrl}
+                                                style={{ width: 24, height: 24 }}
+                                                variant="rounded"
+                                                onError={() => handleImageError(id)}
+                                            />
+                                        ) : (
+                                            <FormHelperText error>No Image</FormHelperText>
+                                        )}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.status}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        align="right"
+                                    >
+                                        <button onClick={() => {
+                                            router.push(`/admin/country_code_list/${row?._id}`)
+                                        }}>
+                                            <CreateIcon color="primary" />
+                                        </button>
+                                        {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                            <DeleteIcon color='error' />
+                                        </button> : null}
+                                    </TableCell>
+                                    <DeleteModal
+                                        open={selectedId === row._id}
+                                        setOpen={() => setSelectedId(null)}
+                                        title={"Delete Country"}
+                                        description={`Are you sure you want to delete ${row?.country}`}
+                                        onSubmit={async () => {
+                                            await dispatch(DeleteCountryCodeService(row._id));
+                                            setSelectedId(null);
+                                        }} />
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

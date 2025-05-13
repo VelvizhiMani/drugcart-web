@@ -17,10 +17,16 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostCountryCodeService } from '@/services/countryCodeService';
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 function CountryCodeAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
+
+    const getFileNameFromUrl = (url) => {
+        return url.split("/").pop();
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -34,15 +40,49 @@ function CountryCodeAdd() {
             flag: yup.string().required("Flag is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostCountryCodeService(data, resetForm))
+            try {
+                const formData = new FormData();
+                formData.append("file", data.flag);
+                formData.append("folder", "admincolor/countryflag");
+
+                const res = await axios.post("/api/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (res.status === 200) {
+                    const uploadedImageUrl = res.data.url || res.data.fileName;
+                    console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                    const updatedData = {
+                        ...data,
+                        flag: getFileNameFromUrl(uploadedImageUrl),
+                    };
+
+                    await dispatch(PostCountryCodeService(updatedData, resetForm));
+                    setImagePreview(null)
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert("Image Upload error");
+            }
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("flag", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("flag", file);
+            setImagePreview(URL.createObjectURL(file));
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            if (imagePreview) URL.revokeObjectURL(imagePreview);
+        };
+    }, [imagePreview]);
 
     return (
         <Box>
@@ -99,7 +139,7 @@ function CountryCodeAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Country Flag"}
-                            image={formik.values.flag}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.flag

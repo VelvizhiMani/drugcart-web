@@ -17,18 +17,25 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutCountryCodeService, GetCountryCodeIdService } from '@/services/countryCodeService';
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 function EditCountryCode() {
+    const [imagePreview, setImagePreview] = useState('')
     const { countryCode } = useSelector((state) => state.countryCodeData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+
+    const getFileNameFromUrl = (url) => {
+        return url.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetCountryCodeIdService(params?.id))
     }, [params?.id])
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
             country: countryCode?.country || "",
             code: countryCode?.code || "",
@@ -40,14 +47,50 @@ function EditCountryCode() {
             flag: yup.string().required("Flag is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutCountryCodeService(countryCode?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutCountryCodeService(countryCode?._id, data))
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", data.flag); // file object
+                    formData.append("folder", "admincolor/countryflag");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                        console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                        const updatedData = {
+                            ...data,
+                            flag: getFileNameFromUrl(uploadedImageUrl),
+                        };
+
+                        const result = await dispatch(PutCountryCodeService(countryCode?._id, updatedData))
+                        if (result) {
+                            console.log('Country added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("flag", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("flag", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -105,7 +148,8 @@ function EditCountryCode() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Country Flag"}
-                            image={formik.values.flag}
+                            image={`https://assets1.drugcarts.com/admincolor/countryflag/${countryCode?.flag}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/countryflag/${countryCode?.flag}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.flag
