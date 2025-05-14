@@ -79,7 +79,7 @@ function EditForm() {
                         const updatedData = {
                             ...data,
                             picture: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.formname),
+                            formurl: URLText(data.formname),
                         };
 
                         const result = await dispatch(PutFormService(form?._id, updatedData))

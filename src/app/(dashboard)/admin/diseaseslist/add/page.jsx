@@ -18,10 +18,16 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostDiseasesService } from '@/services/diseasesService';
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 function DiseasesAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
+
+    function getFileNameFromUrl(url) {
+        return url.split("/").pop();
+    }
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -66,15 +72,50 @@ function DiseasesAdd() {
             picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostDiseasesService(data, resetForm))
+            try {
+                const formData = new FormData();
+                formData.append("file", data.picture);
+                formData.append("folder", "press");
+
+                const res = await axios.post("/api/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (res.status === 200) {
+                    const uploadedImageUrl = res.data.url || res.data.fileName;
+                    console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                    const updatedData = {
+                        ...data,
+                        picture: getFileNameFromUrl(uploadedImageUrl),
+                        url: URLText(data.url),
+                    };
+
+                    await dispatch(PostDiseasesService(updatedData, resetForm));
+                    setImagePreview(null)
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert("Image Upload error");
+            }
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("picture", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            if (imagePreview) URL.revokeObjectURL(imagePreview);
+        };
+    }, [imagePreview]);
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.name)
@@ -135,7 +176,7 @@ function DiseasesAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Picture"}
-                            image={formik.values.picture}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture

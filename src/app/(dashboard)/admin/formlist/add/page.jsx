@@ -68,7 +68,7 @@ function FormAdd() {
           const updatedData = {
             ...data,
             picture: getFileNameFromUrl(uploadedImageUrl),
-            url: URLText(data.formurl),
+            formurl: URLText(data.formurl),
           };
 
           await dispatch(PostFormService(updatedData, resetForm));

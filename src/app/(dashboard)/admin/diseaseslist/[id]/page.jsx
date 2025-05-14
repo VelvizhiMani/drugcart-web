@@ -18,8 +18,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutDiseasesService, GetDiseasesIdService } from '@/services/diseasesService';
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function EditDiseases() {
+    const [imagePreview, setImagePreview] = useState('')
     const { diseases } = useSelector((state) => state.diseasesData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -34,6 +36,10 @@ function EditDiseases() {
         const splitText = text.split(" ")
         const joinSpace = splitText.join("-").toLowerCase()
         return joinSpace
+    }
+
+    function getFileNameFromUrl(url) {
+        return url?.split("/").pop();
     }
 
     const formik = useFormik({
@@ -74,14 +80,52 @@ function EditDiseases() {
             picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutDiseasesService(diseases?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutDiseasesService(diseases?._id, data))
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", data.picture);
+                    formData.append("folder", "press");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                        console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                        const updatedData = {
+                            ...data,
+                            picture: getFileNameFromUrl(uploadedImageUrl),
+                            url: URLText(data.url),
+                        };
+
+                        const result = await dispatch(PutDiseasesService(diseases?._id, updatedData))
+                        if (result) {
+                            console.log('diseases added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
+
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("picture", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     useEffect(() => {
@@ -143,7 +187,8 @@ function EditDiseases() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Picture"}
-                            image={formik.values.picture}
+                            image={`https://assets1.drugcarts.com/press/${diseases?.picture}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/press/${diseases?.picture}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture
