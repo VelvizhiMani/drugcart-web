@@ -18,12 +18,18 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutInfoGraphicsService, GetInfoGraphicsIdService } from '@/services/infoGraphicsService';
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 function EditInfoGraphics() {
+    const [imagePreview, setImagePreview] = useState('')
     const { infoGraphics } = useSelector((state) => state.infoGraphicssData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+
+    const getFileNameFromUrl = (url) => {
+        return url.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetInfoGraphicsIdService(params?.id))
@@ -38,7 +44,7 @@ function EditInfoGraphics() {
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            title: infoGraphics?. title || "",
+            title: infoGraphics?.title || "",
             url: infoGraphics?.url || "",
             thuming: infoGraphics?.thuming || "",
             thumbalt: infoGraphics?.thumbalt || "",
@@ -54,8 +60,44 @@ function EditInfoGraphics() {
             picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutInfoGraphicsService(infoGraphics?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutInfoGraphicsService(infoGraphics?._id, data))
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", data.picture); // file object
+                    formData.append("folder", "admincolor/homepage/infogra");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                        console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                        const updatedData = {
+                            ...data,
+                            picture: getFileNameFromUrl(uploadedImageUrl),
+                            url: URLText(data.url),
+                            thuming: getFileNameFromUrl(uploadedImageUrl),
+                            thumbalt: data.alt
+                        };
+
+                        const result = await dispatch(PutInfoGraphicsService(infoGraphics?._id, updatedData))
+                        if (result) {
+                            console.log('infoGraphics added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
         },
     });
 
@@ -66,7 +108,10 @@ function EditInfoGraphics() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("picture", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     useEffect(() => {
@@ -127,31 +172,9 @@ function EditInfoGraphics() {
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
-                            title={"Images Thumb"}
-                            image={formik.values.thuming}
-                            onChange={handleThumImage}
-                            error={
-                                formik.touched.thuming
-                                    ? formik.errors.thuming
-                                    : null
-                            }
-                        />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <TextInput
-                            title={"Image Thumb Alt"}
-                            value={formik.values.thumbalt}
-                            onChange={formik.handleChange("thumbalt")}
-                            helperText={
-                                formik.touched.thumbalt ? formik.errors.thumbalt : null
-                            }
-                            error={formik.touched.thumbalt ? formik.errors.thumbalt : null}
-                        />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <ImageInput
                             title={"Images"}
-                            image={formik.values.picture}
+                            image={`https://assets3.drugcarts.com/admincolor/homepage/infogra/${infoGraphics?.picture}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/infogra/${infoGraphics?.picture}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture
@@ -169,6 +192,32 @@ function EditInfoGraphics() {
                                 formik.touched.alt ? formik.errors.alt : null
                             }
                             error={formik.touched.alt ? formik.errors.alt : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <ImageInput
+                            title={"Images Thumb"}
+                            image={`https://assets3.drugcarts.com/admincolor/homepage/infogra/${infoGraphics?.thuming}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/infogra/${infoGraphics?.thuming}`}
+                            onChange={handleThumImage}
+                            error={
+                                formik.touched.thuming
+                                    ? formik.errors.thuming
+                                    : null
+                            }
+                            disabled={true}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <TextInput
+                            title={"Image Thumb Alt"}
+                            value={formik.values.thumbalt}
+                            onChange={formik.handleChange("thumbalt")}
+                            helperText={
+                                formik.touched.thumbalt ? formik.errors.thumbalt : null
+                            }
+                            error={formik.touched.thumbalt ? formik.errors.thumbalt : null}
+                            disabled={true}
                         />
                     </Grid2>
                 </Grid2>
