@@ -18,12 +18,18 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutBlogService, GetBlogIdService } from '@/services/blogService';
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function EditBlog() {
+    const [imagePreview, setImagePreview] = useState('')
     const { blog } = useSelector((state) => state.blogData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+
+    const getFileNameFromUrl = (url) => {
+        return url.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetBlogIdService(params?.id))
@@ -38,15 +44,15 @@ function EditBlog() {
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            blogname: blog?.blogname ||  "",
-            blogimg: blog?.blogimg ||  "",
-            blogspoturl: blog?.blogspoturl ||  "",
-            url: blog?.url ||  "",
-            description: blog?.description ||  "",
-            imagealt: blog?.imagealt ||  "",
-            metatitle: blog?.blogname ||  "",
-            metadesc: blog?.blogname ||  "",
-            metakeyboard: blog?.blogname ||  "",
+            blogname: blog?.blogname || "",
+            blogimg: blog?.blogimg || "",
+            blogspoturl: blog?.blogspoturl || "",
+            url: blog?.url || "",
+            description: blog?.description || "",
+            imagealt: blog?.imagealt || "",
+            metatitle: blog?.blogname || "",
+            metadesc: blog?.blogname || "",
+            metakeyboard: blog?.blogname || "",
         },
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
@@ -54,11 +60,43 @@ function EditBlog() {
             blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutBlogService(blog?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutBlogService(blog?._id, data))
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", data.blogimg); // file object
+                    formData.append("folder", "blogs");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                        console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                        const updatedData = {
+                            ...data,
+                            blogimg: getFileNameFromUrl(uploadedImageUrl),
+                            url: URLText(data.url),
+                        };
+
+                        const result = await dispatch(PutBlogService(blog?._id, updatedData))
+                        if (result) {
+                            console.log('article added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
         },
     });
-
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.blogname)
@@ -66,7 +104,10 @@ function EditBlog() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("blogimg", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("blogimg", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -124,7 +165,8 @@ function EditBlog() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Blog Image"}
-                            image={formik.values.blogimg}
+                            image={`https://assets3.drugcarts.com/admincolor/blogs/${blog?.blogimg}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/blogs/${blog?.blogimg}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.blogimg

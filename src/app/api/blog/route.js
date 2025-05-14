@@ -1,4 +1,4 @@
-import { authenticateUser } from '../../../utils/middleware';
+import { adminAuthorization } from '../../../utils/middleware';
 import Blog from '../../../models/Blog';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
@@ -17,7 +17,7 @@ const s3 = new S3Client({
 export async function POST(request) {
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })
@@ -73,7 +73,7 @@ export async function GET(req) {
         const skip = (page - 1) * limit;
 
         const BlogItems = await Blog.find(filters)
-            .sort({ createdAt: -1 })
+            .sort({ timestamp: -1 })
             .skip(skip)
             .limit(limit)
 

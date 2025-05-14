@@ -78,7 +78,7 @@ export async function GET(req) {
         const skip = (page - 1) * limit;
 
         const HealthVideoItems = await HealthVideo.find(filters)
-            .sort({ createdAt: -1 })
+            .sort({ timestamp: -1 })
             .skip(skip)
             .limit(limit)
 
