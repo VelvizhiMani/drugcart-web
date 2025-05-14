@@ -18,10 +18,16 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostArticleService } from '@/services/articleService';
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 function ArticlesAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
+
+    function getFileNameFromUrl(url) {
+        return url.split("/").pop();
+    }
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -46,8 +52,34 @@ function ArticlesAdd() {
             blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostArticleService(data, resetForm))
+            try {
+                const formData = new FormData();
+                formData.append("file", data.blogimg);
+                formData.append("folder", "admincolor/homepage/slider");
+
+                const res = await axios.post("/api/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (res.status === 200) {
+                    const uploadedImageUrl = res.data.url || res.data.fileName;
+                    console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                    const updatedData = {
+                        ...data,
+                        blogimg: getFileNameFromUrl(uploadedImageUrl),
+                        url: URLText(data.url),
+                    };
+
+                    await dispatch(PostArticleService(updatedData, resetForm));
+                    setImagePreview(null)
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert("Image Upload error");
+            }
         },
     });
 
@@ -58,8 +90,17 @@ function ArticlesAdd() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("blogimg", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("blogimg", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            if (imagePreview) URL.revokeObjectURL(imagePreview);
+        };
+    }, [imagePreview]);
 
     return (
         <Box>
@@ -116,7 +157,7 @@ function ArticlesAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.blogimg}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.blogimg

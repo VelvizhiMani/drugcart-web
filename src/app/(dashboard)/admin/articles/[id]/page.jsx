@@ -18,12 +18,18 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutArticleService, GetArticleIdService } from '@/services/articleService';
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function EditArticles() {
+    const [imagePreview, setImagePreview] = useState('')
     const { article } = useSelector((state) => state.articlesData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+
+    const getFileNameFromUrl = (url) => {
+        return url.split("/").pop();
+    }
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -53,11 +59,44 @@ function EditArticles() {
             blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutArticleService(article?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutArticleService(article?._id, data))
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", data.blogimg); // file object
+                    formData.append("folder", "admincolor/homepage/slider");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                        console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                        const updatedData = {
+                            ...data,
+                            blogimg: getFileNameFromUrl(uploadedImageUrl),
+                            url: URLText(data.url),
+                        };
+
+                        const result = await dispatch(PutArticleService(article?._id, updatedData))
+                        if (result) {
+                            console.log('article added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
         },
     });
-
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.blogname)
@@ -65,7 +104,10 @@ function EditArticles() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("blogimg", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("blogimg", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -123,7 +165,8 @@ function EditArticles() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.blogimg}
+                            image={`https://assets3.drugcarts.com/admincolor/homepage/slider/${article?.blogimg}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/slider/${article?.blogimg}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.blogimg
