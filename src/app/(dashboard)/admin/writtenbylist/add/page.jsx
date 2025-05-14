@@ -41,7 +41,7 @@ function WrittenByAdd() {
             qualification: yup.string().required("Qualification is required"),
             // picture: yup.string().required("Picture is required"),
             experience: yup.string().required("Experience is required"),
-            imagealt: yup.string().required("Image alt is required"),
+            // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             if (!imagePreview) {
