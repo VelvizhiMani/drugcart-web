@@ -25,6 +25,7 @@ import { GetOrginService } from "@/services/orginService";
 import { GetReferenceService } from "@/services/referenceService";
 import { GetWrittenByService } from "@/services/writtenByService";
 import { GetReviewByService } from "@/services/reviewByService";
+import axios from "axios";
 
 const EditProduct = () => {
   const { product } = useSelector((state) => state.productData);
@@ -48,14 +49,22 @@ const EditProduct = () => {
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState(null);
 
+  const getFileNameFromUrl = (url) => {
+    if (!url || typeof url !== "string") return "";
+    const parts = url.split("category/");
+    return parts.length > 1 ? "category/" + parts[1] : "";
+  };
+  
   useEffect(() => {
     dispatch(GetProductIdService(params?.id));
   }, [params?.id]);
 
   const handleProductImage = (event) => {
     const file = event.target.files[0];
-    formik.setFieldValue("cat_img", URL.createObjectURL(file));
-    setImagePreview(URL.createObjectURL(file));
+    if (file) {
+      formik.setFieldValue("product_img", file); // Set actual file
+      setImagePreview(URL.createObjectURL(file)); // For preview
+    }
   };
 
   const productStatus = ["Active", "InActive"];
@@ -168,15 +177,62 @@ const EditProduct = () => {
       url: yup.string().required("URL is required"),
       manufactuer: yup.string().required("Manufactuer is required"),
     }),
+    // onSubmit: async (data) => {
+    //   const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
+    //   await dispatch(
+    //     PutProductService(product?._id, {
+    //       ...data,
+    //       manufactuer: URLText(data.manufactuer),
+    //       packageName: packGetID?.packagename,
+    //     })
+    //   );
+    // },
     onSubmit: async (data) => {
       const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
-      await dispatch(
-        PutProductService(product?._id, {
-          ...data,
-          manufactuer: URLText(data.manufactuer),
-          packageName: packGetID?.packagename,
-        })
-      );
+      if (!imagePreview) {
+        await dispatch(
+          PutProductService(product?._id, {
+            ...data,
+            manufactuer: URLText(data.manufactuer),
+            packageName: packGetID?.packagename,
+          })
+        );
+      } else {
+        try {
+          const formData = new FormData();
+          formData.append("file", data.product_img); // file object
+          formData.append("folder", "category/product");
+
+          const res = await axios.post("/api/upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (res.status === 200) {
+            const uploadedImageUrl = res.data.url || res.data.fileName;
+            console.log("Image uploaded successfully:", uploadedImageUrl);
+
+            const updatedData = {
+              ...data,
+              product_img: getFileNameFromUrl(uploadedImageUrl),
+              url: URLText(data.url),
+              manufactuer: URLText(data.manufactuer),
+              packageName: packGetID.packagename
+            };
+
+            const result = await dispatch(PutProductService(product?._id, updatedData))
+            if (result) {
+              console.log('infoGraphics added successfully');
+              setImagePreview("")
+            }
+          } else {
+            alert("Image upload failed");
+          }
+        } catch (error) {
+          console.error("Upload error:", error);
+        }
+      }
     },
   });
 
@@ -331,7 +387,8 @@ const EditProduct = () => {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <ImageInput
               title={"Product Image"}
-              image={formik.values.product_img}
+              image={`https://assets2.drugcarts.com/${product?.product_img}`}
+              fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${product?.product_img}`}
               onChange={handleProductImage}
               error={
                 formik.touched.product_img ? formik.errors.product_img : null

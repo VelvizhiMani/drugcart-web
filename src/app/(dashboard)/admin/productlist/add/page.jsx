@@ -34,6 +34,7 @@ import { GetReferenceService } from "@/services/referenceService";
 import { GetWrittenByService } from "@/services/writtenByService";
 import { GetReviewByService } from "@/services/reviewByService";
 import SliderPage from "../../../../../components/layout/Slider";
+import axios from "axios";
 
 const ProductAdd = () => {
   const { categories } = useSelector((state) => state.categoryData);
@@ -50,10 +51,15 @@ const ProductAdd = () => {
   const { reviewByList, reviewBy } = useSelector(
     (state) => state.referenceData
   );
-
   const dispatch = useDispatch();
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState(null);
+
+  const getFileNameFromUrl = (url) => {
+    if (!url || typeof url !== "string") return "";
+    const parts = url.split("category/");
+    return parts.length > 1 ? "category/" + parts[1] : "";
+  };
 
   const productStatus = ["Active", "InActive"];
   const paymentTypes = ["Online Payment Only", "Cash on Delivery"];
@@ -164,15 +170,52 @@ const ProductAdd = () => {
       subcat_name: yup.string().required("SubCategory Name is required"),
       generices: yup.string().required("Generices Name is required"),
       product_name: yup.string().required("Product Name is required"),
+      product_img: yup.string().required("Product Image is required"),
       url: yup.string().required("URL is required"),
+      manufactuer: yup.string().required("Manufactuer is required"),
+      packageName: yup.string().required("Package is required"),
     }),
+    // onSubmit: async (data, { resetForm }) => {
+    //   const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
+    //   console.log("packGetID", packGetID.packagename);
+
+    //   await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.packagename }, resetForm));
+    // },
     onSubmit: async (data, { resetForm }) => {
       const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
-      console.log("packGetID", packGetID.packagename);
+      try {
+        const formData = new FormData();
+        formData.append("file", data.product_img);
+        formData.append("folder", "category/product");
 
-      await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.packagename }, resetForm));
+        const res = await axios.post("/api/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (res.status === 200) {
+          const uploadedImageUrl = res.data.url || res.data.fileName;
+          console.log("Image uploaded successfully:", uploadedImageUrl);
+
+          const updatedData = {
+            ...data,
+            product_img: getFileNameFromUrl(uploadedImageUrl),
+            url: URLText(data.url),
+            manufactuer: URLText(data.manufactuer),
+            packageName: packGetID.packagename
+          };
+
+          await dispatch(PostProductService(updatedData, resetForm));
+          setImagePreview(null)
+        }
+      } catch (error) {
+        console.error("Upload error:", error);
+        alert("Image Upload error");
+      }
     },
   });
+
   useEffect(() => {
     const percentage = formik.values.percentage;
     const sale = (percentage / 100) * formik.values.price;
@@ -210,6 +253,20 @@ const ProductAdd = () => {
   // const filterOthervarient = productList?.productItems?.filter(
   //   (item) => item?.subcat_name === formik.values.subcaturl
   // );
+
+  const handleImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      formik.setFieldValue("product_img", file); // Set actual file
+      setImagePreview(URL.createObjectURL(file)); // For preview
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+    };
+  }, [imagePreview]);
 
   return (
     <Box>
@@ -337,7 +394,16 @@ const ProductAdd = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <ImageInput title={"Product Image"} />
+            <ImageInput
+              title={"Product Image"}
+              image={imagePreview}
+              onChange={handleImage}
+              error={
+                formik.touched.product_img
+                  ? formik.errors.product_img
+                  : null
+              }
+            />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
