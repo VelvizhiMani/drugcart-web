@@ -68,7 +68,7 @@ const PutGeneticService = (id, userData) => async (dispatch) => {
 const DeleteGeneticService = (id) => async (dispatch) => {
     await axios.delete(`/api/generic/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getGeneric(id))
-        dispatch(GetGeneticService())
+        dispatch(GetGeneticService(1, 10))
     }).catch((error) => {
         console.log("error", error.message)
     })

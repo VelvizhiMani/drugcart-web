@@ -113,7 +113,7 @@ function GenericeAdd() {
     dispatch(GetSubCategoryService())
   }, [formik.values.catnames])
 
-  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name === formik.values.catnames)
+  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name?.toLowerCase() === formik.values.catnames.toLowerCase())
 
   // useEffect(() => {
   //   if (typeof window !== "undefined" && typeof document !== "undefined") {
@@ -143,7 +143,7 @@ function GenericeAdd() {
     // },
   };
 
-  console.log(formik.values.mechanism);
+  console.log(formik.values.catnames);
   return (
     <Box>
       <Box sx={{ display: "flex" }}>

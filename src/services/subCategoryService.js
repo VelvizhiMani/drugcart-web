@@ -68,7 +68,7 @@ const PutSubCategoryService = (id, userData) => async (dispatch) => {
 const DeleteSubCategoryService = (id) => async (dispatch) => {
     await axios.delete(`/api/sub-category/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getSubCategory(id))
-        dispatch(GetSubCategoryService())
+        dispatch(GetSubCategoryService(1, 10))
     }).catch((error) => {
         console.log("error", error.message)
     })

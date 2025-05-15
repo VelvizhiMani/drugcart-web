@@ -173,12 +173,15 @@ const ProductAdd = () => {
       await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.packagename }, resetForm));
     },
   });
-  // const salePriceDetails = () => {
-  // const percentage = formik.values.percentage;
-  // const sale = (percentage / 100) * formik.values.price;
-  // const saleDetail = formik.values.price - sale;
-  // console.log(saleDetail, "SALE");
-  // };
+  useEffect(() => {
+    const percentage = formik.values.percentage;
+    const sale = (percentage / 100) * formik.values.price;
+    const saleDetail = formik.values.price - sale;
+    console.log(saleDetail, "SALE");
+
+
+    formik.setFieldValue("saleprice", saleDetail.toFixed(2));
+  }, [formik.values.price, formik.values.percentage]);
 
   useEffect(() => {
     formik.values.caturl = URLText(formik.values.cat_name);
@@ -202,12 +205,11 @@ const ProductAdd = () => {
   }, []);
 
   const filterSubCategory = subCategories?.subcategoryItems?.filter(
-    (item) => item?.cat_name === formik.values.caturl
+    (item) => item?.cat_name?.toLowerCase() === formik.values.cat_name.toLowerCase()
   );
   // const filterOthervarient = productList?.productItems?.filter(
   //   (item) => item?.subcat_name === formik.values.subcaturl
   // );
-console.log('sale', formik.values.saleprice);
 
   return (
     <Box>
@@ -567,6 +569,18 @@ console.log('sale', formik.values.saleprice);
               title={"Percentage DISCOUNT:(Ex:2)only type number."}
               value={formik.values.percentage}
               onChange={formik.handleChange("percentage")}
+              helperText={
+                formik.touched.percentage ? formik.errors.percentage : null
+              }
+              error={
+                formik.touched.percentage ? formik.errors.percentage : null
+              }
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <TextInput
+              title={"sale"}
+              value={formik.values.saleprice}
               helperText={
                 formik.touched.percentage ? formik.errors.percentage : null
               }

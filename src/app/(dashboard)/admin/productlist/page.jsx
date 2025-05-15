@@ -73,7 +73,7 @@ function ProductList() {
           variant="contained"
           style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
           startIcon={<AddIcon />}
-          onClick={() => router.push(`/admin/product/add`)}
+          onClick={() => router.push(`/admin/productlist/add`)}
         >
           Add Product
         </Button>
