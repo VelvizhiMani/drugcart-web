@@ -31,12 +31,18 @@ function AdminMainSlider() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const [selectedId, setSelectedId] = useState(null);
+    const [fallbackMap, setFallbackMap] = useState({});
 
     const URLText = (text) => {
         const splitText = text.split(" ")
         const joinSpace = splitText.join("-").toLowerCase()
         return joinSpace
     }
+
+    const handleImageError = (id) => {
+        setFallbackMap((prev) => ({ ...prev, [id]: true }));
+    };
+
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -122,67 +128,75 @@ function AdminMainSlider() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {mainSliderList && mainSliderList?.main_sliders?.map((row, i) => (
-                            <TableRow
-                                key={i}
-                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                            >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.sno}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    component="th"
-                                    scope="row"
+                        {mainSliderList && mainSliderList?.main_sliders?.map((row, i) => {
+                            const id = row?._id || row?.title; // Unique identifier
+                            const fallback = fallbackMap[id];
+                            const imageUrl = fallback
+                                ? `https://assets2.drugcarts.com/admincolor/homepage/slider/${row?.slide_image}`
+                                : `${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/slider/${row?.slide_image}`;
+                            return (
+                                <TableRow
+                                    key={i}
+                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                 >
-                                    {row?.title}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.url}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.orderno}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.slide_image ? (
-                                        <Avatar
-                                            alt={row?.title}
-                                            src={`https://assets1.drugcarts.com/admincolor/homepage/slider/${row?.slide_image}`}
-                                            style={{ width: 80, height: 24 }}
-                                            variant="rounded"
-                                        />
-                                    ) : (
-                                        <FormHelperText error>No Image</FormHelperText>
-                                    )}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.status}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    align="right"
-                                >
-                                    <button onClick={() => {
-                                        router.push(`/admin/mainslider/${row?._id}`)
-                                    }}>
-                                        <CreateIcon color="primary" />
-                                    </button>
-                                    <button onClick={() => setSelectedId(row._id)}>
-                                        <DeleteIcon color='error' />
-                                    </button>
-                                </TableCell>
-                                <DeleteModal
-                                    open={selectedId === row._id}
-                                    setOpen={() => setSelectedId(null)}
-                                    title={"Delete Main Slider"}
-                                    description={`Are you sure you want to delete ${row?.title} ?`}
-                                    onSubmit={async () => {
-                                        await dispatch(DeleteMainSliderService(row._id));
-                                        setSelectedId(null);
-                                    }}
-                                />
-                            </TableRow>
-                        ))}
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.sno}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        {row?.title}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.url}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.orderno}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.slide_image ? (
+                                            <Avatar
+                                                alt={row?.title}
+                                                src={imageUrl}
+                                                style={{ width: 80, height: 24 }}
+                                                variant="rounded"
+                                                onError={() => handleImageError(id)}
+                                            />
+                                        ) : (
+                                            <FormHelperText error>No Image</FormHelperText>
+                                        )}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.status}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        align="right"
+                                    >
+                                        <button onClick={() => {
+                                            router.push(`/admin/mainslider/${row?._id}`)
+                                        }}>
+                                            <CreateIcon color="primary" />
+                                        </button>
+                                        <button onClick={() => setSelectedId(row._id)}>
+                                            <DeleteIcon color='error' />
+                                        </button>
+                                    </TableCell>
+                                    <DeleteModal
+                                        open={selectedId === row._id}
+                                        setOpen={() => setSelectedId(null)}
+                                        title={"Delete Main Slider"}
+                                        description={`Are you sure you want to delete ${row?.title} ?`}
+                                        onSubmit={async () => {
+                                            await dispatch(DeleteMainSliderService(row._id));
+                                            setSelectedId(null);
+                                        }}
+                                    />
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
