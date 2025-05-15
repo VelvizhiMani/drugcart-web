@@ -43,7 +43,6 @@ function AdminMainSlider() {
         setFallbackMap((prev) => ({ ...prev, [id]: true }));
     };
 
-
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
     };

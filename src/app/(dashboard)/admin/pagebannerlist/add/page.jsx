@@ -19,11 +19,17 @@ import * as yup from "yup";
 import { PostPageBannerService } from '@/services/pageBannerService';
 import { GetMainSliderListService } from '@/services/mainSliderService';
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function PageBannerAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const router = useRouter();
     const dispatch = useDispatch()
+
+    function getFileNameFromUrl(url) {
+        return url.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetMainSliderListService())
@@ -50,15 +56,49 @@ function PageBannerAdd() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostPageBannerService(data, resetForm))
+            try {
+                const formData = new FormData();
+                formData.append("file", data.image);
+                formData.append("folder", "admincolor/homepage/pagebanner");
+
+                const res = await axios.post("/api/upload", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                if (res.status === 200) {
+                    const uploadedImageUrl = res.data.url || res.data.fileName;
+                    console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                    const updatedData = {
+                        ...data,
+                        image: getFileNameFromUrl(uploadedImageUrl),
+                    };
+
+                    await dispatch(PostPageBannerService(updatedData, resetForm));
+                    setImagePreview(null)
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert("Image Upload error");
+            }
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("image", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            if (imagePreview) URL.revokeObjectURL(imagePreview);
+        };
+    }, [imagePreview]);
 
     return (
         <Box>

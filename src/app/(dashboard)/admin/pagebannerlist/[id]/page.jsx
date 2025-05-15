@@ -19,13 +19,19 @@ import * as yup from "yup";
 import { GetPageBannerIdService, PutPageBannerService } from '@/services/pageBannerService';
 import { GetMainSliderListService } from '@/services/mainSliderService';
 import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 function PageBannerAdd() {
+    const [imagePreview, setImagePreview] = useState('')
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const { pageBanner } = useSelector((state) => state.pageBannerData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+
+    const getFileNameFromUrl = (url) => {
+        return url.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetMainSliderListService())
@@ -44,7 +50,7 @@ function PageBannerAdd() {
         enableReinitialize: true,
         initialValues: {
             pagename: pageBanner?.pagename || "",
-            image: `https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${pageBanner?.image}` || "",
+            image: pageBanner?.image || "",
             alt: pageBanner?.alt || "",
             status: pageBanner?.status || "",
         },
@@ -54,14 +60,50 @@ function PageBannerAdd() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutPageBannerService(pageBanner?._id, data))
+            if (!imagePreview) {
+                await dispatch(PutPageBannerService(pageBanner?._id, data))
+            } else {
+                try {
+                    const formData = new FormData();
+                    formData.append("file", data.image); // file object
+                    formData.append("folder", "admincolor/homepage/pagebanner");
+
+                    const res = await axios.post("/api/upload", formData, {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    });
+
+                    if (res.status === 200) {
+                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                        console.log("Image uploaded successfully:", uploadedImageUrl);
+
+                        const updatedData = {
+                            ...data,
+                            image: getFileNameFromUrl(uploadedImageUrl),
+                        };
+
+                        const result = await dispatch(PutPageBannerService(pageBanner?._id, updatedData))
+                        if (result) {
+                            console.log('Page Banner added successfully');
+                            setImagePreview("")
+                        }
+                    } else {
+                        alert("Image upload failed");
+                    }
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            }
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("image", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -112,7 +154,8 @@ function PageBannerAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Banner Image"}
-                            image={formik.values.image}
+                            image={`https://assets3.drugcarts.com/admincolor/homepage/pagebanner/${pageBanner?.image}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/pagebanner/${pageBanner?.image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.image
