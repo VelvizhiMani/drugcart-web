@@ -19,6 +19,7 @@ import { PostLabPackageService } from '@/services/labPackageService';
 import { useDispatch } from "react-redux";
 
 function AdminLabPackageAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
     const formik = useFormik({
@@ -31,11 +32,12 @@ function AdminLabPackageAdd() {
         validationSchema: yup.object({
             packageName: yup.string().required("Name is required"),
             url: yup.string().required("Url is required"),
-            image: yup.string().required("Image is required"),
+            image: yup.mixed().required("Category Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             console.log(data);
             await dispatch(PostLabPackageService(data, resetForm))
+            setImagePreview(null)
         },
     });
 
@@ -47,8 +49,20 @@ function AdminLabPackageAdd() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("image", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
+
 
 
     useEffect(() => {
@@ -110,7 +124,7 @@ function AdminLabPackageAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.image}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.image
