@@ -39,10 +39,6 @@ export async function POST(request) {
       metakeyboard,
     } = await request.json();
 
-    if (!cat_img || !cat_img.base64) {
-      return NextResponse.json({ error: "Image is missing or invalid" }, { status: 400 });
-    }
-
     // Extract base64 buffer from base64 string
     const base64Data = cat_img.base64.replace(/^data:image\/\w+;base64,/, "");
     const buffer = Buffer.from(base64Data, "base64");

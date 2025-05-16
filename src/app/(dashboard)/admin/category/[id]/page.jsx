@@ -34,11 +34,6 @@ function EditCategory() {
         return joinSpace
     }
 
-    function getFileNameFromUrl(url) {
-        return url?.split("/").pop();
-    }
-
-
     useEffect(() => {
         dispatch(GetCategoryIdService(params?.id))
     }, [params?.id])
@@ -68,51 +63,32 @@ function EditCategory() {
             cat_type: yup.string().required("Category type is required"),
             category_name: yup.string().required("Category Name is required"),
             url: yup.string().required("URL is required"),
-            // cat_img: yup.string().required("Category Image is required"),
+            cat_img: yup.mixed().required("Category Image is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutCategoryService(category?._id, data))
-            } else {
-                try {
-                // 1. Upload the image first
-                const formData = new FormData();
-                formData.append("file", data.cat_img); // file object
-                formData.append("folder", "category/thumb");
+            const finalData = { ...data };
+            if (data.cat_img instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
 
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+                const base64 = await toBase64(data.cat_img);
 
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    // 2. After upload, now dispatch PostCategoryService
-                    const updatedData = {
-                        ...data,
-                        cat_img: getFileNameFromUrl(uploadedImageUrl), // update with uploaded URL
-                        url: URLText(data.category_name), // in case user didn't edit url manually
-                    };
-
-                    const result = await dispatch(PutCategoryService(category?._id, updatedData))
-                    if (result) {
-                        console.log('Category added successfully');
-                        setImagePreview("")
-                        // router.push("/admin/category");
-                    }
-                } else {
-                    alert("Image upload failed");
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                // alert("Image Upload error");
+                finalData.cat_img = {
+                    name: data.cat_img.name,
+                    type: data.cat_img.type,
+                    data: base64,
+                };
             }
-            }
-            
-        },
+            await dispatch(PutCategoryService(category?._id, finalData));
+        }
     });
 
     useEffect(() => {
