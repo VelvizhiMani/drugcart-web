@@ -20,6 +20,7 @@ import { PutLabService, GetLabIdService } from '@/services/labService';
 import { useSelector, useDispatch } from "react-redux";
 
 function EditAdminLab() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { lab } = useSelector((state) => state.labData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -49,9 +50,32 @@ function EditAdminLab() {
             image: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutLabService(lab?._id, data))
-        },
+            const finalData = { ...data };
+
+            // If the image is a File (newly uploaded)
+            if (data.image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1]; // remove data:image/... prefix
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.image);
+
+                finalData.image = {
+                    name: data.image.name,
+                    type: data.image.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutLabService(lab?._id, finalData));
+        }
     });
 
     const URLText = (text) => {
@@ -62,9 +86,11 @@ function EditAdminLab() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("image", file);
+            setImagePreview(URL.createObjectURL(file));
+        }
     };
-
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.labname)
@@ -125,7 +151,8 @@ function EditAdminLab() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.image}
+                            image={`https://assets1.drugcarts.com/admincolor/lab/lablogo/${lab?.image}`}
+                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${lab?.image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.image

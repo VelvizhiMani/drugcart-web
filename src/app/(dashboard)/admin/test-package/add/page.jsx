@@ -24,6 +24,7 @@ import { GetLabsService } from "@/services/labService";
 import SelectInput from "@/components/admin/input/SelectInput";
 
 function AdminLabTestAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { labPackageList } = useSelector((state) => state.labPackageData)
     const { labList } = useSelector((state) => state.labData)
     const router = useRouter();
@@ -64,7 +65,7 @@ function AdminLabTestAdd() {
         validationSchema: yup.object({
             name: yup.string().required("Lab Name is required"),
             url: yup.string().required("Url is required"),
-            image: yup.string().required("Image is required"),
+            image: yup.mixed().required("Image is required"),
             packageName: yup.string().required("Package Name is required"),
             testname: yup.string().required("Test Name is required"),
             status: yup.string().required("Status is required"),
@@ -72,6 +73,7 @@ function AdminLabTestAdd() {
         onSubmit: async (data, { resetForm }) => {
             console.log(data);
             await dispatch(PostTestPackageService(data, resetForm))
+            setImagePreview(null)
         },
     });
 
@@ -83,7 +85,18 @@ function AdminLabTestAdd() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("image", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleLogo = (event) => {
@@ -202,7 +215,7 @@ function AdminLabTestAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Test Image"}
-                            image={formik.values.image}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.image
@@ -221,6 +234,7 @@ function AdminLabTestAdd() {
                                     ? formik.errors.logo
                                     : null
                             }
+                            disabled={true}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
