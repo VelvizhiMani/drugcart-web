@@ -37,13 +37,21 @@ function CategoryAdd() {
     return joinSpace;
   };
 
-  const handleCategoryImage = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      formik.setFieldValue("cat_img", file); // Set actual file
-      setImagePreview(URL.createObjectURL(file)); // For preview
-    }
-  };
+const handleCategoryImage = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      formik.setFieldValue("cat_img", {
+        name: file.name,
+        type: file.type,
+        base64: reader.result, // base64 encoded string
+      });
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
   useEffect(() => {
     return () => {
@@ -69,42 +77,8 @@ function CategoryAdd() {
       cat_img: yup.mixed().required("Category Image is required"),
     }),
     onSubmit: async (data, { resetForm }) => {
-      try {
-        // 1. Upload the image first
-        const formData = new FormData();
-        formData.append("file", data.cat_img); // file object
-        formData.append("folder", "category/thumb");
-
-        const res = await axios.post("/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (res.status === 200) {
-          const uploadedImageUrl = res.data.url || res.data.fileName;
-          console.log("Image uploaded successfully:", uploadedImageUrl);
-
-          // 2. After upload, now dispatch PostCategoryService
-          const updatedData = {
-            ...data,
-            cat_img: getFileNameFromUrl(uploadedImageUrl), // update with uploaded URL
-            url: URLText(data.category_name), // in case user didn't edit url manually
-          };
-
-          const result = await dispatch(PostCategoryService(updatedData, resetForm));
-          if (result) {
-            console.log('Category added successfully');
-            setImagePreview("")
-            // router.push("/admin/category");
-          }
-        } else {
-          alert("Image upload failed");
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        alert("Image Upload error");
-      }
+      await dispatch(PostCategoryService(data, resetForm));
+      setImagePreview(null)
     },
   });
 

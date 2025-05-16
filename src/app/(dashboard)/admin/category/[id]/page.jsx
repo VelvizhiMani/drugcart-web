@@ -192,7 +192,7 @@ function EditCategory() {
                         <ImageInput
                             title={"Category Image"}
                             image={`https://assets1.drugcarts.com/category/thumb/${category?.cat_img}`}
-                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/category/thumb/${category?.cat_img}`}
+                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${category?.cat_img}`}
                             onChange={handleCategoryImage}
                             error={
                                 formik.touched.cat_img
