@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 function EditWrittenBy() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { writtenBy } = useSelector((state) => state.writtenbyData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -51,42 +51,31 @@ function EditWrittenBy() {
             // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutWrittenByService(writtenBy?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.picture);
-                    formData.append("folder", "admincolor/writtenby");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.picture);
 
-                        const updatedData = {
-                            ...data,
-                            picture: getFileNameFromUrl(uploadedImageUrl),
-                        };
-
-                        const result = await dispatch(PutWrittenByService(writtenBy?._id, updatedData))
-                        if (result) {
-                            console.log('Form added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
             }
-        },
+
+            await dispatch(PutWrittenByService(mainSlider?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {

@@ -17,16 +17,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostWrittenByService } from '@/services/writtenByService';
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 function WrittenByAdd() {
     const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
-
-    function getFileNameFromUrl(url) {
-        return url.split("/").pop();
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -39,58 +34,31 @@ function WrittenByAdd() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             qualification: yup.string().required("Qualification is required"),
-            // picture: yup.string().required("Picture is required"),
+            // picture: yup.mixed().required("Picture is required"),
             experience: yup.string().required("Experience is required"),
             // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            if (!imagePreview) {
-                await dispatch(PostWrittenByService(data, resetForm))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.picture);
-                    formData.append("folder", "admincolor/writtenby");
-
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    });
-
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                        const updatedData = {
-                            ...data,
-                            picture: getFileNameFromUrl(uploadedImageUrl),
-                        };
-
-                        await dispatch(PostWrittenByService(updatedData, resetForm));
-                        setImagePreview(null)
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                    alert("Image Upload error");
-                }
-            }
+            await dispatch(PostWrittenByService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("picture", file);
-            setImagePreview(URL.createObjectURL(file));
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("picture", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     return (
         <Box>
