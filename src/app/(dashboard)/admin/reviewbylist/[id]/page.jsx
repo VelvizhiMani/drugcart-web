@@ -17,18 +17,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutReviewByService, GetReviewByIdService } from '@/services/reviewByService';
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 
 function EditReviewBy() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { reviewBy } = useSelector((state) => state.referenceData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    function getFileNameFromUrl(url) {
-        return url?.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetReviewByIdService(params?.id))
@@ -51,46 +46,31 @@ function EditReviewBy() {
             // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutReviewByService(reviewBy?._id, data))
-        },
-        onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutReviewByService(reviewBy?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.picture);
-                    formData.append("folder", "admincolor/reviewby");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.picture);
 
-                        const updatedData = {
-                            ...data,
-                            picture: getFileNameFromUrl(uploadedImageUrl),
-                        };
-
-                        const result = await dispatch(PutReviewByService(reviewBy?._id, updatedData))
-                        if (result) {
-                            console.log('Form added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
             }
-        },
+
+            await dispatch(PutReviewByService(reviewBy?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {

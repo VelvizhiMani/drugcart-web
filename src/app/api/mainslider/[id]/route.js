@@ -1,4 +1,3 @@
-import connectionToDatabase from '../../../../lib/mongodb'
 import MainSlider from '../../../../models/MainSlider'
 import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
