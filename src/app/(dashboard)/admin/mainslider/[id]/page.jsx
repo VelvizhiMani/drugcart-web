@@ -20,15 +20,11 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 function EditMainSlider() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { mainSlider } = useSelector((state) => state.mainSliderData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetMainSliderIdService(params?.id))
@@ -57,43 +53,31 @@ function EditMainSlider() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutMainSliderService(mainSlider?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.slide_image); // file object
-                    formData.append("folder", "admincolor/homepage/slider");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.slide_image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.slide_image);
 
-                        const updatedData = {
-                            ...data,
-                            slide_image: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.url),
-                        };
-
-                        const result = await dispatch(PutMainSliderService(mainSlider?._id, updatedData))
-                        if (result) {
-                            console.log('mainSlider added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.slide_image = {
+                    name: data.slide_image.name,
+                    type: data.slide_image.type,
+                    data: base64,
+                };
             }
-        },
+
+            await dispatch(PutMainSliderService(mainSlider?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
