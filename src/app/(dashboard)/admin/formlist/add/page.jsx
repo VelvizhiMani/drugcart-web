@@ -17,11 +17,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostFormService } from "@/services/formService";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-
-function getFileNameFromUrl(url) {
-  return url.split("/").pop();
-}
 
 function FormAdd() {
   const [imagePreview, setImagePreview] = useState(null);
@@ -47,37 +42,11 @@ function FormAdd() {
     validationSchema: yup.object({
       formname: yup.string().required("Form Name is required"),
       formurl: yup.string().required("Form URL is required"),
-      picture: yup.string().required("Picture is required"),
+      picture: yup.mixed().required("Picture is required"),
     }),
     onSubmit: async (data, { resetForm }) => {
-      try {
-        const formData = new FormData();
-        formData.append("file", data.picture);
-        formData.append("folder", "formimg");
-
-        const res = await axios.post("/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (res.status === 200) {
-          const uploadedImageUrl = res.data.url || res.data.fileName;
-          console.log("Image uploaded successfully:", uploadedImageUrl);
-
-          const updatedData = {
-            ...data,
-            picture: getFileNameFromUrl(uploadedImageUrl),
-            formurl: URLText(data.formurl),
-          };
-
-          await dispatch(PostFormService(updatedData, resetForm));
-          setImagePreview(null)
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        alert("Image Upload error");
-      }
+      await dispatch(PostFormService(data, resetForm));
+      setImagePreview(null)
     },
   });
 
@@ -85,19 +54,21 @@ function FormAdd() {
     formik.values.formurl = URLText(formik.values.formname)
   }, [formik.values.formname])
 
-  const handleCategoryImage = (event) => {
+  const handleImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      formik.setFieldValue("picture", file); // Set actual file
-      setImagePreview(URL.createObjectURL(file)); // For preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("picture", {
+          name: file.name,
+          type: file.type,
+          base64: reader.result, // base64 encoded string
+        });
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-    };
-  }, [imagePreview]);
 
   return (
     <Box>
@@ -153,7 +124,7 @@ function FormAdd() {
             <ImageInput
               title={"Image"}
               image={imagePreview}
-              onChange={handleCategoryImage}
+              onChange={handleImage}
               error={
                 formik.touched.picture
                   ? formik.errors.picture

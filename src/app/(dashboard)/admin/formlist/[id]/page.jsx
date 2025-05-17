@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 
 function EditForm() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { form } = useSelector((state) => state.formData)
     const dispatch = useDispatch()
     const router = useRouter();
@@ -57,52 +57,36 @@ function EditForm() {
             picture: yup.string().required("Picture is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutFormService(form?._id, data))
-            } else {
-                try {
-                    // 1. Upload the image first
-                    const formData = new FormData();
-                    formData.append("file", data.picture); // file object
-                    formData.append("folder", "formimg");
-
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            const finalData = { ...data };
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.picture);
 
-                        const updatedData = {
-                            ...data,
-                            picture: getFileNameFromUrl(uploadedImageUrl),
-                            formurl: URLText(data.formname),
-                        };
-
-                        const result = await dispatch(PutFormService(form?._id, updatedData))
-                        if (result) {
-                            console.log('Form added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
             }
-
-        },
+            await dispatch(PutFormService(form?._id, finalData));
+        }
     });
 
     useEffect(() => {
         formik.values.formurl = URLText(formik.values.formname)
     }, [formik.values.formname])
 
-    const handleCategoryImage = (event) => {
+    const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
             formik.setFieldValue("picture", file); // Set actual file
@@ -165,7 +149,7 @@ function EditForm() {
                             title={"Image"}
                             image={`https://assets1.drugcarts.com/formimg/${form?.picture}`}
                             fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/formimg/${form?.picture}`}
-                            onChange={handleCategoryImage}
+                            onChange={handleImage}
                             error={
                                 formik.touched.picture
                                     ? formik.errors.picture
