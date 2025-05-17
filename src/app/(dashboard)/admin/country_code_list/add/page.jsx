@@ -17,16 +17,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostCountryCodeService } from '@/services/countryCodeService';
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 function CountryCodeAdd() {
     const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -37,52 +32,29 @@ function CountryCodeAdd() {
         validationSchema: yup.object({
             country: yup.string().required("Country is required"),
             code: yup.string().required("Code is required"),
-            flag: yup.string().required("Flag is required"),
+            flag: yup.mixed().required("Flag is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", data.flag);
-                formData.append("folder", "admincolor/countryflag");
-
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    const updatedData = {
-                        ...data,
-                        flag: getFileNameFromUrl(uploadedImageUrl),
-                    };
-
-                    await dispatch(PostCountryCodeService(updatedData, resetForm));
-                    setImagePreview(null)
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("Image Upload error");
-            }
+            await dispatch(PostCountryCodeService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("flag", file);
-            setImagePreview(URL.createObjectURL(file));
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("flag", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     return (
         <Box>

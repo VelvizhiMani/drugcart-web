@@ -17,18 +17,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutCountryCodeService, GetCountryCodeIdService } from '@/services/countryCodeService';
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 
 function EditCountryCode() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { countryCode } = useSelector((state) => state.countryCodeData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetCountryCodeIdService(params?.id))
@@ -47,42 +42,30 @@ function EditCountryCode() {
             flag: yup.string().required("Flag is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutCountryCodeService(countryCode?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.flag); // file object
-                    formData.append("folder", "admincolor/countryflag");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.flag instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.flag);
 
-                        const updatedData = {
-                            ...data,
-                            flag: getFileNameFromUrl(uploadedImageUrl),
-                        };
-
-                        const result = await dispatch(PutCountryCodeService(countryCode?._id, updatedData))
-                        if (result) {
-                            console.log('Country added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.flag = {
+                    name: data.flag.name,
+                    type: data.flag.type,
+                    data: base64,
+                };
             }
-        },
+            await dispatch(PutCountryCodeService(countryCode?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
