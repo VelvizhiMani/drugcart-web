@@ -19,17 +19,12 @@ import * as yup from "yup";
 import { PostPromotionService } from '@/services/promotionService';
 import { GetMainSliderListService } from '@/services/mainSliderService';
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 function PromotionAdd() {
     const [imagePreview, setImagePreview] = useState(null);
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const router = useRouter();
     const dispatch = useDispatch()
-
-    function getFileNameFromUrl(url) {
-        return url.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetMainSliderListService())
@@ -54,54 +49,30 @@ function PromotionAdd() {
         validationSchema: yup.object({
             title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
-            image: yup.string().required("Image is required"),
+            image: yup.mixed().required("Image is required"),
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", data.image);
-                formData.append("folder", "admincolor/homepage/slider");
-
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    const updatedData = {
-                        ...data,
-                        image: getFileNameFromUrl(uploadedImageUrl),
-                        url: URLText(data.url),
-                    };
-
-                    await dispatch(PostPromotionService(updatedData, resetForm));
-                    setImagePreview(null)
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("Image Upload error");
-            }
+            await dispatch(PostPromotionService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("image", file); // Set actual file
-            setImagePreview(URL.createObjectURL(file)); // For preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("image", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.title)

@@ -61,43 +61,29 @@ function EditPromotion() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutPromotionService(promotion?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.image); // file object
-                    formData.append("folder", "admincolor/homepage/slider");
-
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            const finalData = { ...data };
+            if (data.image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.image);
 
-                        const updatedData = {
-                            ...data,
-                            image: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.url),
-                        };
-
-                        const result = await dispatch(PutPromotionService(promotion?._id, updatedData))
-                        if (result) {
-                            console.log('promotion added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.image = {
+                    name: data.image.name,
+                    type: data.image.type,
+                    data: base64,
+                };
             }
-        },
+            await dispatch(PutPromotionService(promotion?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
