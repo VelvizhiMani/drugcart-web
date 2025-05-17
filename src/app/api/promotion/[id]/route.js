@@ -1,9 +1,9 @@
-import connectionToDatabase from '../../../../lib/mongodb'
 import Promotion from '../../../../models/Promotion'
 import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
+import connnectionToDatabase from '../../../../lib/mongodb';
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -19,7 +19,7 @@ function imageFileName(name) {
 
 export async function GET(request, { params }) {
     try {
-        await connectionToDatabase();
+        await connnectionToDatabase();
         // const { success, user, message } = await adminAuthorization();
 
         // if (!success) {
