@@ -21,7 +21,6 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { PostSubCategoryService } from '../../../../../services/subCategoryService'
 import { GetCategoryService } from "@/services/categoryService";
-import axios from "axios";
 
 function getFileNameFromUrl(url) {
     return url.split("/").pop();
@@ -46,16 +45,18 @@ function SubCategoryAdd() {
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("cat_img", file); // Set actual file
-            setImagePreview(URL.createObjectURL(file)); // For preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("cat_img", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     const formik = useFormik({
         initialValues: {
@@ -72,38 +73,11 @@ function SubCategoryAdd() {
             cat_name: yup.string().required("Category type is required"),
             subcat_name: yup.string().required("Sub Category Name is required"),
             url: yup.string().required("URL is required"),
-            cat_img: yup.string().required("Sub Category Image is required"),
+            cat_img: yup.mixed().required("Sub Category Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", data.cat_img);
-                formData.append("folder", "category/thumb");
-                formData.append("path", "sub");
-
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    const updatedData = {
-                        ...data,
-                        cat_img: getFileNameFromUrl(uploadedImageUrl),
-                        url: URLText(data.subcat_name),
-                    };
-
-                    await dispatch(PostSubCategoryService(updatedData, resetForm));
-                    setImagePreview(null)
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("Image Upload error");
-            }
+            await dispatch(PostSubCategoryService(data, resetForm));
+            setImagePreview(null)
         },
     });
 

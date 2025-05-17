@@ -24,16 +24,12 @@ import { GetCategoryService } from "@/services/categoryService";
 import axios from "axios";
 
 function EditSubCategory() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { categories } = useSelector((state) => state.categoryData)
     const { subCategory } = useSelector((state) => state.subCategoryData)
     const dispatch = useDispatch()
     const router = useRouter();
     const params = useParams()
-
-    function getFileNameFromUrl(url) {
-        return url?.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetCategoryService())
@@ -73,45 +69,30 @@ function EditSubCategory() {
             cat_img: yup.string().required("Sub Category Image is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutSubCategoryService(subCategory?._id, data))
-            } else {
-                try {
-                    // 1. Upload the image first
-                    const formData = new FormData();
-                    formData.append("file", data.cat_img); // file object
-                    formData.append("folder", "category/thumb");
-                    formData.append("path", "sub");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.cat_img instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
+                const base64 = await toBase64(data.cat_img);
 
-                        const updatedData = {
-                            ...data,
-                            cat_img: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.subcat_name),
-                        };
-
-                        const result = await dispatch(PutSubCategoryService(subCategory?._id, updatedData))
-                        if (result) {
-                            console.log('Category added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.cat_img = {
+                    name: data.cat_img.name,
+                    type: data.cat_img.type,
+                    data: base64,
+                };
             }
-
-        },
+            await dispatch(PutSubCategoryService(subCategory?._id, finalData));
+        }
     });
 
     console.log(params);
