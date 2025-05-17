@@ -19,19 +19,14 @@ import * as yup from "yup";
 import { GetPageBannerIdService, PutPageBannerService } from '@/services/pageBannerService';
 import { GetMainSliderListService } from '@/services/mainSliderService';
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 function PageBannerAdd() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const { pageBanner } = useSelector((state) => state.pageBannerData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetMainSliderListService())
@@ -60,42 +55,31 @@ function PageBannerAdd() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutPageBannerService(pageBanner?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.image); // file object
-                    formData.append("folder", "admincolor/homepage/pagebanner");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.image);
 
-                        const updatedData = {
-                            ...data,
-                            image: getFileNameFromUrl(uploadedImageUrl),
-                        };
-
-                        const result = await dispatch(PutPageBannerService(pageBanner?._id, updatedData))
-                        if (result) {
-                            console.log('Page Banner added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.image = {
+                    name: data.image.name,
+                    type: data.image.type,
+                    data: base64,
+                };
             }
-        },
+
+            await dispatch(PutPageBannerService(pageBanner?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
