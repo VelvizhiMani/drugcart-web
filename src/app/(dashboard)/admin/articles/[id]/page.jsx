@@ -18,18 +18,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutArticleService, GetArticleIdService } from '@/services/articleService';
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 function EditArticles() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { article } = useSelector((state) => state.articlesData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -59,43 +54,31 @@ function EditArticles() {
             blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutArticleService(article?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.blogimg); // file object
-                    formData.append("folder", "admincolor/homepage/slider");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.blogimg instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.blogimg);
 
-                        const updatedData = {
-                            ...data,
-                            blogimg: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.url),
-                        };
-
-                        const result = await dispatch(PutArticleService(article?._id, updatedData))
-                        if (result) {
-                            console.log('article added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.blogimg = {
+                    name: data.blogimg.name,
+                    type: data.blogimg.type,
+                    data: base64,
+                };
             }
-        },
+
+            await dispatch(PutArticleService(article?._id, finalData));
+        }
     });
 
     useEffect(() => {
