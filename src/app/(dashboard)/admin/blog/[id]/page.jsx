@@ -18,18 +18,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutBlogService, GetBlogIdService } from '@/services/blogService';
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 function EditBlog() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { blog } = useSelector((state) => state.blogData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetBlogIdService(params?.id))
@@ -60,42 +55,30 @@ function EditBlog() {
             blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutBlogService(blog?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.blogimg); // file object
-                    formData.append("folder", "blogs");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    });
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                        const updatedData = {
-                            ...data,
-                            blogimg: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.url),
+            if (data.blogimg instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
                         };
+                        reader.onerror = (error) => reject(error);
+                    });
 
-                        const result = await dispatch(PutBlogService(blog?._id, updatedData))
-                        if (result) {
-                            console.log('article added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                const base64 = await toBase64(data.blogimg);
+
+                finalData.blogimg = {
+                    name: data.blogimg.name,
+                    type: data.blogimg.type,
+                    data: base64,
+                };
             }
-        },
+            await dispatch(PutBlogService(blog?._id, finalData));
+        }
     });
 
     useEffect(() => {

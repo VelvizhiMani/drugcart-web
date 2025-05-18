@@ -18,7 +18,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostBlogService } from '@/services/blogService';
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 function BlogAdd() {
     const [imagePreview, setImagePreview] = useState(null);
@@ -50,37 +49,11 @@ function BlogAdd() {
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
             url: yup.string().required("URL is required"),
-            blogimg: yup.string().required("Image is required"),
+            blogimg: yup.mixed().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", data.blogimg);
-                formData.append("folder", "blogs");
-
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    const updatedData = {
-                        ...data,
-                        blogimg: getFileNameFromUrl(uploadedImageUrl),
-                        url: URLText(data.url),
-                    };
-
-                    await dispatch(PostBlogService(updatedData, resetForm));
-                    setImagePreview(null)
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("Image Upload error");
-            }
+            await dispatch(PostBlogService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
@@ -91,16 +64,18 @@ function BlogAdd() {
     const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("blogimg", file); // Set actual file
-            setImagePreview(URL.createObjectURL(file)); // For preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("blogimg", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     return (
         <Box>
