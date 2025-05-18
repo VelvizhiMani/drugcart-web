@@ -18,16 +18,11 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostDiseasesService } from '@/services/diseasesService';
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 function DiseasesAdd() {
     const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
-
-    function getFileNameFromUrl(url) {
-        return url.split("/").pop();
-    }
 
     const URLText = (text) => {
         const splitText = text.split(" ")
@@ -69,53 +64,29 @@ function DiseasesAdd() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.string().required("Picture is required")
+            picture: yup.mixed().required("Picture is required")
         }),
         onSubmit: async (data, { resetForm }) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", data.picture);
-                formData.append("folder", "press");
-
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    const updatedData = {
-                        ...data,
-                        picture: getFileNameFromUrl(uploadedImageUrl),
-                        url: URLText(data.url),
-                    };
-
-                    await dispatch(PostDiseasesService(updatedData, resetForm));
-                    setImagePreview(null)
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("Image Upload error");
-            }
+            await dispatch(PostDiseasesService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("picture", file); // Set actual file
-            setImagePreview(URL.createObjectURL(file)); // For preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("picture", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.name)

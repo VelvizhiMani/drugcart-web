@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { v4 as uuidv4 } from "uuid";
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -12,6 +13,10 @@ const s3 = new S3Client({
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     },
 });
+
+function imageFileName(name) {
+    return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
 export async function POST(request) {
     try {
@@ -57,6 +62,22 @@ export async function POST(request) {
             updated_at
         } = await request.json();
 
+        const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
+        const buffer = Buffer.from(base64Data, "base64");
+
+        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
+        const fileName = `press/${imageFileName(uniqueSuffix)}`
+        const uploadParams = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: fileName,
+            Body: buffer,
+            ContentType: picture.type,
+            ContentDisposition: "inline",
+            ACL: "public-read",
+        };
+
+        await s3.send(new PutObjectCommand(uploadParams));
+
         const isDiseases = await Diseases.findOne({ name });
         if (isDiseases) {
             return NextResponse.json({ error: 'Diseases already exist' }, { status: 401 })
@@ -65,7 +86,7 @@ export async function POST(request) {
         const addDiseases = new Diseases({
             name,
             url,
-            picture,
+            picture: imageFileName(uniqueSuffix),
             alt,
             generics,
             video,

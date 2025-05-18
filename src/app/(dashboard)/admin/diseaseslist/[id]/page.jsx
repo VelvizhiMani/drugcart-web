@@ -18,10 +18,9 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutDiseasesService, GetDiseasesIdService } from '@/services/diseasesService';
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
 
 function EditDiseases() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null);
     const { diseases } = useSelector((state) => state.diseasesData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -36,10 +35,6 @@ function EditDiseases() {
         const splitText = text.split(" ")
         const joinSpace = splitText.join("-").toLowerCase()
         return joinSpace
-    }
-
-    function getFileNameFromUrl(url) {
-        return url?.split("/").pop();
     }
 
     const formik = useFormik({
@@ -80,44 +75,30 @@ function EditDiseases() {
             picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutDiseasesService(diseases?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.picture);
-                    formData.append("folder", "press");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.picture);
 
-                        const updatedData = {
-                            ...data,
-                            picture: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.url),
-                        };
-
-                        const result = await dispatch(PutDiseasesService(diseases?._id, updatedData))
-                        if (result) {
-                            console.log('diseases added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
             }
-
-        },
+            await dispatch(PutDiseasesService(diseases?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
