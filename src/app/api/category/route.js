@@ -67,7 +67,7 @@ export async function POST(request) {
       url,
       category_name,
       cat_type,
-      cat_img: fileName, // Only S3 key stored
+      cat_img: imageFileName(uniqueSuffix), // Only S3 key stored
       imagealt,
       metatitle,
       metadesc,

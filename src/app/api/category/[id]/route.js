@@ -1,4 +1,3 @@
-import connectionToDatabase from '../../../../lib/mongodb'
 import Category from '../../../../models/Category'
 import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
@@ -20,7 +19,7 @@ function imageFileName(name) {
 
 export async function GET(request, { params }) {
     try {
-        await connectionToDatabase();
+        await connnectionToDatabase();
 
         const { id } = await params;
         const categoryId = await Category.findById(id);
@@ -38,6 +37,7 @@ export async function PUT(request, { params }) {
     try {
         await connnectionToDatabase();
         const { success, message } = await adminAuthorization();
+
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
@@ -50,15 +50,14 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ error: 'existingCategory not found' }, { status: 404 });
         }
 
-        let newImageKey = existingCategory.cat_img;
+        let uniqueSuffix = null;
 
         if (body.cat_img && typeof body.cat_img === 'object' && body.cat_img.name) {
             const { name, type, data } = body.cat_img;
-
-            // Upload new image
             const buffer = Buffer.from(data, 'base64');
-            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + name
-            newImageKey = `category/thumb/${imageFileName(uniqueSuffix)}`;
+
+            uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + name;
+            const newImageKey = `category/thumb/${imageFileName(uniqueSuffix)}`;
 
             const uploadParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,
@@ -70,14 +69,20 @@ export async function PUT(request, { params }) {
             };
 
             await s3.send(new PutObjectCommand(uploadParams));
+
+            // Optionally delete the old image from S3 here
         }
 
         const updatedData = {
             ...body,
-            cat_img: newImageKey,
+            cat_img: uniqueSuffix
+                ? imageFileName(uniqueSuffix)
+                : existingCategory.cat_img,
         };
 
-        const updatedCategory = await Category.findByIdAndUpdate(id, updatedData, { new: true });
+        const updatedCategory = await Category.findByIdAndUpdate(id, updatedData, {
+            new: true,
+        });
 
         return NextResponse.json(updatedCategory, { status: 200 });
     } catch (error) {
