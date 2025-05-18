@@ -18,18 +18,13 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutInfoGraphicsService, GetInfoGraphicsIdService } from '@/services/infoGraphicsService';
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 
 function EditInfoGraphics() {
-    const [imagePreview, setImagePreview] = useState('')
+    const [imagePreview, setImagePreview] = useState(null)
     const { infoGraphics } = useSelector((state) => state.infoGraphicssData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
-
-    const getFileNameFromUrl = (url) => {
-        return url.split("/").pop();
-    }
 
     useEffect(() => {
         dispatch(GetInfoGraphicsIdService(params?.id))
@@ -60,45 +55,30 @@ function EditInfoGraphics() {
             picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
-            if (!imagePreview) {
-                await dispatch(PutInfoGraphicsService(infoGraphics?._id, data))
-            } else {
-                try {
-                    const formData = new FormData();
-                    formData.append("file", data.picture); // file object
-                    formData.append("folder", "admincolor/homepage/infogra");
+            const finalData = { ...data };
 
-                    const res = await axios.post("/api/upload", formData, {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
                     });
 
-                    if (res.status === 200) {
-                        const uploadedImageUrl = res.data.url || res.data.fileName;
-                        console.log("Image uploaded successfully:", uploadedImageUrl);
+                const base64 = await toBase64(data.picture);
 
-                        const updatedData = {
-                            ...data,
-                            picture: getFileNameFromUrl(uploadedImageUrl),
-                            url: URLText(data.url),
-                            thuming: getFileNameFromUrl(uploadedImageUrl),
-                            thumbalt: data.alt
-                        };
-
-                        const result = await dispatch(PutInfoGraphicsService(infoGraphics?._id, updatedData))
-                        if (result) {
-                            console.log('infoGraphics added successfully');
-                            setImagePreview("")
-                        }
-                    } else {
-                        alert("Image upload failed");
-                    }
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
             }
-        },
+            await dispatch(PutInfoGraphicsService(infoGraphics?._id, finalData));
+        }
     });
 
     const handleThumImage = (event) => {
@@ -197,8 +177,8 @@ function EditInfoGraphics() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Images Thumb"}
-                            image={`https://assets3.drugcarts.com/admincolor/homepage/infogra/${infoGraphics?.thuming}`}
-                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/infogra/${infoGraphics?.thuming}`}
+                            image={""}
+                            fallbackImage={""}
                             onChange={handleThumImage}
                             error={
                                 formik.touched.thuming

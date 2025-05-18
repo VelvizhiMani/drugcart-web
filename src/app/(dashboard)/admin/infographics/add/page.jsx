@@ -18,7 +18,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostInfoGraphicsService } from '@/services/infoGraphicsService';
 import { useDispatch } from "react-redux";
-import axios from "axios";
 
 function InfoGraphicsAdd() {
     const [imagePreview, setImagePreview] = useState(null);
@@ -50,39 +49,11 @@ function InfoGraphicsAdd() {
         validationSchema: yup.object({
             title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.string().required("Picture is required")
+            picture: yup.mixed().required("Picture is required")
         }),
         onSubmit: async (data, { resetForm }) => {
-            try {
-                const formData = new FormData();
-                formData.append("file", data.picture);
-                formData.append("folder", "admincolor/homepage/infogra");
-
-                const res = await axios.post("/api/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
-
-                if (res.status === 200) {
-                    const uploadedImageUrl = res.data.url || res.data.fileName;
-                    console.log("Image uploaded successfully:", uploadedImageUrl);
-
-                    const updatedData = {
-                        ...data,
-                        picture: getFileNameFromUrl(uploadedImageUrl),
-                        url: URLText(data.url),
-                        thuming: getFileNameFromUrl(uploadedImageUrl),
-                        thumbalt: data.alt
-                    };
-
-                    await dispatch(PostInfoGraphicsService(updatedData, resetForm));
-                    setImagePreview(null)
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("Image Upload error");
-            }
+            await dispatch(PostInfoGraphicsService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
@@ -94,16 +65,18 @@ function InfoGraphicsAdd() {
     const handleImage = (event) => {
         const file = event.target.files[0];
         if (file) {
-            formik.setFieldValue("picture", file); // Set actual file
-            setImagePreview(URL.createObjectURL(file)); // For preview
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("picture", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) URL.revokeObjectURL(imagePreview);
-        };
-    }, [imagePreview]);
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.title)
