@@ -41,7 +41,7 @@ function SpecialityAdd() {
         },
         validationSchema: yup.object({
             specialty_name: yup.string().required("specialty name is required"),
-            image: yup.string().required("image is required"),
+            image: yup.mixed().required("image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             await dispatch(PostSpecialService(data, resetForm))
