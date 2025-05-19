@@ -19,6 +19,7 @@ import { PostSpecialService } from '@/services/specialityService';
 import { useDispatch } from "react-redux";
 
 function SpecialityAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
@@ -43,14 +44,25 @@ function SpecialityAdd() {
             image: yup.string().required("image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
             await dispatch(PostSpecialService(data, resetForm))
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("image", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     useEffect(() => {
@@ -110,7 +122,7 @@ function SpecialityAdd() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.image}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.image

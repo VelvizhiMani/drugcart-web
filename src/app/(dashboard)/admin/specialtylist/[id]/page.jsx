@@ -19,6 +19,7 @@ import { PutSpecialService, GetSpecialIdService } from '@/services/specialitySer
 import { useSelector, useDispatch } from "react-redux";
 
 function SpecialityId() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { special } = useSelector((state) => state.specialityData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -47,17 +48,42 @@ function SpecialityId() {
         },
         validationSchema: yup.object({
             specialty_name: yup.string().required("specialty name is required"),
-            image: yup.string().required("image is required"),
+            image: yup.mixed().required("image is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutSpecialService(special?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.image);
+
+                finalData.image = {
+                    name: data.image.name,
+                    type: data.image.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutSpecialService(special?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("image", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     useEffect(() => {
@@ -117,7 +143,8 @@ function SpecialityId() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.image}
+                            image={`https://assets3.drugcarts.com/colors/specialty/${special?.image}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/colors/specialty/${special?.image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.image
