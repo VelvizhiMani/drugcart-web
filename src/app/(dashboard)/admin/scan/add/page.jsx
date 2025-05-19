@@ -19,6 +19,7 @@ import { PostScanService } from '@/services/scanService';
 import { useDispatch } from "react-redux";
 
 function ScanAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
@@ -35,17 +36,29 @@ function ScanAdd() {
             scantestname: yup.string().required("Scan Name is required"),
             category: yup.string().required("Category is required"),
             areas: yup.string().required("Area is required"),
-            scanImage: yup.string().required("Image is required"),
+            scanImage: yup.mixed().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             console.log(data);
             await dispatch(PostScanService(data, resetForm))
+            setImagePreview(null)
         },
     });
 
-    const handleScanImage = (event) => {
+    const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("scanImage", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("scanImage", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const URLText = (text) => {
@@ -125,8 +138,8 @@ function ScanAdd() {
 
                         <ImageInput
                             title={"Scan Image:"}
-                            image={formik.values.scanImage}
-                            onChange={handleScanImage}
+                            image={imagePreview}
+                            onChange={handleImage}
                             error={
                                 formik.touched.scanImage
                                     ? formik.errors.scanImage
