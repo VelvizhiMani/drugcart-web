@@ -54,7 +54,7 @@ const EditProduct = () => {
     const parts = url.split("category/");
     return parts.length > 1 ? "category/" + parts[1] : "";
   };
-  
+
   useEffect(() => {
     dispatch(GetProductIdService(params?.id));
   }, [params?.id]);
@@ -189,51 +189,36 @@ const EditProduct = () => {
     // },
     onSubmit: async (data) => {
       const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
-      if (!imagePreview) {
-        await dispatch(
-          PutProductService(product?._id, {
-            ...data,
-            manufactuer: URLText(data.manufactuer),
-            packageName: packGetID?.packagename,
-          })
-        );
-      } else {
-        try {
-          const formData = new FormData();
-          formData.append("file", data.product_img); // file object
-          formData.append("folder", "category/product");
+      const finalData = {
+        ...data,
+        url: URLText(data.url),
+        manufactuer: URLText(data.manufactuer),
+        packageName: packGetID.packagename
 
-          const res = await axios.post("/api/upload", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
+      };
+
+      if (data.product_img instanceof File) {
+        const toBase64 = (file) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+              const base64String = reader.result.split(',')[1];
+              resolve(base64String);
+            };
+            reader.onerror = (error) => reject(error);
           });
 
-          if (res.status === 200) {
-            const uploadedImageUrl = res.data.url || res.data.fileName;
-            console.log("Image uploaded successfully:", uploadedImageUrl);
+        const base64 = await toBase64(data.product_img);
 
-            const updatedData = {
-              ...data,
-              product_img: getFileNameFromUrl(uploadedImageUrl),
-              url: URLText(data.url),
-              manufactuer: URLText(data.manufactuer),
-              packageName: packGetID.packagename
-            };
-
-            const result = await dispatch(PutProductService(product?._id, updatedData))
-            if (result) {
-              console.log('infoGraphics added successfully');
-              setImagePreview("")
-            }
-          } else {
-            alert("Image upload failed");
-          }
-        } catch (error) {
-          console.error("Upload error:", error);
-        }
+        finalData.product_img = {
+          name: data.product_img.name,
+          type: data.product_img.type,
+          data: base64,
+        };
       }
-    },
+      await dispatch(PutProductService(product?._id, finalData));
+    }
   });
 
   useEffect(() => {

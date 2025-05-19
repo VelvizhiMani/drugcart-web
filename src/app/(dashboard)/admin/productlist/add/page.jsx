@@ -170,7 +170,7 @@ const ProductAdd = () => {
       subcat_name: yup.string().required("SubCategory Name is required"),
       generices: yup.string().required("Generices Name is required"),
       product_name: yup.string().required("Product Name is required"),
-      product_img: yup.string().required("Product Image is required"),
+      product_img: yup.mixed().required("Product Image is required"),
       url: yup.string().required("URL is required"),
       manufactuer: yup.string().required("Manufactuer is required"),
       packageName: yup.string().required("Package is required"),
@@ -183,36 +183,15 @@ const ProductAdd = () => {
     // },
     onSubmit: async (data, { resetForm }) => {
       const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
-      try {
-        const formData = new FormData();
-        formData.append("file", data.product_img);
-        formData.append("folder", "category/product");
+      const updatedData = {
+        ...data,
+        url: URLText(data.url),
+        manufactuer: URLText(data.manufactuer),
+        packageName: packGetID.packagename
+      };
 
-        const res = await axios.post("/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (res.status === 200) {
-          const uploadedImageUrl = res.data.url || res.data.fileName;
-          console.log("Image uploaded successfully:", uploadedImageUrl);
-
-          const updatedData = {
-            ...data,
-            product_img: getFileNameFromUrl(uploadedImageUrl),
-            url: URLText(data.url),
-            manufactuer: URLText(data.manufactuer),
-            packageName: packGetID.packagename
-          };
-
-          await dispatch(PostProductService(updatedData, resetForm));
-          setImagePreview(null)
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        alert("Image Upload error");
-      }
+      await dispatch(PostProductService(updatedData, resetForm));
+      setImagePreview(null)
     },
   });
 
@@ -257,17 +236,18 @@ const ProductAdd = () => {
   const handleImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      formik.setFieldValue("product_img", file); // Set actual file
-      setImagePreview(URL.createObjectURL(file)); // For preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("product_img", {
+          name: file.name,
+          type: file.type,
+          base64: reader.result, // base64 encoded string
+        });
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
-
-  useEffect(() => {
-    return () => {
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-    };
-  }, [imagePreview]);
-
   return (
     <Box>
       <Box sx={{ display: "flex" }}>

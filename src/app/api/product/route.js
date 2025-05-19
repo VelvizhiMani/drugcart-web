@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import connnectionToDatabase from "@/lib/mongodb";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { v4 as uuidv4 } from "uuid";
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -12,6 +13,10 @@ const s3 = new S3Client({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
+
+function imageFileName(name) {
+  return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
 export async function POST(request) {
   try {
@@ -112,6 +117,22 @@ export async function POST(request) {
       hsn,
     } = await request.json();
 
+    const base64Data = product_img.base64.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(base64Data, "base64");
+
+    const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + product_img.name
+    const fileName = `category/product/${imageFileName(uniqueSuffix)}`
+    const uploadParams = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: fileName,
+      Body: buffer,
+      ContentType: product_img.type,
+      ContentDisposition: "inline",
+      ACL: "public-read",
+    };
+
+    await s3.send(new PutObjectCommand(uploadParams));
+
     const isProduct = await Product.findOne({ product_name });
     if (isProduct) {
       return NextResponse.json(
@@ -153,7 +174,7 @@ export async function POST(request) {
       packageName,
       price,
       packing,
-      product_img,
+      product_img: fileName,
       description,
       disclaimer,
       stock,
