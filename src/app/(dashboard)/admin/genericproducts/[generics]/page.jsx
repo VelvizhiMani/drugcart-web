@@ -38,6 +38,7 @@ const rowText = {
 };
 function GenericProducts() {
   const { productList, product } = useSelector((state) => state.productData)
+  const { loading } = useSelector((state) => state.common)
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("")
   const [showNo, setShowNo] = useState(10)
@@ -139,87 +140,95 @@ function GenericProducts() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {productList && productList?.products?.map((row, i) => (
-              <TableRow
-                key={i}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {i + 1}
-                </TableCell>
-                <TableCell
-                  sx={{ fontFamily: rowText.fontFamily }}
-                  component="th"
-                  scope="row"
-                >
-                  {row?.cat_name}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.subcat_name}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.generices}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.brand}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.product_name}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  12212
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.manufactuer}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.product_img ? (
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={row?.product_img}
-                      style={{ width: 45, height: 45 }}
-                      variant="rounded"
-                    />
-                  ) : (
-                    <FormHelperText error>No Image</FormHelperText>
-                  )}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.stock}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.saleprice}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.percentage}
-                </TableCell>
-                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.price}
-                </TableCell>
-                <TableCell
-                  sx={{ fontFamily: rowText.fontFamily }}
-                  align="right"
-                >
-                  <button onClick={() => {
-                    router.push(`/admin/storagelist/${row?._id}`)
-                  }}>
-                    <CreateIcon color="primary" />
-                  </button>
-                  <button onClick={async () => {
-                    setOpenModal(true)
-                    await dispatch(GetProductIdService(row?._id))
-                  }}>
-                    <DeleteIcon color='error' />
-                  </button>
-                </TableCell>
-                <DeleteModal
-                  open={openModal}
-                  setOpen={setOpenModal}
-                  title={"Delete Product"}
-                  description={`Are you sure you want to delete ${product?.brand}`}
-                  onSubmit={() => dispatch(DeleteStorageService(product?._id))} />
-              </TableRow>
-            ))}
+            {
+              productList?.products?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} align="center" sx={{ color: 'red' }}>
+                    {loading ? "" : "No data found"}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                productList && productList?.products?.map((row, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {i + 1}
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontFamily: rowText.fontFamily }}
+                      component="th"
+                      scope="row"
+                    >
+                      {row?.cat_name}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.subcat_name}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.generices}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.brand}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.product_name}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      12212
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.manufactuer}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.product_img ? (
+                        <Avatar
+                          alt="Remy Sharp"
+                          src={row?.product_img}
+                          style={{ width: 45, height: 45 }}
+                          variant="rounded"
+                        />
+                      ) : (
+                        <FormHelperText error>No Image</FormHelperText>
+                      )}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.stock}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.saleprice}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.percentage}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                      {row?.price}
+                    </TableCell>
+                    <TableCell
+                      sx={{ fontFamily: rowText.fontFamily }}
+                      align="right"
+                    >
+                      <button onClick={() => {
+                        router.push(`/admin/storagelist/${row?._id}`)
+                      }}>
+                        <CreateIcon color="primary" />
+                      </button>
+                      <button onClick={async () => {
+                        setOpenModal(true)
+                        await dispatch(GetProductIdService(row?._id))
+                      }}>
+                        <DeleteIcon color='error' />
+                      </button>
+                    </TableCell>
+                    <DeleteModal
+                      open={openModal}
+                      setOpen={setOpenModal}
+                      title={"Delete Product"}
+                      description={`Are you sure you want to delete ${product?.brand}`}
+                      onSubmit={() => dispatch(DeleteStorageService(product?._id))} />
+                  </TableRow>
+                )))}
           </TableBody>
         </Table>
       </TableContainer>
