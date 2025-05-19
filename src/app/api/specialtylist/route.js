@@ -62,7 +62,7 @@ export async function POST(request) {
             userId: user?._id,
             url,
             specialty_name,
-            image: imageFileName(uniqueSuffix),
+            image: fileName,
             imagealt,
             metatitle,
             metadesc,

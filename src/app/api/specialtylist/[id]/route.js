@@ -41,7 +41,6 @@ export async function PUT(request, { params }) {
     try {
         await connnectionToDatabase();
         const { success, message } = await adminAuthorization();
-
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
@@ -54,14 +53,16 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ error: 'Specialty not found' }, { status: 404 });
         }
 
-        let uniqueSuffix = null;
+        let newImageKey = existingSpecialty.image;
 
+        // If new image is sent (base64 or blob-like), process it
         if (body.image && typeof body.image === 'object' && body.image.name) {
-            const { name, type, data } = body.image;
-            const buffer = Buffer.from(data, 'base64');
+            const { name, type, data } = body.image; // expects image as { name, type, data (base64) }
 
-            uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + name;
-            const newImageKey = `colors/specialty/${imageFileName(uniqueSuffix)}`;
+            // Upload new image
+            const buffer = Buffer.from(data, 'base64');
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + name
+            newImageKey = `colors/specialty/${imageFileName(uniqueSuffix)}`;
 
             const uploadParams = {
                 Bucket: process.env.AWS_BUCKET_NAME,
@@ -73,20 +74,21 @@ export async function PUT(request, { params }) {
             };
 
             await s3.send(new PutObjectCommand(uploadParams));
-
-            // Optionally delete the old image from S3 here
+            // Delete old image from S3
+            //   if (existingLabPackage.image) {
+            //     await s3.send(new DeleteObjectCommand({
+            //       Bucket: process.env.AWS_BUCKET_NAME,
+            //       Key: existingLabPackage.image,
+            //     }));
+            //   }
         }
 
         const updatedData = {
             ...body,
-            image: uniqueSuffix
-                ? imageFileName(uniqueSuffix)
-                : existingSpecialty.image,
+            image: newImageKey,
         };
 
-        const updatedSpecialty = await Specialty.findByIdAndUpdate(id, updatedData, {
-            new: true,
-        });
+        const updatedSpecialty = await Specialty.findByIdAndUpdate(id, updatedData, { new: true });
 
         return NextResponse.json(updatedSpecialty, { status: 200 });
     } catch (error) {

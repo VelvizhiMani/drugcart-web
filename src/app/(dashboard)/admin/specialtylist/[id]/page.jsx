@@ -143,8 +143,8 @@ function SpecialityId() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Image"}
-                            image={`https://assets3.drugcarts.com/colors/specialty/${special?.image}`}
-                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/colors/specialty/${special?.image}`}
+                            image={`https://assets3.drugcarts.com/${special?.image}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${special?.image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.image
