@@ -4,7 +4,6 @@ import { authenticateUser, adminAuthorization } from '../../../../utils/middlewa
 import { NextResponse } from 'next/server'
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
-import connnectionToDatabase from '../../../../lib/mongodb';
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
