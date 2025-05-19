@@ -25,6 +25,7 @@ import { GetOrginService } from "@/services/orginService";
 import { GetReferenceService } from "@/services/referenceService";
 import { GetWrittenByService } from "@/services/writtenByService";
 import { GetReviewByService } from "@/services/reviewByService";
+import { GetStockService } from "@/services/stockService";
 import axios from "axios";
 
 const EditProduct = () => {
@@ -39,10 +40,11 @@ const EditProduct = () => {
   const { packageList } = useSelector((state) => state.packageData);
   const { manufactuerList } = useSelector((state) => state.manufactuerData);
   const { orginList } = useSelector((state) => state.orginData);
+  const { stockList } = useSelector((state) => state.stockData);
   const { referenceList } = useSelector((state) => state.referenceData);
   const { writtenByList } = useSelector((state) => state.writtenbyData);
   const { reviewByList, reviewBy } = useSelector(
-    (state) => state.referenceData
+    (state) => state.reviewbyData
   );
 
   const dispatch = useDispatch();
@@ -74,6 +76,7 @@ const EditProduct = () => {
   const trends = ["Frequently", "Tranding", "Top Brands", "Top Health", "Best Selling", "Popular"];
 
   const uniqueGenericArray = genericList?.generics?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
+  const uniqueStockArray = stockList?.stocks?.filter((v, i, a) => a.findIndex(t => (t.name === v?.name)) === i)
 
   const URLText = (text) => {
     const splitText = text.split(" ");
@@ -94,6 +97,7 @@ const EditProduct = () => {
       imagealt: product?.imagealt || "",
       manufactuer: product?.manufactuer || "",
       manufactueraddress: product?.manufactueraddress || "",
+      form: product?.form || "",
       tabscount: product?.tabscount || "",
       orgin: product?.orgin || "",
       strength: product?.strength || "",
@@ -227,6 +231,16 @@ const EditProduct = () => {
   }, [formik.values.cat_name]);
 
   useEffect(() => {
+    const percentage = formik.values.percentage;
+    const sale = (percentage / 100) * formik.values.price;
+    const saleDetail = formik.values.price - sale;
+    console.log(saleDetail, "SALE");
+
+
+    formik.setFieldValue("saleprice", saleDetail.toFixed(2));
+  }, [formik.values.price, formik.values.percentage]);
+
+  useEffect(() => {
     dispatch(GetCategoryService());
     dispatch(GetSubCategoryService());
     dispatch(GetGeneticService());
@@ -238,6 +252,7 @@ const EditProduct = () => {
     dispatch(GetReferenceService());
     dispatch(GetWrittenByService());
     dispatch(GetReviewByService());
+    dispatch(GetStockService())
   }, []);
 
   const filterSubCategory = subCategories?.subcategoryItems?.filter(
@@ -405,12 +420,12 @@ const EditProduct = () => {
                 typeof option === "string" ? option : option?.formname || ""
               }
               onInputChange={(event, newValue) => {
-                formik.setFieldValue("tabscount", newValue);
+                formik.setFieldValue("form", newValue);
               }}
               helperText={
-                formik.touched.tabscount ? formik.errors.tabscount : null
+                formik.touched.form ? formik.errors.form : null
               }
-              error={formik.touched.tabscount ? formik.errors.tabscount : null}
+              error={formik.touched.form ? formik.errors.form : null}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -531,19 +546,33 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Available Stock"}
+            <SearchField
+              title="Available Stock"
+              data={uniqueStockArray}
               value={formik.values.stock}
-              onChange={formik.handleChange("stock")}
-              data={["Yes", "No"]}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.name || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("stock", newValue)}
+              helperText={
+                formik.touched.stock ? formik.errors.stock : null
+              }
+              error={
+                formik.touched.stock ? formik.errors.stock : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Product reference(ex :Netmeds)"}
-              data={["yes", "no"]}
-              value={formik.values.referwebsite}
-              onChange={formik.handleChange("referwebsite")}
+            <SearchField
+              title="Product reference"
+              data={referenceList?.references}
+              value={formik.values.reference}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.websitename || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("reference", newValue)}
+              helperText={
+                formik.touched.reference ? formik.errors.reference : null
+              }
+              error={
+                formik.touched.reference ? formik.errors.reference : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -620,6 +649,12 @@ const EditProduct = () => {
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
+              title={"Sale Price"}
+              value={formik.values.saleprice}
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <TextInput
               title={"Other Temperature"}
               value={formik.values.temperature}
               onChange={formik.handleChange("temperature")}
@@ -686,33 +721,21 @@ const EditProduct = () => {
             </Typography>
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <SelectInput
-              title={"Reviewd By :"}
+            <SearchField
+              title="Reviewd By"
+              data={reviewByList?.review_by_lists}
               value={formik.values.reviewbyid}
-              onChange={formik.handleChange("reviewbyid")}
-              data={gst}
-            // data={reviewByList?.review_by_lists}
-            // getOptionLabel={(option) =>
-            //   typeof option === "string" ? option : option?.name || ""
-            // }
-            // onInputChange={(event, newValue) => {
-            //   formik.setFieldValue("reviewbyid", newValue);
-            // }}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.name || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("reviewbyid", newValue)}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <SelectInput
-              title={"Written By :"}
+            <SearchField
+              title="Written By"
+              data={writtenByList?.written_by_lists}
               value={formik.values.writebyid}
-              onChange={formik.handleChange("writebyid")}
-              data={gst}
-            // data={writtenByList?.written_by_lists}
-            // getOptionLabel={(option) =>
-            //   typeof option === "string" ? option : option?.name || ""
-            // }
-            // onInputChange={(event, newValue) => {
-            //   formik.setFieldValue("writebyid", newValue);
-            // }}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.name || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("writebyid", newValue)}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
