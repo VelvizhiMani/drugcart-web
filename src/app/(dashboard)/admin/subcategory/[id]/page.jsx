@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetSubCategoryIdService, PostSubCategoryService, PutSubCategoryService } from '../../../../../services/subCategoryService'
 import { GetCategoryService } from "@/services/categoryService";
 import axios from "axios";
+import SelectField from "@/components/admin/AutoComplete/SelectField";
 
 function EditSubCategory() {
     const [imagePreview, setImagePreview] = useState(null);
@@ -37,10 +38,15 @@ function EditSubCategory() {
     }, [params?.id])
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
+
+    const categoryUrl = categories?.categories?.map((item) => {
+        return {
+            key: item?.url,
+            value: item?.category_name
+        }
+    })
 
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
@@ -66,7 +72,7 @@ function EditSubCategory() {
             cat_name: yup.string().required("Category type is required"),
             subcat_name: yup.string().required("Sub Category Name is required"),
             url: yup.string().required("URL is required"),
-            cat_img: yup.string().required("Sub Category Image is required"),
+            // cat_img: yup.string().required("Sub Category Image is required"),
         }),
         onSubmit: async (data) => {
             const finalData = { ...data };
@@ -94,8 +100,6 @@ function EditSubCategory() {
             await dispatch(PutSubCategoryService(subCategory?._id, finalData));
         }
     });
-
-    console.log(params);
 
     return (
         <Box>
@@ -128,12 +132,12 @@ function EditSubCategory() {
             >
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12, md: 4 }}>
-                        <SearchField
+                        <SelectField
                             title="Category Name"
-                            data={categories?.categories}
+                            data={categoryUrl}
                             value={formik.values.cat_name}
-                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.category_name || "")}
-                            onInputChange={(event, newValue) => formik.setFieldValue("cat_name", newValue)}
+                            onChange={(key) => formik.setFieldValue("cat_name", key)}
+                            getOptionLabel={(option) => option?.value}
                             helperText={
                                 formik.touched.cat_name ? formik.errors.cat_name : null
                             }

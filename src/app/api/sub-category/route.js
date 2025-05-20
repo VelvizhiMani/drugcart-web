@@ -19,66 +19,70 @@ function imageFileName(name) {
 }
 
 export async function POST(request) {
-    try {
-        await connnectionToDatabase();
+  try {
+    await connnectionToDatabase();
 
-        const { success, user, message } = await adminAuthorization();
-        console.log(success);
-
-        if (!success) {
-            return NextResponse.json({ error: message }, { status: 400 })
-        }
-
-        const {
-            cat_name,
-            subcat_name,
-            url,
-            cat_img,
-            imagealt,
-            metatitle,
-            metadesc,
-            metakeyboard
-        } = await request.json();
-
-        const base64Data = cat_img.base64.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
-
-        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + cat_img.name
-        const fileName = `category/thumb/sub${imageFileName(uniqueSuffix)}`
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: fileName,
-            Body: buffer,
-            ContentType: cat_img.type,
-            ContentDisposition: "inline",
-            ACL: "public-read",
-        };
-
-        await s3.send(new PutObjectCommand(uploadParams));
-
-        const isSubCategory = await Subcategory.findOne({ subcat_name });
-        if (isSubCategory) {
-            return NextResponse.json({ error: 'sub category already exist' }, { status: 400 })
-        }
-
-        const addSubCategory = new Subcategory({
-            cat_name,
-            subcat_name,
-            url,
-            cat_img: `sub${imageFileName(uniqueSuffix)}`,
-            imagealt,
-            metatitle,
-            metadesc,
-            metakeyboard
-        });
-
-
-        await addSubCategory.save();
-        return NextResponse.json(addSubCategory, { status: 200 })
-    } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    const { success, user, message } = await adminAuthorization();
+    if (!success) {
+      return NextResponse.json({ error: message }, { status: 400 });
     }
+
+    const {
+      cat_name,
+      subcat_name,
+      url,
+      cat_img,
+      imagealt,
+      metatitle,
+      metadesc,
+      metakeyboard,
+    } = await request.json();
+
+    let uploadedImageFileName = "";
+
+    if (cat_img && cat_img.base64 && cat_img.name) {
+      const base64Data = cat_img.base64.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, "base64");
+
+      const uniqueSuffix = Date.now() + "-" + uuidv4() + "-" + cat_img.name;
+      const fileName = `category/thumb/sub${imageFileName(uniqueSuffix)}`;
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: buffer,
+        ContentType: cat_img.type,
+        ContentDisposition: "inline",
+        ACL: "public-read",
+      };
+
+      await s3.send(new PutObjectCommand(uploadParams));
+      uploadedImageFileName = `sub${imageFileName(uniqueSuffix)}`;
+    }
+
+    const isSubCategory = await Subcategory.findOne({ subcat_name });
+    if (isSubCategory) {
+      return NextResponse.json({ error: "Sub category already exists" }, { status: 400 });
+    }
+
+    const addSubCategory = new Subcategory({
+      cat_name,
+      subcat_name,
+      url,
+      cat_img: uploadedImageFileName,
+      imagealt,
+      metatitle,
+      metadesc,
+      metakeyboard,
+    });
+
+    await addSubCategory.save();
+    return NextResponse.json(addSubCategory, { status: 200 });
+  } catch (error) {
+    console.error("Subcategory error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
+
 
 export async function GET(req) {
     try {
