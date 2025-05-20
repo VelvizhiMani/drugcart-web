@@ -82,10 +82,8 @@ function EditAdminLabPackage() {
     });
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     // const handleImage = (event) => {
     //     const file = event.target.files[0];
