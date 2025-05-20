@@ -43,21 +43,26 @@ export async function POST(request) {
             metakeyboard
         } = await request.json();
 
-        const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
+        let uploadedImageFileName = "";
 
-        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
-        const fileName = `admincolor/homepage/infogra/${imageFileName(uniqueSuffix)}`
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: fileName,
-            Body: buffer,
-            ContentType: picture.type,
-            ContentDisposition: "inline",
-            ACL: "public-read",
-        };
+        if (picture && picture.base64 && picture.name) {
+            const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, "base64");
 
-        await s3.send(new PutObjectCommand(uploadParams));
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
+            const fileName = `admincolor/homepage/infogra/${imageFileName(uniqueSuffix)}`
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: buffer,
+                ContentType: picture.type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
+
+            await s3.send(new PutObjectCommand(uploadParams));
+            uploadedImageFileName = imageFileName(uniqueSuffix);
+        }
 
         const isInfoGraphics = await InfoGraphics.findOne({ title });
         if (isInfoGraphics) {
@@ -67,9 +72,9 @@ export async function POST(request) {
         const addInfoGraphics = new InfoGraphics({
             title,
             url,
-            thuming: imageFileName(uniqueSuffix),
+            thuming: uploadedImageFileName,
             thumbalt,
-            picture: imageFileName(uniqueSuffix),
+            picture: uploadedImageFileName,
             alt,
             status,
             date,

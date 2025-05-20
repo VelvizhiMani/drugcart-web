@@ -29,10 +29,8 @@ function InfoGraphicsAdd() {
     }
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -49,7 +47,7 @@ function InfoGraphicsAdd() {
         validationSchema: yup.object({
             title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.mixed().required("Picture is required")
+            // picture: yup.mixed().required("Picture is required")
         }),
         onSubmit: async (data, { resetForm }) => {
             await dispatch(PostInfoGraphicsService(data, resetForm));
