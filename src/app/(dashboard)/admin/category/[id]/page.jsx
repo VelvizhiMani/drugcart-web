@@ -29,10 +29,8 @@ function EditCategory() {
     const params = useParams()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     useEffect(() => {
         dispatch(GetCategoryIdService(params?.id))
@@ -63,7 +61,7 @@ function EditCategory() {
             cat_type: yup.string().required("Category type is required"),
             category_name: yup.string().required("Category Name is required"),
             url: yup.string().required("URL is required"),
-            cat_img: yup.mixed().required("Category Image is required"),
+            // cat_img: yup.mixed().required("Category Image is required"),
         }),
         onSubmit: async (data) => {
             const finalData = { ...data };
@@ -168,7 +166,7 @@ function EditCategory() {
                         <ImageInput
                             title={"Category Image"}
                             image={`https://assets1.drugcarts.com/category/thumb/${category?.cat_img}`}
-                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${category?.cat_img}`}
+                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/category/thumb/${category?.cat_img}`}
                             onChange={handleCategoryImage}
                             error={
                                 formik.touched.cat_img

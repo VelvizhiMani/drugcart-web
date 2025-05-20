@@ -32,31 +32,34 @@ export async function POST(request) {
       url,
       category_name,
       cat_type,
-      cat_img, // cat_img: { name, type, base64 }
+      cat_img, // Optional
       imagealt,
       metatitle,
       metadesc,
       metakeyboard,
     } = await request.json();
 
-    // Extract base64 buffer from base64 string
-    const base64Data = cat_img.base64.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, "base64");
+    let uploadedImageFileName = "";
 
-    const fileExt = cat_img.name.split(".").pop();
-    // const fileName = `category/thumb/${uuidv4()}.${fileExt}`;
-    const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + cat_img.name
-    const fileName = `category/thumb/${imageFileName(uniqueSuffix)}`
-    const uploadParams = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: fileName,
-      Body: buffer,
-      ContentType: cat_img.type,
-      ContentDisposition: "inline",
-      ACL: "public-read",
-    };
+    if (cat_img && cat_img.base64 && cat_img.name) {
+      const base64Data = cat_img.base64.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, "base64");
 
-    await s3.send(new PutObjectCommand(uploadParams));
+      const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + cat_img.name;
+      const fileName = `category/thumb/${imageFileName(uniqueSuffix)}`;
+
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: buffer,
+        ContentType: cat_img.type,
+        ContentDisposition: "inline",
+        ACL: "public-read",
+      };
+
+      await s3.send(new PutObjectCommand(uploadParams));
+      uploadedImageFileName = imageFileName(uniqueSuffix);
+    }
 
     const isCategory = await Category.findOne({ category_name });
     if (isCategory) {
@@ -67,7 +70,7 @@ export async function POST(request) {
       url,
       category_name,
       cat_type,
-      cat_img: imageFileName(uniqueSuffix), // Only S3 key stored
+      cat_img: uploadedImageFileName,
       imagealt,
       metatitle,
       metadesc,
@@ -76,8 +79,8 @@ export async function POST(request) {
 
     await newCategory.save();
 
-    // return NextResponse.json({ message: "Category added", data: newCategory }, { status: 200 });
-    return NextResponse.json(newCategory, { status: 200 })
+    return NextResponse.json(newCategory, { status: 200 });
+
   } catch (err) {
     console.error("Error:", err);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
