@@ -39,7 +39,7 @@ function EditCountryCode() {
         validationSchema: yup.object({
             country: yup.string().required("Country is required"),
             code: yup.string().required("Code is required"),
-            flag: yup.string().required("Flag is required"),
+            // flag: yup.string().required("Flag is required"),
         }),
         onSubmit: async (data) => {
             const finalData = { ...data };

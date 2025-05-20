@@ -32,7 +32,7 @@ function CountryCodeAdd() {
         validationSchema: yup.object({
             country: yup.string().required("Country is required"),
             code: yup.string().required("Code is required"),
-            flag: yup.mixed().required("Flag is required"),
+            // flag: yup.mixed().required("Flag is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             await dispatch(PostCountryCodeService(data, resetForm));
