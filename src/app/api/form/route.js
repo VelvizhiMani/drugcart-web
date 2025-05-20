@@ -38,22 +38,25 @@ export async function POST(request) {
             status
         } = await request.json();
 
-        const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
+        let uploadedImageFileName = "";
 
-        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
-        const fileName = `formimg/${imageFileName(uniqueSuffix)}`
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: fileName,
-            Body: buffer,
-            ContentType: picture.type,
-            ContentDisposition: "inline",
-            ACL: "public-read",
-        };
+        if (picture && picture.base64 && picture.name) {
+            const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, "base64");
 
-        await s3.send(new PutObjectCommand(uploadParams));
-
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
+            const fileName = `formimg/${imageFileName(uniqueSuffix)}`
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: buffer,
+                ContentType: picture.type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
+            await s3.send(new PutObjectCommand(uploadParams));
+            uploadedImageFileName = imageFileName(uniqueSuffix);
+        }
         const isForm = await Form.findOne({ formname });
         if (isForm) {
             return NextResponse.json({ error: 'Form name already exist' }, { status: 401 })
@@ -62,7 +65,7 @@ export async function POST(request) {
         const addForm = new Form({
             formname,
             formurl,
-            picture: imageFileName(uniqueSuffix),
+            picture: uploadedImageFileName,
             alt,
             metatitle,
             metadesc,
