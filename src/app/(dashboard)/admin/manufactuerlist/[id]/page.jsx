@@ -17,20 +17,18 @@ import { PutManufactuerService, GetManufactuerIdService } from "../../../../../s
 import { useDispatch, useSelector } from "react-redux";
 
 function EditManufactuer() {
-    const { manufactuer } = useSelector((state) => state.manufactuerData)
+  const { manufactuer } = useSelector((state) => state.manufactuerData)
   const dispatch = useDispatch()
   const router = useRouter();
   const params = useParams()
 
   const URLText = (text) => {
-    const splitText = text.split(" ")
-    const joinSpace = splitText.join("-").toLowerCase()
-    return joinSpace
-  }
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+  };
 
   useEffect(() => {
     dispatch(GetManufactuerIdService(params?.id))
-}, [params?.id])
+  }, [params?.id])
 
   const formik = useFormik({
     enableReinitialize: true,
