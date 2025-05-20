@@ -69,7 +69,7 @@ function EditDiseases() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.string().required("Picture is required")
+            // picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
             const finalData = { ...data };

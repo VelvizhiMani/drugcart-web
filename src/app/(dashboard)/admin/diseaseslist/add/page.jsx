@@ -62,7 +62,7 @@ function DiseasesAdd() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.mixed().required("Picture is required")
+            // picture: yup.mixed().required("Picture is required")
         }),
         onSubmit: async (data, { resetForm }) => {
             await dispatch(PostDiseasesService(data, resetForm));
