@@ -36,22 +36,26 @@ export async function POST(request) {
             updated_at,
         } = await request.json();
 
-        const base64Data = flag.base64.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
+        let uploadedImageFileName = "";
 
-        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + flag.name
-        const fileName = `admincolor/countryflag/${imageFileName(uniqueSuffix)}`
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: fileName,
-            Body: buffer,
-            ContentType: flag.type,
-            ContentDisposition: "inline",
-            ACL: "public-read",
-        };
+        if (flag && flag.base64 && flag.name) {
+            const base64Data = flag.base64.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, "base64");
 
-        await s3.send(new PutObjectCommand(uploadParams));
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + flag.name
+            const fileName = `admincolor/countryflag/${imageFileName(uniqueSuffix)}`
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: buffer,
+                ContentType: flag.type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
 
+            await s3.send(new PutObjectCommand(uploadParams));
+            uploadedImageFileName = imageFileName(uniqueSuffix);
+        }
         const isCountryCode = await CountryCode.findOne({ country });
         if (isCountryCode) {
             return NextResponse.json({ error: 'Name already exist' }, { status: 401 })
@@ -60,7 +64,7 @@ export async function POST(request) {
         const addCountryCode = new CountryCode({
             country,
             code,
-            flag: imageFileName(uniqueSuffix),
+            flag: uploadedImageFileName,
             status,
             date,
             updated_at,
