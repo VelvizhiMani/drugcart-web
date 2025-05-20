@@ -27,6 +27,7 @@ import { GetWrittenByService } from "@/services/writtenByService";
 import { GetReviewByService } from "@/services/reviewByService";
 import { GetStockService } from "@/services/stockService";
 import axios from "axios";
+import SelectField from "@/components/admin/AutoComplete/SelectField";
 
 const EditProduct = () => {
   const { product } = useSelector((state) => state.productData);
@@ -77,11 +78,10 @@ const EditProduct = () => {
 
   const uniqueGenericArray = genericList?.generics?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
   const uniqueStockArray = stockList?.stocks?.filter((v, i, a) => a.findIndex(t => (t.name === v?.name)) === i)
+  const uniqueStorageArray = storageList?.storages?.filter((v, i, a) => a.findIndex(t => (t.storagename === v?.storagename)) === i)
 
   const URLText = (text) => {
-    const splitText = text.split(" ");
-    const joinSpace = splitText.join("-").toLowerCase();
-    return joinSpace;
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
   };
 
   const formik = useFormik({
@@ -196,9 +196,6 @@ const EditProduct = () => {
       const finalData = {
         ...data,
         url: URLText(data.url),
-        manufactuer: URLText(data.manufactuer),
-        packageName: packGetID.packagename
-
       };
 
       if (data.product_img instanceof File) {
@@ -226,11 +223,6 @@ const EditProduct = () => {
   });
 
   useEffect(() => {
-    formik.values.caturl = URLText(formik.values.cat_name);
-    // formik.values.subcaturl = URLText(formik.values.subcat_name);
-  }, [formik.values.cat_name]);
-
-  useEffect(() => {
     const percentage = formik.values.percentage;
     const sale = (percentage / 100) * formik.values.price;
     const saleDetail = formik.values.price - sale;
@@ -255,9 +247,62 @@ const EditProduct = () => {
     dispatch(GetStockService())
   }, []);
 
-  const filterSubCategory = subCategories?.subcategoryItems?.filter(
-    (item) => item?.cat_name === formik.values.caturl
-  );
+  const categoryUrl = categories?.categories?.map((item) => {
+    return {
+      key: item?.url,
+      value: item?.category_name
+    }
+  })
+
+  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name === formik.values.cat_name)?.map((data) => {
+    return {
+      key: data?.url,
+      value: data?.subcat_name
+    }
+  })
+
+  const manufactuerUrl = manufactuerList?.manufactuers?.map((item) => {
+    return {
+      key: item?.manufactuerurl,
+      value: item?.manufactuername
+    }
+  })
+
+  const genericesUrl = uniqueGenericArray?.map((item) => {
+    return {
+      key: item?.url,
+      value: item?.generices
+    }
+  })
+
+  const packageUrl = packageList?.packages?.map((item) => {
+    return {
+      key: item?.packid,
+      value: item?.packagename
+    }
+  })
+
+  const writtenByUrl = writtenByList?.written_by_lists?.map((item) => {
+    return {
+      key: item?.id,
+      value: item?.name
+    }
+  })
+
+  const reviewByUrl = reviewByList?.review_by_lists?.map((item) => {
+    return {
+      key: item?.id,
+      value: item?.name
+    }
+  })
+
+  const storageUrl = uniqueStorageArray?.map((item) => {
+    return {
+      key: item?.storageid,
+      value: item?.storagename
+    }
+  })
+
   // const filterOthervarient = productList?.productItems?.filter(
   //   (item) => item?.subcat_name === formik.values.subcaturl
   // );
@@ -292,36 +337,32 @@ const EditProduct = () => {
       >
         <Grid2 container spacing={2}>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Category Name"
-              data={categories?.categories}
+              data={categoryUrl}
               value={formik.values.cat_name}
-              getOptionLabel={(option) =>
-                typeof option === "string"
-                  ? option
-                  : option?.category_name || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("cat_name", newValue);
+              onChange={(key) => {
+                formik.setFieldValue("cat_name", key)
                 formik.setFieldValue("subname", "");
               }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.cat_name ? formik.errors.cat_name : null
               }
-              error={formik.touched.cat_name ? formik.errors.cat_name : null}
+              error={
+                formik.touched.cat_name ? formik.errors.cat_name : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Sub Category Name"
               data={filterSubCategory}
               value={formik.values.subcat_name}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.subcat_name || ""
-              }
-              onInputChange={(event, newValue) =>
-                formik.setFieldValue("subcat_name", newValue)
-              }
+              onChange={(key) => {
+                formik.setFieldValue("subcat_name", key)
+              }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.subcat_name ? formik.errors.subcat_name : null
               }
@@ -331,20 +372,20 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Generic Name"
-              data={uniqueGenericArray}
+              data={genericesUrl}
               value={formik.values.generices}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.generices || ""
-              }
-              onInputChange={(event, newValue) =>
-                formik.setFieldValue("generices", newValue)
-              }
+              onChange={(key) => {
+                formik.setFieldValue("generices", key)
+              }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.generices ? formik.errors.generices : null
               }
-              error={formik.touched.generices ? formik.errors.generices : null}
+              error={
+                formik.touched.generices ? formik.errors.generices : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
@@ -444,18 +485,20 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Storage"
-              data={storageList?.storages}
+              data={storageUrl}
               value={formik.values.storage}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.storagename || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("storage", newValue);
+              onChange={(key) => {
+                formik.setFieldValue("storage", key)
               }}
-              helperText={formik.touched.storage ? formik.errors.storage : null}
-              error={formik.touched.storage ? formik.errors.storage : null}
+              getOptionLabel={(option) => option?.value}
+              helperText={
+                formik.touched.storage ? formik.errors.storage : null
+              }
+              error={
+                formik.touched.storage ? formik.errors.storage : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -466,16 +509,14 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Pack"
-              data={packageList?.packages}
+              data={packageUrl}
               value={formik.values.packageName}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.packagename || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("packageName", newValue);
+              onChange={(key) => {
+                formik.setFieldValue("packageName", key)
               }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.packageName ? formik.errors.packageName : null
               }
@@ -492,7 +533,7 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
-            <SearchField
+            {/* <SearchField
               title="Manufactuer Address"
               data={manufactuerList?.manufactuers}
               value={formik.values.manufactuer}
@@ -510,31 +551,22 @@ const EditProduct = () => {
               error={
                 formik.touched.manufactuer ? formik.errors.manufactuer : null
               }
+            /> */}
+            <SelectField
+              title="Manufactuer Address"
+              data={manufactuerUrl}
+              value={formik.values.manufactuer}
+              onChange={(key) => formik.setFieldValue("manufactuer", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
-            <SearchField
+            <SelectField
               title="Marketer Address"
-              data={manufactuerList?.manufactuers}
+              data={manufactuerUrl}
               value={formik.values.manufactueraddress}
-              getOptionLabel={(option) =>
-                typeof option === "string"
-                  ? option
-                  : option?.manufactueraddress || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("manufactueraddress", newValue);
-              }}
-              helperText={
-                formik.touched.manufactueraddress
-                  ? formik.errors.manufactueraddress
-                  : null
-              }
-              error={
-                formik.touched.manufactueraddress
-                  ? formik.errors.manufactueraddress
-                  : null
-              }
+              onChange={(key) => formik.setFieldValue("manufactueraddress", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -618,11 +650,17 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
+            {/* <SelectInput
               title={"GST(%)"}
               value={formik.values.gst}
               onChange={formik.handleChange("gst")}
               data={gst}
+            /> */}
+            <TextInput
+              title={"GST(%)"}
+              type="number"
+              value={formik.values.gst}
+              onChange={formik.handleChange("gst")}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -721,21 +759,29 @@ const EditProduct = () => {
             </Typography>
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <SearchField
-              title="Reviewd By"
-              data={reviewByList?.review_by_lists}
+            <SelectField
+              title="Review By"
+              data={reviewByUrl}
               value={formik.values.reviewbyid}
-              getOptionLabel={(option) => (typeof option === "string" ? option : option?.name || "")}
-              onInputChange={(event, newValue) => formik.setFieldValue("reviewbyid", newValue)}
+              onChange={(key) => formik.setFieldValue("reviewbyid", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <SearchField
+            <SelectField
               title="Written By"
-              data={writtenByList?.written_by_lists}
+              data={writtenByUrl}
               value={formik.values.writebyid}
-              getOptionLabel={(option) => (typeof option === "string" ? option : option?.name || "")}
-              onInputChange={(event, newValue) => formik.setFieldValue("writebyid", newValue)}
+              onChange={(key) => formik.setFieldValue("writebyid", key)}
+              getOptionLabel={(option) => option?.value}
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 12 }}>
+            {/* <EditorToolbar /> */}
+            <TextEditor
+              title={"Medical Description of Medicine :"}
+              value={formik.values.description}
+              onChange={formik.handleChange("description")}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>

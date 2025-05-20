@@ -47,7 +47,7 @@ export async function POST(request) {
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 10;
+    const limit = parseInt(searchParams.get("limit"));
     const search = searchParams.get("search") || "";
 
     const filters = search ? { packagename: { $regex: search, $options: "i" } } : {};
