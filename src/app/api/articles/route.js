@@ -38,22 +38,26 @@ export async function POST(request) {
             metakeyboard
         } = await request.json();
 
-        const base64Data = blogimg.base64.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
+        let uploadedImageFileName = "";
 
-        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + blogimg.name
-        const fileName = `admincolor/homepage/slider/${imageFileName(uniqueSuffix)}`
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: fileName,
-            Body: buffer,
-            ContentType: blogimg.type,
-            ContentDisposition: "inline",
-            ACL: "public-read",
-        };
+        if (blogimg && blogimg.base64 && blogimg.name) {
+            const base64Data = blogimg.base64.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, "base64");
 
-        await s3.send(new PutObjectCommand(uploadParams));
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + blogimg.name
+            const fileName = `admincolor/homepage/slider/${imageFileName(uniqueSuffix)}`
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: buffer,
+                ContentType: blogimg.type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
 
+            await s3.send(new PutObjectCommand(uploadParams));
+            uploadedImageFileName = imageFileName(uniqueSuffix);
+        }
         const isArticles = await Articles.findOne({ blogname });
         if (isArticles) {
             return NextResponse.json({ error: 'Blog Name already exist' }, { status: 401 })
@@ -61,7 +65,7 @@ export async function POST(request) {
 
         const addArticles = new Articles({
             blogname,
-            blogimg: imageFileName(uniqueSuffix),
+            blogimg: uploadedImageFileName,
             url,
             description,
             imagealt,

@@ -25,10 +25,8 @@ function ArticlesAdd() {
     const dispatch = useDispatch()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -44,7 +42,7 @@ function ArticlesAdd() {
         validationSchema: yup.object({
             blogname: yup.string().required("Article Name is required"),
             url: yup.string().required("URL is required"),
-            blogimg: yup.mixed().required("Image is required"),
+            // blogimg: yup.mixed().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
             await dispatch(PostArticleService(data, resetForm));

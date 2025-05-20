@@ -27,10 +27,8 @@ function EditArticles() {
     const params = useParams()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     useEffect(() => {
         dispatch(GetArticleIdService(params?.id))
@@ -51,7 +49,7 @@ function EditArticles() {
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
             url: yup.string().required("URL is required"),
-            blogimg: yup.string().required("Image is required"),
+            // blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
             const finalData = { ...data };
