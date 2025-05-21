@@ -167,7 +167,7 @@ function StorageList() {
                                     title={"Delete Form"}
                                     description={`Are you sure you want to delete ${row?.storagename}`}
                                     onSubmit={async () => {
-                                        await dispatch(DeleteStorageService(row._id));
+                                        await dispatch(DeleteStorageService(row._id, showNo));
                                         setSelectedId(null);
                                     }} />
                             </TableRow>
