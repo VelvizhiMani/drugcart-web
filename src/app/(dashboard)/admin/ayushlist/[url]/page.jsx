@@ -69,7 +69,7 @@ function AyushList() {
         dispatch(GetProductCategoryService(page, showNo, params?.url, search))
     }
 
-    console.log("productCategory", productCategory);
+    console.log("productCategory", params.id);
 
     return (
         <Box>
@@ -87,7 +87,7 @@ function AyushList() {
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/productlist/add`)}
+                    onClick={() => router.push(`/admin/ayushlist/add`)}
                 >
                     Add Product
                 </Button>
@@ -153,7 +153,7 @@ function AyushList() {
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={() => {
-                                        router.push(`/admin/productlist/${row?._id}`)
+                                        router.push(`/admin/ayushlist/edit/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
