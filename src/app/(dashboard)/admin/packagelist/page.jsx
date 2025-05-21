@@ -167,7 +167,7 @@ function PackageList() {
                                     title={"Delete Form"}
                                     description={`Are you sure you want to delete ${row?.packagename}`}
                                     onSubmit={async () => {
-                                        await dispatch(DeletePackageService(row._id));
+                                        await dispatch(DeletePackageService(row._id, showNo));
                                         setSelectedId(null);
                                     }} />
                             </TableRow>
