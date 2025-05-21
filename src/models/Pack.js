@@ -14,6 +14,10 @@ const packSchema = new Schema(
             type: String,
             default: "",
         },
+        timestamp: {
+            type: Date,
+            default: Date.now
+        },
         status: {
             type: String,
             default: "Active",
