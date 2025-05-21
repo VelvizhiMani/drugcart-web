@@ -69,7 +69,7 @@ function HealthStoreDeviceUrl() {
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/productlist/add`)}
+                    onClick={() => router.push(`/admin/storedevicelist/add`)}
                 >
                     Add Product
                 </Button>
@@ -135,7 +135,7 @@ function HealthStoreDeviceUrl() {
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={() => {
-                                        router.push(`/admin/productlist/${row?._id}`)
+                                        router.push(`/admin/storedevicelist/edit/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
