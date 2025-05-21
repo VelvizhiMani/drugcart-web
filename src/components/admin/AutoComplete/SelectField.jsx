@@ -23,10 +23,11 @@ function SelectField({ title, size = "small", data, getOptionLabel, value, helpe
                 size={size}
                 noOptionsText="No Data Found"
                 options={data || []}
+                getOptionKey={(option) => option.key}
                 getOptionLabel={(option) => option?.value || ""}
-                value={data?.find((d) => d.key === value) || null} // Match object by key
+                value={data?.find((d) => d.key === value) || null}
                 onChange={(e, newValue) => {
-                    onChange?.(newValue?.key || ""); // Send only the key to parent
+                    onChange?.(newValue?.key || "");
                 }}
                 onInputChange={onInputChange}
                 renderInput={(params) => (
