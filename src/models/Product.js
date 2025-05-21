@@ -352,6 +352,31 @@ const productSchema = new Schema(
     { timestamps: true }
 )
 
+productSchema.pre("save", async function (next) {
+  if (!this.product_code) {
+    try {
+      const lastScan = await mongoose
+        .model("Product")
+        .findOne({}, {}, { sort: { product_code: -1 } });
+
+      let newProductCodeNumber = 2500;
+
+      if (lastScan && lastScan.product_code) {
+        const match = lastScan.product_code.match(/\d+$/); // Extract number at the end
+        if (match) {
+          newProductCodeNumber = parseInt(match[0], 10) + 1;
+        }
+      }
+
+      this.product_code = `DC-MA${newProductCodeNumber}`;
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
+
+
 const Product = mongoose.models.Product || mongoose.model("Product", productSchema, "product");
 
 export default Product;
