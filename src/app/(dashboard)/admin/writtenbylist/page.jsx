@@ -160,7 +160,7 @@ function WrittenByListPage() {
                   title={"Delete Orgin"}
                   description={`Are you sure you want to delete ${row?.name}`}
                   onSubmit={async () => {
-                    await dispatch(DeleteWrittenByService(row._id));
+                    await dispatch(DeleteWrittenByService(row._id, showNo));
                     setSelectedId(null);
                   }} />
               </TableRow>
