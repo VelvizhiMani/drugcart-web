@@ -43,22 +43,26 @@ export async function POST(request) {
             status
         } = await request.json();
 
-        const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, "base64");
+        let uploadedImageFileName = "";
 
-        const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
-        const fileName = `admincolor/reviewby/${imageFileName(uniqueSuffix)}`
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: fileName,
-            Body: buffer,
-            ContentType: picture.type,
-            ContentDisposition: "inline",
-            ACL: "public-read",
-        };
+        if (picture && picture.base64 && picture.name) {
+            const base64Data = picture.base64.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, "base64");
 
-        await s3.send(new PutObjectCommand(uploadParams));
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + picture.name
+            const fileName = `admincolor/reviewby/${imageFileName(uniqueSuffix)}`
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: buffer,
+                ContentType: picture.type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
 
+            await s3.send(new PutObjectCommand(uploadParams));
+            uploadedImageFileName = imageFileName(uniqueSuffix);
+        }
         const isReviewBy = await ReviewBy.findOne({ name });
         if (isReviewBy) {
             return NextResponse.json({ error: 'Name already exist' }, { status: 401 })
@@ -66,7 +70,7 @@ export async function POST(request) {
 
         const addReviewBy = new ReviewBy({
             name,
-            picture: imageFileName(uniqueSuffix),
+            picture: uploadedImageFileName,
             imagealt,
             qualification,
             desgination,
@@ -90,7 +94,7 @@ export async function POST(request) {
 export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 10;
+    const limit = parseInt(searchParams.get("limit"));
     const search = searchParams.get("search") || "";
 
     const filters = search ? { name: { $regex: search, $options: "i" } } : {};
@@ -106,7 +110,7 @@ export async function GET(req) {
         const skip = (page - 1) * limit;
 
         const ReviewByItems = await ReviewBy.find(filters)
-            .sort({ createdAt: -1 })
+            .sort({ timestamp: -1 })
             .skip(skip)
             .limit(limit)
 

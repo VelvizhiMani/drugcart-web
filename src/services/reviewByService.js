@@ -53,10 +53,10 @@ const PutReviewByService = (id, userData) => async (dispatch) => {
     })
 }
 
-const DeleteReviewByService = (id) => async (dispatch) => {
+const DeleteReviewByService = (id, limit) => async (dispatch) => {
     await axios.delete(`/api/reviewbylist/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getReviewBy(id))
-        dispatch(GetReviewByService())
+        dispatch(GetReviewByService(1, limit))
     }).catch((error) => {
         console.log("error", error.message)
     })

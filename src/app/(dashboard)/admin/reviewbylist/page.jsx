@@ -24,7 +24,7 @@ const rowText = {
   fontFamily: "Poppins",
 };
 function ReviewByListPage() {
-  const { reviewByList, reviewBy } = useSelector((state) => state.referenceData)
+  const { reviewByList, reviewBy } = useSelector((state) => state.reviewbyData)
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("")
   const [showNo, setShowNo] = useState(10)
@@ -160,7 +160,7 @@ function ReviewByListPage() {
                   title={"Delete Orgin"}
                   description={`Are you sure you want to delete ${row?.name}`}
                   onSubmit={async () => {
-                    await dispatch(DeleteReviewByService(row._id));
+                    await dispatch(DeleteReviewByService(row._id, showNo));
                     setSelectedId(null);
                   }} />
               </TableRow>
