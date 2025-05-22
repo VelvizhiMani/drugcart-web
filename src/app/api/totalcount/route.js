@@ -16,6 +16,15 @@ import Stock from '../../../models/Stock';
 import Order from '../../../models/Order';
 import AdminUser from '../../../models/AdminUser';
 import User from '../../../models/User';
+import Diseases from '../../../models/Diseases';
+import KnowBody from '../../../models/KnowBody';
+import HealthVideo from '../../../models/HealthVideo';
+import Herbs from '../../../models/Herbs';
+import HealthTips from '../../../models/HealthTips';
+import Articles from '../../../models/Articles';
+import Blog from '../../../models/Blog';
+import HealthNews from '../../../models/HealthNews';
+import InfoGraphics from '../../../models/InfoGraphics';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 
@@ -46,6 +55,15 @@ export async function GET(request) {
         const staff = await AdminUser.collection.countDocuments();
         const customers = await User.collection.countDocuments();
         const pending_orders = await Order.collection.countDocuments({ "trackingInfo.orderStatus": "Pending" });
+        const diseases = await Diseases.collection.countDocuments();
+        const knowBody = await KnowBody.collection.countDocuments();
+        const healthVideo = await HealthVideo.collection.countDocuments();
+        const herbs = await Herbs.collection.countDocuments();
+        const healthTips = await HealthTips.collection.countDocuments();
+        const articles = await Articles.collection.countDocuments();
+        const blog = await Blog.collection.countDocuments();
+        const healthNews = await HealthNews.collection.countDocuments();
+        const infoGraphics = await InfoGraphics.collection.countDocuments();
 
         return NextResponse.json(
             {
@@ -66,7 +84,16 @@ export async function GET(request) {
                 orders,
                 staff,
                 customers,
-                pending_orders
+                pending_orders,
+                diseases,
+                knowBody,
+                healthVideo,
+                herbs,
+                healthTips,
+                articles,
+                blog,
+                healthNews,
+                infoGraphics
             }, { status: 200 });
 
     } catch (err) {
