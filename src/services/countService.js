@@ -5,7 +5,7 @@ import { getTotalCount } from '../reduxToolkit/slices/countSlice'
 
 const GetMedicineListService = () => async (dispatch) => {
     try {
-        // dispatch(IsLoading(true))
+        dispatch(IsLoading(true))
         const getData = await axios.get(`/api/totalcount`, { headers: await Authorization() })
         dispatch(getTotalCount(getData.data))
         dispatch(IsLoading(false))

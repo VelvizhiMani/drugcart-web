@@ -108,8 +108,6 @@ function AdminLayout(props) {
   };
 
   useEffect(() => {
-    // dispatch(GetPendingOrderService(1, 0))
-    dispatch(GetMedicineListService())
     const token = ""
     console.log(token);
 
@@ -120,6 +118,11 @@ function AdminLayout(props) {
 
 
   }, [router]);
+
+    useEffect(() => {
+    // dispatch(GetPendingOrderService(1, 0))
+    dispatch(GetMedicineListService())
+  }, []);
 
   console.log(pathName);
 
