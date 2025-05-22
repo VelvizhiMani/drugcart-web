@@ -6,21 +6,7 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2';
 import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetCategoryService } from '@/services/categoryService';
-import { GetSubCategoryService } from '@/services/subCategoryService';
 import { useRouter } from 'next/navigation';
-import { GetGeneticService } from '@/services/genericService';
-import { GetProductService } from '@/services/productService';
-import { GetManufactuerService } from '@/services/manufactuerService';
-import { GetFormService } from '@/services/formService';
-import { GetStorageService } from '@/services/storageService';
-import { GetPackageService } from '@/services/packageService';
-import { GetCourierService } from '@/services/courierService';
-import { GetCountryCodeService } from '@/services/countryCodeService';
-import { GetWrittenByService } from '@/services/writtenByService';
-import { GetReviewByService } from '@/services/reviewByService';
-import { GetReferenceService } from '@/services/referenceService';
-import { GetStockService } from '@/services/stockService';
 import { useRole } from '@/hooks/useRole';
 
 const CardItem = styled(Paper)(({ theme }) => ({
@@ -42,38 +28,8 @@ function MedicinePage() {
     const dispatch = useDispatch()
     const router = useRouter()
     const { role } = useRole()
-    const { categories } = useSelector((state) => state.categoryData)
-    const { subCategories } = useSelector((state) => state.subCategoryData)
-    const { genericList } = useSelector((state) => state.genericData)
-    const { productList } = useSelector((state) => state.productData);
-    const { manufactuerList } = useSelector((state) => state.manufactuerData)
-    const { formList } = useSelector((state) => state.formData)
-    const { storageList } = useSelector((state) => state.storageData)
-    const { packageList } = useSelector((state) => state.packageData)
-    const { courierList } = useSelector((state) => state.courierData)
-    const { countryCodeList } = useSelector((state) => state.countryCodeData)
-    const { writtenByList } = useSelector((state) => state.writtenbyData)
-    const { reviewByList } = useSelector((state) => state.reviewbyData)
-    const { referenceList } = useSelector((state) => state.referenceData)
-    const { stockList } = useSelector((state) => state.stockData)
-
-    useEffect(() => {
-        dispatch(GetCategoryService(1, 1))
-        dispatch(GetSubCategoryService(1, 1))
-        dispatch(GetGeneticService(1, 1))
-        dispatch(GetProductService(1, 1))
-        dispatch(GetManufactuerService(1, 1))
-        dispatch(GetFormService(1, 1))
-        dispatch(GetStorageService(1, 1))
-        dispatch(GetPackageService(1, 1))
-        dispatch(GetCourierService(1, 1))
-        dispatch(GetCountryCodeService(1, 1))
-        dispatch(GetWrittenByService(1, 1))
-        dispatch(GetReviewByService(1, 1))
-        dispatch(GetReferenceService(1, 1))
-        dispatch(GetStockService(1, 1))
-    }, [])
-
+    const { countList } = useSelector((state) => state.countData)
+    
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
@@ -91,7 +47,7 @@ function MedicinePage() {
                                 Total Category
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{categories?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.category}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -108,7 +64,7 @@ function MedicinePage() {
                                 Total Sub Category
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{subCategories?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.sub_category}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -125,7 +81,7 @@ function MedicinePage() {
                                 Total Genetic Name
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{genericList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.generic_name}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -142,7 +98,7 @@ function MedicinePage() {
                                 Total Products
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{productList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.products}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -159,7 +115,7 @@ function MedicinePage() {
                                 Total Manufactuer
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{manufactuerList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.manufactuer}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -176,7 +132,7 @@ function MedicinePage() {
                                 Total Form
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{formList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.forms}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -193,7 +149,7 @@ function MedicinePage() {
                                 Total Storage
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{storageList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.storage}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -210,7 +166,7 @@ function MedicinePage() {
                                 Total Pack
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{packageList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.pack}</Typography>
                     </CardItem>
                 </Grid>
                 {role === "admin" ? (
@@ -228,7 +184,7 @@ function MedicinePage() {
                                     Total Courier
                                 </Typography>
                             </Box>
-                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{courierList?.pagination?.totalItems}</Typography>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.courier}</Typography>
                         </CardItem>
                     </Grid>
                 ) : null}
@@ -246,7 +202,7 @@ function MedicinePage() {
                                 Total Country
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countryCodeList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.country}</Typography>
                     </CardItem>
                 </Grid>
                 {role === "admin" ? (
@@ -264,7 +220,7 @@ function MedicinePage() {
                                     Total Written by list
                                 </Typography>
                             </Box>
-                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{writtenByList?.pagination?.totalItems}</Typography>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.writtenby}</Typography>
                         </CardItem>
                     </Grid>
                 ) : null}
@@ -283,7 +239,7 @@ function MedicinePage() {
                                     Total Review by list
                                 </Typography>
                             </Box>
-                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{reviewByList?.pagination?.totalItems}</Typography>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.reviewBy}</Typography>
                         </CardItem>
                     </Grid>
                 ) : null}
@@ -301,7 +257,7 @@ function MedicinePage() {
                                 Total Reference list
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{referenceList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.reference}</Typography>
                     </CardItem>
                 </Grid>
                 {role === "admin" ? (
@@ -319,7 +275,7 @@ function MedicinePage() {
                                     Total Stock list
                                 </Typography>
                             </Box>
-                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{stockList?.pagination?.totalItems}</Typography>
+                            <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.stock}</Typography>
                         </CardItem>
                     </Grid>
                 ) : null}

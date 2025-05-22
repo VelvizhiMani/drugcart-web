@@ -72,7 +72,6 @@ export async function GET(req) {
         // Total items in the user's cart
         const totalItems = await AdminUser.countDocuments(filters);
         const totalPages = Math.ceil(totalItems / limit);
-        console.log('carties', userItems);
 
         const usersWithIndex = userItems.map((item, index) => ({
             ...item.toObject(),
