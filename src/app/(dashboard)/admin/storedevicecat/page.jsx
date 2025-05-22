@@ -39,7 +39,7 @@ function HealthDevice() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Box sx={{ display: 'flex' }}>
-                <Typography variant="h5" fontFamily={"Poppins"} fontWeight="bold" sx={{ flexGrow: 1 }}>Health Store Device Sub Category List</Typography>
+                <Typography variant="h5" fontFamily={"Poppins"} fontWeight="bold" sx={{ flexGrow: 1 }}>Health Care Device Sub Category List</Typography>
             </Box>
             <Grid container spacing={2}>
                 {subCategoryUrl && subCategoryUrl?.map((item, i) => (
