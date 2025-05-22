@@ -45,6 +45,7 @@ function GenericProducts() {
   const [openModal, setOpenModal] = useState(false)
   const params = useParams()
   const dispatch = useDispatch()
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -81,7 +82,7 @@ function GenericProducts() {
           variant="contained"
           style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
           startIcon={<AddIcon />}
-          onClick={() => router.push(`/admin/genericproducts/add`)}
+          onClick={() => router.push(`/admin/productlist/add`)}
         >
           Add Product
         </Button>
@@ -125,11 +126,9 @@ function GenericProducts() {
               <TableCell style={rowText}>Category</TableCell>
               <TableCell style={rowText}>Sub Category</TableCell>
               <TableCell style={rowText}>Generic</TableCell>
-              <TableCell style={rowText}>Selt Composition</TableCell>
               <TableCell style={rowText}>Product</TableCell>
               <TableCell style={rowText}>Word Count</TableCell>
               <TableCell style={rowText}>Manufactuer</TableCell>
-              <TableCell style={rowText}>Image</TableCell>
               <TableCell style={rowText}>Stock</TableCell>
               <TableCell style={rowText}>MRP</TableCell>
               <TableCell style={rowText}>%</TableCell>
@@ -170,9 +169,6 @@ function GenericProducts() {
                       {row?.generices}
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                      {row?.brand}
-                    </TableCell>
-                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                       {row?.product_name}
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
@@ -180,18 +176,6 @@ function GenericProducts() {
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                       {row?.manufactuer}
-                    </TableCell>
-                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                      {row?.product_img ? (
-                        <Avatar
-                          alt="Remy Sharp"
-                          src={row?.product_img}
-                          style={{ width: 45, height: 45 }}
-                          variant="rounded"
-                        />
-                      ) : (
-                        <FormHelperText error>No Image</FormHelperText>
-                      )}
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                       {row?.stock}
@@ -210,23 +194,23 @@ function GenericProducts() {
                       align="right"
                     >
                       <button onClick={() => {
-                        router.push(`/admin/storagelist/${row?._id}`)
+                        router.push(`/admin/productlist/${row?._id}`)
                       }}>
                         <CreateIcon color="primary" />
                       </button>
-                      <button onClick={async () => {
-                        setOpenModal(true)
-                        await dispatch(GetProductIdService(row?._id))
-                      }}>
+                      <button onClick={() => setSelectedId(row?._id)}>
                         <DeleteIcon color='error' />
                       </button>
                     </TableCell>
                     <DeleteModal
-                      open={openModal}
-                      setOpen={setOpenModal}
+                      open={selectedId === row?._id}
+                      setOpen={() => setSelectedId(null)}
                       title={"Delete Product"}
-                      description={`Are you sure you want to delete ${product?.brand}`}
-                      onSubmit={() => dispatch(DeleteStorageService(product?._id))} />
+                      description={`Are you sure you want to delete ${row?.product_name}`}
+                      onSubmit={async () => {
+                        await dispatch(DeleteProductService(row?._id));
+                        setSelectedId(null);
+                      }} />
                   </TableRow>
                 )))}
           </TableBody>

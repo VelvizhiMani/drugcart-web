@@ -22,6 +22,7 @@ function SearchField({ title, size = "small", data, getOptionLabel, value, helpe
       <Autocomplete
         // freeSolo
         size={size}
+        getOptionKey={(option) => option?._id}
         noOptionsText="No Data Found"
         getOptionLabel={getOptionLabel}
         options={data || []}

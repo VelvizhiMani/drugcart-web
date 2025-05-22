@@ -32,6 +32,7 @@ function HealthStoreList() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const params = useParams()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -148,19 +149,19 @@ function HealthStoreList() {
                                             }}>
                                                 <CreateIcon color="primary" />
                                             </button>
-                                            <button onClick={async () => {
-                                                setOpenModal(true)
-                                                await dispatch(GetProductIdService(row?._id))
-                                            }}>
+                                            <button onClick={() => setSelectedId(row?._id)}>
                                                 <DeleteIcon color='error' />
                                             </button>
                                         </TableCell>
                                         <DeleteModal
-                                            open={openModal}
-                                            setOpen={setOpenModal}
+                                            open={selectedId === row?._id}
+                                            setOpen={() => setSelectedId(null)}
                                             title={"Delete Product"}
-                                            description={`Are you sure you want to delete ${product?.product_name}`}
-                                            onSubmit={() => dispatch(DeleteProductService(product?._id))} />
+                                            description={`Are you sure you want to delete ${row?.product_name}`}
+                                            onSubmit={async () => {
+                                                await dispatch(DeleteProductService(row?._id));
+                                                setSelectedId(null);
+                                            }} />
                                     </TableRow>
                                 )))}
                     </TableBody>
