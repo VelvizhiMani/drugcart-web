@@ -1,11 +1,25 @@
-import connectionToDatabase from '../../../../lib/mongodb'
 import Category from '../../../../models/Category'
 import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { v4 as uuidv4 } from 'uuid';
+import connnectionToDatabase from '../../../../lib/mongodb';
+
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+});
+
+function imageFileName(name) {
+    return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
 export async function GET(request, { params }) {
     try {
-        await connectionToDatabase();
+        await connnectionToDatabase();
 
         const { id } = await params;
         const categoryId = await Category.findById(id);
@@ -21,7 +35,8 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
     try {
-        const { success, user, message } = await adminAuthorization();
+        await connnectionToDatabase();
+        const { success, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
@@ -29,15 +44,50 @@ export async function PUT(request, { params }) {
 
         const { id } = await params;
         const body = await request.json();
-        const updatedCategory = await Category.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedCategory) {
-            return NextResponse.json({ error: 'Category not found' }, { status: 404 });
+        const existingCategory = await Category.findById(id);
+        if (!existingCategory) {
+            return NextResponse.json({ error: 'existingCategory not found' }, { status: 404 });
         }
+
+        let uniqueSuffix = null;
+
+        if (body.cat_img && typeof body.cat_img === 'object' && body.cat_img.name) {
+            const { name, type, data } = body.cat_img;
+            const buffer = Buffer.from(data, 'base64');
+
+            uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + name;
+            const newImageKey = `category/thumb/${imageFileName(uniqueSuffix)}`;
+
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: newImageKey,
+                Body: buffer,
+                ContentType: type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
+
+            await s3.send(new PutObjectCommand(uploadParams));
+
+            // Optionally delete the old image from S3 here
+        }
+
+        const updatedData = {
+            ...body,
+            cat_img: uniqueSuffix
+                ? imageFileName(uniqueSuffix)
+                : existingCategory.cat_img,
+        };
+
+        const updatedCategory = await Category.findByIdAndUpdate(id, updatedData, {
+            new: true,
+        });
 
         return NextResponse.json(updatedCategory, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
+        console.error('PUT error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
 

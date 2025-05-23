@@ -82,7 +82,7 @@ const PutCategoryService = (id, userData) => async (dispatch) => {
 const DeleteCategoryService = (id) => async (dispatch) => {
     await axios.delete(`/api/category/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getCategory(id))
-        dispatch(GetCategoryService())
+        dispatch(GetCategoryService(1, 10))
     }).catch((error) => {
         console.log("error", error.message)
     })

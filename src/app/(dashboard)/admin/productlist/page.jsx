@@ -23,10 +23,6 @@ import {
 } from "@/services/productService";
 import DeleteModal from "@/components/admin/modal/DeleteModal";
 
-function createData(categoryName, subCategory, generic) {
-  return { categoryName, subCategory, generic };
-}
-
 const rowText = {
   color: "#fff",
   fontFamily: "Poppins",
@@ -40,6 +36,7 @@ function ProductList() {
   const [search, setSearch] = useState("");
   const [showNo, setShowNo] = useState(10);
   const [openModal, setOpenModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   const handleNoChange = (event) => {
     setShowNo(event.target.value);
@@ -73,7 +70,7 @@ function ProductList() {
           variant="contained"
           style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
           startIcon={<AddIcon />}
-          onClick={() => router.push(`/admin/product/add`)}
+          onClick={() => router.push(`/admin/productlist/add`)}
         >
           Add Product
         </Button>
@@ -160,23 +157,19 @@ function ProductList() {
                     >
                       <CreateIcon color="primary" />
                     </button>
-                    <button
-                      onClick={async () => {
-                        setOpenModal(true);
-                        await dispatch(GetProductIdService(row?._id));
-                      }}
-                    >
-                      <DeleteIcon color="error" />
+                    <button onClick={() => setSelectedId(row._id)}>
+                      <DeleteIcon color='error' />
                     </button>
                   </TableCell>
                   <DeleteModal
-                    open={openModal}
-                    setOpen={setOpenModal}
+                    open={selectedId === row?._id}
+                    setOpen={() => setSelectedId(null)}
                     title={"Delete Product"}
-                    description={`Are you sure you want to delete ${products?.generices}`}
-                    onSubmit={() =>
-                      dispatch(DeleteProductService(products?._id))
-                    }
+                    description={`Are you sure you want to delete ${row?.generices}`}
+                    onSubmit={async () => {
+                      await dispatch(DeleteProductService(row?._id));
+                      setSelectedId(null);
+                    }}
                   />
                 </TableRow>
               ))}

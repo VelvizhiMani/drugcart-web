@@ -21,6 +21,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useSelector, useDispatch } from "react-redux";
 import SearchField from "@/components/admin/AutoComplete/SearchField";
+import SelectField from "@/components/admin/AutoComplete/SelectField";
 import { GetCategoryService } from "@/services/categoryService";
 import { PostProductService } from "@/services/productService";
 import { GetSubCategoryService } from "@/services/subCategoryService";
@@ -33,7 +34,9 @@ import { GetOrginService } from "@/services/orginService";
 import { GetReferenceService } from "@/services/referenceService";
 import { GetWrittenByService } from "@/services/writtenByService";
 import { GetReviewByService } from "@/services/reviewByService";
+import { GetStockService } from "@/services/stockService";
 import SliderPage from "../../../../../components/layout/Slider";
+import axios from "axios";
 
 const ProductAdd = () => {
   const { categories } = useSelector((state) => state.categoryData);
@@ -45,15 +48,21 @@ const ProductAdd = () => {
   const { packageList } = useSelector((state) => state.packageData);
   const { manufactuerList } = useSelector((state) => state.manufactuerData);
   const { orginList } = useSelector((state) => state.orginData);
+  const { stockList } = useSelector((state) => state.stockData);
   const { referenceList } = useSelector((state) => state.referenceData);
   const { writtenByList } = useSelector((state) => state.writtenbyData);
   const { reviewByList, reviewBy } = useSelector(
-    (state) => state.referenceData
+    (state) => state.reviewbyData
   );
-
   const dispatch = useDispatch();
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState(null);
+
+  const getFileNameFromUrl = (url) => {
+    if (!url || typeof url !== "string") return "";
+    const parts = url.split("category/");
+    return parts.length > 1 ? "category/" + parts[1] : "";
+  };
 
   const productStatus = ["Active", "InActive"];
   const paymentTypes = ["Online Payment Only", "Cash on Delivery"];
@@ -62,12 +71,19 @@ const ProductAdd = () => {
   const trends = ["Frequently", "Tranding", "Top Brands", "Top Health", "Best Selling", "Popular"];
 
   const uniqueGenericArray = genericList?.generics?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
+  const uniqueStockArray = stockList?.stocks?.filter((v, i, a) => a.findIndex(t => (t.name === v?.name)) === i)
+
+  const categoryUrl = categories?.categories?.map((item) => {
+    return {
+      key: item?.url,
+      value: item?.category_name
+    }
+  })
 
   const URLText = (text) => {
-    const splitText = text.split(" ");
-    const joinSpace = splitText.join("-").toLowerCase();
-    return joinSpace;
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
   };
+
 
   const formik = useFormik({
     initialValues: {
@@ -82,6 +98,7 @@ const ProductAdd = () => {
       imagealt: "",
       manufactuer: "",
       manufactueraddress: "",
+      form: "",
       tabscount: "",
       orgin: "",
       strength: "",
@@ -91,7 +108,7 @@ const ProductAdd = () => {
       product_img: "",
       description: "",
       disclaimer: "",
-      stock: "",
+      stock: "In Stock",
       saleprice: "",
       percentage: "",
       rexrequired: "",
@@ -164,28 +181,44 @@ const ProductAdd = () => {
       subcat_name: yup.string().required("SubCategory Name is required"),
       generices: yup.string().required("Generices Name is required"),
       product_name: yup.string().required("Product Name is required"),
+      product_img: yup.mixed().required("Product Image is required"),
       url: yup.string().required("URL is required"),
+      manufactuer: yup.string().required("Manufactuer is required"),
+      packageName: yup.string().required("Package is required"),
     }),
+    // onSubmit: async (data, { resetForm }) => {
+    //   const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
+    //   console.log("packGetID", packGetID.packagename);
+
+    //   await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.packagename }, resetForm));
+    // },
     onSubmit: async (data, { resetForm }) => {
       const packGetID = packageList?.packages?.find((item) => item?.packagename === data.packageName)
-      console.log("packGetID", packGetID.packagename);
+      const updatedData = {
+        ...data,
+        url: URLText(data.url),
+      };
 
-      await dispatch(PostProductService({ ...data, manufactuer: URLText(data.manufactuer), packageName: packGetID.packagename }, resetForm));
+      await dispatch(PostProductService(updatedData, resetForm));
+      setImagePreview(null)
     },
   });
-  // const salePriceDetails = () => {
-  // const percentage = formik.values.percentage;
-  // const sale = (percentage / 100) * formik.values.price;
-  // const saleDetail = formik.values.price - sale;
-  // console.log(saleDetail, "SALE");
-  // };
 
   useEffect(() => {
-    formik.values.caturl = URLText(formik.values.cat_name);
+    const percentage = formik.values.percentage;
+    const sale = (percentage / 100) * formik.values.price;
+    const saleDetail = formik.values.price - sale;
+    console.log(saleDetail, "SALE");
+
+
+    formik.setFieldValue("saleprice", saleDetail.toFixed(2));
+  }, [formik.values.price, formik.values.percentage]);
+
+  useEffect(() => {
     formik.values.url = URLText(formik.values.product_name);
     // formik.values.saleprice = saleDetail;
     // formik.values.subcaturl = URLText(formik.values.subcat_name);
-  }, [formik.values.cat_name, formik.values.product_name]);
+  }, [formik.values.product_name]);
 
   useEffect(() => {
     dispatch(GetCategoryService());
@@ -199,15 +232,76 @@ const ProductAdd = () => {
     dispatch(GetReferenceService());
     dispatch(GetWrittenByService());
     dispatch(GetReviewByService());
+    dispatch(GetStockService())
   }, []);
 
-  const filterSubCategory = subCategories?.subcategoryItems?.filter(
-    (item) => item?.cat_name === formik.values.caturl
-  );
+  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name === formik.values.cat_name)?.map((data) => {
+    return {
+      key: data?.url,
+      value: data?.subcat_name
+    }
+  })
   // const filterOthervarient = productList?.productItems?.filter(
   //   (item) => item?.subcat_name === formik.values.subcaturl
   // );
-console.log('sale', formik.values.saleprice);
+
+  const handleImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("product_img", {
+          name: file.name,
+          type: file.type,
+          base64: reader.result, // base64 encoded string
+        });
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const manufactuerUrl = manufactuerList?.manufactuers?.map((item) => {
+    return {
+      key: item?.manufactuerurl,
+      value: item?.manufactuername
+    }
+  })
+
+  const genericesUrl = uniqueGenericArray?.map((item) => {
+    return {
+      key: item?.url,
+      value: item?.generices
+    }
+  })
+
+  const packageUrl = packageList?.packages?.map((item) => {
+    return {
+      key: item?.packid,
+      value: item?.packagename
+    }
+  })
+
+  const writtenByUrl = writtenByList?.written_by_lists?.map((item) => {
+    return {
+      key: item?.id,
+      value: item?.name
+    }
+  })
+
+  const reviewByUrl = reviewByList?.review_by_lists?.map((item) => {
+    return {
+      key: item?.id,
+      value: item?.name
+    }
+  })
+
+  const storageUrl = storageList?.storages?.map((item) => {
+    return {
+      key: item?.storageid,
+      value: item?.storagename
+    }
+  })
 
   return (
     <Box>
@@ -240,7 +334,7 @@ console.log('sale', formik.values.saleprice);
       >
         <Grid2 container spacing={2}>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            {/* <SearchField
               title="Category Name"
               data={categories?.categories}
               value={formik.values.cat_name}
@@ -257,19 +351,33 @@ console.log('sale', formik.values.saleprice);
                 formik.touched.cat_name ? formik.errors.cat_name : null
               }
               error={formik.touched.cat_name ? formik.errors.cat_name : null}
+            /> */}
+            <SelectField
+              title="Category Name"
+              data={categoryUrl}
+              value={formik.values.cat_name}
+              onChange={(key) => {
+                formik.setFieldValue("cat_name", key)
+                formik.setFieldValue("subname", "");
+              }}
+              getOptionLabel={(option) => option?.value}
+              helperText={
+                formik.touched.cat_name ? formik.errors.cat_name : null
+              }
+              error={
+                formik.touched.cat_name ? formik.errors.cat_name : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Sub Category Name"
               data={filterSubCategory}
               value={formik.values.subcat_name}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.subcat_name || ""
-              }
-              onInputChange={(event, newValue) =>
-                formik.setFieldValue("subcat_name", newValue)
-              }
+              onChange={(key) => {
+                formik.setFieldValue("subcat_name", key)
+              }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.subcat_name ? formik.errors.subcat_name : null
               }
@@ -279,20 +387,20 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Generic Name"
-              data={uniqueGenericArray}
+              data={genericesUrl}
               value={formik.values.generices}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.generices || ""
-              }
-              onInputChange={(event, newValue) =>
-                formik.setFieldValue("generices", newValue)
-              }
+              onChange={(key) => {
+                formik.setFieldValue("generices", key)
+              }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.generices ? formik.errors.generices : null
               }
-              error={formik.touched.generices ? formik.errors.generices : null}
+              error={
+                formik.touched.generices ? formik.errors.generices : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
@@ -335,7 +443,16 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <ImageInput title={"Product Image"} />
+            <ImageInput
+              title={"Product Image"}
+              image={imagePreview}
+              onChange={handleImage}
+              error={
+                formik.touched.product_img
+                  ? formik.errors.product_img
+                  : null
+              }
+            />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
@@ -362,12 +479,12 @@ console.log('sale', formik.values.saleprice);
                 typeof option === "string" ? option : option?.formname || ""
               }
               onInputChange={(event, newValue) => {
-                formik.setFieldValue("tabscount", newValue);
+                formik.setFieldValue("form", newValue);
               }}
               helperText={
-                formik.touched.tabscount ? formik.errors.tabscount : null
+                formik.touched.form ? formik.errors.form : null
               }
-              error={formik.touched.tabscount ? formik.errors.tabscount : null}
+              error={formik.touched.form ? formik.errors.form : null}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 3 }}>
@@ -386,18 +503,20 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Storage"
-              data={storageList?.storages}
+              data={storageUrl}
               value={formik.values.storage}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.storagename || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("storage", newValue);
+              onChange={(key) => {
+                formik.setFieldValue("storage", key)
               }}
-              helperText={formik.touched.storage ? formik.errors.storage : null}
-              error={formik.touched.storage ? formik.errors.storage : null}
+              getOptionLabel={(option) => option?.value}
+              helperText={
+                formik.touched.storage ? formik.errors.storage : null
+              }
+              error={
+                formik.touched.storage ? formik.errors.storage : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -408,16 +527,14 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Pack"
-              data={packageList?.packages}
+              data={packageUrl}
               value={formik.values.packageName}
-              getOptionLabel={(option) =>
-                typeof option === "string" ? option : option?.packagename || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("packageName", newValue);
+              onChange={(key) => {
+                formik.setFieldValue("packageName", key)
               }}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.packageName ? formik.errors.packageName : null
               }
@@ -434,7 +551,7 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
-            <SearchField
+            {/* <SearchField
               title="Manufactuer Address"
               data={manufactuerList?.manufactuers}
               value={formik.values.manufactuer}
@@ -452,31 +569,22 @@ console.log('sale', formik.values.saleprice);
               error={
                 formik.touched.manufactuer ? formik.errors.manufactuer : null
               }
+            /> */}
+            <SelectField
+              title="Manufactuer Address"
+              data={manufactuerUrl}
+              value={formik.values.manufactuer}
+              onChange={(key) => formik.setFieldValue("manufactuer", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>
-            <SearchField
+            <SelectField
               title="Marketer Address"
-              data={manufactuerList?.manufactuers}
+              data={manufactuerUrl}
               value={formik.values.manufactueraddress}
-              getOptionLabel={(option) =>
-                typeof option === "string"
-                  ? option
-                  : option?.manufactueraddress || ""
-              }
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("manufactueraddress", newValue);
-              }}
-              helperText={
-                formik.touched.manufactueraddress
-                  ? formik.errors.manufactueraddress
-                  : null
-              }
-              error={
-                formik.touched.manufactueraddress
-                  ? formik.errors.manufactueraddress
-                  : null
-              }
+              onChange={(key) => formik.setFieldValue("manufactueraddress", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -488,19 +596,33 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Available Stock"}
+            <SearchField
+              title="Available Stock"
+              data={uniqueStockArray}
               value={formik.values.stock}
-              onChange={formik.handleChange("stock")}
-              data={["Yes", "No"]}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.name || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("stock", newValue)}
+              helperText={
+                formik.touched.stock ? formik.errors.stock : null
+              }
+              error={
+                formik.touched.stock ? formik.errors.stock : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
-              title={"Product reference(ex :Netmeds)"}
-              data={["yes", "no"]}
-              value={formik.values.referwebsite}
-              onChange={formik.handleChange("referwebsite")}
+            <SearchField
+              title="Product reference"
+              data={referenceList?.references}
+              value={formik.values.reference}
+              getOptionLabel={(option) => (typeof option === "string" ? option : option?.websitename || "")}
+              onInputChange={(event, newValue) => formik.setFieldValue("reference", newValue)}
+              helperText={
+                formik.touched.reference ? formik.errors.reference : null
+              }
+              error={
+                formik.touched.reference ? formik.errors.reference : null
+              }
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -546,11 +668,17 @@ console.log('sale', formik.values.saleprice);
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SelectInput
+            {/* <SelectInput
               title={"GST(%)"}
               value={formik.values.gst}
               onChange={formik.handleChange("gst")}
               data={gst}
+            /> */}
+            <TextInput
+              title={"GST(%)"}
+              type="number"
+              value={formik.values.gst}
+              onChange={formik.handleChange("gst")}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -573,6 +701,12 @@ console.log('sale', formik.values.saleprice);
               error={
                 formik.touched.percentage ? formik.errors.percentage : null
               }
+            />
+          </Grid2>
+          <Grid2 size={{ xs: 12, md: 4 }}>
+            <TextInput
+              title={"Sale Price"}
+              value={formik.values.saleprice}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
@@ -643,33 +777,21 @@ console.log('sale', formik.values.saleprice);
             </Typography>
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <SelectInput
-              title={"Reviewd By :"}
+            <SelectField
+              title="Reviewd By"
+              data={reviewByUrl}
               value={formik.values.reviewbyid}
-              onChange={formik.handleChange("reviewbyid")}
-              data={gst}
-            // data={reviewByList?.review_by_lists}
-            // getOptionLabel={(option) =>
-            //   typeof option === "string" ? option : option?.name || ""
-            // }
-            // onInputChange={(event, newValue) => {
-            //   formik.setFieldValue("reviewbyid", newValue);
-            // }}
+              onChange={(key) => formik.setFieldValue("reviewbyid", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 6 }}>
-            <SelectInput
-              title={"Written By :"}
+            <SelectField
+              title="Written By"
+              data={writtenByUrl}
               value={formik.values.writebyid}
-              onChange={formik.handleChange("writebyid")}
-              data={gst}
-            // data={writtenByList?.written_by_lists}
-            // getOptionLabel={(option) =>
-            //   typeof option === "string" ? option : option?.name || ""
-            // }
-            // onInputChange={(event, newValue) => {
-            //   formik.setFieldValue("writebyid", newValue);
-            // }}
+              onChange={(key) => formik.setFieldValue("writebyid", key)}
+              getOptionLabel={(option) => option?.value}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 12 }}>

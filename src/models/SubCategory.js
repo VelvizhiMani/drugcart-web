@@ -13,26 +13,33 @@ const subcategorySchema = new Schema(
         url: {
             type: String,
         },
-        sub_cat_img: {
-            type: String
+        cat_img: {
+            type: String,
+            default: ""
         },
         imagealt: {
-            type: String
+            type: String,
+            default: ""
         },
         // banner: {
         //     type: String
         // },
         metatitle: {
             type: String,
+            default: ""
         },
         metakeyword: {
             type: String,
+            default: ""
         },
         metadesc: {
             type: String,
+            default: ""
         },
         status: {
-            type: String
+            type: String,
+            default: "Active",
+            enum: ["Active", "InActive"]
         },
     }, { timestamps: true })
 

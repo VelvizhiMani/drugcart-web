@@ -24,10 +24,8 @@ function EditReference() {
     const params = useParams()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     useEffect(() => {
         dispatch(GetReferenceIdService(params?.id))

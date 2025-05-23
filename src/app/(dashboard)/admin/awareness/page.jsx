@@ -6,16 +6,7 @@ import { styled } from '@mui/material/styles';
 import Grid from '@mui/material/Grid2';
 import { Button, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetDiseasesService } from '@/services/diseasesService';
-import { GetKnowBodyService } from '@/services/knowBodyService';
-import { GetHerbsService } from '@/services/herbsService';
-import { GetArticleService } from '@/services/articleService';
 import { useRouter } from 'next/navigation';
-import { GetHealthTipService } from '@/services/HealthTipService';
-import { GetBlogService } from '@/services/blogService';
-import { GetHealthNewsService } from '@/services/heathNewsService';
-import { GetInfoGraphicsService } from '@/services/infoGraphicsService';
-import { GetHealthVideosService } from '@/services/healthVideoService';
 
 const CardItem = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -35,34 +26,14 @@ const CardItem = styled(Paper)(({ theme }) => ({
 function AwarenessPage() {
     const dispatch = useDispatch()
     const router = useRouter()
-     const { healthVideoList } = useSelector((state) => state.healthVideoData)
-    const { diseasesList } = useSelector((state) => state.diseasesData)
-    const { knowBodyList } = useSelector((state) => state.knowBodyData)
-    const { herbsList } = useSelector((state) => state.herbsData)
-    const { healthTipList } = useSelector((state) => state.healthTipData)
-    const { articleList } = useSelector((state) => state.articlesData)
-    const { blogList } = useSelector((state) => state.blogData)
-    const { healthNewsList } = useSelector((state) => state.healthNewsData)
-    const { infoGraphicsList } = useSelector((state) => state.infoGraphicssData)
-
-    useEffect(() => {
-        dispatch(GetDiseasesService(0, 0))
-        dispatch(GetKnowBodyService(0, 0))
-        dispatch(GetHerbsService(0, 0))
-        dispatch(GetHealthTipService(0, 0))
-        dispatch(GetArticleService(0, 0))
-        dispatch(GetBlogService(0, 0))
-        dispatch(GetHealthNewsService(0, 0))
-        dispatch(GetHealthVideosService(0, 0))
-        dispatch(GetInfoGraphicsService(0, 0))
-    }, [])
+    const { countList } = useSelector((state) => state.countData)
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
                     <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/diseaseslist')}>
-                        <Box >
+                        <Box>
                             <Typography
                                 variant="body1"
                                 fontFamily={"Poppins"}
@@ -74,7 +45,7 @@ function AwarenessPage() {
                                 Total Diseases
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{diseasesList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.diseases}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -91,7 +62,7 @@ function AwarenessPage() {
                                 Total Know Your Body
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{knowBodyList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.knowBody}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -108,7 +79,7 @@ function AwarenessPage() {
                                 Total Health Video
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{healthVideoList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.healthVideo}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -125,7 +96,7 @@ function AwarenessPage() {
                                 Total Herbs
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{herbsList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.herbs}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -142,7 +113,7 @@ function AwarenessPage() {
                                 Total Health Tips
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{healthTipList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.healthTips}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -159,7 +130,7 @@ function AwarenessPage() {
                                 Total Article
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{articleList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.articles}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -176,7 +147,7 @@ function AwarenessPage() {
                                 Total Blog
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{blogList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.blog}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -193,7 +164,7 @@ function AwarenessPage() {
                                 Total Health News
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{healthNewsList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.healthNews}</Typography>
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -210,7 +181,7 @@ function AwarenessPage() {
                                 Total Info Graphices
                             </Typography>
                         </Box>
-                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{infoGraphicsList?.pagination?.totalItems}</Typography>
+                        <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20}>{countList?.infoGraphics}</Typography>
                     </CardItem>
                 </Grid>
             </Grid>

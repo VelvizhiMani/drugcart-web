@@ -19,6 +19,7 @@ import { PutLabPackageService, GetLabPackageIdService } from '@/services/labPack
 import { useSelector, useDispatch } from "react-redux";
 
 function EditAdminLabPackage() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { labPackage } = useSelector((state) => state.labPackageData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -27,6 +28,15 @@ function EditAdminLabPackage() {
     useEffect(() => {
         dispatch(GetLabPackageIdService(params?.id))
     }, [params?.id])
+
+    const handleImage = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            formik.setFieldValue("image", file);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
+
 
 
     const formik = useFormik({
@@ -42,22 +52,43 @@ function EditAdminLabPackage() {
             url: yup.string().required("Url is required"),
             image: yup.string().required("Image is required"),
         }),
-        onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PutLabPackageService(labPackage?._id, data))
-        },
+        onSubmit: async (data) => {
+            const finalData = { ...data };
+
+            // If the image is a File (newly uploaded)
+            if (data.image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1]; // remove data:image/... prefix
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.image);
+
+                finalData.image = {
+                    name: data.image.name,
+                    type: data.image.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutLabPackageService(labPackage?._id, finalData));
+        }
     });
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
-
-    const handleImage = (event) => {
-        const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
     };
+
+    // const handleImage = (event) => {
+    //     const file = event.target.files[0];
+    //     formik.setFieldValue("image", URL.createObjectURL(file));
+    // };
 
 
     useEffect(() => {
@@ -119,7 +150,8 @@ function EditAdminLabPackage() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.image}
+                            image={`https://assets1.drugcarts.com/testpackage/thumb/${labPackage?.image}`}
+                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${labPackage?.image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.image

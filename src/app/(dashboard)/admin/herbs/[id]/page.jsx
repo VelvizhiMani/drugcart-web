@@ -30,10 +30,8 @@ function EditHerbs() {
     }, [params?.id])
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -72,7 +70,7 @@ function EditHerbs() {
         validationSchema: yup.object({
             title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.string().required("Picture is required")
+            // picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
             console.log(data);
@@ -145,6 +143,7 @@ function EditHerbs() {
                         <ImageInput
                             title={"Picture"}
                             image={formik.values.picture}
+                            disabled={true}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture

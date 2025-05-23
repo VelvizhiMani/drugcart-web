@@ -16,7 +16,7 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-function ImageInput({ title, image, onChange, error,onError, fallbackImage }) {
+function ImageInput({ title, image, onChange, error,onError, fallbackImage, disabled = false }) {
   const [preview, setPreview] = useState(image);
   const [imgError, setImgError] = useState(false);
     // const fallbackImage = `https://assets1.drugcarts.com/category/thumb/${"category16232530961536.webp"}`;
@@ -60,6 +60,7 @@ function ImageInput({ title, image, onChange, error,onError, fallbackImage }) {
         color="secondary"
         tabIndex={-1}
         style={{ textTransform: "capitalize" }}
+        disabled={disabled}
         startIcon={<PhotoIcon />}
       >
         Upload Image

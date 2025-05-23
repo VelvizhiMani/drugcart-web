@@ -157,6 +157,7 @@ const DeleteProductService = (id) => async (dispatch) => {
     await axios.delete(`/api/product/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getProduct(id))
         // dispatch(GetProductService())
+        window.location.reload()
     }).catch((error) => {
         console.log("error", error.message)
     })

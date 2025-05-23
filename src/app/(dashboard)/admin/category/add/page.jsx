@@ -20,22 +20,9 @@ import { useDispatch } from "react-redux";
 import { PostCategoryService } from "../../../../../services/categoryService";
 import axios from "axios";
 
-function extractS3Path(url) {
-  try {
-    const baseURL = "https://drugcarts-assets.s3.ap-south-1.amazonaws.com/";
-    if (url.startsWith(baseURL)) {
-      return url.substring(baseURL.length);
-    }
-    return url; // if already short or invalid
-  } catch (error) {
-    console.error("Invalid URL", error);
-    return "";
-  }
-}
 function getFileNameFromUrl(url) {
   return url.split("/").pop();
 }
-
 
 function CategoryAdd() {
   const dispatch = useDispatch();
@@ -45,16 +32,22 @@ function CategoryAdd() {
   const catType = ["prescriptions", "non-prescriptions", "Others"];
 
   const URLText = (text) => {
-    const splitText = text.split(" ");
-    const joinSpace = splitText.join("-").toLowerCase();
-    return joinSpace;
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
   };
 
   const handleCategoryImage = (event) => {
     const file = event.target.files[0];
     if (file) {
-      formik.setFieldValue("cat_img", file); // Set actual file
-      setImagePreview(URL.createObjectURL(file)); // For preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("cat_img", {
+          name: file.name,
+          type: file.type,
+          base64: reader.result, // base64 encoded string
+        });
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -79,45 +72,11 @@ function CategoryAdd() {
       cat_type: yup.string().required("Category type is required"),
       category_name: yup.string().required("Category Name is required"),
       url: yup.string().required("URL is required"),
-      cat_img: yup.mixed().required("Category Image is required"),
+      // cat_img: yup.mixed().required("Category Image is required"),
     }),
     onSubmit: async (data, { resetForm }) => {
-      try {
-        // 1. Upload the image first
-        const formData = new FormData();
-        formData.append("file", data.cat_img); // file object
-        formData.append("folder", "category/thumb");
-
-        const res = await axios.post("/api/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        if (res.status === 200) {
-          const uploadedImageUrl = res.data.url || res.data.fileName;
-          console.log("Image uploaded successfully:", uploadedImageUrl);
-
-          // 2. After upload, now dispatch PostCategoryService
-          const updatedData = {
-            ...data,
-            cat_img: getFileNameFromUrl(uploadedImageUrl), // update with uploaded URL
-            url: URLText(data.category_name), // in case user didn't edit url manually
-          };
-
-          const result = await dispatch(PostCategoryService(updatedData, resetForm));
-          if (result) {
-            console.log('Category added successfully');
-            setImagePreview("")
-            // router.push("/admin/category");
-          }
-        } else {
-          alert("Image upload failed");
-        }
-      } catch (error) {
-        console.error("Upload error:", error);
-        alert("Image Upload error");
-      }
+      await dispatch(PostCategoryService(data, resetForm));
+      setImagePreview(null)
     },
   });
 

@@ -1,7 +1,7 @@
 import { InputLabel, TextField } from '@mui/material'
 import React from 'react'
 
-function TextInput({ title, value, type, onChange, helperText, error, inputProps }) {
+function TextInput({ title, value, type, onChange, helperText, error, inputProps, disabled = false }) {
     return (
         <div>
             <InputLabel
@@ -20,6 +20,7 @@ function TextInput({ title, value, type, onChange, helperText, error, inputProps
                 helperText={helperText}
                 error={error}
                 inputProps={inputProps}
+                disabled={disabled}
             />
         </div>
     )

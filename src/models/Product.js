@@ -18,7 +18,7 @@ const productSchema = new Schema(
         },
         product_code: {
             type: String,
-            default: "",
+            unique: true,
         },
         product_name: {
             type: String,
@@ -351,6 +351,31 @@ const productSchema = new Schema(
     },
     { timestamps: true }
 )
+
+productSchema.pre("save", async function (next) {
+  if (!this.product_code) {
+    try {
+      const lastScan = await mongoose
+        .model("Product")
+        .findOne({}, {}, { sort: { product_code: -1 } });
+
+      let newNumber = 97; // Default start number
+
+      if (lastScan && lastScan.product_code) {
+        const match = lastScan.product_code.match(/\d+$/); // extract numeric part
+        if (match) {
+          newNumber = parseInt(match[0], 10) + 1;
+        }
+      }
+
+      const paddedNumber = String(newNumber).padStart(4, "0"); // 0097 → 0098 → 0099 → ...
+      this.product_code = `DC-MA${paddedNumber}`;
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
 
 const Product = mongoose.models.Product || mongoose.model("Product", productSchema, "product");
 

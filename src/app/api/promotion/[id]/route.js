@@ -1,11 +1,25 @@
-import connectionToDatabase from '../../../../lib/mongodb'
 import Promotion from '../../../../models/Promotion'
 import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { v4 as uuidv4 } from 'uuid';
+import connnectionToDatabase from '../../../../lib/mongodb';
+
+const s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+});
+
+function imageFileName(name) {
+    return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
 export async function GET(request, { params }) {
     try {
-        await connectionToDatabase();
+        await connnectionToDatabase();
         // const { success, user, message } = await adminAuthorization();
 
         // if (!success) {
@@ -25,22 +39,57 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
     try {
-        const { success, user, message } = await adminAuthorization();
+        await connnectionToDatabase();
+        const { success, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
+
         const { id } = await params;
         const body = await request.json();
-        const updatedPromotion = await Promotion.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedPromotion) {
+        const existingPromotion = await Promotion.findById(id);
+        if (!existingPromotion) {
             return NextResponse.json({ error: 'Promotion not found' }, { status: 404 });
         }
 
+        let uniqueSuffix = null;
+
+        if (body.image && typeof body.image === 'object' && body.image.name) {
+            const { name, type, data } = body.image;
+            const buffer = Buffer.from(data, 'base64');
+
+            uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + name;
+            const newImageKey = `admincolor/homepage/slider/${imageFileName(uniqueSuffix)}`;
+
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: newImageKey,
+                Body: buffer,
+                ContentType: type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
+
+            await s3.send(new PutObjectCommand(uploadParams));
+        }
+
+        const updatedData = {
+            ...body,
+            image: uniqueSuffix
+                ? imageFileName(uniqueSuffix)
+                : existingPromotion.image,
+        };
+
+        const updatedPromotion = await Promotion.findByIdAndUpdate(id, updatedData, {
+            new: true,
+        });
+
         return NextResponse.json(updatedPromotion, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating Promotion' }, { status: 500 });
+        console.error('PUT error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
 

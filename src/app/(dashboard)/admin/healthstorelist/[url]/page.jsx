@@ -25,12 +25,14 @@ const rowText = {
 }
 function HealthStoreList() {
     const { productCategory, product } = useSelector((state) => state.productData)
+    const { loading } = useSelector((state) => state.common)
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [showNo, setShowNo] = useState(10)
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const params = useParams()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -69,7 +71,7 @@ function HealthStoreList() {
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/productlist/add`)}
+                    onClick={() => router.push(`/admin/healthstorelist/add`)}
                 >
                     Add Product
                 </Button>
@@ -109,51 +111,59 @@ function HealthStoreList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {productCategory && productCategory?.products?.map((row, i) => (
-                            <TableRow
-                                key={row?.sno}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row?.sno}</TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.cat_name}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.subcat_name}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.product_name}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.product_code}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.manufactuer}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.price}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
-                                    <button onClick={() => {
-                                        router.push(`/admin/productlist/${row?._id}`)
-                                    }}>
-                                        <CreateIcon color="primary" />
-                                    </button>
-                                    <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetProductIdService(row?._id))
-                                    }}>
-                                        <DeleteIcon color='error' />
-                                    </button>
-                                </TableCell>
-                                <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
-                                    title={"Delete Product"}
-                                    description={`Are you sure you want to delete ${product?.product_name}`}
-                                    onSubmit={() => dispatch(DeleteProductService(product?._id))} />
-                            </TableRow>
-                        ))}
+                        {
+                            productCategory?.products?.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} align="center" sx={{ color: 'red' }}>
+                                        {loading ? "" : "No data found"}
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                productCategory && productCategory?.products?.map((row, i) => (
+                                    <TableRow
+                                        key={row?.sno}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row?.sno}</TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
+                                            {row?.cat_name}
+                                        </TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
+                                            {row?.subcat_name}
+                                        </TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
+                                            {row?.product_name}
+                                        </TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
+                                            {row?.product_code}
+                                        </TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
+                                            {row?.manufactuer}
+                                        </TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
+                                            {row?.price}
+                                        </TableCell>
+                                        <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
+                                            <button onClick={() => {
+                                                router.push(`/admin/healthstorelist/edit/${row?._id}`)
+                                            }}>
+                                                <CreateIcon color="primary" />
+                                            </button>
+                                            <button onClick={() => setSelectedId(row?._id)}>
+                                                <DeleteIcon color='error' />
+                                            </button>
+                                        </TableCell>
+                                        <DeleteModal
+                                            open={selectedId === row?._id}
+                                            setOpen={() => setSelectedId(null)}
+                                            title={"Delete Product"}
+                                            description={`Are you sure you want to delete ${row?.product_name}`}
+                                            onSubmit={async () => {
+                                                await dispatch(DeleteProductService(row?._id));
+                                                setSelectedId(null);
+                                            }} />
+                                    </TableRow>
+                                )))}
                     </TableBody>
                 </Table>
 

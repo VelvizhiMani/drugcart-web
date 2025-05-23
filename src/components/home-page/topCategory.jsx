@@ -10,40 +10,31 @@ const TopCategory = () => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // Maintain fallback state per image
-  const [fallbackMap, setFallbackMap] = useState({});
-
   useEffect(() => {
     dispatch(GetCategoryService(1, 8));
   }, [dispatch]);
 
-  const handleImageError = (id) => {
-    setFallbackMap((prev) => ({ ...prev, [id]: true }));
-  };
-
   return (
     <>
-      {categories?.categories?.map((category) => {
-        const id = category?._id || category?.url; // Unique identifier
-        const fallback = fallbackMap[id];
-        const imageUrl = fallback
-          ? `https://assets2.drugcarts.com/category/thumb/${category?.cat_img}`
-          : `https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/category/thumb/${category?.cat_img}`;
+      {categories?.categories?.map((category, i) => {
 
         return (
           <div
             className="bg-bgshop rounded-lg p-4 cursor-pointer"
-            key={id}
+            key={i}
             onClick={() => router.push(`/catalog/${category?.url}`)}
           >
             <p className="text-center">
-              <Image
+              <img
                 width={100}
                 height={100}
-                src={imageUrl}
+                src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/category/thumb/${category?.cat_img}`}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `https://assets2.drugcarts.com/category/thumb/${category?.cat_img}`;
+                }}
                 alt={category?.category_name}
                 className="mb-3 mx-auto object-cover bg-bgcancer rounded-full p-2 w-24 h-24"
-                onError={() => handleImageError(id)}
               />
               <span>{category?.category_name}</span>
             </p>

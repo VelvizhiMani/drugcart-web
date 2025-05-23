@@ -19,6 +19,7 @@ import { PutCountryCodeService, GetCountryCodeIdService } from '@/services/count
 import { useDispatch, useSelector } from "react-redux";
 
 function EditCountryCode() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { countryCode } = useSelector((state) => state.countryCodeData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -29,6 +30,7 @@ function EditCountryCode() {
     }, [params?.id])
 
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
             country: countryCode?.country || "",
             code: countryCode?.code || "",
@@ -37,17 +39,41 @@ function EditCountryCode() {
         validationSchema: yup.object({
             country: yup.string().required("Country is required"),
             code: yup.string().required("Code is required"),
-            flag: yup.string().required("Flag is required"),
+            // flag: yup.string().required("Flag is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutCountryCodeService(countryCode?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.flag instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.flag);
+
+                finalData.flag = {
+                    name: data.flag.name,
+                    type: data.flag.type,
+                    data: base64,
+                };
+            }
+            await dispatch(PutCountryCodeService(countryCode?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("flag", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("flag", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -105,7 +131,8 @@ function EditCountryCode() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Country Flag"}
-                            image={formik.values.flag}
+                            image={`https://assets1.drugcarts.com/admincolor/countryflag/${countryCode?.flag}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/countryflag/${countryCode?.flag}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.flag

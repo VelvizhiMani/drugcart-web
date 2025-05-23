@@ -19,6 +19,7 @@ import { PutScanService, GetScanIdService } from '@/services/scanService';
 import { useSelector, useDispatch } from "react-redux";
 
 function EditScan() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { scan } = useSelector((state) => state.scanData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -47,20 +48,42 @@ function EditScan() {
             scanImage: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutScanService(scan?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.scanImage instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.scanImage);
+
+                finalData.scanImage = {
+                    name: data.scanImage.name,
+                    type: data.scanImage.type,
+                    data: base64,
+                };
+            }
+            await dispatch(PutScanService(scan?._id, finalData));
+        }
     });
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
-    const handleScanImage = (event) => {
+    const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("scanImage", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("scanImage", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     useEffect(() => {
@@ -146,8 +169,9 @@ function EditScan() {
 
                         <ImageInput
                             title={"Scan Image:"}
-                            image={formik.values.scanImage}
-                            onChange={handleScanImage}
+                            image={`https://assets3.drugcarts.com/scan/${scan?.scanImage}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/scan/${scan?.scanImage}`}
+                            onChange={handleImage}
                             error={
                                 formik.touched.scanImage
                                     ? formik.errors.scanImage

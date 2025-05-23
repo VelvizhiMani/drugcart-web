@@ -12,20 +12,10 @@ import UserTable from '@/components/admin/table/UserTable';
 import UserCard from '@/components/admin/card/UserCard';
 import ProductCalendar from '@/components/admin/Calender/ProductCalender';
 import { useDispatch, useSelector } from 'react-redux';
-import { GetOrdersService } from '@/services/orderService';
-import { GetProductService } from '@/services/productService';
-import { GetAllUserService, GetCustomersService } from '@/services/admin/userService';
 import { useRole } from '@/hooks/useRole'
+
 function Dashboard() {
   const { role } = useRole()
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(GetOrdersService())
-    dispatch(GetProductService())
-    dispatch(GetAllUserService())
-    dispatch(GetCustomersService())
-  }, [])
 
   return (
     <Box sx={{ flexGrow: 1 }}>

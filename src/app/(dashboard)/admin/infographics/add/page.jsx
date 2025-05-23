@@ -20,14 +20,17 @@ import { PostInfoGraphicsService } from '@/services/infoGraphicsService';
 import { useDispatch } from "react-redux";
 
 function InfoGraphicsAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
-    const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
+    function getFileNameFromUrl(url) {
+        return url.split("/").pop();
     }
+
+    const URLText = (text) => {
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -44,11 +47,11 @@ function InfoGraphicsAdd() {
         validationSchema: yup.object({
             title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.string().required("Picture is required")
+            // picture: yup.mixed().required("Picture is required")
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostInfoGraphicsService(data, resetForm))
+            await dispatch(PostInfoGraphicsService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
@@ -59,7 +62,18 @@ function InfoGraphicsAdd() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("picture", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     useEffect(() => {
@@ -120,31 +134,8 @@ function InfoGraphicsAdd() {
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
-                            title={"Images Thumb"}
-                            image={formik.values.thuming}
-                            onChange={handleThumImage}
-                            error={
-                                formik.touched.thuming
-                                    ? formik.errors.thuming
-                                    : null
-                            }
-                        />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <TextInput
-                            title={"Image Thumb Alt"}
-                            value={formik.values.thumbalt}
-                            onChange={formik.handleChange("thumbalt")}
-                            helperText={
-                                formik.touched.thumbalt ? formik.errors.thumbalt : null
-                            }
-                            error={formik.touched.thumbalt ? formik.errors.thumbalt : null}
-                        />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <ImageInput
                             title={"Images"}
-                            image={formik.values.picture}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture
@@ -162,6 +153,31 @@ function InfoGraphicsAdd() {
                                 formik.touched.alt ? formik.errors.alt : null
                             }
                             error={formik.touched.alt ? formik.errors.alt : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <ImageInput
+                            title={"Images Thumb"}
+                            image={formik.values.thuming}
+                            onChange={handleThumImage}
+                            error={
+                                formik.touched.thuming
+                                    ? formik.errors.thuming
+                                    : null
+                            }
+                            disabled={true}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <TextInput
+                            title={"Image Thumb Alt"}
+                            value={formik.values.thumbalt}
+                            onChange={formik.handleChange("thumbalt")}
+                            helperText={
+                                formik.touched.thumbalt ? formik.errors.thumbalt : null
+                            }
+                            error={formik.touched.thumbalt ? formik.errors.thumbalt : null}
+                            disabled={true}
                         />
                     </Grid2>
                 </Grid2>

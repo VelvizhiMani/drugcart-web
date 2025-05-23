@@ -17,12 +17,18 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutWrittenByService, GetWrittenByIdService } from '@/services/writtenByService';
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 function EditWrittenBy() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { writtenBy } = useSelector((state) => state.writtenbyData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+
+    function getFileNameFromUrl(url) {
+        return url?.split("/").pop();
+    }
 
     useEffect(() => {
         dispatch(GetWrittenByIdService(params?.id))
@@ -40,19 +46,44 @@ function EditWrittenBy() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             qualification: yup.string().required("Qualification is required"),
-            picture: yup.string().required("Picture is required"),
+            // picture: yup.string().required("Picture is required"),
             experience: yup.string().required("Experience is required"),
-            imagealt: yup.string().required("Image alt is required"),
+            // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutWrittenByService(writtenBy?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.picture);
+
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutWrittenByService(mainSlider?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("picture", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -110,7 +141,8 @@ function EditWrittenBy() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.picture}
+                            image={`https://assets1.drugcarts.com/admincolor/writtenby/${writtenBy?.picture}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/writtenby/${writtenBy?.picture}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture

@@ -20,16 +20,15 @@ import { PutArticleService, GetArticleIdService } from '@/services/articleServic
 import { useSelector, useDispatch } from "react-redux";
 
 function EditArticles() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { article } = useSelector((state) => state.articlesData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     useEffect(() => {
         dispatch(GetArticleIdService(params?.id))
@@ -50,14 +49,35 @@ function EditArticles() {
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
             url: yup.string().required("URL is required"),
-            blogimg: yup.string().required("Image is required"),
+            // blogimg: yup.string().required("Image is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutArticleService(article?._id, data))
-        },
-    });
+            const finalData = { ...data };
 
+            if (data.blogimg instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.blogimg);
+
+                finalData.blogimg = {
+                    name: data.blogimg.name,
+                    type: data.blogimg.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutArticleService(article?._id, finalData));
+        }
+    });
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.blogname)
@@ -65,7 +85,10 @@ function EditArticles() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("blogimg", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("blogimg", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -123,7 +146,8 @@ function EditArticles() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.blogimg}
+                            image={`https://assets3.drugcarts.com/admincolor/homepage/slider/${article?.blogimg}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/slider/${article?.blogimg}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.blogimg

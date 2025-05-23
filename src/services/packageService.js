@@ -70,7 +70,7 @@ const PutPackageService = (id, userData) => async (dispatch) => {
 const DeletePackageService = (id) => async (dispatch) => {
     await axios.delete(`/api/packagelist/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getPackage(id))
-        dispatch(GetPackageService())
+     dispatch(GetPackageIdService(id))
     }).catch((error) => {
         console.log("error", error.message)
     })

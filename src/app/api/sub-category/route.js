@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { v4 as uuidv4 } from "uuid";
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -13,52 +14,75 @@ const s3 = new S3Client({
     },
 });
 
+function imageFileName(name) {
+    return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
 export async function POST(request) {
-    try {
-        await connnectionToDatabase();
+  try {
+    await connnectionToDatabase();
 
-        const { success, user, message } = await adminAuthorization();
-        console.log(success);
-
-        if (!success) {
-            return NextResponse.json({ error: message }, { status: 400 })
-        }
-
-        const {
-            cat_name,
-            subcat_name,
-            url,
-            sub_cat_img,
-            imagealt,
-            metatitle,
-            metadesc,
-            metakeyboard
-        } = await request.json();
-
-        const isSubCategory = await Subcategory.findOne({ subcat_name });
-        if (isSubCategory) {
-            return NextResponse.json({ error: 'sub category already exist' }, { status: 400 })
-        }
-
-        const addSubCategory = new Subcategory({
-            cat_name,
-            subcat_name,
-            url,
-            sub_cat_img,
-            imagealt,
-            metatitle,
-            metadesc,
-            metakeyboard
-        });
-
-
-        await addSubCategory.save();
-        return NextResponse.json(addSubCategory, { status: 200 })
-    } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    const { success, user, message } = await adminAuthorization();
+    if (!success) {
+      return NextResponse.json({ error: message }, { status: 400 });
     }
+
+    const {
+      cat_name,
+      subcat_name,
+      url,
+      cat_img,
+      imagealt,
+      metatitle,
+      metadesc,
+      metakeyboard,
+    } = await request.json();
+
+    let uploadedImageFileName = "";
+
+    if (cat_img && cat_img.base64 && cat_img.name) {
+      const base64Data = cat_img.base64.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, "base64");
+
+      const uniqueSuffix = Date.now() + "-" + uuidv4() + "-" + cat_img.name;
+      const fileName = `category/thumb/sub${imageFileName(uniqueSuffix)}`;
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: buffer,
+        ContentType: cat_img.type,
+        ContentDisposition: "inline",
+        ACL: "public-read",
+      };
+
+      await s3.send(new PutObjectCommand(uploadParams));
+      uploadedImageFileName = `sub${imageFileName(uniqueSuffix)}`;
+    }
+
+    const isSubCategory = await Subcategory.findOne({ subcat_name });
+    if (isSubCategory) {
+      return NextResponse.json({ error: "Sub category already exists" }, { status: 400 });
+    }
+
+    const addSubCategory = new Subcategory({
+      cat_name,
+      subcat_name,
+      url,
+      cat_img: uploadedImageFileName,
+      imagealt,
+      metatitle,
+      metadesc,
+      metakeyboard,
+    });
+
+    await addSubCategory.save();
+    return NextResponse.json(addSubCategory, { status: 200 });
+  } catch (error) {
+    console.error("Subcategory error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
 }
+
 
 export async function GET(req) {
     try {
@@ -72,7 +96,7 @@ export async function GET(req) {
 
         const { searchParams } = new URL(req.url);
         const page = parseInt(searchParams.get("page")) || 1;
-        const limit = parseInt(searchParams.get("limit")) || 10;
+        const limit = parseInt(searchParams.get("limit"));
         const search = searchParams.get("search") || "";
 
         const filters = search ? { subcat_name: { $regex: search, $options: "i" } } : {};

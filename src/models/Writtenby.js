@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const WrittenbySchema = new Schema(
     {
+        id: {
+            type: String,
+            unique: true
+        },
         name: {
             type: String,
             required: true
@@ -58,7 +62,28 @@ const WrittenbySchema = new Schema(
     }
 )
 
+WrittenbySchema.pre("save", async function (next) {
+  if (!this.id) {
+    try {
+      const allPacks = await mongoose.model("Writtenby").find({});
+      let maxNumber = 96;
 
+      for (let pack of allPacks) {
+        const match = pack.id?.match(/\d+$/);
+        if (match) {
+          const number = parseInt(match[0], 10);
+          if (number > maxNumber) maxNumber = number;
+        }
+      }
+
+      const newNumber = maxNumber + 1;
+      this.id = String(newNumber).padStart(4, "0");
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
 
 const Writtenby = mongoose.models.Writtenby || mongoose.model("Writtenby", WrittenbySchema, "writtenby");
 

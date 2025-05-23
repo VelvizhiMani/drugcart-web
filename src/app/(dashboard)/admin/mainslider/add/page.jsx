@@ -17,16 +17,16 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostMainSliderService } from '@/services/mainSliderService';
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 function MainSliderAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -39,19 +39,30 @@ function MainSliderAdd() {
         validationSchema: yup.object({
             title: yup.string().required("Title is required"),
             url: yup.string().required("Url is required"),
-            slide_image: yup.string().required("slide image is required"),
+            slide_image: yup.mixed().required("slide image is required"),
             orderno: yup.string().required("OrderNo is required"),
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostMainSliderService(data, resetForm))
+            await dispatch(PostMainSliderService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("slide_image", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("slide_image", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     useEffect(() => {
@@ -113,7 +124,7 @@ function MainSliderAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"HOME SLIDER"}
-                            image={formik.values.slide_image}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.slide_image

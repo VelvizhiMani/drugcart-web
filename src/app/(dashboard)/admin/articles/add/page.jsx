@@ -20,14 +20,13 @@ import { PostArticleService } from '@/services/articleService';
 import { useDispatch } from "react-redux";
 
 function ArticlesAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -43,11 +42,11 @@ function ArticlesAdd() {
         validationSchema: yup.object({
             blogname: yup.string().required("Article Name is required"),
             url: yup.string().required("URL is required"),
-            blogimg: yup.string().required("Image is required"),
+            // blogimg: yup.mixed().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostArticleService(data, resetForm))
+            await dispatch(PostArticleService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
@@ -58,7 +57,18 @@ function ArticlesAdd() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("blogimg", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("blogimg", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -116,7 +126,7 @@ function ArticlesAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.blogimg}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.blogimg

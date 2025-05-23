@@ -21,6 +21,7 @@ import { GetMainSliderListService } from '@/services/mainSliderService';
 import { useSelector, useDispatch } from "react-redux";
 
 function PageBannerAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { mainSliderList } = useSelector((state) => state.mainSliderData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -32,10 +33,8 @@ function PageBannerAdd() {
     const uniqueArray = mainSliderList?.main_sliders?.filter((v, i, a) => a.findIndex(t => (t.url === v?.url)) === i)
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -46,18 +45,29 @@ function PageBannerAdd() {
         },
         validationSchema: yup.object({
             pagename: yup.string().required("Page Name is required"),
-            image: yup.string().required("Image is required"),
+            image: yup.mixed().required("Image is required"),
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostPageBannerService(data, resetForm))
+            await dispatch(PostPageBannerService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("image", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -108,7 +118,7 @@ function PageBannerAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Banner Image"}
-                            image={formik.values.image}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.image

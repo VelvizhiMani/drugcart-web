@@ -21,8 +21,14 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { PostSubCategoryService } from '../../../../../services/subCategoryService'
 import { GetCategoryService } from "@/services/categoryService";
+import SelectField from "@/components/admin/AutoComplete/SelectField";
+
+function getFileNameFromUrl(url) {
+    return url.split("/").pop();
+}
 
 function SubCategoryAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { categories } = useSelector((state) => state.categoryData)
     const dispatch = useDispatch()
     const router = useRouter();
@@ -32,14 +38,30 @@ function SubCategoryAdd() {
     }, [])
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
+
+    const categoryUrl = categories?.categories?.map((item) => {
+        return {
+            key: item?.url,
+            value: item?.category_name
+        }
+    })
 
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("sub_cat_img", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("cat_img", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const formik = useFormik({
@@ -47,7 +69,7 @@ function SubCategoryAdd() {
             cat_name: "",
             subcat_name: "",
             url: "",
-            sub_cat_img: "",
+            cat_img: "",
             imagealt: "",
             metatitle: "",
             metadesc: "",
@@ -57,11 +79,10 @@ function SubCategoryAdd() {
             cat_name: yup.string().required("Category type is required"),
             subcat_name: yup.string().required("Sub Category Name is required"),
             url: yup.string().required("URL is required"),
-            sub_cat_img: yup.string().required("Sub Category Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostSubCategoryService(data, resetForm))
+            await dispatch(PostSubCategoryService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
@@ -69,6 +90,8 @@ function SubCategoryAdd() {
         formik.values.url = URLText(formik.values.subcat_name)
     }, [formik.values.subcat_name])
 
+    console.log('test', formik.values.cat_name);
+    
     return (
         <Box>
             <Box sx={{ display: "flex" }}>
@@ -100,12 +123,12 @@ function SubCategoryAdd() {
             >
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12, md: 4 }}>
-                        <SearchField
+                        <SelectField
                             title="Category Name"
-                            data={categories?.categories}
+                            data={categoryUrl}
                             value={formik.values.cat_name}
-                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.category_name || "")}
-                            onInputChange={(event, newValue) => formik.setFieldValue("cat_name", newValue)}
+                            onChange={(key) => formik.setFieldValue("cat_name", key)}
+                            getOptionLabel={(option) => option?.value}
                             helperText={
                                 formik.touched.cat_name ? formik.errors.cat_name : null
                             }
@@ -139,13 +162,9 @@ function SubCategoryAdd() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Category Image"}
-                            image={formik.values.sub_cat_img}
+                            image={imagePreview}
                             onChange={handleCategoryImage}
-                            error={
-                                formik.touched.sub_cat_img
-                                    ? formik.errors.sub_cat_img
-                                    : null
-                            }
+
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 4 }}>

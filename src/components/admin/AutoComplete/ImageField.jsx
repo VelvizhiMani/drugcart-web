@@ -63,11 +63,15 @@ function ImageField({ title, size = "small", data, getOptionLabel, value, helper
           return (
             <li {...rest} key={key} className="flex items-center space-x-2 p-2 cursor-pointer">
               <img
-                src={`https://assets2.drugcarts.com/${option?.product_img}`}
+                src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${option?.product_img}`}
                 alt={option?.product_name}
-                width={40}
-                height={40}
-                className="rounded"
+                width={100}
+                height={100}
+                className="object-cover rounded w-8 h-8"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `https://assets2.drugcarts.com/${option?.product_img}`;
+                }}
               />
               <span className="font-semibold">{option?.product_name}</span>
             </li>

@@ -24,6 +24,7 @@ import { GetLabsService } from "@/services/labService";
 import SelectInput from "@/components/admin/input/SelectInput";
 
 function EditAdminLabTest() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { testPackage } = useSelector((state) => state.testPackageData)
     const { labPackageList } = useSelector((state) => state.labPackageData)
     const { labList } = useSelector((state) => state.labData)
@@ -77,20 +78,42 @@ function EditAdminLabTest() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutTestPackageService(testPackage?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.image);
+
+                finalData.image = {
+                    name: data.image.name,
+                    type: data.image.type,
+                    data: base64,
+                };
+            }
+            await dispatch(PutTestPackageService(testPackage?._id, finalData));
+        }
     });
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("image", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("image", file);
+            setImagePreview(URL.createObjectURL(file));
+        }
     };
 
     const handleLogo = (event) => {
@@ -102,7 +125,7 @@ function EditAdminLabTest() {
         formik.values.url = URLText(formik.values.testname)
         formik.values.packageurl = URLText(formik.values.packageName)
     }, [formik.values.testname, formik.values.packageName])
-    
+
     return (
         <Box>
             <Box sx={{ display: "flex" }}>
@@ -209,7 +232,8 @@ function EditAdminLabTest() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Test Image"}
-                            image={formik.values.image}
+                            image={`https://assets1.drugcarts.com/admincolor/lab/lablogo/${testPackage?.image}`}
+                            fallbackImage={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${testPackage?.image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.image
@@ -228,6 +252,7 @@ function EditAdminLabTest() {
                                     ? formik.errors.logo
                                     : null
                             }
+                            disabled={true}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>

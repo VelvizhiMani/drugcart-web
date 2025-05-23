@@ -17,8 +17,10 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { GetMainSliderIdService, PutMainSliderService } from '@/services/mainSliderService';
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 
 function EditMainSlider() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { mainSlider } = useSelector((state) => state.mainSliderData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -29,17 +31,15 @@ function EditMainSlider() {
     }, [params?.id])
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
             title: mainSlider?.title || "",
             url: mainSlider?.url || "",
-            slide_image: `https://assets1.drugcarts.com/admincolor/homepage/slider/${mainSlider?.slide_image}` || "",
+            slide_image: mainSlider?.slide_image || "",
             orderno: mainSlider?.orderno || "",
             status: mainSlider?.status || "",
         },
@@ -51,14 +51,39 @@ function EditMainSlider() {
             status: yup.string().required("Status is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutMainSliderService(mainSlider?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.slide_image instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.slide_image);
+
+                finalData.slide_image = {
+                    name: data.slide_image.name,
+                    type: data.slide_image.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutMainSliderService(mainSlider?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("slide_image", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("slide_image", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     useEffect(() => {
@@ -120,7 +145,8 @@ function EditMainSlider() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"HOME SLIDER"}
-                            image={formik.values.slide_image}
+                            image={`https://assets3.drugcarts.com/admincolor/homepage/slider/${mainSlider?.slide_image}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/slider/${mainSlider?.slide_image}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.slide_image

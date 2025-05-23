@@ -20,14 +20,17 @@ import { PostBlogService } from '@/services/blogService';
 import { useDispatch } from "react-redux";
 
 function BlogAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
-    const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
+    function getFileNameFromUrl(url) {
+        return url.split("/").pop();
     }
+
+    const URLText = (text) => {
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         initialValues: {
@@ -44,14 +47,13 @@ function BlogAdd() {
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
             url: yup.string().required("URL is required"),
-            blogimg: yup.string().required("Image is required"),
+            blogimg: yup.mixed().required("Image is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostBlogService(data, resetForm))
+            await dispatch(PostBlogService(data, resetForm));
+            setImagePreview(null)
         },
     });
-
 
     useEffect(() => {
         formik.values.url = URLText(formik.values.blogname)
@@ -59,7 +61,18 @@ function BlogAdd() {
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("blogimg", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("blogimg", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -117,7 +130,7 @@ function BlogAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Blog Image"}
-                            image={formik.values.blogimg}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.blogimg

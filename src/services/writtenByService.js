@@ -53,10 +53,10 @@ const PutWrittenByService = (id, userData) => async (dispatch) => {
     })
 }
 
-const DeleteWrittenByService = (id) => async (dispatch) => {
+const DeleteWrittenByService = (id, limit) => async (dispatch) => {
     await axios.delete(`/api/writtenbylist/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getWrittenBy(id))
-        dispatch(GetWrittenByService())
+        dispatch(GetWrittenByService(1, limit))
     }).catch((error) => {
         console.log("error", error.message)
     })

@@ -20,6 +20,7 @@ import { PutDiseasesService, GetDiseasesIdService } from '@/services/diseasesSer
 import { useSelector, useDispatch } from "react-redux";
 
 function EditDiseases() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { diseases } = useSelector((state) => state.diseasesData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -29,12 +30,9 @@ function EditDiseases() {
         dispatch(GetDiseasesIdService(params?.id))
     }, [params?.id])
 
-
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -71,17 +69,41 @@ function EditDiseases() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             url: yup.string().required("Url is required"),
-            picture: yup.string().required("Picture is required")
+            // picture: yup.string().required("Picture is required")
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutDiseasesService(diseases?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.picture);
+
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
+            }
+            await dispatch(PutDiseasesService(diseases?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("picture", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     useEffect(() => {
@@ -143,7 +165,8 @@ function EditDiseases() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Picture"}
-                            image={formik.values.picture}
+                            image={`https://assets1.drugcarts.com/press/${diseases?.picture}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/press/${diseases?.picture}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture

@@ -19,6 +19,7 @@ import { PostCountryCodeService } from '@/services/countryCodeService';
 import { useDispatch } from "react-redux";
 
 function CountryCodeAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
 
@@ -31,17 +32,28 @@ function CountryCodeAdd() {
         validationSchema: yup.object({
             country: yup.string().required("Country is required"),
             code: yup.string().required("Code is required"),
-            flag: yup.string().required("Flag is required"),
+            // flag: yup.mixed().required("Flag is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostCountryCodeService(data, resetForm))
+            await dispatch(PostCountryCodeService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("flag", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("flag", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     return (
@@ -99,7 +111,7 @@ function CountryCodeAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Country Flag"}
-                            image={formik.values.flag}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.flag

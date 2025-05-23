@@ -31,6 +31,7 @@ function HealthStoreDeviceUrl() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const params = useParams()
+    const [selectedId, setSelectedId] = useState(null);
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -62,14 +63,14 @@ function HealthStoreDeviceUrl() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Health Store Device Product List
+                    Health Care Device Product List
                 </Typography>
                 <Button
                     color="secondary"
                     variant="contained"
                     style={{ textTransform: "capitalize", fontFamily: "Poppins" }}
                     startIcon={<AddIcon />}
-                    onClick={() => router.push(`/admin/productlist/add`)}
+                    onClick={() => router.push(`/admin/storedevicelist/add`)}
                 >
                     Add Product
                 </Button>
@@ -135,23 +136,23 @@ function HealthStoreDeviceUrl() {
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={() => {
-                                        router.push(`/admin/productlist/${row?._id}`)
+                                        router.push(`/admin/storedevicelist/edit/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={async () => {
-                                        setOpenModal(true)
-                                        await dispatch(GetProductIdService(row?._id))
-                                    }}>
+                                    <button onClick={() => setSelectedId(row?._id)}>
                                         <DeleteIcon color='error' />
                                     </button>
                                 </TableCell>
                                 <DeleteModal
-                                    open={openModal}
-                                    setOpen={setOpenModal}
+                                    open={selectedId === row?._id}
+                                    setOpen={() => setSelectedId(null)}
                                     title={"Delete Product"}
-                                    description={`Are you sure you want to delete ${product?.product_name}`}
-                                    onSubmit={() => dispatch(DeleteProductService(product?._id))} />
+                                    description={`Are you sure you want to delete ${row?.product_name}`}
+                                    onSubmit={async () => {
+                                        await dispatch(DeleteProductService(row?._id));
+                                        setSelectedId(null);
+                                    }} />
                             </TableRow>
                         ))}
                     </TableBody>

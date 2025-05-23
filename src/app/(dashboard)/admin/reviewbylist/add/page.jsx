@@ -17,10 +17,16 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { PostReviewByService } from '@/services/reviewByService';
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 function ReviewByAdd() {
+    const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
+
+    function getFileNameFromUrl(url) {
+        return url.split("/").pop();
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -33,20 +39,37 @@ function ReviewByAdd() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             qualification: yup.string().required("Qualification is required"),
-            picture: yup.string().required("Picture is required"),
+            // picture: yup.mixed().required("Picture is required"),
             experience: yup.string().required("Experience is required"),
-            imagealt: yup.string().required("Image alt is required"),
+            // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data, { resetForm }) => {
-            console.log(data);
-            await dispatch(PostReviewByService(data, resetForm))
+            await dispatch(PostReviewByService(data, resetForm));
+            setImagePreview(null)
         },
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                formik.setFieldValue("picture", {
+                    name: file.name,
+                    type: file.type,
+                    base64: reader.result, // base64 encoded string
+                });
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
+
+    useEffect(() => {
+        return () => {
+            if (imagePreview) URL.revokeObjectURL(imagePreview);
+        };
+    }, [imagePreview]);
 
     return (
         <Box>
@@ -103,7 +126,7 @@ function ReviewByAdd() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.picture}
+                            image={imagePreview}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture

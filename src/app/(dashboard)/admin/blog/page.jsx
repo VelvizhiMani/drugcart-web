@@ -32,9 +32,14 @@ function BlogPage() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const [selectedId, setSelectedId] = useState(null);
+    const [fallbackMap, setFallbackMap] = useState({});
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
+    };
+
+    const handleImageError = (id) => {
+        setFallbackMap((prev) => ({ ...prev, [id]: true }));
     };
 
     const router = useRouter();
@@ -118,63 +123,71 @@ function BlogPage() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {blogList && blogList?.blogs?.map((row, i) => (
-                            <TableRow
-                                key={i}
-                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                            >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.sno}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    component="th"
-                                    scope="row"
+                        {blogList && blogList?.blogs?.map((row, i) => {
+                            const id = row?._id || row?.blogname; // Unique identifier
+                            const fallback = fallbackMap[id];
+                            const imageUrl = fallback
+                                ? `https://assets2.drugcarts.com/blogs/${row?.blogimg}`
+                                : `${process.env.NEXT_PUBLIC_IMAGE_URL}/blogs/${row?.blogimg}`;
+                            return (
+                                <TableRow
+                                    key={i}
+                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                 >
-                                    {tableText(row?.blogname)}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.url}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.blogimg ? (
-                                        <Avatar
-                                            alt="blogimg"
-                                            src={row?.blogimg}
-                                            style={{ width: 24, height: 24 }}
-                                            variant="rounded"
-                                        />
-                                    ) : (
-                                        <FormHelperText error>No Image</FormHelperText>
-                                    )}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.status}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    align="right"
-                                >
-                                    <button onClick={() => {
-                                        router.push(`/admin/blog/${row?._id}`)
-                                    }}>
-                                        <CreateIcon color="primary" />
-                                    </button>
-                                    <button onClick={() => setSelectedId(row._id)}>
-                                        <DeleteIcon color='error' />
-                                    </button>
-                                </TableCell>
-                                <DeleteModal
-                                    open={selectedId === row._id}
-                                    setOpen={() => setSelectedId(null)}
-                                    title={"Delete Article"}
-                                    description={`Are you sure you want to delete ${row?.blogname}`}
-                                    onSubmit={async () => {
-                                        await dispatch(DeleteBlogService(row._id));
-                                        setSelectedId(null);
-                                    }} />
-                            </TableRow>
-                        ))}
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.sno}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        {tableText(row?.blogname)}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.url}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.blogimg ? (
+                                            <Avatar
+                                                alt={row?.blogname}
+                                                src={imageUrl}
+                                                style={{ width: 24, height: 24 }}
+                                                variant="rounded"
+                                                onError={() => handleImageError(id)}
+                                            />
+                                        ) : (
+                                            <FormHelperText error>No Image</FormHelperText>
+                                        )}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.status}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        align="right"
+                                    >
+                                        <button onClick={() => {
+                                            router.push(`/admin/blog/${row?._id}`)
+                                        }}>
+                                            <CreateIcon color="primary" />
+                                        </button>
+                                        <button onClick={() => setSelectedId(row._id)}>
+                                            <DeleteIcon color='error' />
+                                        </button>
+                                    </TableCell>
+                                    <DeleteModal
+                                        open={selectedId === row._id}
+                                        setOpen={() => setSelectedId(null)}
+                                        title={"Delete Article"}
+                                        description={`Are you sure you want to delete ${row?.blogname}`}
+                                        onSubmit={async () => {
+                                            await dispatch(DeleteBlogService(row._id));
+                                            setSelectedId(null);
+                                        }} />
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

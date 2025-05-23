@@ -1,9 +1,10 @@
-import { authenticateUser } from '../../../utils/middleware';
+import { adminAuthorization } from '../../../utils/middleware';
 import Articles from '../../../models/Articles';
 import { NextResponse } from 'next/server';
 import connnectionToDatabase from '@/lib/mongodb';
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { v4 as uuidv4 } from 'uuid';
 
 const s3 = new S3Client({
     region: process.env.AWS_REGION,
@@ -13,11 +14,14 @@ const s3 = new S3Client({
     },
 });
 
+function imageFileName(name) {
+    return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
+}
 
 export async function POST(request) {
     try {
         await connnectionToDatabase();
-        const { success, user, message } = await authenticateUser();
+        const { success, user, message } = await adminAuthorization();
 
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 })
@@ -34,6 +38,26 @@ export async function POST(request) {
             metakeyboard
         } = await request.json();
 
+        let uploadedImageFileName = "";
+
+        if (blogimg && blogimg.base64 && blogimg.name) {
+            const base64Data = blogimg.base64.replace(/^data:image\/\w+;base64,/, "");
+            const buffer = Buffer.from(base64Data, "base64");
+
+            const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + blogimg.name
+            const fileName = `admincolor/homepage/slider/${imageFileName(uniqueSuffix)}`
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: fileName,
+                Body: buffer,
+                ContentType: blogimg.type,
+                ContentDisposition: "inline",
+                ACL: "public-read",
+            };
+
+            await s3.send(new PutObjectCommand(uploadParams));
+            uploadedImageFileName = imageFileName(uniqueSuffix);
+        }
         const isArticles = await Articles.findOne({ blogname });
         if (isArticles) {
             return NextResponse.json({ error: 'Blog Name already exist' }, { status: 401 })
@@ -41,7 +65,7 @@ export async function POST(request) {
 
         const addArticles = new Articles({
             blogname,
-            blogimg,
+            blogimg: uploadedImageFileName,
             url,
             description,
             imagealt,

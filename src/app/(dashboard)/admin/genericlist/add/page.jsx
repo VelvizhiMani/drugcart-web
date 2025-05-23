@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { GetCategoryService } from "@/services/categoryService";
 import { GetSubCategoryService } from "@/services/subCategoryService";
 import { GetGeneticService, PostGeneticService } from "@/services/genericService";
+import SelectField from "@/components/admin/AutoComplete/SelectField";
 
 const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
@@ -33,13 +34,17 @@ function GenericeAdd() {
   const { categories } = useSelector((state) => state.categoryData)
   const { subCategories } = useSelector((state) => state.subCategoryData)
   const dispatch = useDispatch()
-  const [value, setValue] = useState("");
 
   const URLText = (text) => {
-    const splitText = text.split(/[\s+]+/)
-    const joinSpace = splitText.join("-").toLowerCase()
-    return joinSpace
-  }
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+  };
+
+  const categoryUrl = categories?.categories?.map((item) => {
+    return {
+      key: item?.url,
+      value: item?.category_name
+    }
+  })
 
   const formik = useFormik({
     initialValues: {
@@ -91,7 +96,7 @@ function GenericeAdd() {
       subname: yup.string().required("Sub Category is required"),
       url: yup.string().required("URL is required"),
       generices: yup.string().required("Generices is required"),
-      gen_img: yup.string().required("URL is required")
+      // gen_img: yup.string().required("URL is required")
     }),
     onSubmit: async (data, { resetForm }) => {
       // await console.log(data);
@@ -113,7 +118,12 @@ function GenericeAdd() {
     dispatch(GetSubCategoryService())
   }, [formik.values.catnames])
 
-  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name === formik.values.catnames)
+  const filterSubCategory = subCategories?.subcategoryItems?.filter((item) => item?.cat_name === formik.values.catnames)?.map((data) => {
+    return {
+      key: data?.url,
+      value: data?.subcat_name
+    }
+  })
 
   // useEffect(() => {
   //   if (typeof window !== "undefined" && typeof document !== "undefined") {
@@ -143,7 +153,7 @@ function GenericeAdd() {
     // },
   };
 
-  console.log(formik.values.mechanism);
+  console.log(formik.values.catnames);
   return (
     <Box>
       <Box sx={{ display: "flex" }}>
@@ -178,15 +188,12 @@ function GenericeAdd() {
       >
         <Grid2 container spacing={2}>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Category Name"
-              data={categories?.categories}
+              data={categoryUrl}
               value={formik.values.catnames}
-              getOptionLabel={(option) => (typeof option === "string" ? option : option?.category_name || "")}
-              onInputChange={(event, newValue) => {
-                formik.setFieldValue("catnames", newValue);
-                formik.setFieldValue("subname", "");
-              }}
+              onChange={(key) => formik.setFieldValue("catnames", key)}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.catnames ? formik.errors.catnames : null
               }
@@ -196,12 +203,12 @@ function GenericeAdd() {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            <SearchField
+            <SelectField
               title="Sub Category Name"
               data={filterSubCategory}
               value={formik.values.subname}
-              getOptionLabel={(option) => (typeof option === "string" ? option : option?.subcat_name || "")}
-              onInputChange={(event, newValue) => formik.setFieldValue("subname", newValue)}
+              onChange={(key) => formik.setFieldValue("subname", key)}
+              getOptionLabel={(option) => option?.value}
               helperText={
                 formik.touched.subname ? formik.errors.subname : null
               }
@@ -236,6 +243,7 @@ function GenericeAdd() {
                   ? formik.errors.gen_img
                   : null
               }
+              disabled={true}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>

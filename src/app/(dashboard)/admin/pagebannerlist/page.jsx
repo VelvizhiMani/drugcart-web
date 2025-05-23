@@ -31,12 +31,17 @@ function AdminPageBanner() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const [selectedId, setSelectedId] = useState(null);
+    const [fallbackMap, setFallbackMap] = useState({});
 
     const URLText = (text) => {
         const splitText = text.split(" ")
         const joinSpace = splitText.join("-").toLowerCase()
         return joinSpace
     }
+
+    const handleImageError = (id) => {
+        setFallbackMap((prev) => ({ ...prev, [id]: true }));
+    };
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
@@ -120,61 +125,69 @@ function AdminPageBanner() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {pageBannerList && pageBannerList?.page_bannners?.map((row, i) => (
-                            <TableRow
-                                key={i}
-                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                            >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.sno}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    component="th"
-                                    scope="row"
+                        {pageBannerList && pageBannerList?.page_bannners?.map((row, i) => {
+                            const id = row?._id || row?.pagename; // Unique identifier
+                            const fallback = fallbackMap[id];
+                            const imageUrl = fallback
+                                ? `https://assets2.drugcarts.com/admincolor/homepage/pagebanner/${row?.image}`
+                                : `${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/pagebanner/${row?.image}`;
+                            return (
+                                <TableRow
+                                    key={i}
+                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                 >
-                                    {row?.pagename}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.image ? (
-                                        <Avatar
-                                            alt={row?.pagename}
-                                            src={`https://assets1.drugcarts.com/admincolor/homepage/pagebanner/${row?.image}`}
-                                            style={{ width: 80, height: 24 }}
-                                            variant="rounded"
-                                        />
-                                    ) : (
-                                        <FormHelperText error>No Image</FormHelperText>
-                                    )}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.status}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    align="right"
-                                >
-                                    <button onClick={() => {
-                                        router.push(`/admin/pagebannerlist/${row?._id}`)
-                                    }}>
-                                        <CreateIcon color="primary" />
-                                    </button>
-                                    <button onClick={() => setSelectedId(row._id)}>
-                                        <DeleteIcon color='error' />
-                                    </button>
-                                </TableCell>
-                                <DeleteModal
-                                    open={selectedId === row._id}
-                                    setOpen={() => setSelectedId(null)}
-                                    title={"Delete Page Banner"}
-                                    description={`Are you sure you want to delete ${row?.pagename} ?`}
-                                    onSubmit={async () => {
-                                        await dispatch(DeletePageBannerService(row._id));
-                                        setSelectedId(null);
-                                    }}
-                                />
-                            </TableRow>
-                        ))}
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.sno}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        {row?.pagename}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.image ? (
+                                            <Avatar
+                                                alt={row?.pagename}
+                                                src={imageUrl}
+                                                style={{ width: 80, height: 24 }}
+                                                variant="rounded"
+                                                onError={() => handleImageError(id)}
+                                            />
+                                        ) : (
+                                            <FormHelperText error>No Image</FormHelperText>
+                                        )}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.status}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        align="right"
+                                    >
+                                        <button onClick={() => {
+                                            router.push(`/admin/pagebannerlist/${row?._id}`)
+                                        }}>
+                                            <CreateIcon color="primary" />
+                                        </button>
+                                        <button onClick={() => setSelectedId(row._id)}>
+                                            <DeleteIcon color='error' />
+                                        </button>
+                                    </TableCell>
+                                    <DeleteModal
+                                        open={selectedId === row._id}
+                                        setOpen={() => setSelectedId(null)}
+                                        title={"Delete Page Banner"}
+                                        description={`Are you sure you want to delete ${row?.pagename} ?`}
+                                        onSubmit={async () => {
+                                            await dispatch(DeletePageBannerService(row._id));
+                                            setSelectedId(null);
+                                        }}
+                                    />
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

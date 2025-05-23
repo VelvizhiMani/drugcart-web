@@ -21,10 +21,8 @@ function ManufactuerAdd() {
   const router = useRouter();
 
   const URLText = (text) => {
-    const splitText = text.split(" ")
-    const joinSpace = splitText.join("-").toLowerCase()
-    return joinSpace
-  }
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +40,7 @@ function ManufactuerAdd() {
         .string()
         .required("Manufactuer Address is required"),
     }),
-    onSubmit: async (data, {resetForm}) => {
+    onSubmit: async (data, { resetForm }) => {
       await dispatch(PostManufactuerService(data, resetForm))
     },
   });

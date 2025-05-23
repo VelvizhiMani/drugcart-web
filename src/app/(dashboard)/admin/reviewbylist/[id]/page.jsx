@@ -19,6 +19,7 @@ import { PutReviewByService, GetReviewByIdService } from '@/services/reviewBySer
 import { useDispatch, useSelector } from "react-redux";
 
 function EditReviewBy() {
+    const [imagePreview, setImagePreview] = useState(null);
     const { reviewBy } = useSelector((state) => state.referenceData)
     const router = useRouter();
     const dispatch = useDispatch()
@@ -40,19 +41,44 @@ function EditReviewBy() {
         validationSchema: yup.object({
             name: yup.string().required("Name is required"),
             qualification: yup.string().required("Qualification is required"),
-            picture: yup.string().required("Picture is required"),
+            // picture: yup.string().required("Picture is required"),
             experience: yup.string().required("Experience is required"),
-            imagealt: yup.string().required("Image alt is required"),
+            // imagealt: yup.string().required("Image alt is required"),
         }),
         onSubmit: async (data) => {
-            console.log(data);
-            await dispatch(PutReviewByService(reviewBy?._id, data))
-        },
+            const finalData = { ...data };
+
+            if (data.picture instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.picture);
+
+                finalData.picture = {
+                    name: data.picture.name,
+                    type: data.picture.type,
+                    data: base64,
+                };
+            }
+
+            await dispatch(PutReviewByService(reviewBy?._id, finalData));
+        }
     });
 
     const handleImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("picture", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("picture", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     return (
@@ -110,7 +136,8 @@ function EditReviewBy() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Image"}
-                            image={formik.values.picture}
+                            image={`https://assets1.drugcarts.com/admincolor/reviewby/${reviewBy?.picture}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/reviewby/${reviewBy?.picture}`}
                             onChange={handleImage}
                             error={
                                 formik.touched.picture

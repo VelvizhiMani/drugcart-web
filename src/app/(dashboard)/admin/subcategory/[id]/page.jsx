@@ -21,13 +21,16 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { GetSubCategoryIdService, PostSubCategoryService, PutSubCategoryService } from '../../../../../services/subCategoryService'
 import { GetCategoryService } from "@/services/categoryService";
+import axios from "axios";
+import SelectField from "@/components/admin/AutoComplete/SelectField";
 
 function EditSubCategory() {
-    const params = useParams()
+    const [imagePreview, setImagePreview] = useState(null);
     const { categories } = useSelector((state) => state.categoryData)
     const { subCategory } = useSelector((state) => state.subCategoryData)
     const dispatch = useDispatch()
     const router = useRouter();
+    const params = useParams()
 
     useEffect(() => {
         dispatch(GetCategoryService())
@@ -35,14 +38,22 @@ function EditSubCategory() {
     }, [params?.id])
 
     const URLText = (text) => {
-        const splitText = text.split(" ")
-        const joinSpace = splitText.join("-").toLowerCase()
-        return joinSpace
-    }
+        return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+    };
+
+    const categoryUrl = categories?.categories?.map((item) => {
+        return {
+            key: item?.url,
+            value: item?.category_name
+        }
+    })
 
     const handleCategoryImage = (event) => {
         const file = event.target.files[0];
-        formik.setFieldValue("sub_cat_img", URL.createObjectURL(file));
+        if (file) {
+            formik.setFieldValue("cat_img", file); // Set actual file
+            setImagePreview(URL.createObjectURL(file)); // For preview
+        }
     };
 
     const formik = useFormik({
@@ -51,7 +62,7 @@ function EditSubCategory() {
             cat_name: subCategory?.cat_name || "",
             subcat_name: subCategory?.subcat_name || "",
             url: subCategory?.url || "",
-            sub_cat_img: subCategory?.sub_cat_img || "",
+            cat_img: subCategory?.cat_img || "",
             imagealt: subCategory?.imagealt || "",
             metatitle: subCategory?.metatitle || "",
             metadesc: subCategory?.metadesc || "",
@@ -61,14 +72,34 @@ function EditSubCategory() {
             cat_name: yup.string().required("Category type is required"),
             subcat_name: yup.string().required("Sub Category Name is required"),
             url: yup.string().required("URL is required"),
-            sub_cat_img: yup.string().required("Sub Category Image is required"),
+            // cat_img: yup.string().required("Sub Category Image is required"),
         }),
         onSubmit: async (data) => {
-            await dispatch(PutSubCategoryService(subCategory?._id, data))
-        },
-    });
+            const finalData = { ...data };
 
-    console.log(params);
+            if (data.cat_img instanceof File) {
+                const toBase64 = (file) =>
+                    new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => {
+                            const base64String = reader.result.split(',')[1];
+                            resolve(base64String);
+                        };
+                        reader.onerror = (error) => reject(error);
+                    });
+
+                const base64 = await toBase64(data.cat_img);
+
+                finalData.cat_img = {
+                    name: data.cat_img.name,
+                    type: data.cat_img.type,
+                    data: base64,
+                };
+            }
+            await dispatch(PutSubCategoryService(subCategory?._id, finalData));
+        }
+    });
 
     return (
         <Box>
@@ -101,12 +132,12 @@ function EditSubCategory() {
             >
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12, md: 4 }}>
-                        <SearchField
+                        <SelectField
                             title="Category Name"
-                            data={categories?.categories}
+                            data={categoryUrl}
                             value={formik.values.cat_name}
-                            getOptionLabel={(option) => (typeof option === "string" ? option : option?.category_name || "")}
-                            onInputChange={(event, newValue) => formik.setFieldValue("cat_name", newValue)}
+                            onChange={(key) => formik.setFieldValue("cat_name", key)}
+                            getOptionLabel={(option) => option?.value}
                             helperText={
                                 formik.touched.cat_name ? formik.errors.cat_name : null
                             }
@@ -140,11 +171,12 @@ function EditSubCategory() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <ImageInput
                             title={"Category Image"}
-                            image={formik.values.sub_cat_img}
+                            image={`https://assets1.drugcarts.com/category/thumb/${subCategory?.cat_img}`}
+                            fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/category/thumb/${subCategory?.cat_img}`}
                             onChange={handleCategoryImage}
                             error={
-                                formik.touched.sub_cat_img
-                                    ? formik.errors.sub_cat_img
+                                formik.touched.cat_img
+                                    ? formik.errors.cat_img
                                     : null
                             }
                         />

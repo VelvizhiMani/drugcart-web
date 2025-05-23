@@ -40,6 +40,7 @@ function MedicineSubCategory() {
     const router = useRouter()
     const params = useParams()
     const { subCategoryUrl } = useSelector((state) => state.subCategoryData)
+    const { loading } = useSelector((state) => state.common)
 
     useEffect(() => {
         dispatch(GetSubCategoryUrlService(params?.url))
@@ -71,8 +72,19 @@ function MedicineSubCategory() {
                         </CardItem>
                     </Grid>
                 ))}
-
             </Grid>
+            {subCategoryUrl?.length === 0 && (
+                <Grid
+                    container
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                        height: '80vh'
+                    }}
+                >
+                    <Typography variant="h5" textAlign="center" color="error" fontWeight="bold" textTransform="capitalize">{loading ? "" : "No products available for " + params.url + "."}</Typography>
+                </Grid>
+            )}
         </Box>
     )
 }

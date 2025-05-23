@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const ReviewbySchema = new Schema(
     {
+        id: {
+            type: String,
+            unique: true
+        },
         name: {
             type: String,
             required: true
@@ -58,7 +62,28 @@ const ReviewbySchema = new Schema(
     }
 )
 
+ReviewbySchema.pre("save", async function (next) {
+  if (!this.id) {
+    try {
+      const allPacks = await mongoose.model("Reviewby").find({});
+      let maxNumber = 96;
 
+      for (let pack of allPacks) {
+        const match = pack.id?.match(/\d+$/);
+        if (match) {
+          const number = parseInt(match[0], 10);
+          if (number > maxNumber) maxNumber = number;
+        }
+      }
+
+      const newNumber = maxNumber + 1;
+      this.id = String(newNumber).padStart(4, "0");
+    } catch (error) {
+      return next(error);
+    }
+  }
+  next();
+});
 
 const Reviewby = mongoose.models.Reviewby || mongoose.model("Reviewby", ReviewbySchema, "reviewby");
 

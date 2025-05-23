@@ -37,9 +37,7 @@ const CardIcon = styled(Paper)(({ theme }) => ({
 
 
 function AdminCard() {
-    const { productList } = useSelector((state) => state.productData)
-    const { orderList } = useSelector((state) => state.orderData)
-    const { adminUser, customers } = useSelector((state) => state.adminUserData)
+    const { countList } = useSelector((state) => state.countData)
 
     return (
         <Grid container spacing={2}>
@@ -60,7 +58,7 @@ function AdminCard() {
                             <WorkIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{orderList?.all_orders?.length}</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{countList?.orders}</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -80,7 +78,7 @@ function AdminCard() {
                             <AccountTreeIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{productList?.products?.length}</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{countList?.products}</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -100,7 +98,7 @@ function AdminCard() {
                             <GroupsIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{adminUser?.users?.length}</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{countList?.staff}</Typography>
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
@@ -120,7 +118,7 @@ function AdminCard() {
                             <ShoppingCartIcon sx={{ color: "#fff" }} />
                         </CardIcon>
                     </Box>
-                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{customers?.length}</Typography>
+                    <Typography variant="body1" fontFamily={"Poppins"} color='#fff' fontWeight="bold" fontSize={20} sx={{ marginTop: -4 }}>{countList?.customers}</Typography>
                 </CardItem>
             </Grid>
         </Grid>

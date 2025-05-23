@@ -37,11 +37,12 @@ import { useDispatch, useSelector } from "react-redux";
 import DropSpinner from "@/components/admin/spinner/DropSpinner"
 import { useRole } from "@/hooks/useRole";
 import { GetPendingOrderService } from '@/services/orderService';
+import { GetMedicineListService } from '@/services/countService';
 
 const drawerWidth = 220;
 
 function AdminLayout(props) {
-  const { pendingOrder } = useSelector((state) => state.orderData)
+  const { countList } = useSelector((state) => state.countData)
   const [open, setOpen] = React.useState(false)
   const [isAwareness, setIsAwareness] = React.useState(false)
   const { loading } = useSelector((state) => state.common)
@@ -107,7 +108,6 @@ function AdminLayout(props) {
   };
 
   useEffect(() => {
-    dispatch(GetPendingOrderService(1, 0))
     const token = ""
     console.log(token);
 
@@ -118,6 +118,11 @@ function AdminLayout(props) {
 
 
   }, [router]);
+
+    useEffect(() => {
+    // dispatch(GetPendingOrderService(1, 0))
+    dispatch(GetMedicineListService())
+  }, []);
 
   console.log(pathName);
 
@@ -185,7 +190,7 @@ function AdminLayout(props) {
           color="inherit"
           onClick={() => router.push('/admin/orders/Pending')}
         >
-          <Badge badgeContent={pendingOrder?.pagination?.totalItems} color="error">
+          <Badge badgeContent={countList?.pending_orders} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -568,7 +573,7 @@ function AdminLayout(props) {
               color="inherit"
               onClick={() => router.push('/admin/orders/Pending')}
             >
-              <Badge badgeContent={pendingOrder?.pagination?.totalItems} color="error">
+              <Badge badgeContent={countList?.pending_orders} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>

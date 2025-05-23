@@ -19,14 +19,13 @@ import { PostFormService } from "@/services/formService";
 import { useDispatch } from "react-redux";
 
 function FormAdd() {
+  const [imagePreview, setImagePreview] = useState(null);
   const router = useRouter();
   const dispatch = useDispatch()
 
   const URLText = (text) => {
-    const splitText = text.split(" ")
-    const joinSpace = splitText.join("-").toLowerCase()
-    return joinSpace
-  }
+    return text.trim().replace(/[^\w\s-]/g, "").split(/\s+/).join("-").toLowerCase();
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -41,11 +40,11 @@ function FormAdd() {
     validationSchema: yup.object({
       formname: yup.string().required("Form Name is required"),
       formurl: yup.string().required("Form URL is required"),
-      picture: yup.string().required("Picture is required"),
+      // picture: yup.mixed().required("Picture is required"),
     }),
     onSubmit: async (data, { resetForm }) => {
-      console.log(data);
-      await dispatch(PostFormService(data, resetForm))
+      await dispatch(PostFormService(data, resetForm));
+      setImagePreview(null)
     },
   });
 
@@ -53,9 +52,20 @@ function FormAdd() {
     formik.values.formurl = URLText(formik.values.formname)
   }, [formik.values.formname])
 
-  const handleCategoryImage = (event) => {
+  const handleImage = (event) => {
     const file = event.target.files[0];
-    formik.setFieldValue("picture", URL.createObjectURL(file));
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formik.setFieldValue("picture", {
+          name: file.name,
+          type: file.type,
+          base64: reader.result, // base64 encoded string
+        });
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -111,8 +121,8 @@ function FormAdd() {
           <Grid2 size={{ xs: 12, md: 6 }}>
             <ImageInput
               title={"Image"}
-              image={formik.values.picture}
-              onChange={handleCategoryImage}
+              image={imagePreview}
+              onChange={handleImage}
               error={
                 formik.touched.picture
                   ? formik.errors.picture

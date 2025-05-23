@@ -14,14 +14,14 @@ function imageFileName(name) {
   return name.trim().replace(/\s+/g, "-").replace(/[^a-zA-Z0-9.\-_]/g, "").toLowerCase();
 }
 
-async function uploadFileToS3(file, folder, fileName, fileType) {
+async function uploadFileToS3(file, folder, fileName, fileType, path = "") {
   const fileBuffer = file;
   const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + fileName
 // const folder = "mycategory";
   // const fileName = ${folder}/${uuidv4()}.${fileExt};
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
-    Key: `${folder}/${imageFileName(uniqueSuffix)}`,
+    Key: `${folder}/${path}${imageFileName(uniqueSuffix)}`,
     Body: fileBuffer,
     ContentType: fileType?.type,
     ContentDisposition: "inline",
@@ -30,7 +30,7 @@ async function uploadFileToS3(file, folder, fileName, fileType) {
 
   const command = new PutObjectCommand(params);
   await s3Client.send(command);
-  const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${folder}/${imageFileName(uniqueSuffix)}`;
+  const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${folder}/${path}${imageFileName(uniqueSuffix)}`;
   return url;
 }
 
@@ -39,13 +39,14 @@ export async function POST(request) {
     const formData = await request.formData();
     const file = formData.get("file");
     const folder = formData.get("folder");
+    const path = formData.get("path") || "";
 
     if (!file) {
       return NextResponse.json({ error: "File is required." }, { status: 400 });
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const url = await uploadFileToS3(buffer, folder, file.name, file);
+    const url = await uploadFileToS3(buffer, folder, file.name, file, path);
 
     return NextResponse.json({ success: true, url });
   } catch (error) {

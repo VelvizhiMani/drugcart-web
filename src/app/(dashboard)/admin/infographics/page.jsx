@@ -31,9 +31,14 @@ function InfoGraphicsPage() {
     const [openModal, setOpenModal] = useState(false)
     const dispatch = useDispatch()
     const [selectedId, setSelectedId] = useState(null);
+    const [fallbackMap, setFallbackMap] = useState({});
 
     const handleNoChange = (event) => {
         setShowNo(event.target.value);
+    };
+
+    const handleImageError = (id) => {
+        setFallbackMap((prev) => ({ ...prev, [id]: true }));
     };
 
     const router = useRouter();
@@ -117,57 +122,65 @@ function InfoGraphicsPage() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {infoGraphicsList && infoGraphicsList?.infoGraphics_list?.map((row, i) => (
-                            <TableRow
-                                key={i}
-                                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                            >
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.sno}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    component="th"
-                                    scope="row"
+                        {infoGraphicsList && infoGraphicsList?.infoGraphics_list?.map((row, i) => {
+                            const id = row?._id || row?.title; // Unique identifier
+                            const fallback = fallbackMap[id];
+                            const imageUrl = fallback
+                                ? `https://assets2.drugcarts.com/admincolor/homepage/infogra/${row?.picture}`
+                                : `${process.env.NEXT_PUBLIC_IMAGE_URL}/admincolor/homepage/infogra/${row?.picture}`;
+                            return (
+                                <TableRow
+                                    key={i}
+                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                                 >
-                                    {row?.title}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                                    {row?.picture ? (
-                                        <Avatar
-                                            alt="Remy Sharp"
-                                            src={`https://assets2.drugcarts.com/admincolor/homepage/infogra/${row?.picture}`}
-                                            style={{ width: 30, height: 30 }}
-                                            variant="rounded"
-                                        />
-                                    ) : (
-                                        <FormHelperText error>No Image</FormHelperText>
-                                    )}
-                                </TableCell>
-                                <TableCell
-                                    sx={{ fontFamily: rowText.fontFamily }}
-                                    align="right"
-                                >
-                                    <button onClick={() => {
-                                        router.push(`/admin/infographics/${row?._id}`)
-                                    }}>
-                                        <CreateIcon color="primary" />
-                                    </button>
-                                    <button onClick={() => setSelectedId(row._id)}>
-                                        <DeleteIcon color='error' />
-                                    </button>
-                                </TableCell>
-                                <DeleteModal
-                                    open={selectedId === row._id}
-                                    setOpen={() => setSelectedId(null)}
-                                    title={"Delete infoGraphics"}
-                                    description={`Are you sure you want to delete ${row?.title}`}
-                                    onSubmit={async () => {
-                                        await dispatch(DeleteInfoGraphicsService(row._id));
-                                        setSelectedId(null);
-                                    }} />
-                            </TableRow>
-                        ))}
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.sno}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        {row?.title}
+                                    </TableCell>
+                                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
+                                        {row?.picture ? (
+                                            <Avatar
+                                                alt={row?.title}
+                                                src={imageUrl}
+                                                style={{ width: 30, height: 30 }}
+                                                variant="rounded"
+                                                onError={() => handleImageError(id)}
+                                            />
+                                        ) : (
+                                            <FormHelperText error>No Image</FormHelperText>
+                                        )}
+                                    </TableCell>
+                                    <TableCell
+                                        sx={{ fontFamily: rowText.fontFamily }}
+                                        align="right"
+                                    >
+                                        <button onClick={() => {
+                                            router.push(`/admin/infographics/${row?._id}`)
+                                        }}>
+                                            <CreateIcon color="primary" />
+                                        </button>
+                                        <button onClick={() => setSelectedId(row._id)}>
+                                            <DeleteIcon color='error' />
+                                        </button>
+                                    </TableCell>
+                                    <DeleteModal
+                                        open={selectedId === row._id}
+                                        setOpen={() => setSelectedId(null)}
+                                        title={"Delete infoGraphics"}
+                                        description={`Are you sure you want to delete ${row?.title}`}
+                                        onSubmit={async () => {
+                                            await dispatch(DeleteInfoGraphicsService(row._id));
+                                            setSelectedId(null);
+                                        }} />
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
