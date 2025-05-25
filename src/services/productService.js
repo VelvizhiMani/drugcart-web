@@ -191,7 +191,7 @@ const GetProductTypeService = (page = 1, limit = 10, type = "", search = "" ) =>
     try {
         dispatch(IsLoading(true))
         const getIdData = await axios.get(`/api/product/type?page=${page}&limit=${limit}&type=${type}&search=${search}`, { headers: await Authorization() })
-        console.log(getIdData.data,"URP DATA");
+        console.log(getIdData.data,"URP DATA",getIdData);
         dispatch(GetProductTypes(getIdData.data))
         dispatch(IsLoading(false))
     } catch (error) {
