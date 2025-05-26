@@ -159,7 +159,7 @@ const productSchema = new Schema(
         },
         userid: {
             type: String,
-            default: "1",
+            default: "",
         },
         date: {
             type: String,
