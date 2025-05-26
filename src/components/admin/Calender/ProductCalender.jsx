@@ -90,7 +90,7 @@ const ProductCalendar = () => {
 
             <TableContainer component={Paper} sx={{marginTop: 2}}>
                 <Table>
-                    <TableHead sx={{ backgroundColor: '#7d5e69' }}>
+                    <TableHead sx={{ backgroundColor: '#00a65a' }}>
                         <TableRow>
                             <TableCell style={rowText}>Date</TableCell>
                             {matches ? <>

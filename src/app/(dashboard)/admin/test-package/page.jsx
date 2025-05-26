@@ -109,7 +109,7 @@ function AdminLabTest() {
 
       <TableContainer component={Paper} sx={{ marginTop: 3 }}>
         <Table size="small" aria-label="simple table">
-          <TableHead sx={{ backgroundColor: "#7d5e69" }}>
+          <TableHead sx={{ backgroundColor: "#00a65a" }}>
             <TableRow>
               <TableCell style={rowText}>Sno</TableCell>
               <TableCell style={rowText}>Test Package Name</TableCell>
