@@ -119,7 +119,7 @@ function AdminLayout(props) {
 
   }, [router]);
 
-    useEffect(() => {
+  useEffect(() => {
     // dispatch(GetPendingOrderService(1, 0))
     dispatch(GetMedicineListService())
   }, []);
@@ -307,7 +307,7 @@ function AdminLayout(props) {
       path: "/admin/orderprescription",
       name: "Order Prescription",
     },
-        {
+    {
       id: 20,
       path: "/admin/pagemetalist",
       name: "Page Meta Tag",
@@ -353,26 +353,32 @@ function AdminLayout(props) {
             key={i}
           >
             <ListItem
-              style={{
-                marginTop: 8,
-                backgroundColor: pathName === item.path ? "#00a65a" : null,
+              sx={{
+                // marginTop: 1,
+                backgroundColor: pathName === item.path ? "#ae0e49" : null,
+                color: pathName === item.path ? "#fff" : "#ae0e49",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#00a65a",
+                  color: "#fff"
+                },
               }}
               onClick={() => {
                 router.push(item.path, { s: "test" });
                 setMobileOpen(false);
               }}
             >
-              <Box>
-                <Typography
-                  variant="body1"
-                  color={pathName === item.path ? "#fff" : "#ae0e49"}
-                  fontFamily={"Poppins"}
-                  fontSize={14}
-                  fontWeight={600}
-                >
-                  {item.name}
-                </Typography>
-              </Box>
+
+              <ListItemText
+                variant="body1"
+                color={pathName === item.path ? "#fff" : "#ae0e49"}
+                fontFamily={"Poppins"}
+                fontSize={14}
+                sx={{ fontWeight: 600 }}
+              >
+                {item.name}
+              </ListItemText>
+
             </ListItem>
           </Link>
         ))}
@@ -491,25 +497,31 @@ function AdminLayout(props) {
             key={i}
           >
             <ListItem
-              style={{
-                marginTop: 8,
-                backgroundColor: pathName === item.path ? "#00a65a" : null,
+              sx={{
+                marginTop: -2,
+                backgroundColor: pathName === item.path ? "#ae0e49" : null,
+                color: pathName === item.path ? "#fff" : "#ae0e49",
+                fontWeight: "bold",
+                "&:hover": {
+                  backgroundColor: "#00a65a",
+                  color: "#fff"
+                },
               }}
               onClick={() => {
                 router.push(item.path, { s: "test" });
                 setMobileOpen(false);
               }}
             >
-              <Box>
-                <Typography
-                  variant="body1"
-                  color={pathName === item.path ? "#fff" : "#fff"}
-                  fontFamily={"Poppins"}
-                  fontSize={14}
-                >
-                  {item.name}
-                </Typography>
-              </Box>
+              <ListItemText
+                variant="body1"
+                color={pathName === item.path ? "#fff" : "#ae0e49"}
+                fontFamily={"Poppins"}
+                fontSize={14}
+                sx={{ fontWeight: 600 }}
+              >
+                {item.name}
+              </ListItemText>
+
             </ListItem>
           </Link>
         ))}
@@ -531,7 +543,7 @@ function AdminLayout(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor: "#25a142",
+          backgroundColor: "#ae0e49",
         }}
       >
         <Toolbar>
