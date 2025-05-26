@@ -102,7 +102,7 @@ function AdminCard() {
                 </CardItem>
             </Grid>
             <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                <CardItem elevation={6} sx={{ backgroundColor: "#25a142" }}>
+                <CardItem elevation={6} sx={{ backgroundColor: "#7d5e69" }}>
                     <Box sx={{ display: 'flex' }}>
                         <Typography
                             variant="body1"

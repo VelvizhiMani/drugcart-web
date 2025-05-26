@@ -365,9 +365,10 @@ function AdminLayout(props) {
               <Box>
                 <Typography
                   variant="body1"
-                  color={pathName === item.path ? "#fff" : "#fff"}
+                  color={pathName === item.path ? "#fff" : "#ae0e49"}
                   fontFamily={"Poppins"}
                   fontSize={14}
+                  fontWeight={600}
                 >
                   {item.name}
                 </Typography>
@@ -530,7 +531,7 @@ function AdminLayout(props) {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          backgroundColor: "#7d5c68",
+          backgroundColor: "#25a142",
         }}
       >
         <Toolbar>
@@ -630,7 +631,7 @@ function AdminLayout(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "#7d5c68",
+              backgroundColor: "#fff",
             },
           }}
         >
@@ -644,7 +645,7 @@ function AdminLayout(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: "#7d5c68",
+              backgroundColor: "#fff",
             },
           }}
           open
