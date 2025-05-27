@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
@@ -58,6 +58,7 @@ function AdminLayout(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const dispatch = useDispatch()
   const { role } = useRole()
+  const [label, setLabel] = useState('')
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -103,9 +104,15 @@ function AdminLayout(props) {
       setMobileOpen(!mobileOpen);
     }
   };
-  const navigateTo = (subpath) => {
-    router.push(`/admin/${subpath}`);
-  };
+  const pathText = (text) => {
+    const newSplit = text.split('/');
+    const newStr = newSplit[2]
+    if (newStr === undefined) {
+      return "Dashboard"
+    } else {
+      return newStr
+    }
+  }
 
   useEffect(() => {
     const token = ""
@@ -124,16 +131,13 @@ function AdminLayout(props) {
     dispatch(GetMedicineListService())
   }, []);
 
-  console.log(pathName);
+  useEffect(() => {
+    pathLabael()
+  },[])
 
-  const pathText = (text) => {
-    const newSplit = text.split('/');
-    const newStr = newSplit[2]
-    if (newStr === undefined) {
-      return "Dashboard"
-    } else {
-      return newStr.charAt(0).toUpperCase() + newStr.slice(1)
-    }
+  const pathLabael = () => {
+    const labelFilter = mainMenu.filter((item) => item.path === pathName)
+    setLabel(labelFilter[0]?.name)
   }
 
   const menuId = "primary-search-account-menu";
@@ -312,6 +316,11 @@ function AdminLayout(props) {
       path: "/admin/pagemetalist",
       name: "Page Meta Tag",
     },
+    {
+      id: 21,
+      path: "/admin/contractlist",
+      name: "Contract User",
+    },
   ];
 
   const staffRoutes = [
@@ -332,9 +341,9 @@ function AdminLayout(props) {
     }
   ];
 
-  const mainMenu = role === "admin" ? userRoutes.slice(0, 19) : staffRoutes.slice(0, 3);
-  const filteredRoutes = userRoutes.slice(19, 19);
-  const filtereTwodRoutes = userRoutes.slice(19, userRoutes.length);
+  const mainMenu = role === "admin" ? userRoutes.slice(0, 21) : staffRoutes.slice(0, 3);
+  const filteredRoutes = userRoutes.slice(21, 21);
+  const filtereTwodRoutes = userRoutes.slice(21, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
@@ -365,6 +374,7 @@ function AdminLayout(props) {
               }}
               onClick={() => {
                 router.push(item.path, { s: "test" });
+                setLabel(item.name)
                 setMobileOpen(false);
               }}
             >
@@ -567,7 +577,7 @@ function AdminLayout(props) {
             fontFamily={"Poppins"}
           // sx={{ display: { xs: "none", sm: "block" } }}
           >
-            {pathText(pathName)}
+            {label}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
