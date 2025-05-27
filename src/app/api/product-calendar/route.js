@@ -60,5 +60,10 @@ export async function GET(request) {
     };
   });
 
-  return NextResponse.json(result);
+  const overallTotal = data.reduce((sum, entry) => sum + entry.count, 0);
+
+  return NextResponse.json({
+    overallTotal,
+    users: result
+  }, { status: 200 });
 }

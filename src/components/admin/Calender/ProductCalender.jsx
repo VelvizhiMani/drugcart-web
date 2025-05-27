@@ -34,7 +34,7 @@ const ProductCalendar = () => {
 
     fetchCalendarData();
   }, [month, year]);
-console.log('user', data);
+  console.log('user', data);
 
   return (
     <Box sx={{ p: 4 }}>
@@ -66,7 +66,7 @@ console.log('user', data);
         <Table>
           <TableHead sx={{ backgroundColor: '#00a65a' }}>
             <TableRow>
-              <TableCell style={rowText}>User</TableCell>
+              <TableCell style={rowText}>Date</TableCell>
               {matches && [...Array(daysInMonth)].map((_, i) => (
                 <TableCell key={i + 1} align="center" style={rowText}>
                   {i + 1}
@@ -76,7 +76,7 @@ console.log('user', data);
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((user) => (
+            {data?.users?.map((user) => (
               <TableRow key={user?.userId}>
                 <TableCell sx={{ backgroundColor: '#00a65a', color: "#fff", fontWeight: 600 }}>
                   {user.username}
@@ -94,6 +94,10 @@ console.log('user', data);
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Typography variant="h5" align="right" sx={{ my: 3, color: "#ae0e49" }}>
+        Overall Product Count This Month: {data?.overallTotal}
+      </Typography>
     </Box>
   );
 };
