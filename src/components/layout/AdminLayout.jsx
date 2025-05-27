@@ -132,13 +132,9 @@ function AdminLayout(props) {
   }, []);
 
   useEffect(() => {
-    pathLabael()
-  },[])
-
-  const pathLabael = () => {
     const labelFilter = mainMenu.filter((item) => item.path === pathName)
     setLabel(labelFilter[0]?.name)
-  }
+  },[pathName])
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (

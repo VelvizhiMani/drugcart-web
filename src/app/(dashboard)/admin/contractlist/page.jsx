@@ -32,15 +32,14 @@ function CustomersPage() {
   useEffect(() => {
     dispatch(GetContractUserService())
   }, [])
-console.log(contractUserList);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         {contractUserList && contractUserList?.map((userData, i) => (
           <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }} key={i}>
-            <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin')}>
-              <Box >
+            <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push(`/admin/contractwork/${userData?.userId}`)}>
+              <Box>
                 <Typography
                   variant="body1"
                   fontFamily={"Poppins"}
