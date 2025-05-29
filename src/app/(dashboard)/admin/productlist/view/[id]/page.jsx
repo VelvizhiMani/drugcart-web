@@ -8,6 +8,7 @@ import { Button, Typography } from '@mui/material';
 import { useParams, useRouter } from 'next/navigation';
 import { GetProductIdService } from '@/services/productService';
 import { useDispatch, useSelector } from 'react-redux';
+import { DateMonthFormat, TimeFormat } from '@/utils/dateFormat';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -139,6 +140,28 @@ function ProductView() {
                             sx={{ color: "#000" }}
                         >
                             {product?.url}
+                        </Typography>
+                    </Item>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <Item elevation={0}>
+                        <Typography
+                            variant="subtitle2"
+                            fontFamily={"Poppins"}
+                            fontWeight="bold"
+                            fontSize={16}
+                            sx={{ color: "#000" }}
+                            marginBottom={0.5}
+                        >
+                            Generic Name :
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                            fontFamily={"Poppins"}
+                            fontSize={14}
+                            sx={{ color: "#000" }}
+                        >
+                            {product?.generices ? product?.generices : "-"}
                         </Typography>
                     </Item>
                 </Grid>
@@ -447,6 +470,50 @@ function ProductView() {
                             sx={{ color: "#000" }}
                         >
                             {product?.percentage ? product?.percentage : "-"}
+                        </Typography>
+                    </Item>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <Item elevation={0}>
+                        <Typography
+                            variant="subtitle2"
+                            fontFamily={"Poppins"}
+                            fontWeight="bold"
+                            fontSize={16}
+                            sx={{ color: "#000" }}
+                            marginBottom={0.5}
+                        >
+                            Created Date :
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                            fontFamily={"Poppins"}
+                            fontSize={14}
+                            sx={{ color: "#000" }}
+                        >
+                            {DateMonthFormat(product?.timestrap)}
+                        </Typography>
+                    </Item>
+                </Grid>
+                <Grid size={{ xs: 12, md: 4 }}>
+                    <Item elevation={0}>
+                        <Typography
+                            variant="subtitle2"
+                            fontFamily={"Poppins"}
+                            fontWeight="bold"
+                            fontSize={16}
+                            sx={{ color: "#000" }}
+                            marginBottom={0.5}
+                        >
+                            Created Time :
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                            fontFamily={"Poppins"}
+                            fontSize={14}
+                            sx={{ color: "#000" }}
+                        >
+                            {TimeFormat(product?.timestrap)}
                         </Typography>
                     </Item>
                 </Grid>

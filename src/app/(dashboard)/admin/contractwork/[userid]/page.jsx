@@ -174,7 +174,7 @@ function ContractWorkPage() {
                                             align="right"
                                         >
                                             <button onClick={() => {
-                                                router.push(`/admin/contactus/${row?._id}`)
+                                                router.push(`/admin/productlist/view/${row?._id}`)
                                             }}>
                                                 <VisibilityIcon color="primary" />
                                             </button>

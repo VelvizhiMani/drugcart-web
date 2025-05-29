@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Menu from '@mui/material/Menu';
@@ -124,7 +125,7 @@ function AyushList() {
                             <TableCell style={rowText}>Code</TableCell>
                             <TableCell style={rowText}>Manufactuer</TableCell>
                             <TableCell style={rowText}>MRP</TableCell>
-                            <TableCell align="right" style={rowText}>Action</TableCell>
+                            <TableCell align="center" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -153,12 +154,20 @@ function AyushList() {
                                     {row?.price}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
-                                    <button onClick={() => {
+                                    <button
+                                        className='mx-1'
+                                        onClick={() => {
+                                            router.push(`/admin/productlist/view/${row?._id}`);
+                                        }}
+                                    >
+                                        <VisibilityIcon color="warning" />
+                                    </button>
+                                    <button className='mx-1' onClick={() => {
                                         router.push(`/admin/ayushlist/edit/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={() => setSelectedId(row?._id)}>
+                                    <button className='mx-1' onClick={() => setSelectedId(row?._id)}>
                                         <DeleteIcon color='error' />
                                     </button>
                                 </TableCell>
