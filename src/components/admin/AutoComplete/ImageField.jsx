@@ -54,6 +54,7 @@ function ImageField({ title, size = "small", data, getOptionLabel, value, helper
         size={size}
         noOptionsText="No Data Found"
         options={data}
+        getOptionKey={(option) => option?._id}
         getOptionLabel={getOptionLabel}
         value={value}
         onInputChange={onInputChange}

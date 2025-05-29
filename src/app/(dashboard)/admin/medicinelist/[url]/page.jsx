@@ -16,6 +16,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import SearchInput from '@/components/admin/input/SearchInput';
 import DDInput from '@/components/admin/input/DDInput';
 import { useDispatch, useSelector } from 'react-redux';
@@ -127,7 +128,7 @@ function MedicineList() {
                             <TableCell style={rowText}>Code</TableCell>
                             <TableCell style={rowText}>Manufactuer</TableCell>
                             <TableCell style={rowText}>MRP</TableCell>
-                            <TableCell align="right" style={rowText}>Action</TableCell>
+                            <TableCell align="center" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -164,12 +165,20 @@ function MedicineList() {
                                             {row?.price}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
-                                            <button onClick={() => {
+                                            <button
+                                            className='mx-1'
+                                                onClick={() => {
+                                                    router.push(`/admin/productlist/view/${row?._id}`);
+                                                }}
+                                            >
+                                                <VisibilityIcon color="warning" />
+                                            </button>
+                                            <button className='mx-1' onClick={() => {
                                                 router.push(`/admin/productlist/${row?._id}`)
                                             }}>
                                                 <CreateIcon color="primary" />
                                             </button>
-                                            {role === "admin" ? <button onClick={() => setSelectedId(row._id)}>
+                                            {role === "admin" ? <button className='mx-1' onClick={() => setSelectedId(row._id)}>
                                                 <DeleteIcon color='error' />
                                             </button> : null}
                                         </TableCell>

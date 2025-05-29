@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateIcon from "@mui/icons-material/Create";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Pagination from "@mui/material/Pagination";
 import SearchInput from "@/components/admin/input/SearchInput";
 import DDInput from "@/components/admin/input/DDInput";
@@ -115,7 +116,7 @@ function ProductList() {
               <TableCell style={rowText}>Sub Category</TableCell>
               <TableCell style={rowText}>Generic Name</TableCell>
               <TableCell style={rowText}>Product Name</TableCell>
-              <TableCell align="right" style={rowText}>
+              <TableCell align="center" style={rowText}>
                 Action
               </TableCell>
             </TableRow>
@@ -151,13 +152,22 @@ function ProductList() {
                     sx={{ fontFamily: rowText.fontFamily }}
                   >
                     <button
+                    className='mx-1'
+                      onClick={() => {
+                        router.push(`/admin/productlist/view/${row?._id}`);
+                      }}
+                    >
+                      <VisibilityIcon color="warning" />
+                    </button>
+                    <button
+                    className='mx-1'
                       onClick={() => {
                         router.push(`/admin/product/${row?._id}`);
                       }}
                     >
                       <CreateIcon color="primary" />
                     </button>
-                    <button onClick={() => setSelectedId(row._id)}>
+                    <button className='mx-1' onClick={() => setSelectedId(row._id)}>
                       <DeleteIcon color='error' />
                     </button>
                   </TableCell>
