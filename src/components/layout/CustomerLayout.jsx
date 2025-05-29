@@ -14,8 +14,11 @@ function CustomerLayout({ children }) {
     const { loading } = useSelector((state) => state.common)
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getProfileService());
-        dispatch(getCartService())
+        const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+        if (token) {
+            dispatch(getProfileService());
+            dispatch(getCartService())
+        }
     }, [dispatch]);
     return (
         <>
