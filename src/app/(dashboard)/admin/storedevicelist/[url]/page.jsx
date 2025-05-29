@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Pagination from '@mui/material/Pagination';
 import SearchInput from '@/components/admin/input/SearchInput';
 import DDInput from '@/components/admin/input/DDInput';
@@ -97,16 +98,15 @@ function HealthStoreDeviceUrl() {
 
             <TableContainer component={Paper} sx={{ marginTop: 3 }}>
                 <Table size="small" aria-label="simple table">
-                    <TableHead sx={{ backgroundColor: '#7d5e69' }}>
+                    <TableHead sx={{ backgroundColor: '#00a65a' }}>
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Category</TableCell>
                             <TableCell style={rowText}>Subcat</TableCell>
                             <TableCell style={rowText}>Product</TableCell>
                             <TableCell style={rowText}>Code</TableCell>
-                            <TableCell style={rowText}>Manufactuer</TableCell>
                             <TableCell style={rowText}>MRP</TableCell>
-                            <TableCell align="right" style={rowText}>Action</TableCell>
+                            <TableCell align="center" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -129,18 +129,23 @@ function HealthStoreDeviceUrl() {
                                     {row?.product_code}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.manufactuer}
-                                </TableCell>
-                                <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                     {row?.price}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
-                                    <button onClick={() => {
+                                    <button
+                                        className='mx-1'
+                                        onClick={() => {
+                                            router.push(`/admin/productlist/view/${row?._id}`);
+                                        }}
+                                    >
+                                        <VisibilityIcon color="warning" />
+                                    </button>
+                                    <button className='mx-1' onClick={() => {
                                         router.push(`/admin/storedevicelist/edit/${row?._id}`)
                                     }}>
                                         <CreateIcon color="primary" />
                                     </button>
-                                    <button onClick={() => setSelectedId(row?._id)}>
+                                    <button className='mx-1' onClick={() => setSelectedId(row?._id)}>
                                         <DeleteIcon color='error' />
                                     </button>
                                 </TableCell>

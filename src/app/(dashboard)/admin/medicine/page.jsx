@@ -17,7 +17,7 @@ const CardItem = styled(Paper)(({ theme }) => ({
     marginTop: 2,
     cursor: "pointer",
     "&:hover": {
-        backgroundColor: "#00a65a",
+        backgroundColor: "#ae0e49",
         ...theme.typography.body2,
         padding: theme.spacing(2),
         borderRadius: 12,
@@ -34,7 +34,7 @@ function MedicinePage() {
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/category')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/category')}>
                         <Box >
                             <Typography
                                 variant="body1"
@@ -51,7 +51,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/subcategory')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/subcategory')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -68,7 +68,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/genericlist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/genericlist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -85,7 +85,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/medicinecat')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/medicinecat')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -102,7 +102,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/manufactuerlist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/manufactuerlist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -119,7 +119,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/formlist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/formlist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -136,7 +136,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/storagelist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/storagelist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -153,7 +153,7 @@ function MedicinePage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/packagelist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/packagelist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -171,7 +171,7 @@ function MedicinePage() {
                 </Grid>
                 {role === "admin" ? (
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/courierlist')}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/courierlist')}>
                             <Box>
                                 <Typography
                                     variant="body1"
@@ -189,7 +189,7 @@ function MedicinePage() {
                     </Grid>
                 ) : null}
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/country_code_list')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/country_code_list')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -207,7 +207,7 @@ function MedicinePage() {
                 </Grid>
                 {role === "admin" ? (
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/writtenbylist')}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/writtenbylist')}>
                             <Box>
                                 <Typography
                                     variant="body1"
@@ -226,7 +226,7 @@ function MedicinePage() {
                 ) : null}
                 {role === "admin" ? (
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/reviewbylist')}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/reviewbylist')}>
                             <Box>
                                 <Typography
                                     variant="body1"
@@ -244,7 +244,7 @@ function MedicinePage() {
                     </Grid>
                 ) : null}
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/referlist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/referlist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -262,7 +262,7 @@ function MedicinePage() {
                 </Grid>
                 {role === "admin" ? (
                     <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                        <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/stocklist')}>
+                        <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/stocklist')}>
                             <Box>
                                 <Typography
                                     variant="body1"

@@ -118,21 +118,26 @@ export async function POST(request) {
       hsn,
     } = await request.json();
 
-    const base64Data = product_img.base64.replace(/^data:image\/\w+;base64,/, "");
-    const buffer = Buffer.from(base64Data, "base64");
+    let uploadedImageFileName = "";
 
-    const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + product_img.name
-    const fileName = `category/product/${imageFileName(uniqueSuffix)}`
-    const uploadParams = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: fileName,
-      Body: buffer,
-      ContentType: product_img.type,
-      ContentDisposition: "inline",
-      ACL: "public-read",
-    };
+    if (product_img && product_img.base64 && product_img.name) {
+      const base64Data = product_img.base64.replace(/^data:image\/\w+;base64,/, "");
+      const buffer = Buffer.from(base64Data, "base64");
 
-    await s3.send(new PutObjectCommand(uploadParams));
+      const uniqueSuffix = Date.now() + '-' + uuidv4() + '-' + product_img.name
+      const fileName = `category/product/${imageFileName(uniqueSuffix)}`
+      const uploadParams = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: fileName,
+        Body: buffer,
+        ContentType: product_img.type,
+        ContentDisposition: "inline",
+        ACL: "public-read",
+      };
+
+      await s3.send(new PutObjectCommand(uploadParams));
+      uploadedImageFileName = imageFileName(uniqueSuffix);
+    }
 
     const isProduct = await Product.findOne({ product_name });
     if (isProduct) {
@@ -176,7 +181,7 @@ export async function POST(request) {
       packageName,
       price,
       packing,
-      product_img: fileName,
+      product_img: uploadedImageFileName,
       description,
       disclaimer,
       stock,
@@ -248,6 +253,7 @@ export async function POST(request) {
       retunpolicy,
       gst,
       hsn,
+      userid: user?._id
     });
 
     await addProduct.save();

@@ -181,7 +181,7 @@ const ProductAdd = () => {
       subcat_name: yup.string().required("SubCategory Name is required"),
       generices: yup.string().required("Generices Name is required"),
       product_name: yup.string().required("Product Name is required"),
-      product_img: yup.mixed().required("Product Image is required"),
+      // product_img: yup.mixed().required("Product Image is required"),
       url: yup.string().required("URL is required"),
       manufactuer: yup.string().required("Manufactuer is required"),
       packageName: yup.string().required("Package is required"),

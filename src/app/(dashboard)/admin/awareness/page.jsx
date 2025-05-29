@@ -16,7 +16,7 @@ const CardItem = styled(Paper)(({ theme }) => ({
     marginTop: 2,
     cursor: "pointer",
     "&:hover": {
-        backgroundColor: "#00a65a",
+        backgroundColor: "#ae0e49",
         ...theme.typography.body2,
         padding: theme.spacing(2),
         borderRadius: 12,
@@ -32,7 +32,7 @@ function AwarenessPage() {
         <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/diseaseslist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/diseaseslist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -49,7 +49,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/knowbody')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/knowbody')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -66,7 +66,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/healthvideo')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/healthvideo')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -83,7 +83,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/herbs')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/herbs')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -100,7 +100,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/healthtips')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/healthtips')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -117,7 +117,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/articles')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/articles')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -134,7 +134,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/blog')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/blog')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -151,7 +151,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/newslist')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/newslist')}>
                         <Box>
                             <Typography
                                 variant="body1"
@@ -168,7 +168,7 @@ function AwarenessPage() {
                     </CardItem>
                 </Grid>
                 <Grid size={{ xs: 12, sm: 5, md: 3, lg: 3, xl: 3 }}>
-                    <CardItem elevation={6} sx={{ backgroundColor: "#7d5c68" }} onClick={() => router.push('/admin/infographics')}>
+                    <CardItem elevation={6} sx={{ backgroundColor: "#00a65a" }} onClick={() => router.push('/admin/infographics')}>
                         <Box>
                             <Typography
                                 variant="body1"
