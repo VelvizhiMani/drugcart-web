@@ -49,11 +49,11 @@ export async function GET(request) {
 
   // Build result
   const result = adminUsers.map((user) => {
-    const dailyCounts = userDayMap[user._id.toString()] || {};
+    const dailyCounts = userDayMap[user.id.toString()] || {};
     const total = Object.values(dailyCounts).reduce((sum, val) => sum + val, 0);
 
     return {
-      userId: user._id,
+      userId: user.id,
       username: user.username,
       dailyCounts,
       total
