@@ -3,6 +3,7 @@ import AdminUser from '../../../models/AdminUser'
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { adminAuthorization } from '@/utils/middleware';
 
 export async function POST(request) {
     await connectionToDatabase();
@@ -10,7 +11,7 @@ export async function POST(request) {
 
     try {
         const user = await AdminUser.findOne({ email });
-        console.log(user);
+        console.log("user", user);
         if (!user) {
             return NextResponse.json({ error: 'Invalid email' }, { status: 401 })
         }
@@ -27,19 +28,17 @@ export async function POST(request) {
     }
 }
 
-// export async function POST(request) {
-//     try {
-//         await connectionToDatabase()
-//         const { email, password } = await request.json()
-//         const existingUser = await AdminUser.findOne({ email });
-//         if (existingUser) {
-//             return NextResponse.json({ error: 'User alreay exist' }, { status: 400 })
-//         } else {
-//             const newUser = new AdminUser({ email, password });
-//             await newUser.save()
-//             return NextResponse.json(newUser, { status: 200 })
-//         }
-//     } catch (error) {
-//         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
-//     }
-// }
+export async function GET() {
+    try {
+        const { success, user, message } = await adminAuthorization();
+        console.log('user', user);
+        
+        if (!success) {
+            return NextResponse.json({ error: message }, { status: 401 })
+        }
+
+        return NextResponse.json(user, { status: 200 })
+    } catch (error) {
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    }
+}

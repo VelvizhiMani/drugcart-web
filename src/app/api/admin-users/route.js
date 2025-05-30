@@ -19,6 +19,7 @@ export async function POST(request) {
             return NextResponse.json({ error: 'User alreay exist' }, { status: 400 })
         } else {
             const newUser = new AdminUser({ username, email, password, role, salary });
+            newUser.id = newUser._id;
             await newUser.save()
             return NextResponse.json(newUser, { status: 200 })
         }
@@ -65,7 +66,7 @@ export async function GET(req) {
 
         // Fetch cart items with pagination
         const userItems = await AdminUser.find(filters)
-            .sort({ createdAt: -1 })
+            .sort({ timestamp: -1 })
             .skip(skip)
             .limit(limit)
 

@@ -18,7 +18,7 @@ const GetContractUserService = () => async (dispatch) => {
 const GetContractUserProductService = (page = 1, limit, search = "", userid) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/contractwork?page=${page}&limit=${limit}&search=${search}&userid=${userid}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/contractwork?page=${page}&limit=${limit}&search=${search}&id=${userid}`, { headers: await Authorization() })
         dispatch(getContractUserProducts(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {

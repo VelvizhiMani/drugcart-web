@@ -35,14 +35,14 @@ function EditUser() {
             email: yup.string().email().required("Email is required"),
             password: yup.string().required("Password is required").min(6, "6 characters required"),
             role: yup.string().required("User Type is required"),
-            salary: yup.string().required("Salary is required"),
+            // salary: yup.string().required("Salary is required"),
         }),
         onSubmit: async (data) => {
             await dispatch(PutUserService(userId?._id, data))
         },
     });
 
-    const UType = ["salary", "contract"]
+    const UType = ["contract", "salary"]
 
     return (
         <Box>

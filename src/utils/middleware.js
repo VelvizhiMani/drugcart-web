@@ -46,9 +46,9 @@ export async function adminAuthorization() {
         const decoded = jwt.verify(token, "admin");
 
         // Ensure both queries resolve before checking
-        let user = await User.findById(decoded.id).select('-id');
+        let user = await User.findById(decoded.id)
         if (!user) {
-            user = await AdminUser.findById(decoded.id).select('-id');
+            user = await AdminUser.findById(decoded.id)
         }
 
         if (!user) {

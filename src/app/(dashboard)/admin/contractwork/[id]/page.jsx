@@ -44,11 +44,11 @@ function ContractWorkPage() {
     const userEntries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     useEffect(() => {
-        dispatch(GetContractUserProductService(page, showNo, search, params?.userid))
-    }, [page, showNo, search, params?.userid])
+        dispatch(GetContractUserProductService(page, showNo, search, params?.id))
+    }, [page, showNo, search, params?.id])
 
     const searchSubmit = () => {
-        dispatch(GetContractUserProductService(page, showNo, search, params?.userid))
+        dispatch(GetContractUserProductService(page, showNo, search, params?.id))
     }
 
     return (

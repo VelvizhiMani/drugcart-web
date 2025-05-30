@@ -8,7 +8,7 @@ export async function GET(req) {
   const page = parseInt(searchParams.get("page")) || 1;
   const limit = parseInt(searchParams.get("limit")) || 10;
   const search = searchParams.get("search") || "";
-  const userid = searchParams.get("userid") || "";
+  const userid = searchParams.get("id") || "";
 
   try {
     await connectionToDatabase();
@@ -24,7 +24,7 @@ export async function GET(req) {
     if (userid) {
       query.userid = userid; // Make sure this matches your Product schema field
     }
-const staffId = await AdminUser.findOne({ _id: userid });
+const staffId = await AdminUser.findOne({ id: userid });
     const productItems = await Product.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)

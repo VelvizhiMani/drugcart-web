@@ -18,9 +18,9 @@ export async function GET() {
 
   const usersWithProductCount = await Promise.all(
     filteredUsers.map(async (user) => {
-      const productCount = await Product.countDocuments({ userid: user._id });
+      const productCount = await Product.countDocuments({ userid: user.id });
       return {
-        userId: user?._id,
+        userId: user?.id,
         username: user.username,
         productCount,
       };
