@@ -315,6 +315,11 @@ function AdminLayout(props) {
     {
       id: 21,
       path: "/admin/contractlist",
+      name: "Contract List",
+    },
+        {
+      id: 22,
+      path: "/admin/contractuser",
       name: "Contract User",
     },
   ];
@@ -337,9 +342,9 @@ function AdminLayout(props) {
     }
   ];
 
-  const mainMenu = role === "admin" ? userRoutes.slice(0, 21) : staffRoutes.slice(0, 3);
-  const filteredRoutes = userRoutes.slice(21, 21);
-  const filtereTwodRoutes = userRoutes.slice(21, userRoutes.length);
+  const mainMenu = role === "admin" ? userRoutes.slice(0, 22) : staffRoutes.slice(0, 3);
+  const filteredRoutes = userRoutes.slice(22, 22);
+  const filtereTwodRoutes = userRoutes.slice(22, userRoutes.length);
   const drawer = (
     <div>
       {/* <Toolbar /> */}
