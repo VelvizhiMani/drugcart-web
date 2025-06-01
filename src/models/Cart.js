@@ -111,7 +111,7 @@ const CartItemSchema = new mongoose.Schema({
     status: {
         type: String,
         default: "Active",
-        enum: ["Active", "InActive"]
+        // enum: ["Active", "InActive"]
     },
     writebyid: {
         type: String,

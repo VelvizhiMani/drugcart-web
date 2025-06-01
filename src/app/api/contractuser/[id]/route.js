@@ -1,5 +1,5 @@
 import connectionToDatabase from '../../../../lib/mongodb'
-import VideoFeedback from '../../../../models/VideoFeedback'
+import ContractUser from '../../../../models/ContractUser'
 import { authenticateUser, adminAuthorization } from '../../../../utils/middleware';
 import { NextResponse } from 'next/server'
 
@@ -11,15 +11,16 @@ export async function GET(request, { params }) {
         if (!success) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
+
         const { id } = await params;
-        const VideoFeedbackId = await VideoFeedback.findById(id);
-        if (!VideoFeedbackId) {
-            return NextResponse.json({ error: 'VideoFeedback not found' }, { status: 404 });
+        const adminUser = await ContractUser.findById(id);
+        if (!adminUser) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        return NextResponse.json(VideoFeedbackId, { status: 200 });
+        return NextResponse.json(adminUser, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error fetching VideoFeedback' }, { status: 500 });
+        return NextResponse.json({ error: 'Error fetching user' }, { status: 500 });
     }
 }
 
@@ -37,15 +38,15 @@ export async function PUT(request, { params }) {
 
         const { id } = await params;
         const body = await request.json();
-        const updatedVideoFeedback = await VideoFeedback.findByIdAndUpdate(id, body, { new: true });
+        const updatedUser = await ContractUser.findByIdAndUpdate(id, body, { new: true });
 
-        if (!updatedVideoFeedback) {
-            return NextResponse.json({ error: 'VideoFeedback not found' }, { status: 404 });
+        if (!updatedUser) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        return NextResponse.json(updatedVideoFeedback, { status: 200 });
+        return NextResponse.json(updatedUser, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error updating VideoFeedback' }, { status: 500 });
+        return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
     }
 }
 
@@ -62,14 +63,14 @@ export async function DELETE(request, { params }) {
         }
 
         const { id } = await params;
-        const deletedVideoFeedback = await VideoFeedback.findByIdAndDelete(id);
+        const deletedUser = await ContractUser.findByIdAndDelete(id);
 
-        if (!deletedVideoFeedback) {
-            return NextResponse.json({ error: 'VideoFeedback not found' }, { status: 404 });
+        if (!deletedUser) {
+            return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ message: 'VideoFeedback deleted successfully' }, { status: 200 });
+        return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error deleting VideoFeedback' }, { status: 500 });
+        return NextResponse.json({ error: 'Error deleting user' }, { status: 500 });
     }
 }

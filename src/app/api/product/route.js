@@ -253,7 +253,7 @@ export async function POST(request) {
       retunpolicy,
       gst,
       hsn,
-      userid: user?._id
+      userid: user?.id
     });
 
     await addProduct.save();

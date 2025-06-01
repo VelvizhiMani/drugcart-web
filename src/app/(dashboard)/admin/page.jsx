@@ -16,13 +16,14 @@ import { useRole } from '@/hooks/useRole'
 
 function Dashboard() {
   const { role } = useRole()
+  const dispatch = useDispatch()
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* <UserCard /> */}
+      {role !== "admin" ? <UserCard /> : null}
       <AdminCard />
       {role === "admin" ? <UserTable /> : null}
-      <ProductCalendar />
+      {role === "admin" ? <ProductCalendar /> : null}
     </Box>
   )
 }

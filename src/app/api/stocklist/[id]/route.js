@@ -31,7 +31,7 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
 
-        if (user?.role === "staff") {
+        if (user?.role !== "admin") {
             return NextResponse.json({ error: 'Permission not found' }, { status: 404 });
         }
 
@@ -57,7 +57,7 @@ export async function DELETE(request, { params }) {
             return NextResponse.json({ error: message }, { status: 401 });
         }
 
-        if (user?.role === "staff") {
+        if (user?.role !== "admin") {
             return NextResponse.json({ error: 'Permission not found' }, { status: 404 });
         }
 
