@@ -53,7 +53,7 @@ const ProductView = ({ url }) => {
     dispatch(GetSubCateUrlService(product?.subcat_name));
     dispatch(GetAddStorageIdService(product?.storage));
     dispatch(GetManufactuerUrlService(product?.manufactuer));
-    dispatch(GetAddPackageIdService(product?.package));
+    dispatch(GetAddPackageIdService(product?.packageName));
     dispatch(GetProductGeneticUrlService(product?.generices));
     dispatch(getCartService());
     dispatch(GetProductService(1, 4, search, product?.generices));
@@ -87,6 +87,39 @@ const ProductView = ({ url }) => {
     router.push("/prescription");
   };
 
+  const ProductImage = ({ product, width, height, className }) => {
+    const primaryImage = product?.product_img
+      ? `https://assets2.drugcarts.com/${product.product_img}`
+      : null;
+
+    const fallbackImage = product?.product_img
+      ? `https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product.product_img}`
+      : null;
+
+    const [imgSrc, setImgSrc] = useState(primaryImage || IMAGES.NO_IMAGE);
+
+    const handleError = () => {
+      if (imgSrc !== fallbackImage && fallbackImage) {
+        setImgSrc(fallbackImage);
+      } else {
+        setImgSrc(IMAGES.NO_IMAGE);
+      }
+    };
+
+    return (
+      <Image
+        priority
+        src={imgSrc}
+        alt={product?.product_name || 'Product Image'}
+        width={width}
+        height={height}
+        className={className}
+        onError={handleError}
+      />
+    );
+  };
+
+
   const cartDetails = onAuth?.filter((cartItem) => cartItem?.url === url);
   return (
     <>
@@ -94,51 +127,34 @@ const ProductView = ({ url }) => {
         <section className="px-5 mt-3 bg-[#F9F9F9] p-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto">
             <div className="bg-white p-3 rounded-md">
-              <Image
-                priority
-                src={
-                  product?.product_img
-                    ? `https://assets2.drugcarts.com/${product?.product_img}`
-                    : IMAGES.NO_IMAGE
-                }
-                alt={product?.product_name}
+              {/* <ProductImage
+                image={product?.product_img}
+                name={product?.product_name}
+                width={300}
+                height={280}
+                className="p-2 w-[300px] h-[280px] my-1 mx-auto"
+              /> */}
+              <ProductImage
+                product={product}
                 width={300}
                 height={280}
                 className="p-2 w-[300px] h-[280px] my-1 mx-auto"
               />
               <div className="flex items-center justify-between mt-4 p-2">
-                <Image
-                  priority
-                  src={
-                    product?.product_img
-                      ? `https://assets2.drugcarts.com/${product?.product_img}`
-                      : IMAGES.NO_IMAGE
-                  }
-                  alt={product?.product_name}
+                <ProductImage
+                  product={product}
                   width={120}
                   height={120}
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
-                <Image
-                  priority
-                  src={
-                    product?.product_img
-                      ? `https://assets2.drugcarts.com/${product?.product_img}`
-                      : IMAGES.NO_IMAGE
-                  }
-                  alt={product?.product_name}
+                <ProductImage
+                  product={product}
                   width={120}
                   height={120}
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
                 />
-                <Image
-                  priority
-                  src={
-                    product?.product_img
-                      ? `https://assets2.drugcarts.com/${product?.product_img}`
-                      : IMAGES.NO_IMAGE
-                  }
-                  alt={product?.product_name}
+                <ProductImage
+                  product={product}
                   width={120}
                   height={120}
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
@@ -318,15 +334,15 @@ const ProductView = ({ url }) => {
                 ) : null}
 
                 {product?.cat_name === "ayush" ||
-                product?.cat_name === "Health-Care-Device" ||
-                product?.cat_name === "treatments" ||
-                product?.cat_name === "fitness-supplements" ||
-                product?.cat_name === "personal-care" ? null : (
+                  product?.cat_name === "Health-Care-Device" ||
+                  product?.cat_name === "treatments" ||
+                  product?.cat_name === "fitness-supplements" ||
+                  product?.cat_name === "personal-care" ? null : (
                   <p className="bg-[#ff5c02] py-1 px-1 text-center rounded-lg text-white mt-2 w-48">
                     Prescription Required
                   </p>
                 )}
-                
+
                 <h3 className="font-bold mt-2 text-xl">Share</h3>
                 <div className="flex flex-col md:flex-row gap-3 mt-2">
                   <button className="flex items-center gap-1 border-2  py-1">
@@ -424,7 +440,7 @@ const ProductView = ({ url }) => {
                     <td className="bg-pink-200 py-[15px] px-1 font-bold">
                       Product Form
                     </td>
-                    <td className="px-2 capitalize">{product?.tabscount}</td>
+                    <td className="px-2 capitalize">{product?.form}</td>
                   </tr>
                   <tr className="border-[1px]">
                     <td className="bg-pink-200 py-[15px] px-1 font-bold">
@@ -1651,14 +1667,14 @@ const ProductView = ({ url }) => {
               <div className="bg-[#F3F8FC] text-[14px] border-[1.5px] m-2 rounded">
                 {alterBrands?.map((product, i) => (
                   <div key={i}>
-                    <div className="flex m-3">
+                    <div className="flex m-3 cursor-pointer" onClick={()=> router.push(`/product/${product?.url}`)}>
                       <div className="w-2/3">
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
                           <p className="capitalize">{product?.cat_name}</p>
                           {product?.rexrequired > 0 ? (
-    <p>{product?.rexrequired}</p>
-                      ) : null}
+                            <p>{product?.rexrequired}</p>
+                          ) : null}
                         </div>
                         <h3 className="text-[#B7084B] font-bold text-lg">
                           &#8377; {product?.saleprice}
@@ -1668,13 +1684,8 @@ const ProductView = ({ url }) => {
                         </h3>
                       </div>
                       <div className="w-1/3">
-                        <Image
-                          src={
-                            product?.product_img
-                              ? `https://assets2.drugcarts.com/${product?.product_img}`
-                              : IMAGES.NO_IMAGE
-                          }
-                          alt={product?.product_name}
+                        <ProductImage
+                          product={product}
                           width={96}
                           height={96}
                           className="w-[96px] h-[90px] mx-auto"
@@ -2123,7 +2134,7 @@ const ProductView = ({ url }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {productList &&
             productList?.products?.map((product, i) => (
-              <div className="bg-[#CEDEFC] rounded-md p-4 px-10" key={i}>
+              <div className="bg-[#CEDEFC] rounded-md p-4 px-10 cursor-pointer" key={i} onClick={()=> router.push(`/product/${product?.url}`)}>
                 <div className="flex">
                   <div className="p-1">
                     <h2 className="font-bold">{product?.product_name}</h2>
@@ -2148,16 +2159,10 @@ const ProductView = ({ url }) => {
                     </h4>
                     <p>You Saved : {product?.percentage} %</p>
                   </div>
-                  <Image
-                    priority
-                    src={
-                      product?.product_img
-                        ? `https://assets2.drugcarts.com/${product?.product_img}`
-                        : IMAGES.NO_IMAGE
-                    }
-                    alt={product?.product_name}
-                    width={200}
-                    height={100}
+                  <ProductImage
+                    product={product}
+                    width={100}
+                    height={20}
                     className="mt-3 mx-auto rounded-lg"
                   />
                 </div>
