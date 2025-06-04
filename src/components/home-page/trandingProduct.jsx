@@ -8,20 +8,64 @@ import CartIcon from "@/assets/Icons/CartIcon";
 import discountImg from "@/assets/trendingimg/dealofday.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { GetProductTypeService } from "@/services/productService";
+import { GetProductTypeService, getBestProductTypeData } from "@/services/productService";
 import { PostCartService } from "@/services/cartService";
 import { useRouter } from "next/navigation";
 import { IMAGES } from "../common/images";
 
 const TrandingProduct = () => {
   const { productTypeList } = useSelector((state) => state.productData);
+  const [bestProduct, setBestProduct] = useState([])
   const router = useRouter();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState("Popular");
 
+
   useEffect(() => {
     dispatch(GetProductTypeService(1, 8, activeTab));
   }, [activeTab]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getBestProductTypeData(1, 3);
+      if (res?.products) {
+        setBestProduct(res?.products);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const ProductImage = ({ product, width, height, className }) => {
+    const primaryImage = product?.product_img
+      ? `https://assets2.drugcarts.com/${product.product_img}`
+      : null;
+
+    const fallbackImage = product?.product_img
+      ? `https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product.product_img}`
+      : null;
+
+    const [imgSrc, setImgSrc] = useState(primaryImage || IMAGES.NO_IMAGE);
+
+    const handleError = () => {
+      if (imgSrc !== fallbackImage && fallbackImage) {
+        setImgSrc(fallbackImage);
+      } else {
+        setImgSrc(IMAGES.NO_IMAGE);
+      }
+    };
+
+    return (
+      <Image
+        priority
+        src={imgSrc}
+        alt={product?.product_name || 'Product Image'}
+        width={width}
+        height={height}
+        className={className}
+        onError={handleError}
+      />
+    );
+  };
 
   const productsData = [
     {
@@ -171,7 +215,7 @@ const TrandingProduct = () => {
                       </svg>
                     </button>
                   </div>
-                  <Image
+                  {/* <Image
                     src={
                       product?.product_img
                         ? `https://assets2.drugcarts.com/${product?.product_img}`
@@ -181,7 +225,8 @@ const TrandingProduct = () => {
                     className="w-48 h-48 ml-3"
                     width={200}
                     height={200}
-                  />
+                  /> */}
+                    <ProductImage  product={product} width={200} height={200} className="w-48 h-48 ml-3"/>
                   <h3
                     className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 cursor-pointer"
                     onClick={() => router.push(`/product/${product?.url}`)}
@@ -222,22 +267,23 @@ const TrandingProduct = () => {
             <h3 className="font-bold text-lg">Best Seller</h3>
             <hr className="border-gray-500 mt-2" />
           </div>
-          {bestSellers?.map((item) => (
+          {bestProduct?.map((item, i) => (
             <div
-              key={item.id}
+              key={i}
               className="flex justify-center items-center p-3 border-b-2 border-gray-300"
             >
               <div className="w-1/3 h-24">
-                <Image
+                {/* <Image
                   priority
                   src={item?.image}
                   alt={item?.name}
                   className="w-20 h-20 object-cover rounded-md mx-auto"
-                />
+                /> */}
+                <ProductImage  product={item} width={200} height={200} className="w-20 h-20 object-cover rounded-md mx-auto"/>
               </div>
               <div className="w-2/3 h-24">
                 <div className="ml-2">
-                  <h4 className="text-sm">{item?.name}</h4>
+                  <h4 className="text-sm">{item?.product_name}</h4>
                   <p className="text-black font-poppins text-sm mt-1">
                     {item?.price}
                   </p>
@@ -250,7 +296,7 @@ const TrandingProduct = () => {
                       <span className="text-gray-500">&#9733;</span>
                     </div>
                     <div className="w-1/2">
-                      <button className="bg-green-500 hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-1 rounded shadow-md">
+                      <button className="bg-green-500 hover:bg-blue-600 text-white font-poppins font-semibold text-[12px] py-1 px-1 rounded shadow-md" onClick={()=> router.push(`/product/${item?.url}`)}>
                         <div className="flex justify-center">
                           <span>Shop Now</span>
                           <svg

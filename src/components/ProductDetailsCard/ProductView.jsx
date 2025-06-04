@@ -12,6 +12,8 @@ import {
   GetProductService,
   GetProductUrlService,
   GetProductGeneticUrlService,
+  getTrendingProductTypeData,
+  getFrequentlyProductTypeData
 } from "@/services/productService";
 import { GetSubCateUrlService } from "@/services/subCategoryService";
 import { GetAddStorageIdService } from "@/services/storageService";
@@ -36,6 +38,8 @@ import OurHomeService from "./rightsection/OurHomeService";
 import OurTreatment from "./rightsection/OurTreatment";
 
 const ProductView = ({ url }) => {
+  const [trandingProduct, setTrandingProduct] = useState([]);
+  const [frequently, setFrequently] = useState([])
   const dispatch = useDispatch();
   const router = useRouter();
   const [search, setSearch] = useState("");
@@ -53,12 +57,29 @@ const ProductView = ({ url }) => {
     dispatch(GetSubCateUrlService(product?.subcat_name));
     dispatch(GetAddStorageIdService(product?.storage));
     dispatch(GetManufactuerUrlService(product?.manufactuer));
-    dispatch(GetAddPackageIdService(product?.packageName));
+    dispatch(GetAddPackageIdService(product?.packageName || product?.package));
     dispatch(GetProductGeneticUrlService(product?.generices));
     dispatch(getCartService());
     dispatch(GetProductService(1, 4, search, product?.generices));
     dispatch(GetSideeffectGenericService(product?.generices));
   }, [url, product?.generices, product?.manufactuer]);
+
+  useEffect(() => {
+    const fetchTrandingData = async () => {
+      const res = await getTrendingProductTypeData(1, 2);
+      if (res?.products) {
+        setTrandingProduct(res?.products);
+      }
+    };
+    const fetchFrequentlyData = async () => {
+      const res = await getFrequentlyProductTypeData(1, 2);
+      if (res?.products) {
+        setFrequently(res?.products);
+      }
+    };
+    fetchFrequentlyData()
+    fetchTrandingData();
+  }, []);
 
   const alterBrands = productGenericUrl.filter((item) => item?.url !== url);
 
@@ -121,6 +142,8 @@ const ProductView = ({ url }) => {
 
 
   const cartDetails = onAuth?.filter((cartItem) => cartItem?.url === url);
+  console.log('trand', trandingProduct);
+
   return (
     <>
       <section className="px-3 mt-3">
@@ -440,7 +463,7 @@ const ProductView = ({ url }) => {
                     <td className="bg-pink-200 py-[15px] px-1 font-bold">
                       Product Form
                     </td>
-                    <td className="px-2 capitalize">{product?.form}</td>
+                    <td className="px-2 capitalize">{product?.form ? product?.form : product?.tabscount}</td>
                   </tr>
                   <tr className="border-[1px]">
                     <td className="bg-pink-200 py-[15px] px-1 font-bold">
@@ -1667,7 +1690,7 @@ const ProductView = ({ url }) => {
               <div className="bg-[#F3F8FC] text-[14px] border-[1.5px] m-2 rounded">
                 {alterBrands?.map((product, i) => (
                   <div key={i}>
-                    <div className="flex m-3 cursor-pointer" onClick={()=> router.push(`/product/${product?.url}`)}>
+                    <div className="flex m-3 cursor-pointer" onClick={() => router.push(`/product/${product?.url}`)}>
                       <div className="w-2/3">
                         <h2 className="text-lg">{product?.product_name}</h2>
                         <div className="flex text-[10px] gap-3 font-semibold">
@@ -1832,9 +1855,11 @@ const ProductView = ({ url }) => {
                   <h2>Fever</h2>
                 </div>
               </div>
-              <h2 className="font-bold text-center m-2 text-xl">
-                Frequently bought Together
-              </h2>
+              {frequently.length !== 0 ? (
+                <h2 className="font-bold text-center m-2 text-xl">
+                  Frequently bought Together
+                </h2>
+              ) : null}
               <div className="grid grid-cols-2 gap-2 justify-center items-center mx-auto ">
                 <div className="border-2">
                   <div className="bg-pink-200 m-3 rounded-md">
@@ -1961,134 +1986,82 @@ const ProductView = ({ url }) => {
                   </div>
                 </div>
               </div>
-              <h2 className="font-bold text-center m-2 text-xl">
-                Tranding Product
-              </h2>
+              {trandingProduct?.length !== 0 ? (
+                <h2 className="font-bold text-center m-2 text-xl">
+                  Tranding Product
+                </h2>
+              ) : null}
               <div className="grid grid-cols-2 gap-2 justify-center items-center mx-auto ">
-                <div className="border-2">
-                  <div className="bg-green-200 m-3 rounded-md">
-                    <span className="bg-[#B7084B] mx-1 text-[10px] text-white p-[0.5px]">
-                      -10%
-                    </span>
-                    <Image
-                      src={IMAGES.Product_Eugebra}
-                      alt="ANTI CANCER"
-                      priority
-                      className="w-24 mx-auto py-2 rounded-md"
-                    />
+                {trandingProduct?.map((item, i) => (
+                  <div className="border-2" key={i}>
+                    <div className="bg-green-200 m-3 rounded-md">
+                      <span className="bg-[#B7084B] mx-1 text-[10px] text-white p-[0.5px]">
+                        -{item?.percentage}%
+                      </span>
+                      {/* <Image
+                        src={IMAGES.Product_Eugebra}
+                        alt="ANTI CANCER"
+                        priority
+                        className="w-24 mx-auto py-2 rounded-md"
+                      /> */}
+                      <ProductImage
+                        product={product}
+                        width={300}
+                        height={280}
+                        className="w-24 mx-auto py-2 rounded-md"
+                      />
+                    </div>
+                    <p className="text-gray-400 text-[12px] px-2">{item?.cat_name}</p>
+                    <h3 className="text-[12px] px-2 font-bold">
+                      {item?.product_name}
+                    </h3>
+                    <h2 className="text-[12px] px-2 font-bold">Rs. 299.00</h2>
+                    <div className="flex justify-between gap-4 p-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="size-6 text-[#B7084B]"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="size-6 text-green-600"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                        />
+                      </svg>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="size-6 text-blue-500"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
+                        />
+                      </svg>
+                    </div>
                   </div>
-                  <p className="text-gray-400 text-[12px] px-2">Cold Cough</p>
-                  <h3 className="text-[12px] px-2 font-bold">
-                    Emcof Herbal (pack of 2)
-                  </h3>
-                  <h2 className="text-[12px] px-2 font-bold">Rs. 299.00</h2>
-                  <div className="flex justify-between gap-4 p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6 text-[#B7084B]"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6 text-green-600"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6 text-blue-500"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="border-2">
-                  <div className="bg-pink-200 m-3 rounded-md">
-                    <span className="bg-[#B7084B] mx-1 text-[10px] text-white p-[0.5px]">
-                      -10%
-                    </span>
-                    <Image
-                      src={IMAGES.Product_Eugebra}
-                      alt="ANTI CANCER"
-                      priority
-                      className="w-24 mx-auto py-2 rounded-md"
-                    />
-                  </div>
-                  <p className="text-gray-400 text-[12px] px-2">Cold Cough</p>
-                  <h3 className="text-[12px] px-2 font-bold">
-                    Emcof Herbal (pack of 2)
-                  </h3>
-                  <h2 className="text-[12px] px-2 font-bold">Rs. 299.00</h2>
-                  <div className="flex justify-between gap-4 p-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6 text-[#B7084B]"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6 text-green-600"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="1.5"
-                      stroke="currentColor"
-                      className="size-6 text-blue-500"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                ))}
               </div>
               <div className="p-5 border-2 my-10">
                 <h2 className="font-bold text-center m-2 text-xl">
@@ -2134,7 +2107,7 @@ const ProductView = ({ url }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {productList &&
             productList?.products?.map((product, i) => (
-              <div className="bg-[#CEDEFC] rounded-md p-4 px-10 cursor-pointer" key={i} onClick={()=> router.push(`/product/${product?.url}`)}>
+              <div className="bg-[#CEDEFC] rounded-md p-4 px-10 cursor-pointer" key={i} onClick={() => router.push(`/product/${product?.url}`)}>
                 <div className="flex">
                   <div className="p-1">
                     <h2 className="font-bold">{product?.product_name}</h2>
