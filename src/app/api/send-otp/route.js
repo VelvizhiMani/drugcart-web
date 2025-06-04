@@ -5,17 +5,17 @@ import bcrypt from 'bcryptjs';
 import axios from 'axios';
 
 export async function GET(request, response) {
-    try {
-        await connectionToDatabase()
-        const user = await User.find();
-        if (user) {
-            return NextResponse.json(user, { status: 200 })
-        } else {
-            return NextResponse.json({ message: "User not found" }, { status: 400 });
-        }
-    } catch (error) {
-        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+  try {
+    await connectionToDatabase()
+    const user = await User.find();
+    if (user) {
+      return NextResponse.json(user, { status: 200 })
+    } else {
+      return NextResponse.json({ message: "User not found" }, { status: 400 });
     }
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+  }
 }
 
 
@@ -43,12 +43,12 @@ export async function GET(request, response) {
 //       if (!phone) {
 //         return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
 //       }
-  
+
 //       const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
 //       const message = Your OTP code is ${otp}. It is valid for 5 minutes.; 
-  
+
 //       console.log("Sending OTP to:", message);
-  
+
 //       // InstantAlerts API Request
 //       const response = await axios.post("https://instantalerts.co/api/web/send", {
 //         apikey: process.env.INSTANTALERTS_API_KEY,
@@ -57,13 +57,13 @@ export async function GET(request, response) {
 //         message: "Your Signup OTP for Drugcarts is  Regards, DRGCRT",
 //         format: "json",
 //       });
-  
+
 //       console.log("InstantAlerts API Response:", response.data); // Log full response
-  
+
 //       return NextResponse.json({ success: true, message: "OTP sent successfully!", data: response.data });
 //     } catch (error) {
 //       console.error("InstantAlerts API Error:", error.response?.data || error.message);
-  
+
 //       return NextResponse.json(
 //         { error: "Failed to send OTP", details: error.response?.data || error.message },
 //         { status: 500 }
@@ -75,8 +75,11 @@ export async function POST(req) {
   try {
     const { phone } = await req.json();
 
-    if (!phone) {
-      return NextResponse.json({ error: "Phone number is required" }, { status: 400 });
+    const isUser = await User.findOne({ phone: phone })
+    console.log(isUser);
+    
+    if (!isUser) {
+      return NextResponse.json({ error: "User Not Found" }, { status: 404 });
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
@@ -89,7 +92,7 @@ export async function POST(req) {
 
     console.log(process.env.INSTANTALERTS_API_KEY)
     // InstantAlerts API Request
-    const response = await axios.post("https://instantalerts.co/api/web/send", {
+    await axios.post("https://instantalerts.co/api/web/send", {
       apikey: process.env.INSTANTALERTS_API_KEY,
       sender: process.env.INSTANTALERTS_SENDER_ID,
       to: phone,

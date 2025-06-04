@@ -200,4 +200,40 @@ const GetProductTypeService = (page = 1, limit = 10, type = "", search = "" ) =>
     }
 }
 
-export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService, PutGenericProductStockService, GetProductTypeService }
+async function getBestProductTypeData(page = 1, limit = 10, type = "Best Selling", search = "" ) {
+  try {
+    const res = await fetch(
+      `/api/product/type?page=${page}&limit=${limit}&type=${type}&search=${search}`,
+      { cache: "no-store" } // no-store or 'force-cache' if you want caching
+    );
+    return await res.json();
+  } catch (error) {
+    return { products: [] };
+  }
+}
+
+async function getTrendingProductTypeData(page = 1, limit = 10, type = "Tranding", search = "" ) {
+  try {
+    const res = await fetch(
+      `/api/product/type?page=${page}&limit=${limit}&type=${type}&search=${search}`,
+      { cache: "no-store" } // no-store or 'force-cache' if you want caching
+    );
+    return await res.json();
+  } catch (error) {
+    return { products: [] };
+  }
+}
+
+async function getFrequentlyProductTypeData(page = 1, limit = 10, type = "Frequently", search = "" ) {
+  try {
+    const res = await fetch(
+      `/api/product/type?page=${page}&limit=${limit}&type=${type}&search=${search}`,
+      { cache: "no-store" } // no-store or 'force-cache' if you want caching
+    );
+    return await res.json();
+  } catch (error) {
+    return { products: [] };
+  }
+}
+
+export { PostProductService, GetProductService, GetProductNameService, GetProductCatsService, GetProductCategoryService, GetProductUrlService, GetProductIdService, PutProductService, DeleteProductService, GetProductGeneticUrlService,GetProductManufactuerUrlService, GetProductPersonalCareService, GetProductFitnessService, GetProductTreatmentService, PutGenericProductStockService, GetProductTypeService, getBestProductTypeData, getTrendingProductTypeData, getFrequentlyProductTypeData }

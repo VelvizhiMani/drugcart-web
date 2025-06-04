@@ -650,18 +650,18 @@ const EditProduct = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            {/* <SelectInput
+            <SelectInput
               title={"GST(%)"}
               value={formik.values.gst}
               onChange={formik.handleChange("gst")}
               data={gst}
-            /> */}
-            <TextInput
+            />
+            {/* <TextInput
               title={"GST(%)"}
               type="number"
               value={formik.values.gst}
               onChange={formik.handleChange("gst")}
-            />
+            /> */}
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput

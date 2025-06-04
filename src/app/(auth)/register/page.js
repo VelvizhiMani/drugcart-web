@@ -7,7 +7,7 @@ import Logo from "@/assets/logo.png";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation';
-import { sendOTPService } from "@/services/userService"
+import { registerOTPService } from "@/services/userService"
 
 const Register = () => {
   const dispatch = useDispatch()
@@ -25,7 +25,7 @@ const Register = () => {
     }),
     onSubmit: (data) => {
       console.log("DATA",data);
-      dispatch(sendOTPService(data, router))
+      dispatch(registerOTPService(data, router))
     },
   });
 

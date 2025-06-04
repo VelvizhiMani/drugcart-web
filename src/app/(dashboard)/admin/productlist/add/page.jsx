@@ -668,17 +668,17 @@ const ProductAdd = () => {
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>
-            {/* <SelectInput
-              title={"GST(%)"}
-              value={formik.values.gst}
-              onChange={formik.handleChange("gst")}
-              data={gst}
-            /> */}
-            <TextInput
+            {/* <TextInput
               title={"GST(%)"}
               type="number"
               value={formik.values.gst}
               onChange={formik.handleChange("gst")}
+            /> */}
+            <SelectInput
+              title={"GST(%)"}
+              value={formik.values.gst}
+              onChange={formik.handleChange("gst")}
+              data={["5", "12", "18"]}
             />
           </Grid2>
           <Grid2 size={{ xs: 12, md: 4 }}>

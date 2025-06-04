@@ -29,6 +29,20 @@ const sendOTPService = (userData, router) => async (dispatch) => {
         console.log(response);
         router.push(`/otp?username=${username}&phone=${phone}`)
     }).catch((error) => {
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+        console.log("error", error.message)
+    })
+}
+
+const registerOTPService = (userData, router) => async (dispatch) => {
+    console.log(userData);
+
+    const { phone, username } = userData
+    await axios.post('/api/register-otp', { phone }).then((response) => {
+        console.log(response);
+        router.push(`/otp?username=${username}&phone=${phone}`)
+    }).catch((error) => {
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
         console.log("error", error.message)
     })
 }
@@ -54,4 +68,4 @@ const verifyOTPService = (userData, router, items) => async (dispatch) => {
     })
 }
 
-export { registerService, PostUserService, sendOTPService, verifyOTPService }
+export { registerService, PostUserService, sendOTPService, verifyOTPService, registerOTPService }
