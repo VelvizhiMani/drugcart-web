@@ -56,7 +56,7 @@ const PutReferenceService = (id, userData) => async (dispatch) => {
 const DeleteReferenceService = (id) => async (dispatch) => {
     await axios.delete(`/api/referlist/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getReference(id))
-        dispatch(GetReferenceService())
+        dispatch(GetReferenceService(1, 10))
     }).catch((error) => {
         console.log("error", error.message)
     })
