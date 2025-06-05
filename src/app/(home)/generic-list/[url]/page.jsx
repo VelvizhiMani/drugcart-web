@@ -44,6 +44,39 @@ const GenericProductList = () => {
   const ProductClick = (url) => {
     router.push(`/product/${url}`);
   };
+
+    const ProductImage = ({ product, width, height, className }) => {
+      const primaryImage = product?.product_img
+        ? `https://assets2.drugcarts.com/${product.product_img}`
+        : null;
+  
+      const fallbackImage = product?.product_img
+        ? `https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product.product_img}`
+        : null;
+  
+      const [imgSrc, setImgSrc] = useState(primaryImage || IMAGES.NO_IMAGE);
+  
+      const handleError = () => {
+        if (imgSrc !== fallbackImage && fallbackImage) {
+          setImgSrc(fallbackImage);
+        } else {
+          setImgSrc(IMAGES.NO_IMAGE);
+        }
+      };
+  
+      return (
+        <Image
+          priority
+          src={imgSrc}
+          alt={product?.product_name || 'Product Image'}
+          width={width}
+          height={height}
+          className={className}
+          onError={handleError}
+        />
+      );
+    };
+
   return (
     <>
       <section className="max-w-7xl mx-auto ">
@@ -58,7 +91,7 @@ const GenericProductList = () => {
               </h2>
               <div className="m-2">
                 <div className="flex justify-start border-[1.5px] p-2">
-                  <Image
+                  {/* <Image
                     src={
                       productList?.products?.[0]?.product_img
                         ? `https://assets2.drugcarts.com/${productList?.products?.[0]?.product_img}`
@@ -68,7 +101,8 @@ const GenericProductList = () => {
                     width={250}
                     height={220}
                     className="w-16 h-16 object-cover"
-                  />
+                  /> */}
+                  <ProductImage  product={productList?.products?.[0]} width={250} height={250} className="w-16 h-16 object-cover"/>
                   <div className="ml-2">
                     <h3 className="font-bold text-sm cursor-pointer" onClick={() => ProductClick(productList?.products?.[0]?.url)}>{tableText(productList?.products?.[0]?.product_name, 30)}</h3>
                     <h3 className="text-gray-400 text-xs">{productList?.products?.[0]?.generices}</h3>
@@ -164,7 +198,7 @@ const GenericProductList = () => {
                   </div>
                 ) : null}
               </div>
-                    <Image
+                    {/* <Image
                       src={
                         product?.product_img
                           ? `https://assets2.drugcarts.com/${product?.product_img}`
@@ -174,7 +208,8 @@ const GenericProductList = () => {
                       width={250}
                       height={220}
                       className="sml-3 p-2 w-[250px] h-[220px] my-1 mx-auto pt-6"
-                    />
+                    /> */}
+                    <ProductImage  product={product} width={250} height={250} className="sml-3 p-2 w-[250px] h-[220px] my-1 mx-auto pt-6"/>
                     <h3 className="text-gray-500 font-poppins font-medium text-[13px] w-[60%] line-clamp-1 capitalize">
                       {product?.cat_name} / {product?.generices}
                     </h3>
