@@ -26,6 +26,38 @@ const Medicine = () => {
     router.push(`/catalog/${cat_url}`)
   }
 
+  const CategoryImage = ({ category, width, height, className }) => {
+    const primaryImage = category?.cat_img
+      ? `https://assets2.drugcarts.com/category/thumb/${category?.cat_img}`
+      : null;
+
+    const fallbackImage = category?.cat_img
+      ? `https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/category/thumb/${category.cat_img}`
+      : null;
+
+    const [imgSrc, setImgSrc] = useState(primaryImage || IMAGES.NO_IMAGE);
+
+    const handleError = () => {
+      if (imgSrc !== fallbackImage && fallbackImage) {
+        setImgSrc(fallbackImage);
+      } else {
+        setImgSrc(IMAGES.NO_IMAGE);
+      }
+    };
+
+    return (
+      <Image
+        priority
+        src={imgSrc}
+        alt={category?.category_name || 'Category Image'}
+        width={width}
+        height={height}
+        className={className}
+        onError={handleError}
+      />
+    );
+  };
+
   return (
     <>
       <section className="max-w-7xl mx-auto">
@@ -72,13 +104,14 @@ const Medicine = () => {
                 onClick={() => categroyClick(category?.url)}
               >
                 <p className="text-center">
-                  <Image
+                  {/* <Image
                     width={100}
                     height={100}
                     src={category?.cat_img ? `https://assets2.drugcarts.com/category/thumb/${category?.cat_img}` : IMAGES.NO_IMAGE}
                     alt={category?.category_name}
                     className={`mb-3 mx-auto object-cover ${category?.cat_img ? "bg-bgcancer" : "bg-white"} rounded-full p-2`}
-                  />
+                  /> */}
+                   <CategoryImage  category={category} width={100} height={100} className={`mb-3 mx-auto object-cover ${category?.cat_img ? "bg-bgcancer" : "bg-white"} rounded-full p-2 w-24 h-24`}/>
                   <span className="capitalize">{category?.category_name}</span>
                 </p>
               </div>
