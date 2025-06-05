@@ -13,7 +13,7 @@ const PostOrderService = (data, router) => async (dispatch) => {
         dispatch(getGetOrderData(postData.data))
         if (postData.status === 200) {
             sessionStorage.setItem('orderId', postData.data?.orderId)
-            // dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "Invoice", message: JSON.stringify(postData.data) }))
+            dispatch(PostInvoiceService({ to: data.shippingInfo.email, subject: "Invoice", message: JSON.stringify(postData.data) }))
             for (const item of postData.data?.orderItems || []) {
                 dispatch(DeleteCartService(item?._id));
             }
