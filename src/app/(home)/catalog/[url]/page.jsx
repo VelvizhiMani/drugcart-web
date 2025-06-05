@@ -33,7 +33,7 @@ const Catalog = () => {
               onClick={() => subCategroyClick(sub?.url)}
               title={sub?.subcat_name}
               imageAlt={sub?.cat_name}
-              imagUrl={sub?.cat_img ? `https://assets2.drugcarts.com/category/thumb/${sub?.cat_img}` : IMAGES.NO_IMAGE}
+              imagUrl={sub?.cat_img}
               key={i} />
           ))}
         </div>
