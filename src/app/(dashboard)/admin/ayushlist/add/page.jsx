@@ -308,7 +308,7 @@ const AyushProductAdd = () => {
           color="success"
           variant="contained"
           style={{ textTransform: "capitalize" }}
-          onClick={() => router.push(`/admin/product`)}
+          onClick={() => router.back()}
         >
           Product List
         </Button>

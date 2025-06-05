@@ -249,10 +249,8 @@ function GenericeAdd() {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
               title={"Image Alt Tag"}
-              value={URLText(formik.values.imagealt)}
+              value={formik.values.imagealt}
               onChange={formik.handleChange("imagealt")}
-              helperText={formik.touched.imagealt ? formik.errors.imagealt : null}
-              error={formik.touched.imagealt ? formik.errors.imagealt : null}
             />
           </Grid2>
         </Grid2>

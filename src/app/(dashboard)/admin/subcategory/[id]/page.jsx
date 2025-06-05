@@ -66,7 +66,7 @@ function EditSubCategory() {
             imagealt: subCategory?.imagealt || "",
             metatitle: subCategory?.metatitle || "",
             metadesc: subCategory?.metadesc || "",
-            metakeyboard: subCategory?.metakeyboard || "",
+            metakeyword: subCategory?.metakeyword || "",
         },
         validationSchema: yup.object({
             cat_name: yup.string().required("Category type is required"),
@@ -210,8 +210,8 @@ function EditSubCategory() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"Meta Keyword"}
-                            value={formik.values.metakeyboard}
-                            onChange={formik.handleChange("metakeyboard")}
+                            value={formik.values.metakeyword}
+                            onChange={formik.handleChange("metakeyword")}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 8 }}>
