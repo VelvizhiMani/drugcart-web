@@ -38,7 +38,7 @@ function EditManufactuer() {
       manufactueraddress: manufactuer?.manufactueraddress || "",
       metatitle: manufactuer?.metatitle || "",
       metadesc: manufactuer?.metadesc || "",
-      metakeyboard: manufactuer?.metakeyboard || "",
+      metakeyword: manufactuer?.metakeyword || "",
     },
     validationSchema: yup.object({
       manufactuername: yup.string().required("Manufactuer Name is required"),
@@ -170,16 +170,16 @@ function EditManufactuer() {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
               title={"Meta Keyword"}
-              value={formik.values.metakeyboard}
-              onChange={formik.handleChange("metakeyboard")}
+              value={formik.values.metakeyword}
+              onChange={formik.handleChange("metakeyword")}
               helperText={
-                formik.touched.metakeyboard
-                  ? formik.errors.metakeyboard
+                formik.touched.metakeyword
+                  ? formik.errors.metakeyword
                   : null
               }
               error={
-                formik.touched.metakeyboard
-                  ? formik.errors.metakeyboard
+                formik.touched.metakeyword
+                  ? formik.errors.metakeyword
                   : null
               }
             />

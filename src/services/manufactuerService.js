@@ -85,7 +85,7 @@ const PutManufactuerService = (id, userData) => async (dispatch) => {
 const DeleteManufactuerService = (id) => async (dispatch) => {
     await axios.delete(`/api/manufactuerlist/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getManufactuer(id))
-        dispatch(GetManufactuerService())
+        dispatch(GetManufactuerService(1, 10))
     }).catch((error) => {
         console.log("error", error.message)
     })

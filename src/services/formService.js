@@ -56,7 +56,7 @@ const PutFormService = (id, userData) => async (dispatch) => {
 const DeleteFormService = (id) => async (dispatch) => {
     await axios.delete(`/api/form/${id}`, { headers: await Authorization() }).then(() => {
         dispatch(getForm(id))
-        dispatch(GetFormService())
+        dispatch(GetFormService(1, 10))
     }).catch((error) => {
         console.log("error", error.message)
     })

@@ -34,7 +34,7 @@ export async function POST(request) {
             alt,
             metatitle,
             metadesc,
-            metakeyboard,
+            metakeyword,
             status
         } = await request.json();
 
@@ -69,7 +69,7 @@ export async function POST(request) {
             alt,
             metatitle,
             metadesc,
-            metakeyboard,
+            metakeyword,
             status
         });
 
