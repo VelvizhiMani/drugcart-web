@@ -99,7 +99,7 @@ function EditKnowBody() {
                             error={formik.touched.url ? formik.errors.url : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 12 }}>
                         <TextEditor
                             title={"Description:"}
                             value={formik.values.about}
