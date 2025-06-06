@@ -36,7 +36,7 @@ export async function POST(request) {
             imagealt,
             metatitle,
             metadesc,
-            metakeyboard
+            metakeyword
         } = await request.json();
 
         let uploadedImageFileName = "";
@@ -73,7 +73,7 @@ export async function POST(request) {
             imagealt,
             metatitle,
             metadesc,
-            metakeyboard
+            metakeyword
         });
 
         await addBlog.save();

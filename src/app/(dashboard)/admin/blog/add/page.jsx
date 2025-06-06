@@ -42,7 +42,7 @@ function BlogAdd() {
             imagealt: "",
             metatitle: "",
             metadesc: "",
-            metakeyboard: "",
+            metakeyword: "",
         },
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
@@ -161,7 +161,7 @@ function BlogAdd() {
                             error={formik.touched.blogspoturl ? formik.errors.blogspoturl : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 12 }}>
                         <TextEditor
                             title={"Description:"}
                             value={formik.values.description}
@@ -191,8 +191,8 @@ function BlogAdd() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"Meta Keyword"}
-                            value={formik.values.metakeyboard}
-                            onChange={formik.handleChange("metakeyboard")}
+                            value={formik.values.metakeyword}
+                            onChange={formik.handleChange("metakeyword")}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 8 }}>

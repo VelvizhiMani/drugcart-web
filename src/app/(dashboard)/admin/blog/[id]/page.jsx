@@ -43,9 +43,9 @@ function EditBlog() {
             url: blog?.url || "",
             description: blog?.description || "",
             imagealt: blog?.imagealt || "",
-            metatitle: blog?.blogname || "",
-            metadesc: blog?.blogname || "",
-            metakeyboard: blog?.blogname || "",
+            metatitle: blog?.metatitle || "",
+            metadesc: blog?.metadesc || "",
+            metakeyword: blog?.metakeyword || "",
         },
         validationSchema: yup.object({
             blogname: yup.string().required("Blog Name is required"),
@@ -208,8 +208,8 @@ function EditBlog() {
                     <Grid2 size={{ xs: 12, md: 4 }}>
                         <TextInput
                             title={"Meta Keyword"}
-                            value={formik.values.metakeyboard}
-                            onChange={formik.handleChange("metakeyboard")}
+                            value={formik.values.metakeyword}
+                            onChange={formik.handleChange("metakeyword")}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 8 }}>
