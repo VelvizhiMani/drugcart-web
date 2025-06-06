@@ -18,6 +18,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteHealthNewsService, GetHealthNewsIdService, GetHealthNewsService } from '@/services/heathNewsService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import {tableText} from '@/utils/textFormat';
 
 const rowText = {
   color: "#fff",
@@ -130,10 +131,10 @@ function HealthNewsPage() {
                   component="th"
                   scope="row"
                 >
-                  {row?.title}
+                  {tableText(row?.title)}
                 </TableCell>
                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                  {row?.url}
+                  {tableText(row?.url)}
                 </TableCell>
                 <TableCell
                   sx={{ fontFamily: rowText.fontFamily }}
