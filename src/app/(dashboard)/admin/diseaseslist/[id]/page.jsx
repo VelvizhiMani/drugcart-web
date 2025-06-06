@@ -208,17 +208,6 @@ function EditDiseases() {
                             error={formik.touched.videoalt ? formik.errors.videoalt : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
-                        <TextInput
-                            title={"Video Alt [EX:( Diseases name -Drugcarts)]"}
-                            value={formik.values.videoalt}
-                            onChange={formik.handleChange("videoalt")}
-                            helperText={
-                                formik.touched.videoalt ? formik.errors.videoalt : null
-                            }
-                            error={formik.touched.videoalt ? formik.errors.videoalt : null}
-                        />
-                    </Grid2>
                     <Grid2 size={{ xs: 12, md: 12 }}>
                         <TextEditor
                             title={"Disease overview and Definition:"}
@@ -306,15 +295,15 @@ function EditDiseases() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextEditor
                             title={"Lab Test:"}
-                            value={formik.values.symptoms}
-                            onChange={formik.handleChange("symptoms")}
+                            value={formik.values.labtest}
+                            onChange={formik.handleChange("labtest")}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextEditor
                             title={"Radiology:"}
                             value={formik.values.radiology}
-                            onChange={formik.handleChange("symptoms")}
+                            onChange={formik.handleChange("radiology")}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 12 }}>
@@ -347,13 +336,6 @@ function EditDiseases() {
                             title={"Surgical:"}
                             value={formik.values.surgical}
                             onChange={formik.handleChange("surgical")}
-                        />
-                    </Grid2>
-                    <Grid2 size={{ xs: 12, md: 12 }}>
-                        <TextEditor
-                            title={"Prognosis:"}
-                            value={formik.values.prognosis}
-                            onChange={formik.handleChange("prognosis")}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 12 }}>
