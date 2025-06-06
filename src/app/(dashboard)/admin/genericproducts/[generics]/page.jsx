@@ -19,6 +19,7 @@ import DDInput from "@/components/admin/input/DDInput";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteProductService, GetProductIdService, GetProductService } from '@/services/productService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { tableText } from '@/utils/textFormat';
 
 function createData(name, url, status) {
   return { name, url, status };
@@ -128,7 +129,6 @@ function GenericProducts() {
               <TableCell style={rowText}>Sub Category</TableCell>
               <TableCell style={rowText}>Generic</TableCell>
               <TableCell style={rowText}>Product</TableCell>
-              <TableCell style={rowText}>Word Count</TableCell>
               <TableCell style={rowText}>Manufactuer</TableCell>
               <TableCell style={rowText}>Stock</TableCell>
               <TableCell style={rowText}>MRP</TableCell>
@@ -170,13 +170,10 @@ function GenericProducts() {
                       {row?.generices}
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                      {row?.product_name}
+                      {tableText(row?.product_name, 20)}
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                      12212
-                    </TableCell>
-                    <TableCell sx={{ fontFamily: rowText.fontFamily }}>
-                      {row?.manufactuer}
+                      {tableText(row?.manufactuer, 15)}
                     </TableCell>
                     <TableCell sx={{ fontFamily: rowText.fontFamily }}>
                       {row?.stock}

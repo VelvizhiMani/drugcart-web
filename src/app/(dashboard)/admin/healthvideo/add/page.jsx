@@ -103,7 +103,7 @@ function HeathVideoAdd() {
                             error={formik.touched.url ? formik.errors.url : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 10 }}>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
                             title={"Video URL"}
                             value={formik.values.vedio}
@@ -114,7 +114,7 @@ function HeathVideoAdd() {
                             error={formik.touched.vedio ? formik.errors.vedio : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 10 }}>
+                    <Grid2 size={{ xs: 12, md: 12 }}>
                         <TextEditor
                             title={"Description:"}
                             value={formik.values.description}

@@ -111,7 +111,7 @@ function EditCategory() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/category`)}
+                    onClick={() => router.back()}
                 >
                     Category List
                 </Button>

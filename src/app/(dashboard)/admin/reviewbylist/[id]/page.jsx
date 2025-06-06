@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 function EditReviewBy() {
     const [imagePreview, setImagePreview] = useState(null);
-    const { reviewBy } = useSelector((state) => state.referenceData)
+    const { reviewBy } = useSelector((state) => state.reviewbyData)
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
@@ -96,7 +96,7 @@ function EditReviewBy() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/reviewbylist`)}
+                    onClick={() => router.back()}
                 >
                     Review By List
                 </Button>

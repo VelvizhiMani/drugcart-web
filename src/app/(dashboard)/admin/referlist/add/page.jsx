@@ -86,9 +86,9 @@ function ReferenceAdd() {
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
-                            title={"Country of Orgin name: EX:India"}
+                            title={"Url Name"}
                             value={URLText(formik.values.websitename)}
-                            onChange={formik.handleChange("url")}
+                            // onChange={formik.handleChange("url")}
                             helperText={
                                 formik.touched.url ? formik.errors.url : null
                             }

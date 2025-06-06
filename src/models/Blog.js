@@ -46,7 +46,7 @@ const blogSchema = new Schema(
             type: String,
             default: ""
         },
-        metakeyboard: {
+        metakeyword: {
             type: String,
             default: ""
         },

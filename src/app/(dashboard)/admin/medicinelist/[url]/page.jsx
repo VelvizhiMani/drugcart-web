@@ -24,7 +24,7 @@ import { DeleteCategoryService, GetCategoryIdService, GetCategoryService } from 
 import { GetProductCategoryService, GetProductIdService, DeleteProductService } from '@/services/productService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
 import { useRole } from '@/hooks/useRole';
-
+import { tableText } from '@/utils/textFormat';
 
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
@@ -153,13 +153,13 @@ function MedicineList() {
                                             {row?.subcat_name}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                            {row?.product_name}
+                                            {tableText(row?.product_name, 20)}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                             {row?.product_code}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                            {row?.manufactuer}
+                                            {tableText(row?.manufactuer, 20)}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                             {row?.price}

@@ -55,7 +55,7 @@ function EditStorage() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/packagelist`)}
+                    onClick={() => router.back()}
                 >
                     Package List
                 </Button>

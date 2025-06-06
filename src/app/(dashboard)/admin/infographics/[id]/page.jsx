@@ -111,7 +111,7 @@ function EditInfoGraphics() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/infographics`)}
+                    onClick={() => router.back()}
                 >
                     Infographics List
                 </Button>

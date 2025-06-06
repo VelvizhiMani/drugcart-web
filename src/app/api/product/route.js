@@ -136,7 +136,7 @@ export async function POST(request) {
       };
 
       await s3.send(new PutObjectCommand(uploadParams));
-      uploadedImageFileName = imageFileName(uniqueSuffix);
+      uploadedImageFileName = fileName;
     }
 
     const isProduct = await Product.findOne({ product_name });

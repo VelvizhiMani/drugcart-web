@@ -102,7 +102,7 @@ function EditHerbs() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/herbs`)}
+                    onClick={() => router.back()}
                 >
                     Herbs List
                 </Button>

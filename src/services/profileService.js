@@ -12,9 +12,10 @@ const getProfileService = () => async (dispatch, getState) => {
         dispatch(GetAddressIdService(response.data?._id))
         // localStorage.removeItem("cart")
         dispatch(IsLoading(false))
-        const guestCart = getState().cartData.items;
-        console.log("guestCart", guestCart);
-        dispatch(mergeCartAfterLogin(guestCart));
+        // const guestCart = getState().cartData.items; - 05-07-2025
+        // console.log("guestCart", guestCart); - 05-07-2025
+        // dispatch(mergeCartAfterLogin(guestCart)); - 05-07-2025
+        localStorage.removeItem("cart") // - 05-07-2025
         
     }).catch((error) => {
         console.log("error", error.message)

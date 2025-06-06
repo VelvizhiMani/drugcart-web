@@ -103,7 +103,7 @@ function SubCategory() {
                         <TableRow>
                             <TableCell style={rowText}>Sno</TableCell>
                             <TableCell style={rowText}>Sub Category</TableCell>
-                            <TableCell style={rowText}>Category</TableCell>
+                            <TableCell style={rowText}>Url</TableCell>
                             <TableCell align="right" style={rowText}>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -116,7 +116,7 @@ function SubCategory() {
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row?.sno}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }}>{row?.subcat_name}</TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                    {row?.cat_name}
+                                    {row?.url}
                                 </TableCell>
                                 <TableCell sx={{ fontFamily: rowText.fontFamily }} align="right">
                                     <button onClick={() => {

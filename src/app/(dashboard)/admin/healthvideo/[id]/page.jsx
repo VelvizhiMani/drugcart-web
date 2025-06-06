@@ -72,7 +72,7 @@ function HeathVideoEdit() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/healthvideo`)}
+                    onClick={() => router.back()}
                 >
                     Daily Health Video
                 </Button>
@@ -109,7 +109,7 @@ function HeathVideoEdit() {
                             error={formik.touched.url ? formik.errors.url : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 10 }}>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
                         <TextInput
                             title={"Video URL"}
                             value={formik.values.vedio}
@@ -120,7 +120,7 @@ function HeathVideoEdit() {
                             error={formik.touched.vedio ? formik.errors.vedio : null}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, md: 6 }}>
+                    <Grid2 size={{ xs: 12, md: 12 }}>
                         <TextEditor
                             title={"Description:"}
                             value={formik.values.description}

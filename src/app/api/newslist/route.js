@@ -74,7 +74,7 @@ export async function GET(req) {
         const skip = (page - 1) * limit;
 
         const HealthNewsItems = await HealthNews.find(filters)
-            .sort({ createdAt: -1 })
+            .sort({ updated_at: -1 })
             .skip(skip)
             .limit(limit)
 

@@ -71,7 +71,7 @@ function HeathTipsEdit() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/healthtips`)}
+                    onClick={() => router.back()}
                 >
                     Daily Health Tips
                 </Button>

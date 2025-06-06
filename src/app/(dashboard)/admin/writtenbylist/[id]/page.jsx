@@ -101,7 +101,7 @@ function EditWrittenBy() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/writtenbylist`)}
+                    onClick={() => router.back()}
                 >
                     Written By List
                 </Button>

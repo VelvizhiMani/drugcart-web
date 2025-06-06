@@ -106,7 +106,7 @@ function EditArticles() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/articles`)}
+                    onClick={() => router.back()}
                 >
                     Articles List
                 </Button>

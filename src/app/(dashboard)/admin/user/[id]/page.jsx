@@ -52,7 +52,7 @@ function EditUser() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin`)}
+                    onClick={() => router.back()}
                 >
                     User List
                 </Button>

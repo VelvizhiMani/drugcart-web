@@ -103,7 +103,7 @@ function EditForm() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/formlist`)}
+                    onClick={() => router.back()}
                 >
                     Form List
                 </Button>

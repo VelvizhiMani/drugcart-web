@@ -53,7 +53,7 @@ const OTP = ({searchParams}) => {
       username,
       phone,
     }
-    await dispatch(sendOTPService(userdata))
+    await dispatch(sendOTPService(userdata, router))
     resetTimer()
   };
   console.log("otp", digit);

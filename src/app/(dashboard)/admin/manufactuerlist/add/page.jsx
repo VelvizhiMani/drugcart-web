@@ -31,7 +31,7 @@ function ManufactuerAdd() {
       manufactueraddress: "",
       metatitle: "",
       metadesc: "",
-      metakeyboard: "",
+      metakeyword: "",
     },
     validationSchema: yup.object({
       manufactuername: yup.string().required("Manufactuer Name is required"),
@@ -163,16 +163,16 @@ function ManufactuerAdd() {
           <Grid2 size={{ xs: 12, md: 4 }}>
             <TextInput
               title={"Meta Keyword"}
-              value={formik.values.metakeyboard}
-              onChange={formik.handleChange("metakeyboard")}
+              value={formik.values.metakeyword}
+              onChange={formik.handleChange("metakeyword")}
               helperText={
-                formik.touched.metakeyboard
-                  ? formik.errors.metakeyboard
+                formik.touched.metakeyword
+                  ? formik.errors.metakeyword
                   : null
               }
               error={
-                formik.touched.metakeyboard
-                  ? formik.errors.metakeyboard
+                formik.touched.metakeyword
+                  ? formik.errors.metakeyword
                   : null
               }
             />

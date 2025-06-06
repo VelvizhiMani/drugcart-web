@@ -60,7 +60,7 @@ function EditCourier() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/courierlist`)}
+                    onClick={() => router.back()}
                 >
                     Courier List
                 </Button>
