@@ -72,7 +72,7 @@ function HeathVideoEdit() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/healthvideo`)}
+                    onClick={() => router.back()}
                 >
                     Daily Health Video
                 </Button>

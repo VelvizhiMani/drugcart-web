@@ -64,7 +64,7 @@ function EditKnowBody() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/knowbody`)}
+                    onClick={() => router.back()}
                 >
                     Know Your Body List
                 </Button>

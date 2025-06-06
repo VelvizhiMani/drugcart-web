@@ -125,7 +125,7 @@ function EditDiseases() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/diseaseslist`)}
+                    onClick={() => router.back()}
                 >
                     Diseases List
                 </Button>

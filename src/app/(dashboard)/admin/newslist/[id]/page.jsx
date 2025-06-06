@@ -71,7 +71,7 @@ function HealthNewsEdit() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/newslist`)}
+                    onClick={() => router.back()}
                 >
                     Health News
                 </Button>

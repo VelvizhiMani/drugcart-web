@@ -106,7 +106,7 @@ function EditBlog() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/blog`)}
+                    onClick={() => router.back()}
                 >
                     Blog List
                 </Button>
