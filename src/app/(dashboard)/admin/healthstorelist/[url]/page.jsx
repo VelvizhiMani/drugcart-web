@@ -19,6 +19,7 @@ import DDInput from '@/components/admin/input/DDInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetProductCategoryService, GetProductIdService, DeleteProductService } from '@/services/productService';
 import DeleteModal from '@/components/admin/modal/DeleteModal';
+import { tableText } from '@/utils/textFormat';
 
 const rowText = {
     color: '#fff',
@@ -133,13 +134,13 @@ function HealthStoreList() {
                                             {row?.subcat_name}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                            {row?.product_name}
+                                            {tableText(row?.product_name, 30)}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                             {row?.product_code}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
-                                            {row?.manufactuer}
+                                            {tableText(row?.manufactuer, 25)}
                                         </TableCell>
                                         <TableCell sx={{ fontFamily: rowText.fontFamily }} component="th" scope="row">
                                             {row?.price}
