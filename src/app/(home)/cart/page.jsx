@@ -47,38 +47,6 @@ function MyCart() {
     }
   };
 
-  const ProductImage = ({ product, width, height, className }) => {
-    const primaryImage = product?.product_img
-      ? `https://assets2.drugcarts.com/${product.product_img}`
-      : null;
-
-    const fallbackImage = product?.product_img
-      ? `https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product.product_img}`
-      : null;
-
-    const [imgSrc, setImgSrc] = useState(primaryImage || IMAGES.NO_IMAGE);
-
-    const handleError = () => {
-      if (imgSrc !== fallbackImage && fallbackImage) {
-        setImgSrc(fallbackImage);
-      } else {
-        setImgSrc(IMAGES.NO_IMAGE);
-      }
-    };
-
-    return (
-      <Image
-        priority
-        src={imgSrc}
-        alt={product?.product_name || 'Product Image'}
-        width={width}
-        height={height}
-        className={className}
-        onError={handleError}
-      />
-    );
-  };
-
   return (
     <section className="px-2 md:px-12 mt-3">
       <div className="max-w-7xl mx-auto bg-white p-6 rounded-lg">
@@ -118,7 +86,17 @@ function MyCart() {
                         width={50}
                         height={50}
                       /> */}
-                      <ProductImage  product={item} width={50} height={50} className="w-16 h-16"/>
+                      <img
+                        src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${item?.product_img}`}
+                        alt={item?.product_name}
+                        width={50}
+                        height={50}
+                        className="object-cover rounded w-16 h-16"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://assets2.drugcarts.com/${item?.product_img}`;
+                        }}
+                      />
                       <div>
                         <h3 className="font-semibold">
                           {tableText(item?.product_name, 22)}

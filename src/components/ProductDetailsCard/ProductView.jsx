@@ -151,36 +151,55 @@ const ProductView = ({ url }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto">
             <div className="bg-white p-3 rounded-md">
               {/* <ProductImage
-                image={product?.product_img}
-                name={product?.product_name}
-                width={300}
-                height={280}
-                className="p-2 w-[300px] h-[280px] my-1 mx-auto"
-              /> */}
-              <ProductImage
                 product={product}
                 width={300}
                 height={280}
                 className="p-2 w-[300px] h-[280px] my-1 mx-auto"
+              /> */}
+              <img
+                src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                alt={product?.product_name}
+                width={300}
+                height={280}
+                className="p-2 w-[300px] h-[280px] my-1 mx-auto"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                }}
               />
               <div className="flex items-center justify-between mt-4 p-2">
-                <ProductImage
-                  product={product}
+                <img
+                  src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                  alt={product?.product_name}
                   width={120}
                   height={120}
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                  }}
                 />
-                <ProductImage
-                  product={product}
+                <img
+                  src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                  alt={product?.product_name}
                   width={120}
                   height={120}
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                  }}
                 />
-                <ProductImage
-                  product={product}
+                <img
+                  src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                  alt={product?.product_name}
                   width={120}
                   height={120}
                   className="border-2 border-gray-300 p-2 w-[120px] h-[100px] mx-auto"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                  }}
                 />
               </div>
             </div>
@@ -1707,11 +1726,16 @@ const ProductView = ({ url }) => {
                         </h3>
                       </div>
                       <div className="w-1/3">
-                        <ProductImage
-                          product={product}
+                        <img
+                          src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                          alt={product?.product_name}
                           width={96}
                           height={96}
                           className="w-[96px] h-[90px] mx-auto"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                          }}
                         />
                       </div>
                     </div>
@@ -1998,17 +2022,16 @@ const ProductView = ({ url }) => {
                       <span className="bg-[#B7084B] mx-1 text-[10px] text-white p-[0.5px]">
                         -{item?.percentage}%
                       </span>
-                      {/* <Image
-                        src={IMAGES.Product_Eugebra}
-                        alt="ANTI CANCER"
-                        priority
-                        className="w-24 mx-auto py-2 rounded-md"
-                      /> */}
-                      <ProductImage
-                        product={product}
+                      <img
+                        src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                        alt={product?.product_name}
                         width={300}
                         height={280}
                         className="w-24 mx-auto py-2 rounded-md"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                        }}
                       />
                     </div>
                     <p className="text-gray-400 text-[12px] px-2">{item?.cat_name}</p>
@@ -2132,11 +2155,16 @@ const ProductView = ({ url }) => {
                     </h4>
                     <p>You Saved : {product?.percentage} %</p>
                   </div>
-                  <ProductImage
-                    product={product}
+                  <img
+                    src={`https://drugcarts-nextjs.s3.ap-south-1.amazonaws.com/${product?.product_img}`}
+                    alt={product?.product_name}
                     width={100}
-                    height={20}
+                    height={50}
                     className="mt-3 mx-auto rounded-lg"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://assets2.drugcarts.com/${product?.product_img}`;
+                    }}
                   />
                 </div>
               </div>
