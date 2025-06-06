@@ -116,7 +116,7 @@ function EditSubCategory() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/subcategory`)}
+                    onClick={() => router.back()}
                 >
                     Sub Category List
                 </Button>

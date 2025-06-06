@@ -96,7 +96,7 @@ function EditReviewBy() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/reviewbylist`)}
+                    onClick={() => router.back()}
                 >
                     Review By List
                 </Button>

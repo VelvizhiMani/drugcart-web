@@ -66,7 +66,7 @@ function EditReference() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/referlist`)}
+                    onClick={() => router.back()}
                 >
                     Reference List
                 </Button>

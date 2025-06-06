@@ -162,7 +162,7 @@ function EditGeneric() {
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/genericlist`)}
+                    onClick={() => router.back()}
                 >
                     Generic List
                 </Button>

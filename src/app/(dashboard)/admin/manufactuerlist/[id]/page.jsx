@@ -71,7 +71,7 @@ function EditManufactuer() {
           color="success"
           variant="contained"
           style={{ textTransform: "capitalize" }}
-          onClick={() => router.push(`/admin/manufactuerlist`)}
+          onClick={() => router.back()}
         >
           Manufactuer List
         </Button>

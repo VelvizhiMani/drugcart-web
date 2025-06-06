@@ -51,13 +51,13 @@ function EditStock() {
                     fontWeight="bold"
                     sx={{ flexGrow: 1 }}
                 >
-                    Add Stock Status
+                    Edit Stock Status
                 </Typography>
                 <Button
                     color="success"
                     variant="contained"
                     style={{ textTransform: "capitalize" }}
-                    onClick={() => router.push(`/admin/stocklist`)}
+                    onClick={() => router.back()}
                 >
                     Stock Status List
                 </Button>
