@@ -39,7 +39,7 @@ function MyCart() {
 
   const checkoutClick = async () => {
     // const token = await localStorage.getItem("token");
-    const isPrescription = items?.find((item => item?.rexrequired === "Yes"))
+    const isPrescription = items?.find((item => item?.rexrequired === "yes"))
     if (isPrescription) {
       router.push("/prescription");
     } else {
