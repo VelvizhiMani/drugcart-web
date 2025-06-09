@@ -8,6 +8,7 @@ import { IMAGES } from "@/components/common/images";
 import { GetMainSliderUrlService } from "@/services/mainSliderService";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const slides = [
   {
@@ -35,6 +36,7 @@ const slides = [
 const SliderPage = () => {
   const { mainSliderUrl } = useSelector((state) => state.mainSliderData)
   const dispatch = useDispatch()
+  const router = useRouter()
 
   useEffect(() => {
     dispatch(GetMainSliderUrlService("medicine"))
@@ -179,9 +181,10 @@ const SliderPage = () => {
               {mainSliderUrl.map((slide, i) => (
                 <SwiperSlide key={i}>
                   <Image
+                  onClick={() => router.push(`/${slide?.url}`)}
                     src={slide?.slide_image ? `https://assets1.drugcarts.com/admincolor/homepage/slider/${slide?.slide_image}` : IMAGES.NO_IMAGE}
                     alt="Lab Test"
-                    className="rounded-lg h-[220px] md:h-[350px] w-full"
+                    className="rounded-lg h-[220px] md:h-[350px] w-full cursor-pointer"
                     width={500}
                     height={100}
                   />
