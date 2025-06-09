@@ -20,7 +20,7 @@ const AddressUpload = () => {
   const formik = useFormik({
     initialValues: {
       cus_name: "",
-      type: "",
+      type: type,
       lastname: "",
       email: "",
       lastname: "",
@@ -43,7 +43,7 @@ useEffect(() => {
   } else {
     setActiveTab("saved");
   }
-}, [addresses, activeTab]);
+}, [addresses]);
 // console.log('userAddress', userAddress);
 
   return (

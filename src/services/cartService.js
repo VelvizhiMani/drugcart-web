@@ -15,27 +15,32 @@ const getCartService = () => async (dispatch) => {
 }
 
 const PostCartService = (data) => async (dispatch) => {
-    dispatch(addToCart(data))
-    dispatch(showToast({ message: "Cart added Successfully!!!", severity: "success" }))
-    try {
-        dispatch(IsLoading(true))
-        const postData = await axios.post('/api/cart', data, { headers: await Authorization() })
-        dispatch(addToCart(postData.data))
-        dispatch(getCartService())
-        dispatch(IsLoading(false))
-    } catch (error) {
-        dispatch(getCartService())
-        dispatch(IsLoading(false))
-        if (error?.response?.data?.error !== "Unauthorized") {
-            // dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
-            localStorage.removeItem("cart")
-        }
-        console.log("error", error.message)
-        // localStorage.removeItem("cart")
-        // dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
-    }
-}
+  dispatch(IsLoading(true));
 
+  try {
+    dispatch(addToCart(data));
+    dispatch(showToast({ message: "Cart added successfully!", severity: "success" }));
+
+    const headers = await Authorization();
+    const response = await axios.post("/api/cart", data, { headers });
+
+    dispatch(addToCart(response.data));
+    dispatch(getCartService());
+  } catch (error) {
+    console.error("PostCartService error:", error.message);
+    dispatch(getCartService());
+
+    if (error?.response?.data?.error !== "Unauthorized") {
+      localStorage.removeItem("cart");
+    }
+    // dispatch(showToast({
+    //   message: error?.response?.data?.error || "Failed to add to cart",
+    //   severity: "error",
+    // }));
+  } finally {
+    dispatch(IsLoading(false));
+  }
+};
 
 const CartIncrementService = (id, userData) => async (dispatch) => {
     dispatch(incrementQuantity(id))

@@ -108,6 +108,10 @@ const PaymentDetail = () => {
     COD = 500;
     amountTotal = Number(totalPrice);
     codExtra = (amountTotal + COD).toFixed(2);
+  } else {
+    COD = 100;
+    amountTotal = Number(totalPrice);
+    codExtra = (amountTotal + COD).toFixed(2);
   }
 
   const orderConfirm = async () => {
@@ -266,8 +270,8 @@ const PaymentDetail = () => {
                     <label
                       key={option.value}
                       className={`flex items-center border rounded-xl p-4 mb-3 cursor-pointer transition-colors ${selected === option.value
-                          ? "border-blue-500 bg-blue-50"
-                          : "border-gray-300 hover:border-blue-400"
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300 hover:border-blue-400"
                         }`}
                     >
                       <input
