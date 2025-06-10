@@ -15,7 +15,7 @@ const InfographicsCard = () => {
     const router = useRouter();
 
     useEffect(() => {
-        dispatch(GetInfoGraphicsService(page, 10))
+        dispatch(GetInfoGraphicsService(page, 8))
     }, [page])
 
     const infographicClick = (url) => {

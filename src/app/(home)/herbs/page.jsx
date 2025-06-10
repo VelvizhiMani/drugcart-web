@@ -16,7 +16,7 @@ const Herbs = () => {
     const [articlePContent, setArticlePContent] = useState({});
 
     useEffect(() => {
-        dispatch(GetHerbsService(page, 10));
+        dispatch(GetHerbsService(page, 12));
     }, [page]);
 
     useEffect(() => {
@@ -62,8 +62,8 @@ const Herbs = () => {
                             <Image
                                 src={articleImages[i] ? articleImages[i] : IMAGES.NO_IMAGE}
                                 alt="Health hacks"
-                                width={24}
-                                height={24}
+                                width={200}
+                                height={200}
                                 className="w-24 h-24 object-cover"
                             />
                             <div className="ml-4 text-start">

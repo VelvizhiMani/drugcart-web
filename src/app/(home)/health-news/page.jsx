@@ -16,7 +16,7 @@ const HealthNews = () => {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        dispatch(GetHealthNewsService(page, 10))
+        dispatch(GetHealthNewsService(page, 12))
     }, [page])
 
     const healthnewsClick = (url) => {
@@ -58,8 +58,10 @@ const HealthNews = () => {
                     ) : (
 
                         <img
-                            src={articleImages[0] ? articleImages[0] : IMAGES.NO_IMAGE}
+                            src={articleImages[0] ? articleImages[0] : "/assets/no_image.png"}
                             alt="Article Image"
+                            width={400}
+                            height={400}
                             className="w-[100%] h-96 rounded p-4 object-cover mx-auto"
                         />
 
@@ -76,8 +78,10 @@ const HealthNews = () => {
                             ) : (
 
                                 <img
-                                    src={articleImages[i] ? articleImages[i] : IMAGES.NO_IMAGE}
+                                    src={articleImages[i] ? articleImages[i] : "/assets/no_image.png"}
                                     alt="Article Image"
+                                    width={200}
+                                    height={200}
                                     className="w-24 h-24 object-cover"
                                 />
 
@@ -99,13 +103,16 @@ const HealthNews = () => {
                         onClick={() => healthnewsClick(article?.url)}>
                         <div className="flex place-items-start">
                             {articleImages[i]?.endsWith(".svg") || articleImages[i]?.startsWith("data:image") ? (
-                                <img src={articleImages[i]} alt="SVG Image" className="w-24 h-24 object-cover" />
+                                <img src={articleImages[i]} alt="SVG Image" className="w-24 h-24 object-cover" width={200}
+                                    height={200} />
                             ) : (
 
                                 <img
-                                    src={articleImages[i] ? articleImages[i] : IMAGES.NO_IMAGE}
+                                    src={articleImages[i] ? articleImages[i] : "/assets/no_image.png"}
                                     alt="Article Image"
                                     className="w-24 h-24 object-cover"
+                                    width={200}
+                                    height={200}
                                 />
 
                             )}
