@@ -4,6 +4,7 @@ const initialState = {
     scanBookingList: [],
     newScanBooking: {},
     scanBooking: {},
+    scanEmail: {},
 }
 const scanBookingSlice = createSlice({
     name: 'scanBooking',
@@ -18,8 +19,11 @@ const scanBookingSlice = createSlice({
         getBooking: (state, { payload }) => {
             state.scanBooking = payload
         },
+        emailBooking: (state, { payload }) => {
+            state.scanEmail = payload
+        },
     }
 })
 
-export const { addBooking, getBookings, getBooking } = scanBookingSlice.actions
+export const { addBooking, getBookings, getBooking, emailBooking } = scanBookingSlice.actions
 export default scanBookingSlice.reducer
