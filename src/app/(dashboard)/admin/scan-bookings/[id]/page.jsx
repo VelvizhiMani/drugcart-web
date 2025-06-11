@@ -143,6 +143,16 @@ function ViewScanBooking() {
                             {scanBooking?.address}
                         </Typography>
                     </Grid2>
+                    <Grid2 size={{ xs: 12, md: 8 }}>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 600, fontFamily: "Poppins", color: "#000", fontSize: 16 }}>
+                            Subject:
+                        </Typography>
+                        <Typography
+                            sx={{ mt: 1, mb: 0.5, fontWeight: 500, fontFamily: "Poppins", color: "#000", fontSize: 14 }}>
+                            {scanBooking?.subject}
+                        </Typography>
+                    </Grid2>
                 </Grid2>
             </Paper>
         </Box>
