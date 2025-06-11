@@ -16,7 +16,7 @@ const DailyHealthTips = () => {
     const [articlePContent, setArticlePContent] = useState({});
 
     useEffect(() => {
-        dispatch(GetHealthTipService(page, 10));
+        dispatch(GetHealthTipService(page, 12));
     }, [page]);
 
     useEffect(() => {

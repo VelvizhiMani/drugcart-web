@@ -37,7 +37,6 @@ const scanBookingSchema = new Schema(
         email: {
             type: String,
             default: "",
-            unique: true
         },
         date: {
             type: String,

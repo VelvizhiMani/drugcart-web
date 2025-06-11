@@ -16,7 +16,7 @@ const HealthVideoCard = () => {
     const [articlePContent, setArticlePContent] = useState({});
 
     useEffect(() => {
-        dispatch(GetHealthVideosService(page, 4));
+        dispatch(GetHealthVideosService(page, 20));
     }, [page]);
 
     useEffect(() => {
@@ -58,7 +58,7 @@ const HealthVideoCard = () => {
                             {articleImages[i] ? (
                                 <img src={articleImages[i]} alt="Video Thumbnail" className="w-full h-48 object-cover" />
                             ) : (
-                                <img src={IMAGES.NO_IMAGE} alt="No Image" className="w-full h-48 object-cover" />
+                                <img src={"/assets/no_image.png"} alt="No Image" className="w-full h-48 object-cover" />
                             )}
 
                             <div className="absolute top-0 left-0 bg-gray-800 bg-opacity-50 text-white text-xl font-bold px-4 py-2">

@@ -73,6 +73,7 @@ export async function GET(request, response) {
 
 export async function POST(req) {
   try {
+    await connectionToDatabase()
     const { phone } = await req.json();
 
     const isUser = await User.findOne({ phone: phone })

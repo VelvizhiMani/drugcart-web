@@ -5,21 +5,11 @@ import { useEffect } from "react";
 import { GetBlogService } from "@/services/blogService";
 import { useRouter } from "next/navigation";
 
-const BlogCard = () => {
-  const { blogList } = useSelector((state) => state.blogData);
-  const dispatch = useDispatch();
-  const router = useRouter()
-
-  useEffect(() => {
-    dispatch(GetBlogService(1, 3));
-  }, []);
-
-  console.log("blogList", blogList);
-
+const BlogCard = ({ blogData }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-center md:text-left pb-10">
       {/* px-0 md:px-5  */}
-      {blogList?.blogs?.map((blog, i) => (
+      {blogData?.map((blog, i) => (
         <div className="bg-white rounded-lg p-5 border-[1.5px]" key={i}>
           <Image
             src={`https://assets1.drugcarts.com/blogs/${blog?.blogimg}`}

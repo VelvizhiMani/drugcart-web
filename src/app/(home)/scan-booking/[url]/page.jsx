@@ -154,7 +154,6 @@ const ScanBooking = () => {
                     </div>
                     <div>
                         <input
-                            type="email"
                             name="email"
                             className="w-full p-2 border rounded-md"
                             placeholder="E-Mail"

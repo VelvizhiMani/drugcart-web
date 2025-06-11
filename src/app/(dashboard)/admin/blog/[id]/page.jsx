@@ -14,6 +14,7 @@ import InputArea from "@/components/admin/input/InputArea";
 import TextInput from "@/components/admin/input/TextInput";
 import TextEditor from "@/components/admin/input/TextEditor";
 import ImageInput from "@/components/admin/input/ImageInput";
+import SelectInput from "@/components/admin/input/SelectInput";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { PutBlogService, GetBlogIdService } from '@/services/blogService';
@@ -25,6 +26,7 @@ function EditBlog() {
     const router = useRouter();
     const dispatch = useDispatch()
     const params = useParams()
+    const blog_type = ["Tranding", "Latest"];
 
     useEffect(() => {
         dispatch(GetBlogIdService(params?.id))
@@ -41,6 +43,7 @@ function EditBlog() {
             blogimg: blog?.blogimg || "",
             blogspoturl: blog?.blogspoturl || "",
             url: blog?.url || "",
+            blogtype: blog?.blogtype || "",
             description: blog?.description || "",
             imagealt: blog?.imagealt || "",
             metatitle: blog?.metatitle || "",
@@ -146,7 +149,7 @@ function EditBlog() {
                     <Grid2 size={{ xs: 12, md: 6 }}>
                         <ImageInput
                             title={"Blog Image"}
-                            image={`https://assets3.drugcarts.com/admincolor/blogs/${blog?.blogimg}`}
+                            image={`https://assets3.drugcarts.com/blogs/${blog?.blogimg}`}
                             fallbackImage={`${process.env.NEXT_PUBLIC_IMAGE_URL}/blogs/${blog?.blogimg}`}
                             onChange={handleImage}
                             error={
@@ -176,6 +179,14 @@ function EditBlog() {
                                 formik.touched.blogspoturl ? formik.errors.blogspoturl : null
                             }
                             error={formik.touched.blogspoturl ? formik.errors.blogspoturl : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <SelectInput
+                            title={"Blog Type"}
+                            value={formik.values.blogtype}
+                            onChange={formik.handleChange("blogtype")}
+                            data={blog_type}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 6 }}>

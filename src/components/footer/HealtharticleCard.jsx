@@ -17,7 +17,7 @@ const HealtharticleCard = () => {
     }
 
     useEffect(() => {
-        dispatch(GetArticleService(page, 10))
+        dispatch(GetArticleService(page, 8))
     }, [page])
 
     console.log('articleList', articleList);
