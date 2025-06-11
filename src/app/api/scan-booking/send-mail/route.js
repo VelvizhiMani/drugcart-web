@@ -87,6 +87,10 @@ export async function POST(req) {
                     <td style="font-weight: bold;">Subject:</td>
                     <td>${jsonParse.subject}</td>
                   </tr>
+                  <tr>
+                    <td style="font-weight: bold;">Web Link:</td>
+                    <td> <a href="https://main.diinz06zqqfgz.amplifyapp.com/admin/scan-bookings/${jsonParse._id}" target="_blank">View data</a></td>
+                  </tr>
                 </table>
               </td>
             </tr>
