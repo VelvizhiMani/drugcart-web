@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import axios from 'axios';
 
 export async function POST(req) {
+  await connectionToDatabase()
   try {
     const { phone } = await req.json();
 

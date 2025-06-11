@@ -10,6 +10,7 @@ const Services = () => {
   const router = useRouter();
   const { serviceList } = useSelector((state) => state.serviceData);
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     dispatch(GetServicesService());
