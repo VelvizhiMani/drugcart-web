@@ -6,7 +6,7 @@ import { getServiceList, getServiceUrl } from '../reduxToolkit/slices/serviceSli
 const GetServicesService = (page = 1, limit, search = "") => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
-        const getData = await axios.get(`/api/service?page=${page}&limit=${limit}&search=${search}`, { headers: await Authorization() })
+        const getData = await axios.get(`/api/service`, { headers: await Authorization() })
         dispatch(getServiceList(getData.data))
         dispatch(IsLoading(false))
     } catch (error) {
