@@ -22,6 +22,10 @@ const blogSchema = new Schema(
             type: String,
             default: "",
         },
+        blogtype: {
+            type: String,
+            default: "",
+        },
         date: {
             type: Date,
             default: Date.now

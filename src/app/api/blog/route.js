@@ -34,6 +34,7 @@ export async function POST(request) {
             url,
             description,
             imagealt,
+            blogtype,
             metatitle,
             metadesc,
             metakeyword
@@ -71,6 +72,7 @@ export async function POST(request) {
             url,
             description,
             imagealt,
+            blogtype,
             metatitle,
             metadesc,
             metakeyword
@@ -88,20 +90,31 @@ export async function GET(req) {
     const page = parseInt(searchParams.get("page")) || 1;
     const limit = parseInt(searchParams.get("limit")) || 10;
     const search = searchParams.get("search") || "";
+    const blogtype = searchParams.get("blogtype") || "";
 
-    const filters = search ? { blogname: { $regex: search, $options: "i" } } : {};
+    let query = {};
+
+    if (search) {
+        query.blogname = { $regex: search, $options: "i" };
+    }
+
+    if (blogtype) {
+        query.blogtype = blogtype;
+    }
+
+    // const filters = search ? { blogname: { $regex: search, $options: "i" } } : {};
 
     try {
         await connnectionToDatabase();
 
         const skip = (page - 1) * limit;
 
-        const BlogItems = await Blog.find(filters)
+        const BlogItems = await Blog.find(query)
             .sort({ timestamp: -1 })
             .skip(skip)
             .limit(limit)
 
-        const totalItems = await Blog.countDocuments(filters);
+        const totalItems = await Blog.countDocuments(query);
         const totalPages = Math.ceil(totalItems / limit);
 
         const BlogWithIndex = BlogItems.map((item, index) => ({

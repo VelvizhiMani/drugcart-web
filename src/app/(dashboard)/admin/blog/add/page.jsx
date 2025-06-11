@@ -10,6 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import SelectInput from "@/components/admin/input/SelectInput";
 import InputArea from "@/components/admin/input/InputArea";
 import TextInput from "@/components/admin/input/TextInput";
 import TextEditor from "@/components/admin/input/TextEditor";
@@ -23,6 +24,7 @@ function BlogAdd() {
     const [imagePreview, setImagePreview] = useState(null);
     const router = useRouter();
     const dispatch = useDispatch()
+    const blog_type = ["Tranding", "Latest"];
 
     function getFileNameFromUrl(url) {
         return url.split("/").pop();
@@ -38,6 +40,7 @@ function BlogAdd() {
             blogimg: "",
             blogspoturl: "",
             url: "",
+            blogtype: "Latest",
             description: "",
             imagealt: "",
             metatitle: "",
@@ -159,6 +162,14 @@ function BlogAdd() {
                                 formik.touched.blogspoturl ? formik.errors.blogspoturl : null
                             }
                             error={formik.touched.blogspoturl ? formik.errors.blogspoturl : null}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, md: 6 }}>
+                        <SelectInput
+                            title={"Blog Type"}
+                            value={formik.values.blogtype}
+                            onChange={formik.handleChange("blogtype")}
+                            data={blog_type}
                         />
                     </Grid2>
                     <Grid2 size={{ xs: 12, md: 12 }}>
