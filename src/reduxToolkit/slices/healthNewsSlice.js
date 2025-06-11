@@ -4,7 +4,8 @@ const initialState = {
     healthNewsList: [],
     newHealthNews: {},
     healthNews: {},
-    healthNewsUrl: {}
+    healthNewsUrl: {},
+    healthLatestNews: {},
 }
 const healthNewsSlice = createSlice({
     name: 'tips',
@@ -21,9 +22,12 @@ const healthNewsSlice = createSlice({
         },
         gethealthNewsUrl: (state, { payload }) => {
             state.healthNewsUrl = payload
-        }
+        },
+        getLatesthealthNews: (state, { payload }) => {
+            state.healthLatestNews = payload
+        },
     }
 })
 
-export const { addhealthNews, gethealthNewes, gethealthNews, gethealthNewsUrl } = healthNewsSlice.actions
+export const { addhealthNews, gethealthNewes, gethealthNews, gethealthNewsUrl, getLatesthealthNews } = healthNewsSlice.actions
 export default healthNewsSlice.reducer
