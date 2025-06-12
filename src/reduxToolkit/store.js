@@ -58,6 +58,7 @@ import metaTagsReducer from "@/reduxToolkit/slices/metaTagsSlice";
 import countReducer from "@/reduxToolkit/slices/countSlice";
 import contractReducer from "@/reduxToolkit/slices/contractSlice";
 import contractUserReducer from "@/reduxToolkit/slices/contractUserSlice";
+import labInfoReducer from "@/reduxToolkit/slices/labInfoSlice";
 
 export const store = configureStore({
     reducer: {
@@ -120,5 +121,6 @@ export const store = configureStore({
         countData: countReducer,
         contractData: contractReducer,
         contractUserData: contractUserReducer,
+        labInfoData: labInfoReducer
     }
 })

@@ -65,7 +65,7 @@ function AdminLogin() {
                 backgroundSize: "cover",
                 background: "#fff",
                 // alignItems: "center",
-                marginTop: theme.spacing(8),
+                marginTop: theme.spacing(-2),
             }}
         >
             <Paper
@@ -82,17 +82,16 @@ function AdminLogin() {
             >
                 {" "}
                 <Avatar
-                    src={"https://assets3.drugcarts.com/static/image/logodrugnew.jpg"}
+                    src={"/assets/logo.jpeg"}
                     alt="Drugcart"
                     style={{
-                        marginTop: theme.spacing(-8),
-                        backgroundColor: "green",
-                        width: theme.spacing(10),
-                        height: theme.spacing(10),
+                     marginTop: theme.spacing(-2),
+                        width: "auto",
+                        height: theme.spacing(16),
                     }}
                     variant="square"
                 />
-                <Typography component="body1" variant="h5" textAlign="center">
+                <Typography component="body1" variant="h5" textAlign="center" fontWeight={"bold"}>
                 Admin Login
                 </Typography>
                 <form style={{ marginTop: theme.spacing(3), width: "100%" }}>

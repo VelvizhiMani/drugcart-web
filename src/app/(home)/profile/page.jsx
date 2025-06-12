@@ -238,7 +238,17 @@ export default function ProfileTab() {
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                         </select>
-                                        <input type="date" placeholder="Date of Birth" value={formik.values.dob} onChange={formik.handleChange("dob")} disabled={!edit} className="border p-2 rounded w-full" />
+                                        <input
+                                            type="date"
+                                            placeholder="Date of Birth"
+                                            value={formik.values.dob}
+                                            onChange={formik.handleChange("dob")}
+                                            disabled={!edit}
+                                            className="border p-2 rounded w-full"
+                                            max={new Date(new Date().setFullYear(new Date().getFullYear() - 1))
+                                                .toISOString()
+                                                .split("T")[0]}
+                                        />
                                         <input type="text" placeholder="Blood Group" value={formik.values.blood} onChange={formik.handleChange("blood")} disabled={!edit} className="border p-2 rounded w-full" />
                                     </div>
                                     <div className="flex justify-end my-3">
