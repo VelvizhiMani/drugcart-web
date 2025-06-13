@@ -22,7 +22,7 @@ const ScanDetails = () => {
                 <div className="w-full md:w-1/2 p-2">
                     <h1 className="text-md md:text-xl font-bold">{scanUrl?.scantestname}</h1>
                     <div className="rounded-lg p-6">
-                        <img src={scanUrl?.scanImage || IMAGES.NO_IMAGE} alt="Pet Scan" className="w-full mx-auto" />
+                        <img src={scanUrl?.scanImage ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/scan/${scanUrl?.scanImage}` : "/assets/no_image.png"} alt="Pet Scan" className="w-full mx-auto" />
                     </div>
                 </div>
                 <div className="w-full md:w-1/2 p-2 border-[1.5px]">
