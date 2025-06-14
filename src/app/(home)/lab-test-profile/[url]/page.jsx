@@ -5,7 +5,7 @@ import { IMAGES } from "@/components/common/images";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { GetLabInfoUrlService } from "@/services/LabInfoService.JS";
+import { GetLabInfoUrlService } from "@/services/LabInfoService";
 import { useParams } from "next/navigation";
 
 const BlogDetail = () => {
