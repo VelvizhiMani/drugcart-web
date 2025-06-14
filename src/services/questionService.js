@@ -1,14 +1,17 @@
 import axios from 'axios'
 import { IsLoading, showToast } from '../reduxToolkit/slices/commonSlice'
 import Authorization from '../utils/authorization'
-import { addQuestion, getQuestions, getQuestion } from '../reduxToolkit/slices/questionFormSlice'
+import { addQuestion, getQuestions, getQuestion, sendQuestion } from '../reduxToolkit/slices/questionFormSlice'
 
 const PostQuestionService = (data, resetForm) => async (dispatch) => {
     try {
         dispatch(IsLoading(true))
         const postData = await axios.post('/api/question_form', data, { headers: await Authorization() })
         dispatch(addQuestion(postData.data))
-        dispatch(GetQuestionIdService(postData.data?._id))
+        if (postData.status === 200) {
+            dispatch(EmailQuestionService({ to: postData.data?.email, subject: "User Question", message: JSON.stringify(postData.data) }))
+        }
+        // dispatch(GetQuestionIdService(postData.data?._id))
         dispatch(IsLoading(false))
         dispatch(showToast({ message: "Question sent Successfully!!!", severity: "success" }))
         resetForm()
@@ -50,6 +53,20 @@ const DeleteQuestionService = (id) => async (dispatch) => {
     }).catch((error) => {
         console.log("error", error.message)
     })
+}
+
+const EmailQuestionService = (data) => async (dispatch) => {
+    try {
+        dispatch(IsLoading(true))
+        const postData = await axios.post('/api/question_form/send-mail', data, { headers: await Authorization() })
+        dispatch(sendQuestion(postData.data))
+        dispatch(IsLoading(false))
+        dispatch(showToast({ message: "Your Question sent Successfully!!!", severity: "success" }))
+    } catch (error) {
+        dispatch(IsLoading(false))
+        console.log("error", error.message)
+        dispatch(showToast({ message: error?.response?.data?.error, severity: "error" }))
+    }
 }
 
 export { PostQuestionService, GetQuestionsService, GetQuestionIdService, DeleteQuestionService }

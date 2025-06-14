@@ -16,9 +16,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProfileService } from "@/services/profileService";
 import { getCartService } from "@/services/cartService";
 import FeedbackCard from "@/components/home-page/FeedbackCard";
+import { GetBlogService } from "@/services/blogService";
 
 const Home = () => {
   const { profile } = useSelector((state) => state.profileData);
+  const { blogList } = useSelector((state) => state.blogData);
   const dispatch = useDispatch();
   // await new Promise((resolve) => {
   //   setTimeout(() => {
@@ -26,10 +28,11 @@ const Home = () => {
   //   }, 2000);
   // })
 
-  // useEffect(() => {
-  //   dispatch(getProfileService());
-  //    dispatch(getCartService())
-  // }, []);
+  useEffect(() => {
+    // dispatch(getProfileService());
+    //  dispatch(getCartService())
+    dispatch(GetBlogService(1, 3));
+  }, []);
   console.log(profile);
 
   return (
@@ -53,7 +56,7 @@ const Home = () => {
       <section className="px-10 mt-10">
         <div className="bg-bgblog rounded-md px-5 md:px-10">
           <h1 className="font-bold text-xl md:text-2xl p-5">Our Latest Blog</h1>
-          <BlogCard />
+          <BlogCard blogData={blogList?.blogs} />
         </div>
       </section>
       <FeedbackCard />

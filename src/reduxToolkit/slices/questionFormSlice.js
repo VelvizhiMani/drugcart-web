@@ -4,6 +4,7 @@ const initialState = {
     questionFormList: [],
     newQuestion: {},
     question: {},
+    emailQuestion: {}
 }
 const questionSlice = createSlice({
     name: 'question',
@@ -15,11 +16,14 @@ const questionSlice = createSlice({
         getQuestions: (state, { payload }) => {
             state.questionFormList = payload
         },
-        getQuestion: (state, { payload }) => { 
+        getQuestion: (state, { payload }) => {
             state.question = payload
+        },
+        sendQuestion: (state, { payload }) => {
+            state.emailQuestion = payload
         }
     }
 })
 
-export const { addQuestion, getQuestions, getQuestion } = questionSlice.actions
+export const { addQuestion, getQuestions, getQuestion, sendQuestion } = questionSlice.actions
 export default questionSlice.reducer

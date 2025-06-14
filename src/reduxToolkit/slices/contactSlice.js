@@ -4,6 +4,7 @@ const initialState = {
     contactUsList: [],
     newContactUs: {},
     contactus: {},
+    contactMail: {}
 }
 const contactUsSlice = createSlice({
     name: 'contact_us',
@@ -15,11 +16,14 @@ const contactUsSlice = createSlice({
         getContactUsList: (state, { payload }) => {
             state.contactUsList = payload
         },
-        getContactUs: (state, { payload }) => { 
+        getContactUs: (state, { payload }) => {
             state.contactus = payload
+        },
+        postContactMail: (state, { payload }) => {
+            state.contactMail = payload
         }
     }
 })
 
-export const { addContactUs, getContactUsList, getContactUs } = contactUsSlice.actions
+export const { addContactUs, getContactUsList, getContactUs, postContactMail } = contactUsSlice.actions
 export default contactUsSlice.reducer
