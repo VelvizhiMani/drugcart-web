@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import CartIcon from "@/assets/Icons/CartIcon";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,7 @@ const AyushCard = () => {
   const [showNo, setShowNo] = useState(10);
   const dispatch = useDispatch();
   const params = useParams();
+  const router = useRouter()
 
   useEffect(() => {
     dispatch(GetProductCategoryService(page, 4, params?.url, search));
