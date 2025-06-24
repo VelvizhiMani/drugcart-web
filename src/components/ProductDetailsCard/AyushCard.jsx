@@ -18,7 +18,7 @@ const AyushCard = () => {
   const router = useRouter()
 
   useEffect(() => {
-    dispatch(GetProductCategoryService(page, 4, params?.url, search));
+    dispatch(GetProductCategoryService(page, 12, params?.url, search));
   }, [page, 4, search]);
   
  const ProductClick = (url) => {
