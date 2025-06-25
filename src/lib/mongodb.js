@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const MONGO_URI = "mongodb://superadmin:newdrugpass@3.83.154.29:27017/mydrugcarts";
+const MONGO_URI = "mongodb+srv://admin:Needforspeed4@cluster0.sjx0c.mongodb.net/dragcart?retryWrites=true&w=majority";
 
 const connnectionToDatabase = async () => {
     try {
